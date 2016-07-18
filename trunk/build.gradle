@@ -33,8 +33,8 @@ android {
         versionName "1.0"
     }
 
-    sourceSets.main{
-        jniLibs.srcDirs =['libs']
+    sourceSets.main {
+        jniLibs.srcDirs = ['libs']
         assets.srcDirs = ['assets']
     }
     buildTypes {
@@ -47,6 +47,7 @@ android {
     dexOptions {
     }
 
+    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
 }
 
 dependencies {

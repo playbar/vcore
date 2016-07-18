@@ -51,7 +51,8 @@
         </activity>
         <activity
             android:name="com.bfmj.viewcore.LxkTestActivity"
-            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="landscape"
             android:label="@string/title_activity_lxk_test" >
             
         </activity>
