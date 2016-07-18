@@ -118,7 +118,7 @@ public class GLFocusUtils {
 		float xDpi = GLScreenParams.getXDpi();
 		float yDpi = GLScreenParams.getYDpi();
 		float depth = GLScreenParams.getDefualtDepth() * GLRectView.getDepthScale();
-		
+
 		position[0] = xDpi/2 -(float)(depth * Math.tan(out[0])) / screenWidth * xDpi;
 		position[1] = yDpi/2 - (float)(depth * Math.tan(out[1])) / screenHeight * yDpi;
 		
