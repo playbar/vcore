@@ -27,7 +27,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import com.androidquery.callback.AjaxStatus;
 
-public class AdapterDemo extends GLBaseAdapter {
+public class ListViewAdapter extends GLBaseAdapter {
 
 	private List<String> list;
 	private Context context;
@@ -36,7 +36,7 @@ public class AdapterDemo extends GLBaseAdapter {
 	private ImageLoader imageLoader = ImageLoader.getInstance();  
 //	private ImageView iv;
 	
-	public AdapterDemo(List<String> listData, Context c) {
+	public ListViewAdapter(List<String> listData, Context c) {
 		context = c;
 		list = listData;
 //		mAq = aq;
@@ -82,11 +82,6 @@ public class AdapterDemo extends GLBaseAdapter {
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	public void notifyDataSetChanged(){
-
 	}
 
 	@Override

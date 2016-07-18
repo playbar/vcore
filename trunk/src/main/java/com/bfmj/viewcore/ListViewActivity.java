@@ -6,27 +6,24 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
-import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLListView;
 import com.bfmj.viewcore.view.GLRootView;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 
-public class ListViewDemoActivity extends BaseViewActivity {
+public class ListViewActivity extends BaseViewActivity {
 
 	private GLListView listView;
 	private String Url = "http://img.static.mojing.cn/resource/list/3.js";
 //	private AQuery aq;
 	private int index = 0;
 	private GLRootView rootView;
-	private AdapterDemo adapter;
+	private ListViewAdapter adapter;
 	private List<String> listData = new ArrayList<String>();
 
     // 图片封装为一个数组
@@ -46,10 +43,10 @@ public class ListViewDemoActivity extends BaseViewActivity {
 //		aq = new AQuery(this);
 		rootView = getRootView();
 		rootView.onResume();		
-		listView = new GLListView(ListViewDemoActivity.this, GLListView.HORIZONTAL);
+		listView = new GLListView(ListViewActivity.this, GLListView.HORIZONTAL);
 		listView.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
 
-		listView.setLayoutParams(200, 180, 500, 200);
+		listView.setLayoutParams(280, 400, 1000, 400);
 		listView.setItemSpacing(20);
 
 
@@ -58,7 +55,7 @@ public class ListViewDemoActivity extends BaseViewActivity {
 			listData.add(iconName[index]);
 		}
 
-		adapter = new AdapterDemo(listData, ListViewDemoActivity.this);
+		adapter = new ListViewAdapter(listData, ListViewActivity.this);
 		listView.setAdapter(adapter);
 		rootView.addView(listView);
 
@@ -101,7 +98,7 @@ public class ListViewDemoActivity extends BaseViewActivity {
 //		imageView.setImage(R.drawable.ic_launcher);
 //		textView.setText("北京欢迎你");
 //		textView.setAlpha(0.3f);
-		imageView.setLayoutParams(460, 460, 40, 40);
+		imageView.setLayoutParams(1000, 1000, 100, 100);
 		
 		rootView.addView(imageView);
 //		rootView.addView(listView);		
@@ -119,7 +116,7 @@ public class ListViewDemoActivity extends BaseViewActivity {
 				listData.add(imageUrl);
 			}
 			
-			AdapterDemo adapter = new AdapterDemo(listData, ListViewDemoActivity.this);
+			ListViewAdapter adapter = new ListViewAdapter(listData, ListViewActivity.this);
 			listView.setAdapter(adapter);
 			
 			
@@ -142,8 +139,9 @@ public class ListViewDemoActivity extends BaseViewActivity {
 //			listview.move();
 
 			listData.add(iconName[++index]);
+
 			adapter.notifyDataSetChanged();
-			listView.moveLeft();
+			//listView.moveLeft();
 
 		}
 		if(event.getAction() == MotionEvent.ACTION_MOVE){

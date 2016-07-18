@@ -3,9 +3,11 @@ package com.bfmj.viewcore.view;
 import com.bfmj.viewcore.adapter.GLAdapter;
 
 import android.content.Context;
+import android.database.DataSetObservable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewDebug;
+import android.database.DataSetObserver;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -183,6 +185,19 @@ public abstract class GLAdapterView<T extends GLAdapter> extends GLGroupView {
     	 */
     	void back(int position, int local);
     }
-    
+
+    class GLAdapterDataSetObserver extends DataSetObserver{
+
+        @Override
+        public void onChanged(){
+            requestLayout();
+        }
+
+        @Override
+        public void onInvalidated(){
+
+        }
+
+    }
     
 }

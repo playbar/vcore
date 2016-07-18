@@ -1,5 +1,7 @@
 package com.bfmj.viewcore.adapter;
 
+import android.database.DataSetObserver;
+
 import java.util.ArrayList;
 
 import com.bfmj.viewcore.view.GLGroupView;
@@ -9,6 +11,9 @@ import com.bfmj.viewcore.view.GLView;
 
 
 public interface GLAdapter {
+	void registerDataSetObserver(DataSetObserver observer);
+	void unregisterDataSetObserver(DataSetObserver observer);
+
 	/**
 	 * 从数据集里添加一项
 	 * @param index

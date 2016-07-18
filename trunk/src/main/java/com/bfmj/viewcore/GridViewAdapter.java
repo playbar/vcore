@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class GridViewAdapter implements GLListAdapter {
+public class GridViewAdapter extends GLBaseAdapter {
 
 	private List<? extends Map<String, ?>> list;
 	private Context context;
@@ -50,7 +50,7 @@ public class GridViewAdapter implements GLListAdapter {
 	@Override
 	public void addIndex(int index, GLRectView view) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

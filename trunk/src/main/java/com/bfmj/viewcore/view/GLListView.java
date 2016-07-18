@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.viewcore.BaseViewActivity;
+import com.bfmj.viewcore.adapter.GLAdapter;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.animation.GLAnimation;
 import com.bfmj.viewcore.animation.GLAnimation.OnGLAnimationListener;
@@ -30,6 +31,8 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 	public static final int MOVELEFT=0x00;
 
 	public static final int MOVERIGHT=0x01;
+
+	GLAdapterDataSetObserver mDataSetObserver;
 	
 	
 	private ArrayList<GLView> mList;//数据集
@@ -192,22 +195,16 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 	}
 
 	@Override
-	public void setAdapter(GLListAdapter adapter) {
-
-		// TODO Auto-generated method stub
-		mGLListAdapter = adapter;
-		this.mTotalCount = adapter.getCount();
-		mOnItemSelectedListener = getOnItemSelectedListener();
-		mOnItemClickListener = getOnItemClickListener();
-
+	public void requestLayout(){
 		if(this.mChildView.size() > 0){
-			removeAllGLViews();			
+			removeAllGLViews();
 		}
 		resetParams();
-		
+
+		this.mTotalCount = mGLListAdapter.getCount();
 		float mX = GLListView.this.getX();
 		for(int j=0;j<this.mNumOneScreen;j++){
-			
+
 			if(j >this.mTotalCount-1)
 				break;
 			final GLRectView view = getAdapterView(j,j, null, GLListView.this, true);
@@ -218,7 +215,7 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 			if(this.mOrderType == this.HORIZONTAL){
 				view.setX(mX);
 				view.setY(GLListView.this.getY() + view.getMarginTop());
-				
+
 				mX += view.getWidth() + view.getMarginRight() + this.mItemSpacing;
 			}
 			else{
@@ -238,30 +235,51 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 				}
 			}
 			catch(Exception e){
-				
+
 			}
 		}
-		
+
 		for(int k=0;k<GLListView.this.getChildView().size();k++){
 			GLRectView _view1 = GLListView.this.getView(k);
 			if(_view1.getDepth() > GLListView.this.getDepth()){
 				_view1.setDepth(GLListView.this.getDepth());
 			}
 		}
-		
+
 		if(!isOpenHeadControl()){
 			setNoHeadListen();
 		}
 		else{
 			this.setFocusListener(new GLViewFocusListener() {
-				
+
 				@Override
 				public void onFocusChange(GLRectView view, boolean focused) {
 					// TODO Auto-generated method stub
-					
+
 				}
 			});
 		}
+	}
+
+	@Override
+	public void setAdapter(GLListAdapter adapter) {
+
+		if( mGLListAdapter != null && mDataSetObserver != null){
+			mGLListAdapter.unregisterDataSetObserver( mDataSetObserver);
+		}
+
+		if( adapter == null ){
+			return;
+		}
+		// TODO Auto-generated method stub
+		mGLListAdapter = adapter;
+		mOnItemSelectedListener = getOnItemSelectedListener();
+		mOnItemClickListener = getOnItemClickListener();
+		mDataSetObserver = new GLAdapterDataSetObserver();
+		mGLListAdapter.registerDataSetObserver( mDataSetObserver );
+
+		requestLayout();
+		return;
 	}
 	
 	private void setNoHeadListen(){
@@ -1318,6 +1336,18 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 		if(mGLListAdapter == null) return;
 		for(int i=0;i<list.size();i++){
 			mGLListAdapter.getGLView(i, list.get(i), this);
+		}
+	}
+
+	class GLAdapterDataSetObserver extends GLAdapterView<GLAdapter>.GLAdapterDataSetObserver{
+		@Override
+		public void onChanged() {
+			super.onChanged();
+
+		}
+		@Override
+		public void onInvalidated(){
+			super.onInvalidated();
 		}
 	}
 	

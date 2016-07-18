@@ -29,7 +29,8 @@ public abstract class GLView implements GLRenderListener {
 		mContext = context;
 		mMatrixState = new GLMatrixState();
 	}
-	
+
+	public void requestLayout(){};
 	/**
 	 * 获取上下文
 	 * @author lixianke  @Date 2015-6-19 下午5:13:00
