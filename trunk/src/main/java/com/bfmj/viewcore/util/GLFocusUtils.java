@@ -68,7 +68,8 @@ public class GLFocusUtils {
 	}
 	
 	private int scale(float p, float s){
-		return (int)((p - 480) * s + 480);
+		float width = GLScreenParams.getXDpi() / 2;
+		return (int)((p - width) * s + width);
 	}
 	
 	public static void getEulerAngles(float[] eulerAngles, int offset) {

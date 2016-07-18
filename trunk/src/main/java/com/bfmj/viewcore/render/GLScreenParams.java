@@ -1,16 +1,23 @@
 package com.bfmj.viewcore.render;
 
 public class GLScreenParams {
-	public static float UNIT = 184.6f;
-	
-	private static float NEAR = 0.916f;
+	private static float FOV = 96;
+	private static float NEAR = 0.1f;
 	private static float FAR = 200.0f;
-	private static float screenWidth = 4f / NEAR;
-	private static float screenHeight = 4f / NEAR;
+	private static float screenWidth;
+	private static float screenHeight;
 	private static float xDpi = 2400;
 	private static float yDpi = 2400;
-	private static float defualtDepth = 4;
+	private static float defualtDepth = 4.0f;
 	private static float eyeDistance = 0.05f;
+
+	public static float getFOV(){
+		return FOV;
+	}
+
+	public static void setFOV(float fov){
+		FOV = fov;
+	}
 	
 	public static float getNear(){
 		return NEAR;
@@ -25,11 +32,11 @@ public class GLScreenParams {
 	}
 	
 	public static float getScreenWidth(){
-		return screenWidth;
+		return defualtDepth * (float) Math.tan(FOV / 2) * 2;
 	}
 	
 	public static float getScreenHeight(){
-		return screenHeight;
+		return defualtDepth * (float) Math.tan(FOV / 2) * 2;
 	}
 	
 	public static void setDpi(float x, float y){

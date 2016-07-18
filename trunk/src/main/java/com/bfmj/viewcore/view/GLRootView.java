@@ -377,6 +377,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         float[] groyMatrix = getGroyMatrix();
 
         int height = mWidth / 2;
+        float nearRight = GLScreenParams.getNear() * (float)Math.tan(GLScreenParams.getFOV() / 2);
 
         //双屏
         if (mIsDouble) {
@@ -391,7 +392,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                     GLView view = allViews.get(j);
                     if (view != null) {
                         view.getMatrixState().setVMatrix(groyMatrix);
-                        Matrix.frustumM(view.getMatrixState().getProjMatrix(), 0, -1, 1, -1, 1, GLScreenParams.getNear(), GLScreenParams.getFar());
+                        Matrix.frustumM(view.getMatrixState().getProjMatrix(), 0, -nearRight, nearRight, -nearRight, nearRight, GLScreenParams.getNear(), GLScreenParams.getFar());
                         //					Matrix.orthoM(view.getMatrixState().getProjMatrix(), 0, -40, 40, -40, 40, GLScreenParams.getNear(), GLScreenParams.getFar());
                         //			Matrix.setLookAtM(view.getMatrixState().getVMatrix(), 0, 0, 0, 0, headView[2], -headView[6], headView[10], 0, 1, 0);
 
@@ -410,7 +411,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                 GLView view = allViews.get(j);
                 if (view != null) {
                     view.getMatrixState().setVMatrix(groyMatrix);
-                    Matrix.frustumM(view.getMatrixState().getProjMatrix(), 0, -1, 1, -1 * ratio, 1 * ratio, GLScreenParams.getNear(), GLScreenParams.getFar());
+                    Matrix.frustumM(view.getMatrixState().getProjMatrix(), 0, -nearRight, nearRight, -nearRight * ratio, nearRight * ratio, GLScreenParams.getNear(), GLScreenParams.getFar());
 //					Matrix.orthoM(view.getMatrixState().getProjMatrix(), 0, -40, 40, -40, 40, GLScreenParams.getNear(), GLScreenParams.getFar());
                     //Matrix.setLookAtM(view.getMatrixState().getVMatrix(), 0, 0, 0, 0, 0, 0, -10, 0, 1, 0);
 

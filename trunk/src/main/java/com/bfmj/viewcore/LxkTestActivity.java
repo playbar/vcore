@@ -74,7 +74,7 @@ public class LxkTestActivity extends BaseViewActivity {
 
 		for (int i = 0; i < imageViews.length; i++) {
 			imageViews[i].setBackground(new GLColor(1, 1, 1));
-			imageViews[i].setDepth(40f);
+//			imageViews[i].setDepth(40f);
 			imageViews[i].setFocusListener(listener);
 			rootView.addView(imageViews[i]);
 		}
@@ -193,19 +193,19 @@ public class LxkTestActivity extends BaseViewActivity {
 	private static float scaleY = 6.8f * 1.75f;
 
 	private int getX(int x){
-		return (int)((x - 480) * scaleX + 480);
+		return x;
 	}
 
 	private int getY(int y){
-		return (int)((y - 480) * scaleY + 480);
+		return y;
 	}
 
 	private int getWidth(int w){
-		return (int)(w * scaleX);
+		return w;
 	}
 
 	private int getHeight(int h){
-		return (int)(h * scaleY);
+		return h;
 	}
 
 }
