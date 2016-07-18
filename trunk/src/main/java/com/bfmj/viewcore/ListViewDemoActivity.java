@@ -44,11 +44,13 @@ public class ListViewDemoActivity extends BaseViewActivity {
 //		aq = new AQuery(this);
 		rootView = getRootView();
 		rootView.onResume();		
-		//slistView = new GLListView(this);
-//		listView.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
-		listView.setWidth(500);
-		listView.setHeight(200);
+		listView = new GLListView(ListViewDemoActivity.this, GLListView.HORIZONTAL);
+		listView.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
+
+		listView.setLayoutParams(200, 180, 500, 200);
 		listView.setItemSpacing(20);
+
+
 
 		for(int i=0;  i < iconName.length; i++){
 			listData.add(iconName[i]);

@@ -208,35 +208,31 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 		float mX = GLListView.this.getX();
 		for(int j=0;j<this.mNumOneScreen;j++){
 			
-			if(j >this.mTotalCount-1) break;
-			final GLRectView _v = getAdapterView(j,j, null, GLListView.this, true);
-			if(_v == null) continue;
+			if(j >this.mTotalCount-1)
+				break;
+			final GLRectView view = getAdapterView(j,j, null, GLListView.this, true);
+			if(view == null)
+				continue;
 
-			mX += _v.getMarginLeft();
+			mX += view.getMarginLeft();
 			if(this.mOrderType == this.HORIZONTAL){
-				_v.setX(mX);
-				_v.setY(GLListView.this.getY() + _v.getMarginTop());
+				view.setX(mX);
+				view.setY(GLListView.this.getY() + view.getMarginTop());
 				
-				mX += _v.getWidth() + _v.getMarginRight() + this.mItemSpacing;
+				mX += view.getWidth() + view.getMarginRight() + this.mItemSpacing;
 			}
 			else{
-				_v.setX(GLListView.this.getX() + _v.getMarginRight()); 
-				_v.setY(_v.getMarginTop() + (_v.getHeight() + this.mItemSpacing + _v.getMarginTop() + _v.getMarginBottom())*j);
+				view.setX(GLListView.this.getX() + view.getMarginRight());
+				view.setY(view.getMarginTop() + (view.getHeight() + this.mItemSpacing + view.getMarginTop() + view.getMarginBottom())*j);
 			}
-			mDefaultDepth = _v.getDepth();
-			
-//			if (isLookAngle) {
-//				_v.setX(-_v.getWidth() / 2 + 480);
-//				_v.setLookAngle((j - 3) * 15);
-//			}
-			
-			
+			mDefaultDepth = view.getDepth();
+
 			try{
 				if(getContext() != null && (BaseViewActivity) getContext() != null && ((BaseViewActivity) getContext()).getRootView() != null){
 					(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
 						@Override
 						public void run() {
-							GLListView.this.addView(_v);
+							GLListView.this.addView(view);
 						}
 					});
 				}

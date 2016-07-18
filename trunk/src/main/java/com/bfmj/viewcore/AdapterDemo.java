@@ -96,7 +96,7 @@ public class AdapterDemo extends GLBaseAdapter {
 		}
 
 		final GLImageView image = (GLImageView)grv.getView("timage");
-//		image.setImage(R.drawable.a1);
+		image.setImage(R.drawable.a1);
 		
 		/** 
          * 显示图片 
