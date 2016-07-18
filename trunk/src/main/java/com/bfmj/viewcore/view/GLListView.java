@@ -32,9 +32,7 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 
 	public static final int MOVERIGHT=0x01;
 
-	GLAdapterDataSetObserver mDataSetObserver;
-	
-	
+
 	private ArrayList<GLView> mList;//数据集
 	private int mStartIndex=0;//当前开始的索引
 	private int mSelectedIndex=0;//当前选中的索引
@@ -263,14 +261,14 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 
 	@Override
 	public void setAdapter(GLListAdapter adapter) {
+		if( adapter == null ){
+			return;
+		}
 
 		if( mGLListAdapter != null && mDataSetObserver != null){
 			mGLListAdapter.unregisterDataSetObserver( mDataSetObserver);
 		}
 
-		if( adapter == null ){
-			return;
-		}
 		// TODO Auto-generated method stub
 		mGLListAdapter = adapter;
 		mOnItemSelectedListener = getOnItemSelectedListener();
@@ -1339,16 +1337,16 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 		}
 	}
 
-	class GLAdapterDataSetObserver extends GLAdapterView<GLAdapter>.GLAdapterDataSetObserver{
-		@Override
-		public void onChanged() {
-			super.onChanged();
-
-		}
-		@Override
-		public void onInvalidated(){
-			super.onInvalidated();
-		}
-	}
+//	class GLAdapterDataSetObserver extends GLAdapterView<GLAdapter>.GLAdapterDataSetObserver{
+//		@Override
+//		public void onChanged() {
+//			super.onChanged();
+//
+//		}
+//		@Override
+//		public void onInvalidated(){
+//			super.onInvalidated();
+//		}
+//	}
 	
 }

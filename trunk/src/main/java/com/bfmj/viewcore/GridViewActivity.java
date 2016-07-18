@@ -62,7 +62,7 @@ public class GridViewActivity extends BaseViewActivity {
 		//rootView.setDoubleScreen(false);
 
 		gridView = new GLGridView( this, 3, 3 );
-		gridView.setLayoutParams(200, 180, 40, 40);
+		gridView.setLayoutParams(500, 500, 40, 40);
 		gridView.setBackground( new GLColor(1.0f, 0.0f, 0.0f ));
 		gridView.setHorizontalSpacing( 20.0f);
 		gridView.setVerticalSpacing( 20.0f);
@@ -82,12 +82,12 @@ public class GridViewActivity extends BaseViewActivity {
 		rootView.addView(gridView);
 
 		GLImageView lineH = new GLImageView(this);
-		lineH.setLayoutParams(0, 180, 960, 2 );
+		lineH.setLayoutParams(0, 500, 960, 2 );
 		lineH.setBackground( new GLColor( 1, 1, 1));
 		rootView.addView(lineH);
 
 		GLImageView line = new GLImageView(this);
-		line.setLayoutParams(200, 0, 2, 960);
+		line.setLayoutParams(500, 0, 2, 960);
 		line.setBackground(new GLColor(0, 1, 0));
 		rootView.addView(line);
 
@@ -123,9 +123,9 @@ public class GridViewActivity extends BaseViewActivity {
 //				return true;
 //			}
 //		});
-		
-		
-		
+
+
+
 		GLCursorView imageView = new GLCursorView(this);
 		imageView.setWidth(10);
 		imageView.setHeight(10);
@@ -134,7 +134,7 @@ public class GridViewActivity extends BaseViewActivity {
 //		imageView.setImage(R.drawable.ic_launcher);
 //		textView.setText("北京欢迎你");
 //		textView.setAlpha(0.3f);
-		imageView.setLayoutParams(460, 460, 40, 40);
+		imageView.setLayoutParams(1000, 1000, 100, 100);
 //
 		rootView.addView(imageView);
 //		rootView.addView(listView);		
@@ -154,7 +154,9 @@ public class GridViewActivity extends BaseViewActivity {
 			map.put("image", icon[index]);
 			map.put("text", iconName[index]);
 			listData.add(map);
-			gridView.showItem(0);
+			adapter.notifyDataSetChanged();
+			// todo
+			//gridView.showItem(0);
 			index++;
 			Log.e("OnTouchEvent", "add item");
 		}

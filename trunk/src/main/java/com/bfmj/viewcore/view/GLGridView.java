@@ -10,7 +10,6 @@ import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLConstant.*;
 
 import android.content.Context;
-import android.opengl.GLES20;
 
 public class GLGridView extends GLAdapterView<GLListAdapter> {
 
@@ -23,7 +22,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	private int mSelectedIndex=0;//当前选中的索引
 	private float mVerticalSpacing=0.0f;//垂直间距离
 	private float mHorizontalSpacing=0.0f;//水平间距离
-	private GLListAdapter mGLListAdapter;
+	private GLListAdapter mGLAdapter;
 	private int mNumOneScreen=-1;
 	private int mTotalCount = 0;
 	private GLRectView convertView;
@@ -126,8 +125,8 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	@Override
 	public GLListAdapter getGLAdapter() {
 		// TODO Auto-generated method stub
-		if(mGLListAdapter != null) {
-			return mGLListAdapter;
+		if(mGLAdapter != null) {
+			return mGLAdapter;
 		}
 		return null;
 	}
@@ -135,12 +134,23 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	@Override
 	public void setAdapter(GLListAdapter adapter) {
 		// TODO Auto-generated method stub
+		if( adapter == null ){
+			return;
+		}
+
+		if( mGLAdapter != null &&  mDataSetObserver != null ){
+			mGLAdapter.unregisterDataSetObserver( mDataSetObserver);
+		}
+
 		//清除以前的数据
-		mGLListAdapter = adapter;
+		mGLAdapter = adapter;
 		this.mTotalCount = adapter.getCount();
 		mOnItemSelectedListener = getOnItemSelectedListener();
 		mOnItemClickListener = getOnItemClickListener();
-		showItem(this.mStartIndex);
+		mDataSetObserver = new GLAdapterDataSetObserver();
+		mGLAdapter.registerDataSetObserver( mDataSetObserver );
+
+		requestLayout();
 	}
 
 	public void showHItem( int cIndex ){
@@ -154,7 +164,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if((tempIndex > this.mNumOneScreen && this.mNumOneScreen != -1) || tempIndex > this.mTotalCount-1){
 					break;
 				}
-				final GLRectView view = this.mGLListAdapter.getGLView(tempIndex, convertView, null);
+				final GLRectView view = this.mGLAdapter.getGLView(tempIndex, convertView, null);
 				if (col == 0 && rows == 0) {
 					mFirstView = view;
 				}
@@ -227,7 +237,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if((tempIndex > this.mNumOneScreen && this.mNumOneScreen != -1) || tempIndex > this.mTotalCount-1){
 					break;
 				}
-				final GLRectView view = this.mGLListAdapter.getGLView(tempIndex, convertView, null);
+				final GLRectView view = this.mGLAdapter.getGLView(tempIndex, convertView, null);
 				if (col == 0 && row == 0) {
 					mFirstView = view;
 				}
@@ -288,18 +298,16 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 		}
 	}
 
-	/**
-	 * 显示list列表
-	 * @param cIndex 从哪个索引开始显示
-	 */
-	public void showItem(int cIndex){
-		if(this.mGLListAdapter==null)
+
+	@Override
+	public void requestLayout(){
+		if(this.mGLAdapter ==null)
 			return;
-		this.mTotalCount = mGLListAdapter.getCount();
+		this.mTotalCount = mGLAdapter.getCount();
 		if( mOrientation.equals( GLOrientation.HORIZONTAL )){
-			showHItem(cIndex);
+			showHItem(mStartIndex);
 		}else{
-			showVItem(cIndex);
+			showVItem(mStartIndex);
 		}
 		return;
 
@@ -318,8 +326,8 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	 * @return
 	 */
 	public GLRectView getChatAtChild(int index){
-		if(this.mGLListAdapter!=null){
-//			return this.mGLListAdapter.getItem(index);
+		if(this.mGLAdapter !=null){
+//			return this.mGLAdapter.getItem(index);
 		}
 		return null;
 	}
@@ -329,8 +337,8 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	 * @return
 	 */
 	public int getTotalNum(){
-		if(this.mGLListAdapter!=null){
-			return this.mGLListAdapter.getCount();
+		if(this.mGLAdapter !=null){
+			return this.mGLAdapter.getCount();
 		}
 		
 		return 0;
@@ -341,15 +349,15 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	 * @param index 要删除的索引
 	 */
 	public void removeView(int index){
-		if(this.mGLListAdapter == null) return;
+		if(this.mGLAdapter == null) return;
 		//如果索引大于长度则不处理
 		if(index >= this.mTotalCount) return;
 		
-//		super.removeView(this.mGLListAdapter.getItem(index));
+//		super.removeView(this.mGLAdapter.getItem(index));
 		//总数量减去1
 		this.mTotalCount--;
 		//从数据集里移除
-		this.mGLListAdapter.removeIndex(index);
+		this.mGLAdapter.removeIndex(index);
 		//计算行数
 		this.mNumRows = (int)Math.ceil((float)this.mTotalCount/(float)this.mNumColumns);
 		
@@ -378,11 +386,11 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	 * @param view
 	 */
 	public void addChildView(GLRectView view){
-		if(this.mGLListAdapter == null) return;
+		if(this.mGLAdapter == null) return;
 		
 		this.mTotalCount++;
 		//添加到数据集里
-		this.mGLListAdapter.addIndex(this.mGLListAdapter.getCount()-1, view);
+		this.mGLAdapter.addIndex(this.mGLAdapter.getCount()-1, view);
 		//计算行数
 		this.mNumRows = (int)Math.ceil((double)this.mTotalCount/(double)this.mNumColumns) - 1;
 		
@@ -401,11 +409,11 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	 * @param index
 	 */
 	public void addChildView(GLRectView view, int index){
-		if(this.mGLListAdapter == null) return;
+		if(this.mGLAdapter == null) return;
 		
 		this.mTotalCount++;
 		//添加到数据集里
-		this.mGLListAdapter.addIndex(index, view);
+		this.mGLAdapter.addIndex(index, view);
 		
 		//总行数
 		this.mNumRows = (int)Math.ceil((double)this.mTotalCount/(double)this.mNumColumns);

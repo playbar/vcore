@@ -26,6 +26,7 @@ public abstract class GLAdapterView<T extends GLAdapter> extends GLGroupView {
     OnItemClickListener mOnItemClickListener;
     OnItemSelectedListener mOnItemSelectedListener;
     protected OnListViewFocusChange mOnListViewFocusChange;
+    GLAdapterDataSetObserver mDataSetObserver;
     
     public static final int INVALID_POSITION = -1;
 
