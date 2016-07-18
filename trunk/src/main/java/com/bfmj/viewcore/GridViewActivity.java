@@ -13,6 +13,7 @@ import com.bfmj.viewcore.view.GLGridView;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLListView;
 import com.bfmj.viewcore.view.GLRootView;
+import com.bfmj.viewcore.view.GLTextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -125,18 +126,24 @@ public class GridViewActivity extends BaseViewActivity {
 //		});
 
 
+		GLTextView textView = new GLTextView(this);
+		textView.setLayoutParams( 1000, 1200, 1000, 200 );
+		textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
+		textView.setText("111的境况");
+		textView.setTextSize(100);
+		rootView.addView(textView);
 
 		GLCursorView imageView = new GLCursorView(this);
 		imageView.setWidth(10);
 		imageView.setHeight(10);
 		imageView.setBackground(new GLColor(1.0f, 1.0f, 1.0f));
 		imageView.setDepth(3);
-//		imageView.setImage(R.drawable.ic_launcher);
-//		textView.setText("北京欢迎你");
-//		textView.setAlpha(0.3f);
 		imageView.setLayoutParams(1000, 1000, 100, 100);
-//
 		rootView.addView(imageView);
+
+
+
+
 //		rootView.addView(listView);		
 
 	}
