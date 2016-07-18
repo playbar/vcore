@@ -82,16 +82,18 @@ public class GridViewAdapter implements GLListAdapter {
 			GLGroupView parent) {
 		// TODO Auto-generated method stub
 		
-		TestRelativeLayout grv = (TestRelativeLayout)convertView;
-		
-		if(grv == null){
-			grv = new TestRelativeLayout(context);			
-		}
+//		TestRelativeLayout grv = (TestRelativeLayout)convertView;
+//
+//		if(grv == null){
+//			grv = new TestRelativeLayout(context);
+//		}
 
-		final GLImageView image = (GLImageView)grv.getView("timage");
+		final GLImageView image = new GLImageView( context );
 		final Map data = list.get( position );
 		final int imgid = (int)data.get("image");
 		image.setImage(imgid);
+		image.setWidth(150.0f);
+		image.setHeight(150.0f);
 		
 		/** 
          * 显示图片 
@@ -129,7 +131,9 @@ public class GridViewAdapter implements GLListAdapter {
 		ImageView iv = new ImageView(context);
 
 		Log.d("bbbbb",list.get(position) + "");
-		return grv;
+
+		return image;
+		//return grv;
 		
 	}
 

@@ -143,12 +143,16 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	 * @param cIndex 从哪个索引开始显示
 	 */
 	public void showItem(int cIndex){
-		if(this.mGLListAdapter==null) return;
+		if(this.mGLListAdapter==null)
+			return;
 		int tempIndex=cIndex;
-		for(int rows=0; rows<this.mNumRows; rows++){			
-			for(int col=0;col<this.mNumColumns;col++){
+		for(int rows=0; rows<this.mNumRows; rows++)
+		{
+			for(int col=0;col<this.mNumColumns;col++)
+			{
 				//如果大于设置的一屏显示数则不再添加
-				if((tempIndex > this.mNumOneScreen && this.mNumOneScreen != -1) || tempIndex > this.mTotalCount-1){
+				if((tempIndex > this.mNumOneScreen && this.mNumOneScreen != -1)
+						|| tempIndex > this.mTotalCount-1){
 					break;
 				}
 				final GLRectView view = this.mGLListAdapter.getGLView(tempIndex, convertView, null);

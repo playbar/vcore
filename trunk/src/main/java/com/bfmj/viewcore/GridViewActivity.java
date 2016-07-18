@@ -58,15 +58,19 @@ public class GridViewActivity extends BaseViewActivity {
 
 		gridView = new GLGridView( this, 2, 3 );
 		gridView.setLayoutParams(200, 280, 40, 40);
-		gridView.setBackground( new GLColor(1.0f, 0, 0 ));
+		gridView.setBackground( new GLColor(1.0f, 0.0f, 0.0f ));
+		gridView.setHorizontalSpacing( 20.0f);
+		gridView.setVerticalSpacing( 20.0f);
+		gridView.setMargin(10, 10, 10, 10 );
+		gridView.setPadding( 10, 10, 10, 10);
 
 		getData();
-
 		GridViewAdapter adapter = new GridViewAdapter(listData, this);
 
 		gridView.setAdapter( adapter );
 		gridView.setWidth(500);
 		gridView.setHeight(400);
+
 		//gridView.rotate(90.0f, 1.0f, 0.0f, 0.0f );
 		rootView.addView(gridView);
 		//rootView.setRotationX( 90 );
@@ -104,17 +108,17 @@ public class GridViewActivity extends BaseViewActivity {
 		
 		
 		
-//		GLCursorView imageView = new GLCursorView(this);
-//		imageView.setWidth(10);
-//		imageView.setHeight(10);
-//		imageView.setBackground(new GLColor(1.0f, 1.0f, 1.0f));
-//		imageView.setDepth(3);
-////		imageView.setImage(R.drawable.ic_launcher);
-////		textView.setText("北京欢迎你");
-////		textView.setAlpha(0.3f);
-//		imageView.setLayoutParams(460, 460, 40, 40);
+		GLCursorView imageView = new GLCursorView(this);
+		imageView.setWidth(10);
+		imageView.setHeight(10);
+		imageView.setBackground(new GLColor(1.0f, 1.0f, 1.0f));
+		imageView.setDepth(3);
+//		imageView.setImage(R.drawable.ic_launcher);
+//		textView.setText("北京欢迎你");
+//		textView.setAlpha(0.3f);
+		imageView.setLayoutParams(460, 460, 40, 40);
 //
-//		rootView.addView(imageView);
+		rootView.addView(imageView);
 //		rootView.addView(listView);		
 
 	}
