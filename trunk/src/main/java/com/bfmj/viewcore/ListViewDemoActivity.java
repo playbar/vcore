@@ -24,7 +24,9 @@ public class ListViewDemoActivity extends BaseViewActivity {
 	private GLListView listView;
 	private String Url = "http://img.static.mojing.cn/resource/list/3.js";
 //	private AQuery aq;
+	private int index = 0;
 	private GLRootView rootView;
+	private AdapterDemo adapter;
 	private List<String> listData = new ArrayList<String>();
 
     // 图片封装为一个数组
@@ -52,11 +54,11 @@ public class ListViewDemoActivity extends BaseViewActivity {
 
 
 
-		for(int i=0;  i < iconName.length; i++){
-			listData.add(iconName[i]);
+		for(index =0;  index < 2; index++){
+			listData.add(iconName[index]);
 		}
 
-		AdapterDemo adapter = new AdapterDemo(listData, ListViewDemoActivity.this);
+		adapter = new AdapterDemo(listData, ListViewDemoActivity.this);
 		listView.setAdapter(adapter);
 		rootView.addView(listView);
 
@@ -132,21 +134,24 @@ public class ListViewDemoActivity extends BaseViewActivity {
 		}	        
 	}
 	
-//	@Override
-//	public boolean onTouchEvent(MotionEvent event) {
-//		// TODO Auto-generated method stub
-//		if(event.getAction() == MotionEvent.ACTION_DOWN){
-////			listview.changeItem(false);
-////			listview.move();
-//			listView.moveLeft();
-//			
-//		}
-//		if(event.getAction() == MotionEvent.ACTION_MOVE){
-////			listview.changeItem(false);
-////			listview.move();
-//			listView.moveRight();
-//		}
-//		return super.onTouchEvent(event);
-//	}
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// TODO Auto-generated method stub
+		if(event.getAction() == MotionEvent.ACTION_DOWN){
+//			listview.changeItem(false);
+//			listview.move();
+
+			listData.add(iconName[++index]);
+			adapter.notifyDataSetChanged();
+			listView.moveLeft();
+
+		}
+		if(event.getAction() == MotionEvent.ACTION_MOVE){
+//			listview.changeItem(false);
+//			listview.move();
+			listView.moveRight();
+		}
+		return super.onTouchEvent(event);
+	}
 	
 }

@@ -85,6 +85,11 @@ public class AdapterDemo extends GLBaseAdapter {
 	}
 
 	@Override
+	public void notifyDataSetChanged(){
+
+	}
+
+	@Override
 	public GLRectView getGLView(int position, GLRectView convertView,
 			GLGroupView parent) {
 		// TODO Auto-generated method stub
