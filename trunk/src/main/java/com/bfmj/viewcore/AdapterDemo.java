@@ -31,15 +31,15 @@ public class AdapterDemo extends GLBaseAdapter {
 
 	private List<String> list;
 	private Context context;
-	private AQuery mAq;
+//	private AQuery mAq;
 	private DisplayImageOptions options;        // DisplayImageOptions是用于设置图片显示的类
 	private ImageLoader imageLoader = ImageLoader.getInstance();  
 //	private ImageView iv;
 	
-	public AdapterDemo(List<String> listData, AQuery aq, Context c) {
+	public AdapterDemo(List<String> listData, Context c) {
 		context = c;
 		list = listData;
-		mAq = aq;
+//		mAq = aq;
 		
 		imageLoader.init(ImageLoaderConfiguration.createDefault(c));
 		
@@ -132,25 +132,25 @@ public class AdapterDemo extends GLBaseAdapter {
 //			}
 //		});
 		ImageView iv = new ImageView(context);
-		mAq.id(iv).image(list.get(position), true, true, 0, 0, new BitmapAjaxCallback(){
-
-	        @Override
-	        public void callback(String url, ImageView iv, Bitmap bm,  AjaxStatus status){
-	                                
-	        	Log.d("iiii",url);
-	        	
-				final Bitmap _bitmap = bm;
-				(((BaseViewActivity)context).getRootView()).queueEvent(new Runnable() {
-					@Override
-					public void run() {
-						image.setImage(_bitmap);
-//						_bitmap.recycle();
-					}
-				});				
-	                
-	        }
-	        
-		});
+//		mAq.id(iv).image(list.get(position), true, true, 0, 0, new BitmapAjaxCallback(){
+//
+//	        @Override
+//	        public void callback(String url, ImageView iv, Bitmap bm,  AjaxStatus status){
+//
+//	        	Log.d("iiii",url);
+//
+//				final Bitmap _bitmap = bm;
+//				(((BaseViewActivity)context).getRootView()).queueEvent(new Runnable() {
+//					@Override
+//					public void run() {
+//						image.setImage(_bitmap);
+////						_bitmap.recycle();
+//					}
+//				});
+//
+//	 	       }
+//
+//		});
 		
 		
 //		mAq.im

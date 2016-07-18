@@ -295,7 +295,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	public void showItem(int cIndex){
 		if(this.mGLListAdapter==null)
 			return;
-
+		this.mTotalCount = mGLListAdapter.getCount();
 		if( mOrientation.equals( GLOrientation.HORIZONTAL )){
 			showHItem(cIndex);
 		}else{

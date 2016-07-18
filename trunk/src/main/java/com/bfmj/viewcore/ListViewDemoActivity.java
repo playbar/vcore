@@ -23,16 +23,25 @@ public class ListViewDemoActivity extends BaseViewActivity {
 
 	private GLListView listView;
 	private String Url = "http://img.static.mojing.cn/resource/list/3.js";
-	private AQuery aq;
+//	private AQuery aq;
 	private GLRootView rootView;
 	private List<String> listData = new ArrayList<String>();
+
+    // 图片封装为一个数组
+    private int[] icon = { R.drawable.address_book, R.drawable.calendar,
+            R.drawable.camera, R.drawable.clock, R.drawable.games_control,
+            R.drawable.messenger, R.drawable.ringtone, R.drawable.settings,
+            R.drawable.speech_balloon, R.drawable.weather, R.drawable.world,
+            R.drawable.youtube };
+    private String[] iconName = { "通讯录", "日历", "照相机", "时钟", "游戏", "短信", "铃声",
+            "设置", "语音", "天气", "浏览器", "视频" };
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		aq = new AQuery(this);
+//		aq = new AQuery(this);
 		rootView = getRootView();
 		rootView.onResume();		
 		//slistView = new GLListView(this);
@@ -40,7 +49,15 @@ public class ListViewDemoActivity extends BaseViewActivity {
 		listView.setWidth(500);
 		listView.setHeight(200);
 		listView.setItemSpacing(20);
-		
+
+		for(int i=0;  i < iconName.length; i++){
+			listData.add(iconName[i]);
+		}
+
+		AdapterDemo adapter = new AdapterDemo(listData, ListViewDemoActivity.this);
+		listView.setAdapter(adapter);
+		rootView.addView(listView);
+
 //		listView.setOnKeyListener(new GLOnKeyListener() {
 //			
 //			@Override
@@ -84,7 +101,7 @@ public class ListViewDemoActivity extends BaseViewActivity {
 		
 		rootView.addView(imageView);
 //		rootView.addView(listView);		
-		aq.ajax(Url, JSONArray.class, this, "jsonCallBack");
+		//aq.ajax(Url, JSONArray.class, this, "jsonCallBack");
 		
 	}
 	
@@ -98,7 +115,7 @@ public class ListViewDemoActivity extends BaseViewActivity {
 				listData.add(imageUrl);
 			}
 			
-			AdapterDemo adapter = new AdapterDemo(listData, aq, ListViewDemoActivity.this);
+			AdapterDemo adapter = new AdapterDemo(listData, ListViewDemoActivity.this);
 			listView.setAdapter(adapter);
 			
 			

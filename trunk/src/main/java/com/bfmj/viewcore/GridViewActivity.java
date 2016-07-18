@@ -2,6 +2,7 @@ package com.bfmj.viewcore;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
@@ -26,6 +27,8 @@ public class GridViewActivity extends BaseViewActivity {
 	private GLRootView rootView;
 	private GLGridView gridView;
 	private AQuery aq;
+	private GridViewAdapter adapter;
+	private int index;
 	private List<Map<String, Object>> listData = new ArrayList<Map<String, Object>>();
 
 	// 图片封装为一个数组
@@ -39,10 +42,10 @@ public class GridViewActivity extends BaseViewActivity {
 
 	public List<Map<String, Object>> getData(){
 		//cion和iconName的长度是相同的，这里任选其一都可以
-		for(int i=0;i<5;i++){
+		for(index=0; index<2; ++index){
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("image", icon[i]);
-			map.put("text", iconName[i]);
+			map.put("image", icon[index]);
+			map.put("text", iconName[index]);
 			listData.add(map);
 		}
 
@@ -68,7 +71,7 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
 
 		getData();
-		GridViewAdapter adapter = new GridViewAdapter(listData, this);
+		adapter = new GridViewAdapter(listData, this);
 
 		gridView.setAdapter( adapter );
 		gridView.setWidth(500);
@@ -140,21 +143,27 @@ public class GridViewActivity extends BaseViewActivity {
 	
 
 
-//	@Override
-//	public boolean onTouchEvent(MotionEvent event) {
-//		// TODO Auto-generated method stub
-//		if(event.getAction() == MotionEvent.ACTION_DOWN){
-////			listview.changeItem(false);
-////			listview.move();
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// TODO Auto-generated method stub
+		if(event.getAction() == MotionEvent.ACTION_DOWN){
+//			listview.changeItem(false);
+//			listview.move();
 //			listView.moveLeft();
-//			
-//		}
-//		if(event.getAction() == MotionEvent.ACTION_MOVE){
-////			listview.changeItem(false);
-////			listview.move();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("image", icon[index]);
+			map.put("text", iconName[index]);
+			listData.add(map);
+			gridView.showItem(0);
+			index++;
+			Log.e("OnTouchEvent", "add item");
+		}
+		if(event.getAction() == MotionEvent.ACTION_MOVE){
+//			listview.changeItem(false);
+//			listview.move();
 //			listView.moveRight();
-//		}
-//		return super.onTouchEvent(event);
-//	}
+		}
+		return super.onTouchEvent(event);
+	}
 	
 }

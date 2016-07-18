@@ -193,6 +193,7 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 
 	@Override
 	public void setAdapter(GLListAdapter adapter) {
+
 		// TODO Auto-generated method stub
 		mGLListAdapter = adapter;
 		this.mTotalCount = adapter.getCount();
@@ -381,9 +382,11 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 					// TODO Auto-generated method stub
 					if(focused){
 						mFocusIndex = location;
-						mOnItemSelectedListener.onItemSelected(GLListView.this, view, location, mStartIndex + location);
+						if( mOnItemClickListener != null ) {
+							mOnItemSelectedListener.onItemSelected(GLListView.this, view, location, mStartIndex + location);
+						}
 					}
-					else{
+					else if( mOnItemClickListener != null ){
 						mOnItemSelectedListener.onNothingSelected(GLListView.this, view, location, mStartIndex + location);
 					}
 				}
