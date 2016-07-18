@@ -94,6 +94,7 @@ public class GridViewAdapter extends GLBaseAdapter {
 		image.setImage(imgid);
 		image.setWidth(145.0f);
 		image.setHeight(150.0f);
+
 		
 		/** 
          * 显示图片 

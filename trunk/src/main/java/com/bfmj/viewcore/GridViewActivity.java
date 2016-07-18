@@ -11,7 +11,6 @@ import com.bfmj.viewcore.render.GLConstant;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLGridView;
 import com.bfmj.viewcore.view.GLImageView;
-import com.bfmj.viewcore.view.GLListView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
 
@@ -43,7 +42,7 @@ public class GridViewActivity extends BaseViewActivity {
 
 	public List<Map<String, Object>> getData(){
 		//cion和iconName的长度是相同的，这里任选其一都可以
-		for(index=0; index<2; ++index){
+		for(index=0; index<3; ++index){
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("image", icon[index]);
 			map.put("text", iconName[index]);
@@ -62,7 +61,7 @@ public class GridViewActivity extends BaseViewActivity {
 		rootView.onResume();
 		//rootView.setDoubleScreen(false);
 
-		gridView = new GLGridView( this, 3, 3 );
+		gridView = new GLGridView( this, 2, 2 );
 		gridView.setLayoutParams(500, 500, 40, 40);
 		gridView.setBackground( new GLColor(1.0f, 0.0f, 0.0f ));
 		gridView.setHorizontalSpacing( 20.0f);
@@ -75,8 +74,8 @@ public class GridViewActivity extends BaseViewActivity {
 		adapter = new GridViewAdapter(listData, this);
 
 		gridView.setAdapter( adapter );
-		gridView.setWidth(500);
-		gridView.setHeight(500);
+		gridView.setWidth(1000);
+		gridView.setHeight(800);
 
 
 		//gridView.rotate(90.0f, 1.0f, 0.0f, 0.0f );
@@ -153,6 +152,8 @@ public class GridViewActivity extends BaseViewActivity {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
+		if( index >= icon.length )
+			return super.onTouchEvent( event );
 		if(event.getAction() == MotionEvent.ACTION_DOWN){
 //			listview.changeItem(false);
 //			listview.move();
