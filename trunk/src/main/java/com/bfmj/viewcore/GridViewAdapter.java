@@ -92,7 +92,7 @@ public class GridViewAdapter implements GLListAdapter {
 		final Map data = list.get( position );
 		final int imgid = (int)data.get("image");
 		image.setImage(imgid);
-		image.setWidth(150.0f);
+		image.setWidth(145.0f);
 		image.setHeight(150.0f);
 		
 		/** 

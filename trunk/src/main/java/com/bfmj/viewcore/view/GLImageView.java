@@ -69,9 +69,9 @@ public class GLImageView extends GLRectView {
 		float width = getInnerWidth();
 		float height = getInnerHeight();
 		
-		if (width <= 0){
-			return;
-		}
+//		if (width <= 0){
+//			return;
+//		}
 		
 		if (mRenderParams != null){
 			removeRender(mRenderParams);
@@ -99,6 +99,10 @@ public class GLImageView extends GLRectView {
 		}
 
     	if (bitmap != null){
+			if ( this.getWidth() == 0 || this.getHeight() == 0 ){
+				this.setWidth( bitmap.getWidth());
+				this.setHeight( bitmap.getHeight() );
+			}
     		if (getHeight() == WRAP_CONTENT){
 	    		height = bitmap.getHeight() * width / bitmap.getWidth();
 	    		setHeight(height + getPaddingTop() + getPaddingBottom());

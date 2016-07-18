@@ -6,8 +6,10 @@ import android.util.Log;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
 import com.bfmj.viewcore.render.GLColor;
+import com.bfmj.viewcore.render.GLConstant;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLGridView;
+import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLListView;
 import com.bfmj.viewcore.view.GLRootView;
 
@@ -37,7 +39,7 @@ public class GridViewActivity extends BaseViewActivity {
 
 	public List<Map<String, Object>> getData(){
 		//cion和iconName的长度是相同的，这里任选其一都可以
-		for(int i=0;i<icon.length;i++){
+		for(int i=0;i<5;i++){
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("image", icon[i]);
 			map.put("text", iconName[i]);
@@ -56,23 +58,36 @@ public class GridViewActivity extends BaseViewActivity {
 		rootView.onResume();
 		//rootView.setDoubleScreen(false);
 
-		gridView = new GLGridView( this, 2, 3 );
-		gridView.setLayoutParams(200, 280, 40, 40);
+		gridView = new GLGridView( this, 3, 3 );
+		gridView.setLayoutParams(200, 180, 40, 40);
 		gridView.setBackground( new GLColor(1.0f, 0.0f, 0.0f ));
 		gridView.setHorizontalSpacing( 20.0f);
 		gridView.setVerticalSpacing( 20.0f);
 		gridView.setMargin(10, 10, 10, 10 );
 		gridView.setPadding( 10, 10, 10, 10);
+		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
 
 		getData();
 		GridViewAdapter adapter = new GridViewAdapter(listData, this);
 
 		gridView.setAdapter( adapter );
 		gridView.setWidth(500);
-		gridView.setHeight(400);
+		gridView.setHeight(500);
+
 
 		//gridView.rotate(90.0f, 1.0f, 0.0f, 0.0f );
 		rootView.addView(gridView);
+
+		GLImageView lineH = new GLImageView(this);
+		lineH.setLayoutParams(0, 180, 960, 2 );
+		lineH.setBackground( new GLColor( 1, 1, 1));
+		rootView.addView(lineH);
+
+		GLImageView line = new GLImageView(this);
+		line.setLayoutParams(200, 0, 2, 960);
+		line.setBackground(new GLColor(0, 1, 0));
+		rootView.addView(line);
+
 		//rootView.setRotationX( 90 );
 
 		//gridView.setItemSpacing(20);

@@ -7,10 +7,15 @@ import com.bfmj.viewcore.BaseViewActivity;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
+import com.bfmj.viewcore.render.GLConstant.*;
+
 import android.content.Context;
+import android.opengl.GLES20;
 
 public class GLGridView extends GLAdapterView<GLListAdapter> {
-	
+
+	private GLOrientation mOrientation = GLOrientation.HORIZONTAL; //默认模向
+
 	private int mNumColumns=0; //列数
 	private int mNumRows=0;//行数
 	private ArrayList<GLView> mList;//数据集
@@ -137,30 +142,26 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 		mOnItemClickListener = getOnItemClickListener();
 		showItem(this.mStartIndex);
 	}
-	
-	/**
-	 * 显示list列表
-	 * @param cIndex 从哪个索引开始显示
-	 */
-	public void showItem(int cIndex){
-		if(this.mGLListAdapter==null)
-			return;
+
+	public void showHItem( int cIndex ){
 		int tempIndex=cIndex;
+		//int width = getInnerWidth()
 		for(int rows=0; rows<this.mNumRows; rows++)
 		{
 			for(int col=0;col<this.mNumColumns;col++)
 			{
 				//如果大于设置的一屏显示数则不再添加
-				if((tempIndex > this.mNumOneScreen && this.mNumOneScreen != -1)
-						|| tempIndex > this.mTotalCount-1){
+				if((tempIndex > this.mNumOneScreen && this.mNumOneScreen != -1) || tempIndex > this.mTotalCount-1){
 					break;
 				}
 				final GLRectView view = this.mGLListAdapter.getGLView(tempIndex, convertView, null);
 				if (col == 0 && rows == 0) {
 					mFirstView = view;
 				}
-				view.setX(GLGridView.this.getX() + view.getWidth() * col + this.mHorizontalSpacing * col);
-				view.setY(GLGridView.this.getY() + view.getHeight() * rows + this.mVerticalSpacing * rows);
+
+				view.setX(GLGridView.this.getX() + getPaddingLeft() + view.getWidth() * col + this.mHorizontalSpacing * col);
+				view.setY(GLGridView.this.getY() + getPaddingTop() + view.getHeight() * rows + this.mVerticalSpacing * rows);
+
 				view.setId("gridview_" + tempIndex);
 				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
 					@Override
@@ -168,10 +169,10 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 						GLGridView.this.addView(view);
 					}
 				});
-				
+
 				final int position = mNumColumns*rows+col;
 				view.setFocusListener(new GLViewFocusListener() {
-					
+
 					@Override
 					public void onFocusChange(GLRectView view, boolean focused) {
 						if (mOnItemSelectedListener == null) {
@@ -185,23 +186,23 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 					}
 				});
 				view.setOnKeyListener(new GLOnKeyListener() {
-					
+
 					@Override
 					public boolean onKeyUp(GLRectView view, int keycode) {
 						return false;
 					}
-					
+
 					@Override
 					public boolean onKeyLongPress(GLRectView view, int keycode) {
 						return false;
 					}
-					
+
 					@Override
 					public boolean onKeyDown(GLRectView view, int keycode) {
 						if (mOnItemClickListener == null) {
 							return false;
 						}
-						
+
 						if (keycode == MojingKeyCode.KEYCODE_ENTER) {
 							mOnItemClickListener.onItemClick(null, view, position, position);
 						}
@@ -213,6 +214,96 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				tempIndex++;
 			}
 		}
+	}
+
+	public void showVItem( int cIndex ){
+		int tempIndex=cIndex;
+		//int width = getInnerWidth()
+		for(int col=0; col<this.mNumColumns; col++)
+		{
+			for(int row=0; row<this.mNumRows; row++)
+			{
+				//如果大于设置的一屏显示数则不再添加
+				if((tempIndex > this.mNumOneScreen && this.mNumOneScreen != -1) || tempIndex > this.mTotalCount-1){
+					break;
+				}
+				final GLRectView view = this.mGLListAdapter.getGLView(tempIndex, convertView, null);
+				if (col == 0 && row == 0) {
+					mFirstView = view;
+				}
+				view.setX(GLGridView.this.getX() + getPaddingLeft() + view.getWidth() * col + this.mHorizontalSpacing * col);
+				view.setY(GLGridView.this.getY() + getPaddingTop() + view.getHeight() * row + this.mVerticalSpacing * row);
+
+				view.setId("gridview_" + tempIndex);
+				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
+					@Override
+					public void run() {
+						GLGridView.this.addView(view);
+					}
+				});
+
+				final int position = mNumColumns*row+col;
+				view.setFocusListener(new GLViewFocusListener() {
+
+					@Override
+					public void onFocusChange(GLRectView view, boolean focused) {
+						if (mOnItemSelectedListener == null) {
+							return;
+						}
+						if (focused) {
+							mOnItemSelectedListener.onItemSelected(null, view, position, position);
+						} else {
+							mOnItemSelectedListener.onNothingSelected(null, view, position, position);
+						}
+					}
+				});
+				view.setOnKeyListener(new GLOnKeyListener() {
+
+					@Override
+					public boolean onKeyUp(GLRectView view, int keycode) {
+						return false;
+					}
+
+					@Override
+					public boolean onKeyLongPress(GLRectView view, int keycode) {
+						return false;
+					}
+
+					@Override
+					public boolean onKeyDown(GLRectView view, int keycode) {
+						if (mOnItemClickListener == null) {
+							return false;
+						}
+
+						if (keycode == MojingKeyCode.KEYCODE_ENTER) {
+							mOnItemClickListener.onItemClick(null, view, position, position);
+						}
+						mPrevIndex = position;
+						return false;
+					}
+				});
+				//this.addView(view);
+				tempIndex++;
+			}
+		}
+	}
+
+	/**
+	 * 显示list列表
+	 * @param cIndex 从哪个索引开始显示
+	 */
+	public void showItem(int cIndex){
+		if(this.mGLListAdapter==null)
+			return;
+
+		if( mOrientation.equals( GLOrientation.HORIZONTAL )){
+			showHItem(cIndex);
+		}else{
+			showVItem(cIndex);
+		}
+		return;
+
+
 	}
 
 	@Override
@@ -345,6 +436,13 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 		this.addView(view, index);
 	}
 
+	@Override
+	public void draw(boolean isLeft) {
+		//GLES20.glEnable(GLES20.GL_SCISSOR_TEST);
+		//GLES20.glScissor(0, 0, 2000, 600 );
+		super.draw(isLeft);
+	}
+
 	public int getPrevIndex() {
 		return mPrevIndex;
 	}
@@ -363,4 +461,18 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	public int getNumColumns() {
 		return mNumColumns;
 	}
+
+	public void setOrientation(GLOrientation orientation) {
+		mOrientation = orientation;
+	}
+
+	/**
+	 * 获取布局方向
+	 * @author linzanxian  @Date 2015年3月10日 下午5:36:47
+	 * @return String
+	 */
+	public GLOrientation getOrientation() {
+		return mOrientation;
+	}
+
 }
