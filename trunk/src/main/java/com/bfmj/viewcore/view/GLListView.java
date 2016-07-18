@@ -238,9 +238,9 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 		}
 
 		for(int k=0;k<GLListView.this.getChildView().size();k++){
-			GLRectView _view1 = GLListView.this.getView(k);
-			if(_view1.getDepth() > GLListView.this.getDepth()){
-				_view1.setDepth(GLListView.this.getDepth());
+			GLRectView view1 = GLListView.this.getView(k);
+			if(view1.getDepth() > GLListView.this.getDepth()){
+				view1.setDepth(GLListView.this.getDepth());
 			}
 		}
 

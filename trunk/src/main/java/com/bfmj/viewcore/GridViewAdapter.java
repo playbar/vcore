@@ -28,7 +28,6 @@ public class GridViewAdapter extends GLBaseAdapter {
 	private Context context;
 	private DisplayImageOptions options;        // DisplayImageOptions是用于设置图片显示的类
 	private ImageLoader imageLoader = ImageLoader.getInstance();
-//	private ImageView iv;
 
 	public GridViewAdapter(List<? extends Map<String, ?>> listData, Context c) {
 		context = c;
@@ -129,13 +128,10 @@ public class GridViewAdapter extends GLBaseAdapter {
 //				
 //			}
 //		});
-		ImageView iv = new ImageView(context);
 
-		Log.d("bbbbb",list.get(position) + "");
 
 		return image;
-		//return grv;
-		
+
 	}
 
 	public boolean isEmpty() {return getCount() == 0;}
