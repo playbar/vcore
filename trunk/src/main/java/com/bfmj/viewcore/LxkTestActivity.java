@@ -80,7 +80,7 @@ public class LxkTestActivity extends BaseViewActivity {
 		}
 
 		GLCursorView cursorView = new GLCursorView(this);
-		cursorView.setLayoutParams(1000, 1000, 50, 50);
+		cursorView.setLayoutParams(1000, 1000, 10, 10);
 		cursorView.setBackground(new GLColor(1.0f, 0, 0));
 		cursorView.setDepth(3);
 		rootView.addView(cursorView);

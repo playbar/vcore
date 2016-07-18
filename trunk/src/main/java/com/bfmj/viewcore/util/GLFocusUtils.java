@@ -174,11 +174,21 @@ public class GLFocusUtils {
 			
 			float s = defualtDepth / v.getDepth();
 			float vx1 = v.getLeft() + v.getX();
-			float vx2 = vx1 + v.getWidth();
 			float vy1 = v.getTop() + v.getY();
+
+			float vx2 = vx1 + v.getWidth();
 			float vy2 = vy1 + v.getHeight();
-			
-			if (x >= scale(vx1, s) && x < scale(vx2, s) && y >= scale(vy1, s) && y < scale(vy2, s)){
+
+//			int valx1 = (int)((vx1 - 480) * s + 480);
+//			int valx2 = (int)((vx2 - 480) * s + 480);
+//
+//			int valy1 = (int)((vy1 - 480) * s + 480);
+//			int valy2 = (int)((vy2 - 480) * s + 480);
+
+			if (x >= scale(vx1, s) && x < scale(vx2, s)
+					&& y >= scale(vy1, s) && y < scale(vy2, s))
+			//if( x >= vx1 && x < valx2 && y >= valy1 && y < valy2 )
+			{
 //				
 				if (!isAdjustCursor) {
 					isAdjustCursor = true;
