@@ -36,7 +36,7 @@ public class GLColor {
 	}
 
 	public GLColor(int hex){
-		new GLColor(hex, 1.0f);
+		 this(hex, 1.0f);
 	}
 
 	public GLColor(int hex, float a){
