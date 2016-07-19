@@ -11,6 +11,8 @@ import com.androidquery.callback.BitmapAjaxCallback;
 import com.bfmj.viewcore.R;
 import com.bfmj.viewcore.adapter.GLBaseAdapter;
 import com.bfmj.viewcore.adapter.GLListAdapter;
+import com.bfmj.viewcore.interfaces.GLViewFocusListener;
+import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.view.GLGroupView;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLRectView;
@@ -29,6 +31,20 @@ public class GridViewAdapter extends GLBaseAdapter {
 	private Context context;
 	private DisplayImageOptions options;        // DisplayImageOptions是用于设置图片显示的类
 	private ImageLoader imageLoader = ImageLoader.getInstance();
+
+	//////////////
+
+	GLViewFocusListener listener = new GLViewFocusListener() {
+
+		@Override
+		public void onFocusChange(GLRectView view, boolean focused) {
+			if (focused){
+				view.setBackground(new GLColor(0, 0, 1));
+			} else {
+				view.setBackground(new GLColor(1, 1, 1));
+			}
+		}
+	};
 
 	public GridViewAdapter(List<? extends Map<String, ?>> listData, Context c) {
 		context = c;
@@ -92,8 +108,9 @@ public class GridViewAdapter extends GLBaseAdapter {
 		final Map data = list.get( position );
 		final int imgid = (int)data.get("image");
 		image.setImage(imgid);
-		image.setWidth(145.0f);
-		image.setHeight(150.0f);
+		image.setWidth(300.0f);
+		image.setHeight(300.0f);
+		image.setFocusListener( listener );
 
 		
 		/** 

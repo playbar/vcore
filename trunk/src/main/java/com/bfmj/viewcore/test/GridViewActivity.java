@@ -9,11 +9,13 @@ import com.bfmj.viewcore.R;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLConstant;
 import com.bfmj.viewcore.view.BaseViewActivity;
+import com.bfmj.viewcore.view.GLAdapterView;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLGridView;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
+import com.bfmj.viewcore.view.GLView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,10 +60,22 @@ public class GridViewActivity extends BaseViewActivity {
 		rootView = getRootView();
 		rootView.onResume();
 		//rootView.setDoubleScreen(false);
+		GLAdapterView.OnItemSelectedListener listener = new GLAdapterView.OnItemSelectedListener(){
+			public void onItemSelected(GLAdapterView<?> glparent, GLView glview, int position, long id){
+
+			}
+
+			public void onNothingSelected(GLAdapterView<?> glparent, GLView glview, int position, long id){
+
+			}
+			public void onNoItemData(){
+
+			}
+		};
 
 		gridView = new GLGridView( this, 2, 2 );
 		gridView.setLayoutParams(500, 500, 40, 40);
-		gridView.setBackground( new GLColor(1.0f, 0.0f, 0.0f ));
+		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
 		gridView.setHorizontalSpacing( 20.0f);
 		gridView.setVerticalSpacing( 20.0f);
 		gridView.setMargin(10, 10, 10, 10 );
@@ -74,6 +88,8 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setAdapter( adapter );
 		gridView.setWidth(1000);
 		gridView.setHeight(800);
+		gridView.setOnItemSelectedListener( listener );
+
 
 
 		//gridView.rotate(90.0f, 1.0f, 0.0f, 0.0f );
@@ -130,13 +146,19 @@ public class GridViewActivity extends BaseViewActivity {
 		textView.setTextSize(100);
 		rootView.addView(textView);
 
-		GLCursorView imageView = new GLCursorView(this);
-		imageView.setWidth(10);
-		imageView.setHeight(10);
-		imageView.setBackground(new GLColor(1.0f, 1.0f, 1.0f));
-		imageView.setDepth(3);
-		imageView.setLayoutParams(1000, 1000, 100, 100);
-		rootView.addView(imageView);
+//		GLCursorView imageView = new GLCursorView(this);
+//		imageView.setWidth(10);
+//		imageView.setHeight(10);
+//		imageView.setBackground(new GLColor(1.0f, 1.0f, 1.0f));
+//		imageView.setDepth(3);
+//		imageView.setLayoutParams(1000, 1000, 100, 100);
+//		rootView.addView(imageView);
+
+		GLCursorView cursorView = new GLCursorView(this);
+		cursorView.setLayoutParams(1190, 1190, 20, 20);
+		cursorView.setBackground(new GLColor(1.0f, 0, 0));
+		cursorView.setDepth(3);
+		rootView.addView(cursorView);
 
 
 
