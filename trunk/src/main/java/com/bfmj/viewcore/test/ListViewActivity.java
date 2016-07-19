@@ -1,4 +1,4 @@
-package com.bfmj.viewcore;
+package com.bfmj.viewcore.test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.androidquery.callback.AjaxStatus;
+import com.bfmj.viewcore.R;
 import com.bfmj.viewcore.render.GLColor;
+import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLListView;
 import com.bfmj.viewcore.view.GLRootView;

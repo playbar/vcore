@@ -3,7 +3,6 @@ package com.bfmj.viewcore.view;
 import java.util.ArrayList;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
-import com.bfmj.viewcore.BaseViewActivity;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;

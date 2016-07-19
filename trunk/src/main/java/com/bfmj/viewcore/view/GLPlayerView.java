@@ -3,7 +3,6 @@ package com.bfmj.viewcore.view;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.bfmj.viewcore.BaseViewActivity;
 import com.bfmj.viewcore.interfaces.IGLPlayerListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLRenderParams;
@@ -11,8 +10,6 @@ import com.bfmj.viewcore.render.GLVideoRect.TextureType;
 import com.bfmj.viewcore.util.GLTextureUtils;
 import android.content.Context;
 import android.graphics.SurfaceTexture;
-import android.opengl.GLSurfaceView;
-import android.view.SurfaceView;
 
 /**
  * GL播放器

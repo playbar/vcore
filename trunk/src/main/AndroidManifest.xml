@@ -30,7 +30,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
        <activity
-            android:name=".LxkTestActivity"
+            android:name=".test.LxkTestActivity"
             android:screenOrientation="landscape"
             android:label="@string/app_name" >
             <intent-filter>
@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WangFZDemoActivity"
+            android:name=".test.WangFZDemoActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"  >
            
@@ -51,13 +51,13 @@
             <!--android:screenOrientation="landscape"  >-->
         <!--</activity>-->
         <!--<activity-->
-            <!--android:name="com.bfmj.viewcore.LxkTestActivity"-->
+            <!--android:name="com.bfmj.viewcore.test.LxkTestActivity"-->
             <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen"-->
             <!--android:screenOrientation="landscape"-->
             <!--android:label="@string/title_activity_lxk_test" >-->
         <!--</activity>-->
         <activity
-            android:name="com.bfmj.viewcore.LinTestActivity"
+            android:name=".test.LinTestActivity"
             android:screenOrientation="landscape"
             android:label="@string/title_activity_lxk_test" >
         </activity>

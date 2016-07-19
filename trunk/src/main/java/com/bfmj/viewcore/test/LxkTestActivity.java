@@ -1,20 +1,16 @@
-package com.bfmj.viewcore;
+package com.bfmj.viewcore.test;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
-import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
-import com.bfmj.viewcore.interfaces.IGLPlayerListener;
 import com.bfmj.viewcore.player.GLSystemPlayer;
 import com.bfmj.viewcore.render.GLColor;
+import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLCursorView;
-import com.bfmj.viewcore.view.GLGroupView;
 import com.bfmj.viewcore.view.GLImageView;
-import com.bfmj.viewcore.view.GLPlayerView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
-import com.bfmj.viewcore.view.GLSenceView;
 import com.bfmj.viewcore.view.GLTextView;
 
 public class LxkTestActivity extends BaseViewActivity {

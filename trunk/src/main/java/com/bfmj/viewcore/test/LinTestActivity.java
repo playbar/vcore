@@ -1,29 +1,13 @@
-package com.bfmj.viewcore;
+package com.bfmj.viewcore.test;
 
-import com.bfmj.viewcore.animation.GLScaleAnimation;
-import com.bfmj.viewcore.render.GLColor;
-import com.bfmj.viewcore.render.GLConstant.GLAlign;
-import com.bfmj.viewcore.render.GLConstant.GLDirection;
-import com.bfmj.viewcore.render.GLConstant.GLOrientation;
-import com.bfmj.viewcore.render.GLConstant.GLProcessMode;
-import com.bfmj.viewcore.view.GLAbsoluteView;
-import com.bfmj.viewcore.view.GLImageView;
-import com.bfmj.viewcore.view.GLLinearView;
-import com.bfmj.viewcore.view.GLProcessCircleCanvasView;
+import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLProcessCircleView;
-import com.bfmj.viewcore.view.GLProcessView;
 import com.bfmj.viewcore.view.GLRelativeView;
 import com.bfmj.viewcore.view.GLRootView;
-import com.bfmj.viewcore.view.GLSenceView;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.Window;
-import android.view.WindowManager;
 
 public class LinTestActivity extends BaseViewActivity {
 	GLRelativeView view3;

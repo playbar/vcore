@@ -1,19 +1,13 @@
-package com.bfmj.viewcore;
+package com.bfmj.viewcore.test;
 
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.bfmj.viewcore.adapter.GLBaseAdapter;
-import com.bfmj.viewcore.view.GLGridView;
 import com.bfmj.viewcore.view.GLGroupView;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLRectView;
-import com.bfmj.viewcore.view.GLRelativeView;
-import com.bfmj.viewcore.view.GLView; 
 
 public class WangDemoAdpater extends GLBaseAdapter  {
 	

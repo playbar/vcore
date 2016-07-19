@@ -8,7 +8,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
-import com.bfmj.viewcore.BaseViewActivity;
 import com.bfmj.viewcore.animation.GLAlphaAnimation;
 import com.bfmj.viewcore.animation.GLAnimation;
 import com.bfmj.viewcore.animation.GLRotateAnimation;

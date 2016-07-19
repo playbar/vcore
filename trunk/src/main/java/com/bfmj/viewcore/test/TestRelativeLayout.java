@@ -1,4 +1,4 @@
-package com.bfmj.viewcore;
+package com.bfmj.viewcore.test;
 
 import android.content.Context;
 

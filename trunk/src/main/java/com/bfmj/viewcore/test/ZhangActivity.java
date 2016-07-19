@@ -1,29 +1,17 @@
-package com.bfmj.viewcore;
+package com.bfmj.viewcore.test;
 
-import junit.framework.Test;
-
-import com.bfmj.viewcore.animation.GLAlphaAnimation;
+import com.bfmj.viewcore.R;
 import com.bfmj.viewcore.animation.GLAnimation;
 import com.bfmj.viewcore.animation.GLAnimation.OnGLAnimationListener;
-import com.bfmj.viewcore.animation.GLRotateAnimation;
-import com.bfmj.viewcore.animation.GLScaleAnimation;
 import com.bfmj.viewcore.animation.GLTranslateAnimation;
 import com.bfmj.viewcore.render.GLColor;
-import com.bfmj.viewcore.view.GLGroupView;
+import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLLinearView;
-import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
-import com.bfmj.viewcore.view.GLSenceView;
 
-import android.R.anim;
-import android.app.Activity;
-import android.opengl.Matrix;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 

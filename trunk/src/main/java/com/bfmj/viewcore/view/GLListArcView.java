@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
-import com.bfmj.viewcore.BaseViewActivity;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.animation.GLAnimation;
 import com.bfmj.viewcore.animation.GLAnimation.OnGLAnimationListener;

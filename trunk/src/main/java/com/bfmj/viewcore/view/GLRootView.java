@@ -13,7 +13,6 @@ import com.baofeng.mojing.MojingSDK;
 import com.baofeng.mojing.MojingSurfaceView;
 import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.distortion.Distortion;
-import com.bfmj.viewcore.BaseViewActivity;
 import com.bfmj.viewcore.render.GLColorRect;
 import com.bfmj.viewcore.render.GLImageRect;
 import com.bfmj.viewcore.render.GLScreenParams;

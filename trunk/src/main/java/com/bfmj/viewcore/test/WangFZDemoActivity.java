@@ -1,12 +1,13 @@
-package com.bfmj.viewcore;
+package com.bfmj.viewcore.test;
 
 
 
 import java.util.ArrayList;
 
-import com.bfmj.viewcore.interfaces.GLViewFocusListener;
+import com.bfmj.viewcore.R;
 import com.bfmj.viewcore.render.GLColor;
 
+import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLAdapterView;
 import com.bfmj.viewcore.view.GLAdapterView.OnItemSelectedListener;
 import com.bfmj.viewcore.view.GLCursorView;
@@ -17,16 +18,11 @@ import com.bfmj.viewcore.view.GLRelativeView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLView;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Toast;
 
-public class WangFZDemoActivity extends BaseViewActivity{
+public class WangFZDemoActivity extends BaseViewActivity {
 	private GLGridView grid;
 	private ArrayList<GLRelativeView> list;
 	private ArrayList<Integer> listData;

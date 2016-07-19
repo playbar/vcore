@@ -6,7 +6,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import com.bfmj.viewcore.BaseViewActivity;
 import com.bfmj.viewcore.render.GLMesh;
 import com.bfmj.viewcore.render.GLRect;
 import com.bfmj.viewcore.render.GLVector2;

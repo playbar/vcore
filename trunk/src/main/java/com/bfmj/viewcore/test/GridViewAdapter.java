@@ -1,4 +1,4 @@
-package com.bfmj.viewcore;
+package com.bfmj.viewcore.test;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
 import com.androidquery.callback.BitmapAjaxCallback;
+import com.bfmj.viewcore.R;
 import com.bfmj.viewcore.adapter.GLBaseAdapter;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.view.GLGroupView;
@@ -37,7 +38,7 @@ public class GridViewAdapter extends GLBaseAdapter {
 
 		// 使用DisplayImageOptions.Builder()创建DisplayImageOptions  
         options = new DisplayImageOptions.Builder()  
-            .showStubImage(R.drawable.a1)          // 设置图片下载期间显示的图片  
+            .showStubImage(R.drawable.a1)          // 设置图片下载期间显示的图片
             .showImageForEmptyUri(R.drawable.a1)  // 设置图片Uri为空或是错误的时候显示的图片  
             .showImageOnFail(R.drawable.a1)       // 设置图片加载或解码过程中发生错误显示的图片      
             .cacheInMemory(true)                        // 设置下载的图片是否缓存在内存中  
