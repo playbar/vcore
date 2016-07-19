@@ -240,8 +240,8 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if (col == 0 && row == 0) {
 					mFirstView = view;
 				}
-				view.setX(GLGridView.this.getX() + getPaddingLeft() + view.getWidth() * col + this.mHorizontalSpacing * col);
-				view.setY(GLGridView.this.getY() + getPaddingTop() + view.getHeight() * row + this.mVerticalSpacing * row);
+				view.setX(getX() + getPaddingLeft() + view.getWidth() * col + this.mHorizontalSpacing * col);
+				view.setY(getY() + getPaddingTop() + view.getHeight() * row + this.mVerticalSpacing * row);
 
 				view.setId("gridview_" + tempIndex);
 				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {

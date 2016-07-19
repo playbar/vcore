@@ -45,15 +45,15 @@ public class ListViewActivity extends BaseViewActivity {
 //		aq = new AQuery(this);
 		rootView = getRootView();
 		rootView.onResume();		
-		listView = new GLListView(ListViewActivity.this, GLListView.HORIZONTAL);
+		listView = new GLListView(ListViewActivity.this, GLListView.VERTICAL);
 		listView.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
 
-		listView.setLayoutParams(280, 400, 1000, 400);
+		listView.setLayoutParams(280, 400, 1000, 800);
 		listView.setItemSpacing(20);
 
 
 
-		for(index =0;  index < 2; index++){
+		for(index =0;  index < 1; index++){
 			listData.add(iconName[index]);
 		}
 

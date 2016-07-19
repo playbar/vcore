@@ -62,33 +62,35 @@ public class GridViewActivity extends BaseViewActivity {
 		//rootView.setDoubleScreen(false);
 		GLAdapterView.OnItemSelectedListener listener = new GLAdapterView.OnItemSelectedListener(){
 			public void onItemSelected(GLAdapterView<?> glparent, GLView glview, int position, long id){
-
+				Log.e("test", "onItemSelected");
+				glview.setAlpha(0.3f);
 			}
 
 			public void onNothingSelected(GLAdapterView<?> glparent, GLView glview, int position, long id){
-
+				Log.e("test", "onNothingSelected");
+				glview.setAlpha( 1.0f);
 			}
 			public void onNoItemData(){
-
+				Log.e("test", "onNoItemData");
 			}
 		};
 
-		gridView = new GLGridView( this, 2, 2 );
+		gridView = new GLGridView( this, 3, 3 );
 		gridView.setLayoutParams(500, 500, 40, 40);
 		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
 		gridView.setHorizontalSpacing( 20.0f);
 		gridView.setVerticalSpacing( 20.0f);
 		gridView.setMargin(10, 10, 10, 10 );
 		gridView.setPadding( 10, 10, 10, 10);
-		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
+		gridView.setOrientation(GLConstant.GLOrientation.VERTICAL );
 
 		getData();
 		adapter = new GridViewAdapter(listData, this);
-
+		gridView.setOnItemSelectedListener( listener );
 		gridView.setAdapter( adapter );
 		gridView.setWidth(1000);
 		gridView.setHeight(800);
-		gridView.setOnItemSelectedListener( listener );
+
 
 
 

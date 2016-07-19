@@ -110,7 +110,7 @@ public class GridViewAdapter extends GLBaseAdapter {
 		image.setImage(imgid);
 		image.setWidth(300.0f);
 		image.setHeight(300.0f);
-		image.setFocusListener( listener );
+		//image.setFocusListener( listener );
 
 		
 		/** 
