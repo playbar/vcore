@@ -35,15 +35,14 @@ public class GLColor {
 		init(r, g, b, a);
 	}
 
-	public GLColor(String hex){
+	public GLColor(int hex){
 		new GLColor(hex, 1.0f);
 	}
 
-	public GLColor(String hex, float a){
-		int color = Integer.parseInt(hex);
-		int r = (color & 0xFF0000) >> 16;
-		int g = (color & 0x00FF00) >> 8;
-		int b = color & 0x0000FF;
+	public GLColor(int hex, float a){
+		int r = (hex & 0xFF0000) >> 16;
+		int g = (hex & 0x00FF00) >> 8;
+		int b = hex & 0x0000FF;
 		init(r / 255.0f, g / 255.0f, b / 255.0f, a);
 	}
 
