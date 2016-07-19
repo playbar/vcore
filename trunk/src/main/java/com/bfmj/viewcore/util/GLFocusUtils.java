@@ -124,6 +124,14 @@ public class GLFocusUtils {
 		
 		return position;
 	}
+
+	private float getX(float x){
+		return (x - GLScreenParams.getXDpi() / 2) / GLScreenParams.getXDpi() * GLScreenParams.getScreenWidth();
+	}
+
+	private float getY(float y){
+		return (GLScreenParams.getYDpi() / 2 - y) / GLScreenParams.getYDpi() * GLScreenParams.getScreenHeight();
+	}
 	
 	/**
 	 * 处理焦点
@@ -174,21 +182,34 @@ public class GLFocusUtils {
 			y = position[1];
 			
 			float s = defualtDepth / v.getDepth();
-			float vx1 = v.getLeft() + v.getX();
-			float vy1 = v.getTop() + v.getY();
+			float vx1 = getX(v.getLeft() + v.getX());
+			float vy1 = getY(v.getTop() + v.getY());
 
-			float vx2 = vx1 + v.getWidth();
-			float vy2 = vy1 + v.getHeight();
+			float vx2 = getX(v.getLeft() + v.getX() + v.getWidth());
+			float vy2 = getY(v.getTop() + v.getY() + v.getHeight());
 
-			int valx1 =scale(vx1, s);
-			int valx2 = scale(vx2, s);
+			float[] pos1 = {
+					vx1,
+					vy1,
+					-v.getDepth(), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+			};
+			float[] pos2 = {
+					vx2,
+					vy2,
+					-v.getDepth(), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+			};
+			Matrix.multiplyMM(pos1, 0, v.getMatrixState().getFinalMatrix(), 0, pos1, 0);
+			Matrix.multiplyMM(pos2, 0, v.getMatrixState().getFinalMatrix(), 0, pos2, 0);
 
-			int valy1 = scale(vy1, s);
-			int valy2 = scale(vy2, s);
+//			int valx1 = (int)((vx1 - 480) * s + 480);
+//			int valx2 = (int)((vx2 - 480) * s + 480);
+//
+//			int valy1 = (int)((vy1 - 480) * s + 480);
+//			int valy2 = (int)((vy2 - 480) * s + 480);
 
 //			if (x >= scale(vx1, s) && x < scale(vx2, s)
 //					&& y >= scale(vy1, s) && y < scale(vy2, s))
-			if( x >= valx1 && x < valx2 && y >= valy1 && y < valy2 )
+			if( pos1[0] <= 0 && pos1[1] >= 0 && pos2[0] >= 0 && pos2[1] <= 0 )
 			{
 //				
 				if (!isAdjustCursor) {
