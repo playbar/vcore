@@ -188,18 +188,23 @@ public class GLFocusUtils {
 			float vx2 = getX(v.getLeft() + v.getX() + v.getWidth());
 			float vy2 = getY(v.getTop() + v.getY() + v.getHeight());
 
-			float[] pos1 = {
-					vx1,
-					vy1,
-					-v.getDepth(), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+			float[][] pos = {
+					{vx1,vy1,-v.getDepth(), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{vx2,vy1,-v.getDepth(), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{vx1,vy2,-v.getDepth(), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					{vx2,vy2,-v.getDepth(), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 			};
-			float[] pos2 = {
-					vx2,
-					vy2,
-					-v.getDepth(), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-			};
-			Matrix.multiplyMM(pos1, 0, v.getMatrixState().getFinalMatrix(), 0, pos1, 0);
-			Matrix.multiplyMM(pos2, 0, v.getMatrixState().getFinalMatrix(), 0, pos2, 0);
+
+			float[] mtx = v.getMatrixState().getFinalMatrix();
+			float minX = 10,  minY = 10, maxX = -10,  maxY = -10;
+
+			for (int j = 0; j < pos.length; j++){
+				Matrix.multiplyMM(pos[j], 0, mtx, 0, pos[j], 0);
+				minX = Math.min(minX, pos[j][0]);
+				minY = Math.min(minY, pos[j][1]);
+				maxX = Math.max(maxX, pos[j][0]);
+				maxY = Math.max(maxY, pos[j][1]);
+			}
 
 //			int valx1 = (int)((vx1 - 480) * s + 480);
 //			int valx2 = (int)((vx2 - 480) * s + 480);
@@ -209,7 +214,7 @@ public class GLFocusUtils {
 
 //			if (x >= scale(vx1, s) && x < scale(vx2, s)
 //					&& y >= scale(vy1, s) && y < scale(vy2, s))
-			if( pos1[0] <= 0 && pos1[1] >= 0 && pos2[0] >= 0 && pos2[1] <= 0 )
+			if( minX <= 0 && minY <= 0 && maxX >= 0 && maxY >= 0 )
 			{
 //				
 				if (!isAdjustCursor) {
