@@ -89,7 +89,7 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setVerticalSpacing( 20.0f);
 		gridView.setMargin(10, 10, 10, 10 );
 		gridView.setPadding( 10, 10, 10, 10);
-		gridView.setOrientation(GLConstant.GLOrientation.VERTICAL );
+		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
 
 		getData();
 		adapter = new GridViewAdapter(listData, this);
@@ -188,15 +188,21 @@ public class GridViewActivity extends BaseViewActivity {
 //			listview.changeItem(false);
 //			listview.move();
 //			listView.moveLeft();
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("image", icon[index]);
-			map.put("text", iconName[index]);
-			listData.add(map);
-			adapter.notifyDataSetChanged();
-			// todo
-			//gridView.showItem(0);
-			index++;
-			Log.e("OnTouchEvent", "add item");
+			getRootView().queueEvent(new Runnable() {
+				@Override
+				public void run() {
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("image", icon[index]);
+					map.put("text", iconName[index]);
+					listData.add(map);
+					adapter.notifyDataSetChanged();
+					// todo
+					//gridView.showItem(0);
+					index++;
+					Log.e("OnTouchEvent", "add item");
+				}
+			});
+
 		}
 		if(event.getAction() == MotionEvent.ACTION_MOVE){
 //			listview.changeItem(false);

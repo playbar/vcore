@@ -141,6 +141,8 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 			mGLAdapter.unregisterDataSetObserver( mDataSetObserver);
 		}
 
+		removeAllView();
+
 		//清除以前的数据
 		mGLAdapter = adapter;
 		this.mTotalCount = adapter.getCount();
@@ -172,12 +174,14 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				view.setY(GLGridView.this.getY() + getPaddingTop() + view.getHeight() * rows + this.mVerticalSpacing * rows);
 
 				view.setId("gridview_" + tempIndex);
-				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
-					@Override
-					public void run() {
-						GLGridView.this.addView(view);
-					}
-				});
+//				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
+//					@Override
+//					public void run() {
+//						synchronized (this) {
+//							GLGridView.this.addView(view);
+//						}
+//					}
+//				});
 
 				final int position = mNumColumns*rows+col;
 				view.setFocusListener(new GLViewFocusListener() {
@@ -219,7 +223,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 						return false;
 					}
 				});
-				//this.addView(view);
+				this.addView(view);
 				tempIndex++;
 			}
 		}
@@ -228,6 +232,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	public void showVItem( int cIndex ){
 		int tempIndex=cIndex;
 		//int width = getInnerWidth()
+
 		for(int col=0; col<this.mNumColumns; col++)
 		{
 			for(int row=0; row<this.mNumRows; row++)
@@ -244,12 +249,6 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				view.setY(getY() + getPaddingTop() + view.getHeight() * row + this.mVerticalSpacing * row);
 
 				view.setId("gridview_" + tempIndex);
-				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
-					@Override
-					public void run() {
-						GLGridView.this.addView(view);
-					}
-				});
 
 				final int position = mNumColumns*row+col;
 				view.setFocusListener(new GLViewFocusListener() {
@@ -291,7 +290,16 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 						return false;
 					}
 				});
-				//this.addView(view);
+				this.addView(view);
+//				GLGridView.this.addView(view);
+//				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
+//					@Override
+//					public void run() {
+//						synchronized (this) {
+//							GLGridView.this.addView(view);
+//						}
+//					}
+//				});
 				tempIndex++;
 			}
 		}

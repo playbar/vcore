@@ -104,9 +104,9 @@ public class GridViewAdapter extends GLBaseAdapter {
 //			grv = new TestRelativeLayout(context);
 //		}
 
-		final GLImageView image = new GLImageView( context );
-		final Map data = list.get( position );
-		final int imgid = (int)data.get("image");
+		GLImageView image = new GLImageView( context );
+		Map data = list.get( position );
+		int imgid = (int)data.get("image");
 		image.setImage(imgid);
 		image.setWidth(300.0f);
 		image.setHeight(300.0f);
