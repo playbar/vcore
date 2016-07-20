@@ -75,6 +75,13 @@ public class GridViewActivity extends BaseViewActivity {
 			}
 		};
 
+		GLAdapterView.OnItemClickListener clickListener = new GLAdapterView.OnItemClickListener(){
+			public void onItemClick(GLAdapterView<?> glparent, GLView glview, int position, long id){
+				Log.e("test", "onItemClick");
+
+			}
+		};
+
 		gridView = new GLGridView( this, 3, 3 );
 		gridView.setLayoutParams(500, 500, 40, 40);
 		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
@@ -87,6 +94,7 @@ public class GridViewActivity extends BaseViewActivity {
 		getData();
 		adapter = new GridViewAdapter(listData, this);
 		gridView.setOnItemSelectedListener( listener );
+		gridView.setOnItemClickListener( clickListener );
 		gridView.setAdapter( adapter );
 		gridView.setWidth(1000);
 		gridView.setHeight(800);

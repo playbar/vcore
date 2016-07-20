@@ -53,7 +53,7 @@ public class ListViewActivity extends BaseViewActivity {
 
 
 
-		for(index =0;  index < 1; index++){
+		for(index =0;  index < 4; index++){
 			listData.add(iconName[index]);
 		}
 
