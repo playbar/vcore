@@ -199,11 +199,12 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 
 		this.mTotalCount = mGLListAdapter.getCount();
 		float mX = GLListView.this.getX();
+		final GLRectView[] views = new GLRectView[this.mNumOneScreen];
 		for(int j=0;j<this.mNumOneScreen;j++){
 
 			if(j >this.mTotalCount-1)
 				break;
-			final GLRectView view = getAdapterView(j,j, null, GLListView.this, true);
+			GLRectView view = getAdapterView(j,j, null, GLListView.this, true);
 			if(view == null)
 				continue;
 
@@ -219,20 +220,28 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 				view.setY(view.getMarginTop() + (view.getHeight() + this.mItemSpacing + view.getMarginTop() + view.getMarginBottom())*j);
 			}
 			mDefaultDepth = view.getDepth();
+			views[j] = view;
+		}
 
-			try{
-				if(getContext() != null && (BaseViewActivity) getContext() != null && ((BaseViewActivity) getContext()).getRootView() != null){
-					(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
-						@Override
-						public void run() {
-							GLListView.this.addView(view);
+		try{
+			if(getContext() != null && (BaseViewActivity) getContext() != null && ((BaseViewActivity) getContext()).getRootView() != null){
+				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
+					@Override
+					public void run() {
+						for (GLRectView v : views){
+							if (v != null) {
+								GLListView.this.addView(v);
+							}
 						}
-					});
-				}
+						if (GLListView.this.getParent() != null){
+							resetChildView(GLListView.this);
+						}
+					}
+				});
 			}
-			catch(Exception e){
+		}
+		catch(Exception e){
 
-			}
 		}
 
 		for(int k=0;k<GLListView.this.getChildView().size();k++){

@@ -1497,7 +1497,7 @@ public class GLRectView extends GLView {
 		}
 	}
 	
-	private GLRootView getRootView(){
+	public GLRootView getRootView(){
 		BaseViewActivity activity = (BaseViewActivity)getContext();
 		if (activity != null) {
 			return activity.getRootView();
