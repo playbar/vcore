@@ -17,6 +17,8 @@ import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
+import com.bfmj.viewcore.view.BaseViewActivity;
+
 /**
  * 
  * ClassName: GLTextureUtils <br/>
@@ -101,6 +103,7 @@ public class GLTextureUtils {
         if (isRecycle){
 	        bm.recycle(); 		  //纹理加载成功后释放图片
 		}
+		BaseViewActivity.log(System.currentTimeMillis() + "-create : " + textures[0]);
         return textures[0];
 	}
 	
@@ -108,7 +111,7 @@ public class GLTextureUtils {
 		if (textureId < 0) {
 			return;
 		}
-
+		BaseViewActivity.log(System.currentTimeMillis() + "-release : " + textureId);
 		GLES20.glDeleteTextures(1, new int[]{textureId}, 0);
 	}
 	

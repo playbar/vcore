@@ -11,7 +11,7 @@ import android.opengl.GLES20;
  */
 public class GLShaderManager {
 	
-	public static final String VERTEX_IMAGE = 
+	public static final String VERTEX_IMAGE =
 		"uniform mat4 uMVPMatrix;" +
 		"uniform float uAlpha;" +
 		"uniform float uMask;" +
@@ -28,7 +28,7 @@ public class GLShaderManager {
             "vMask = uMask;" +
         "}";
 	
-	public static final String FRAGMENT_IMAGE = 
+	public static final String FRAGMENT_IMAGE =
 		"precision mediump float;" +
         "varying vec2 textureCoordinate;\n" +
         "uniform sampler2D s_texture;\n" +
@@ -39,7 +39,7 @@ public class GLShaderManager {
         	"gl_FragColor = vec4(color.r * vMask, color.g * vMask, color.b * vMask, color.a * vAlpha);\n" +
         "}";
 	
-	public static final String VERTEX_SENCE = 
+	public static final String VERTEX_SENCE =
 			"uniform mat4 uMVPMatrix;" +
 			"uniform float uAlpha;" +
 			"uniform float uMask;" +
@@ -56,7 +56,7 @@ public class GLShaderManager {
 	            "vMask = uMask;" +
 	        "}";
 		
-	public static final String FRAGMENT_SENCE = 
+	public static final String FRAGMENT_SENCE =
 			"precision mediump float;" +
 	        "varying vec2 textureCoordinate;\n" +
 	        "uniform sampler2D s_texture;\n" +
@@ -67,7 +67,7 @@ public class GLShaderManager {
 	        	"gl_FragColor = vec4(color.r * vMask, color.g * vMask, color.b * vMask, color.a * vAlpha);\n" +
 	        "}";
 	
-	public static final String VERTEX_COLOR = 
+	public static final String VERTEX_COLOR =
 		"uniform mat4 uMVPMatrix;" +
 		"uniform vec4 uColor;" + 
         "attribute vec3 aPosition;" +
@@ -77,7 +77,7 @@ public class GLShaderManager {
             "vColor = uColor;" +
         "}";
 	
-	public static final String FRAGMENT_COLOR = 
+	public static final String FRAGMENT_COLOR =
 		"precision mediump float;" +
 		"varying vec4 vColor;" +
         "void main(){" +
@@ -85,7 +85,7 @@ public class GLShaderManager {
         "}";
 	
 	public static final String VERTEX_POINT =
-		"uniform mat4 uMVPMatrix;" + 
+		"uniform mat4 uMVPMatrix;" +
         "attribute vec3 aPosition;" +
         "attribute float aSize;" +
         "attribute vec4 aColor;" +
@@ -105,7 +105,7 @@ public class GLShaderManager {
         "}";
 	
 	public static final String VERTEX_VIDEO =
-		"uniform mat4 uMVPMatrix;" + 
+		"uniform mat4 uMVPMatrix;" +
         "attribute vec3 vPosition;" +
         "attribute vec2 inputTextureCoordinate;" +
         "varying vec2 textureCoordinate;" +

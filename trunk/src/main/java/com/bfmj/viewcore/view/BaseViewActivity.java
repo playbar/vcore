@@ -9,19 +9,23 @@ import com.bfmj.viewcore.view.GLPageManager;
 import com.bfmj.viewcore.view.GLRootView;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 
 public class BaseViewActivity extends Activity implements SensorEventListener {
+	private static BaseViewActivity instance;
 	private RelativeLayout rootLayout;
 	private GLRootView rootView;
 	private GLPageManager mPageManager;
@@ -41,6 +45,8 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 //		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 //		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		super.onCreate(savedInstanceState);
+
+		instance = this;
 		
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		
@@ -63,10 +69,72 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 
 		rootLayout.addView(rootView);
 		setContentView(rootLayout);
-		
+
+		initLog();
 //		StickUtil.getInstance(this);
 	}
-	
+
+	public static void log(String msg){
+		if (instance != null){
+			instance.doLog(msg);
+		}
+	}
+
+	private void doLog(String msg){
+		Log.d("aaaaaaaaaaaa", msg);
+	}
+
+	private void initLog(){
+		final TextView fps = new TextView(this);
+		fps.setTextColor(Color.RED);
+		fps.setTextSize(36);
+
+		getRootLayout().addView(fps);
+
+		new Thread(new Runnable() {
+			long times = 0;
+			int max = 0;
+			int min = 60;
+
+			@Override
+			public void run() {
+				getRootView().getFPS();
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				while (true){
+					final int f = getRootView().getFPS();
+					if (f > 0 && f < 70){
+						times++;
+						if (times > 2) {
+							max = Math.max(f, max);
+							min = Math.min(f, min);
+							BaseViewActivity.this.runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									String msg = "FPS : " + f;
+									if (max > 0){
+										msg +=  " [" + min + "~" + max + "]";
+									}
+									fps.setText(msg);
+								}
+							});
+						}
+					}
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+
+			}
+		}).start();
+	}
+
+
 	/**
 	 * 
 	 * @author linzanxian  @Date 2015年3月16日 下午2:41:34

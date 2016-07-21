@@ -72,7 +72,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     private void init(Context context) {
         mContext = context;
-        setEGLContextClientVersion(2);
+        setEGLContextClientVersion(3);
         //多重采样，抗锯齿
 //		setEGLConfigChooser(new EGLConfigChooser() {  
 //			@Override
@@ -339,21 +339,21 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     }
 
     //FPS测试 start//////
-    private long lastFrame = System.nanoTime();
-    public float FPS = 0;
+    private long lastFrame = System.currentTimeMillis();
+    private int times = 0;
 
-    public void logFrame() {
-        long time = (System.nanoTime() - lastFrame);
-        FPS = 1 / (time / 1000000000.0f);
-        Log.e("当前帧率", "FPS =" + FPS);
-        mRenderCallback.updateFPS(FPS);
-        lastFrame = System.nanoTime();
+    public int getFPS() {
+        long time = (System.currentTimeMillis() - lastFrame);
+        int ts = times;
+        lastFrame = System.currentTimeMillis();
+        times = 0;
+        return (int)(ts * 1000 / time);
     }
     //FPS测试 end//////
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        // logFrame();
+        times ++;
         if (mChild == null || mChild.size() == 0) {
             return;
         }
