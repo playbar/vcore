@@ -222,7 +222,7 @@ public class GridViewActivity extends BaseViewActivity {
 //		rootView.addView(listView);		
 
 	}
-	
+
 
 
 	@Override

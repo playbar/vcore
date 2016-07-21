@@ -590,7 +590,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                 mGlFocusUtils.setFousedView(null);
             }
         }
-
+        view.release();
         mChild.remove(view);
     }
 
