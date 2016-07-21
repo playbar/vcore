@@ -133,7 +133,7 @@ public class GLImageView extends GLRectView {
 	public void initDraw() {
 		super.initDraw();
 
-		getRootView().mCreateTextureQueue.offer(this);
+		createTexture();
 	}
 	
 	/**

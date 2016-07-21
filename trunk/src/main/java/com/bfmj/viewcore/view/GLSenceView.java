@@ -176,7 +176,7 @@ public class GLSenceView extends GLView {
 	@Override
 	public void initDraw() {
 		isSurfaceCreated = true;
-		getRootView().mCreateTextureQueue.offer(this);
+		createTexture();
 	}
 
 	@Override
