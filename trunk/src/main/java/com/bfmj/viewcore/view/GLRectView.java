@@ -110,6 +110,7 @@ public class GLRectView extends GLView {
     private Timer mHeadClickTimer;
     private boolean isHeadClicking = false;
     private boolean isHeadClickStart = false;
+	private boolean isFixed = false;
 
     //动画实例
     private  ArrayList<GLAnimation> mAnimations = new ArrayList<GLAnimation>();
@@ -979,6 +980,13 @@ public class GLRectView extends GLView {
 		}
 		
 		GLMatrixState state = getMatrixState();
+
+		if (isFixed){
+			float[] mtx = new float[16];
+			Matrix.setIdentityM(mtx, 0);
+			state.setVMatrix(mtx);
+		}
+
 		float[] curMatrix = state.getCurrentMatrix();
 		state.pushMatrix();
         
@@ -1703,5 +1711,13 @@ public class GLRectView extends GLView {
 		boolean onHeadClickStart(GLRectView view);
 		boolean onHeadClickEnd(GLRectView view);
 		boolean onHeadClickCancel(GLRectView view);
+	}
+
+	public void setFixed(boolean fixed){
+		isFixed = fixed;
+	}
+
+	public boolean isFixed(){
+		return isFixed;
 	}
 }
