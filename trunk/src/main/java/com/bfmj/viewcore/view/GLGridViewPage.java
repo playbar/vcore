@@ -112,11 +112,18 @@ public class GLGridViewPage extends GLGridView {
 		showPage();
 	}
 
+	@Override
+	public void requestLayout(){
+		super.requestLayout();
+		showPage();
+	}
+
 	//创建分页
 	public void showPage(){
 
 		int count = getTotalNum() / getNumOneScreen();
-		++count;
+		if( getTotalNum() % getNumOneScreen() != 0 )
+			++count;
 
 		for( int i = 1; i <= count; ++i ) {
 
@@ -125,11 +132,16 @@ public class GLGridViewPage extends GLGridView {
 			textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
 			textView.setText("" + i);
 			textView.setTextSize(100);
+			final int index = (i-1) * getNumOneScreen();
 			textView.setFocusListener(new GLViewFocusListener() {
 				@Override
 				public void onFocusChange(GLRectView view, boolean focused) {
-					if (focused)
+					if (focused){
 						view.setAlpha(0.3f);
+						setStartIndex( index );
+						requestLayout();
+						showPage();
+					}
 					else
 						view.setAlpha(1.0f);
 				}

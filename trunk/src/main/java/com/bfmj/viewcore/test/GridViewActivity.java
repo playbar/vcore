@@ -36,17 +36,27 @@ public class GridViewActivity extends BaseViewActivity {
 	private List<Map<String, Object>> listData = new ArrayList<Map<String, Object>>();
 
 	// 图片封装为一个数组
-	private int[] icon = { R.drawable.address_book, R.drawable.calendar,
-			R.drawable.camera, R.drawable.clock, R.drawable.games_control,
-			R.drawable.messenger, R.drawable.ringtone, R.drawable.settings,
-			R.drawable.speech_balloon, R.drawable.weather, R.drawable.world,
-			R.drawable.youtube };
+	private int[] icon = {
+			R.drawable.address_book,
+			R.drawable.calendar,
+			R.drawable.camera,
+			R.drawable.clock,
+			R.drawable.games_control,
+			R.drawable.messenger,
+			R.drawable.ringtone,
+			R.drawable.settings,
+			R.drawable.speech_balloon,
+			R.drawable.weather,
+			R.drawable.world,
+			R.drawable.youtube
+	};
+
 	private String[] iconName = { "通讯录", "日历", "照相机", "时钟", "游戏", "短信", "铃声",
 			"设置", "语音", "天气", "浏览器", "视频" };
 
 	public List<Map<String, Object>> getData(){
 		//cion和iconName的长度是相同的，这里任选其一都可以
-		for(index=0; index<8; ++index){
+		for(index=0; index < 3; ++index){
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("image", icon[index]);
 			map.put("text", iconName[index]);

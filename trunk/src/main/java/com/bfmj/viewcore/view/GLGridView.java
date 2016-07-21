@@ -164,7 +164,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 			for(int col=0;col<this.mNumColumns;col++)
 			{
 				//如果大于设置的一屏显示数则不再添加
-				if((tempIndex > this.mNumOneScreen && this.mNumOneScreen != -1) || tempIndex > this.mTotalCount-1){
+				if( tempIndex > this.mNumOneScreen + cIndex || tempIndex > this.mTotalCount-1){
 					break;
 				}
 				GLRectView view = this.mGLAdapter.getGLView(tempIndex, convertView, null);
@@ -240,7 +240,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 			for(int row=0; row<this.mNumRows; row++)
 			{
 				//如果大于设置的一屏显示数则不再添加
-				if((tempIndex > this.mNumOneScreen && this.mNumOneScreen != -1) || tempIndex > this.mTotalCount-1){
+				if( tempIndex > this.mNumOneScreen + cIndex || tempIndex > this.mTotalCount-1){
 					break;
 				}
 				GLRectView view = this.mGLAdapter.getGLView(tempIndex, convertView, null);
