@@ -63,12 +63,12 @@ public class GridViewActivity extends BaseViewActivity {
 		//rootView.setDoubleScreen(false);
 		GLAdapterView.OnItemSelectedListener listener = new GLAdapterView.OnItemSelectedListener(){
 			public void onItemSelected(GLAdapterView<?> glparent, GLView glview, int position, long id){
-				Log.e("test", "onItemSelected");
+				Log.e("test", "onItemSelected:" + glview.toString());
 				glview.setAlpha(0.3f);
 			}
 
 			public void onNothingSelected(GLAdapterView<?> glparent, GLView glview, int position, long id){
-				Log.e("test", "onNothingSelected");
+				Log.e("test", "onNothingSelected:" + glview.toString() );
 				glview.setAlpha( 1.0f);
 			}
 			public void onNoItemData(){

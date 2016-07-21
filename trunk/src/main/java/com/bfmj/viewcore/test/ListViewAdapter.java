@@ -85,6 +85,8 @@ public class ListViewAdapter extends GLBaseAdapter {
 		}
 
 		final GLImageView image = (GLImageView)grv.getView("timage");
+		image.setWidth( 500 );
+		image.setHeight( 300 );
 		image.setImage(R.drawable.a1);
 		
 		/** 
@@ -120,7 +122,7 @@ public class ListViewAdapter extends GLBaseAdapter {
 //				
 //			}
 //		});
-		ImageView iv = new ImageView(context);
+		//ImageView iv = new ImageView(context);
 //		mAq.id(iv).image(list.get(position), true, true, 0, 0, new BitmapAjaxCallback(){
 //
 //	        @Override

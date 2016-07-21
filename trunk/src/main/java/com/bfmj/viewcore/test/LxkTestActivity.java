@@ -2,16 +2,19 @@ package com.bfmj.viewcore.test;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.player.GLSystemPlayer;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.view.BaseViewActivity;
+import com.bfmj.viewcore.view.GLAdapterView;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
+import com.bfmj.viewcore.view.GLView;
 
 public class LxkTestActivity extends BaseViewActivity {
 	private GLRootView rootView;
@@ -41,6 +44,7 @@ public class LxkTestActivity extends BaseViewActivity {
 				}
 			}
 		};
+
 		GLImageView[] imageViews = new GLImageView[10];
 
 		imageViews[0] = new GLImageView(this);

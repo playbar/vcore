@@ -8,11 +8,15 @@ import org.json.JSONException;
 
 import com.androidquery.callback.AjaxStatus;
 import com.bfmj.viewcore.R;
+import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.view.BaseViewActivity;
+import com.bfmj.viewcore.view.GLAdapterView;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLListView;
+import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
+import com.bfmj.viewcore.view.GLView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -52,43 +56,57 @@ public class ListViewActivity extends BaseViewActivity {
 		listView.setItemSpacing(20);
 
 
+		final GLAdapterView.OnItemSelectedListener onItemSelectedListener = new GLAdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(GLAdapterView<?> glparent,
+									   GLView glview, int position, long id) {
+				Log.e("LxkTestActivity", "OnItemSelectedListener.onItemSelected");
+			}
+
+			@Override
+			public void onNothingSelected(GLAdapterView<?> glparent,
+										  GLView glview, int position, long id) {
+				Log.e("LxkTestActivity", "OnItemSelectedListener.onNothingSelected");
+			}
+
+			@Override
+			public void onNoItemData() {
+				Log.e("LxkTestActivity", "OnItemSelectedListener.onNoItemData");
+			}
+		};
 
 		for(index =0;  index < 4; index++){
 			listData.add(iconName[index]);
 		}
 
+		listView.setOnItemSelectedListener( onItemSelectedListener );
 		adapter = new ListViewAdapter(listData, ListViewActivity.this);
 		listView.setAdapter(adapter);
 		rootView.addView(listView);
 
-//		listView.setOnKeyListener(new GLOnKeyListener() {
-//			
-//			@Override
-//			public boolean onKeyUp(int keycode) {
-//				// TODO Auto-generated method stub
-//				return false;
-//			}
-//			
-//			@Override
-//			public boolean onKeyLongPress(int keycode) {
-//				// TODO Auto-generated method stub
-//				return false;
-//			}
-//			
-//			
-//			@Override
-//			public boolean onKeyDown(int keycode) {
-//
-//				if(keycode == MojingKeyCode.KEYCODE_DPAD_RIGHT){
-//					listView.moveLeft();
-//				}
-//				if(keycode == MojingKeyCode.KEYCODE_DPAD_LEFT){
-//					listView.moveRight();
-//				}
-//				
-//				return true;
-//			}
-//		});
+		listView.setOnKeyListener(new GLOnKeyListener() {
+
+			@Override
+			public boolean onKeyUp(GLRectView view, int keycode) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean onKeyLongPress(GLRectView view, int keycode) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+
+			@Override
+			public boolean onKeyDown(GLRectView view, int keycode) {
+
+
+
+				return true;
+			}
+		});
 		
 		
 		
@@ -137,22 +155,23 @@ public class ListViewActivity extends BaseViewActivity {
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
 		if(event.getAction() == MotionEvent.ACTION_DOWN){
-//			listview.changeItem(false);
+
+			//listView.changeItem(false);
 //			listview.move();
 
-			getRootView().queueEvent(new Runnable() {
-				@Override
-				public void run() {
-					listData.add(iconName[++index]);
-					adapter.notifyDataSetChanged();
-				}
-			});
+//			getRootView().queueEvent(new Runnable() {
+//				@Override
+//				public void run() {
+//					listData.add(iconName[++index]);
+//					adapter.notifyDataSetChanged();
+//				}
+//			});
 
 			//listView.moveLeft();
 
 		}
 		if(event.getAction() == MotionEvent.ACTION_MOVE){
-//			listview.changeItem(false);
+//			listView.changeItem(false);
 //			listview.move();
 			listView.moveRight();
 		}
