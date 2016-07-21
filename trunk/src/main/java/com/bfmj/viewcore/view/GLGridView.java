@@ -17,7 +17,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	private int mNumColumns=0; //列数
 	private int mNumRows=0;//行数
 	private ArrayList<GLView> mList;//数据集
-	private int mStartIndex=0;//当前开始的索引
+	public int mStartIndex=0;//当前开始的索引
 	private int mSelectedIndex=0;//当前选中的索引
 	private float mVerticalSpacing=0.0f;//垂直间距离
 	private float mHorizontalSpacing=0.0f;//水平间距离

@@ -2,14 +2,10 @@ package com.bfmj.viewcore.view;
 
 import android.content.Context;
 
-import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.viewcore.adapter.GLListAdapter;
-import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLConstant.GLOrientation;
-
-import java.util.ArrayList;
 
 public class GLGridViewPage extends GLGridView {
 
@@ -118,32 +114,134 @@ public class GLGridViewPage extends GLGridView {
 		showPage();
 	}
 
+	private void prvBtn(){
+		GLTextView textView = new GLTextView(this.getContext());
+		textView.setLayoutParams(mStart - mStep, getY() + getHeight() + 20, 100, 100);
+		textView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
+		textView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
+		textView.setAlignment(GLTextView.ALIGN_CENTER);
+
+		textView.setText("<");
+		textView.setTextSize(80);
+		textView.setFocusListener(new GLViewFocusListener() {
+			@Override
+			public void onFocusChange(GLRectView view, boolean focused) {
+				if (focused) {
+					view.setAlpha(0.3f);
+					--mCurIndex;
+					setStartIndex((mCurIndex - 1) * getNumOneScreen());
+					requestLayout();
+					showPage();
+				} else {
+					view.setAlpha(1.0f);
+				}
+			}
+		});
+		addView(textView);
+		return;
+	}
+
+	private void nextBtn(){
+		GLTextView textView = new GLTextView(this.getContext());
+		textView.setLayoutParams(mStart + mShowMaxCount * mStep, getY() + getHeight() + 20, 100, 100);
+		textView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
+		textView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
+		textView.setAlignment(GLTextView.ALIGN_CENTER);
+
+		textView.setText(">");
+		textView.setTextSize(80);
+		textView.setFocusListener(new GLViewFocusListener() {
+			@Override
+			public void onFocusChange(GLRectView view, boolean focused) {
+				if (focused) {
+					view.setAlpha(0.3f);
+					++mCurIndex;
+					setStartIndex((mCurIndex -1) * getNumOneScreen());
+					requestLayout();
+					showPage();
+				} else {
+					view.setAlpha(1.0f);
+				}
+			}
+		});
+		addView(textView);
+	}
+
+	private float mStart = 0.0f;
+	private float mStep = 120.0f;
+	private int mCurIndex = 1; //当前分页的位置,从1开始计数
+	private int mCount = 0;  // 分页的个数, 从1开始计数
+	private int mShowMaxCount = 0;
+
+	private final static int MAXSHOW = 5;
+
 	//创建分页
 	public void showPage(){
 
-		int count = getTotalNum() / getNumOneScreen();
+		mCount = getTotalNum() / getNumOneScreen();
 		if( getTotalNum() % getNumOneScreen() != 0 )
-			++count;
+			++mCount;
 
-		for( int i = 1; i <= count; ++i ) {
+//		GLRectView rectView = new GLRectView( this.getContext() );
+//		rectView.setLayoutParams( getX(), getY() + getHeight() - 140 , getWidth(), 140 );
+//		rectView.setBackground(new GLColor( 1.0f, 1.0f, 0.0f));
+//		addView( rectView );
+
+		float mid = getX() + getWidth() / 2;
+
+		mShowMaxCount = mCount > MAXSHOW ? MAXSHOW : mCount;
+		if( mCount > 1 ){
+			mStart = mid - (mStep * mShowMaxCount) / 2;
+			if (mCurIndex < mCount) {
+				nextBtn();
+				if (mCurIndex > 1) {
+					prvBtn();
+				}
+			} else if (mCurIndex == mCount) {
+				prvBtn();
+			}
+
+		}
+		else{
+			mStart = mid;
+		}
+
+		int istart = 0;
+		int iend = mCount;
+		if( mCount > MAXSHOW ) {
+			if( mCurIndex <= MAXSHOW / 2 ){
+				istart = 1;
+			} else{
+				istart = (mCurIndex + MAXSHOW/2) < mCount ? mCurIndex - MAXSHOW / 2 : (mCount + 1 - MAXSHOW);
+			}
+			iend = istart + MAXSHOW;
+
+		}
+
+		for( int i = istart; i < iend; ++i ) {
 
 			GLTextView textView = new GLTextView(this.getContext());
-			textView.setLayoutParams(getX() + getWidth() - 120 * (count + 1 - i), getY() + getHeight() - 140, 120, 120);
-			textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
+			textView.setLayoutParams(mStart + (i - istart) * mStep, getY() + getHeight() + 20, 100, 100);
+			textView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
+			textView.setBackground( new GLColor( 0.43f,  0.4f, 0.34f));
+			textView.setAlignment( GLTextView.ALIGN_CENTER );
+
 			textView.setText("" + i);
-			textView.setTextSize(100);
-			final int index = (i-1) * getNumOneScreen();
+			textView.setTextSize(80);
+			final int index = i;
 			textView.setFocusListener(new GLViewFocusListener() {
 				@Override
 				public void onFocusChange(GLRectView view, boolean focused) {
 					if (focused){
 						view.setAlpha(0.3f);
-						setStartIndex( index );
+						setStartIndex( (index - 1) * getNumOneScreen() );
+						mCurIndex = index;
 						requestLayout();
 						showPage();
 					}
-					else
+					else{
 						view.setAlpha(1.0f);
+					}
 				}
 			});
 			addView(textView);

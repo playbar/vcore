@@ -56,7 +56,7 @@ public class GridViewActivity extends BaseViewActivity {
 
 	public List<Map<String, Object>> getData(){
 		//cion和iconName的长度是相同的，这里任选其一都可以
-		for(index=0; index < 3; ++index){
+		for(index=0; index < 9; ++index){
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("image", icon[index]);
 			map.put("text", iconName[index]);
@@ -72,6 +72,7 @@ public class GridViewActivity extends BaseViewActivity {
 		super.onCreate(savedInstanceState);
 		
 		rootView = getRootView();
+
 		rootView.onResume();
 		//rootView.setDoubleScreen(false);
 		GLAdapterView.OnItemSelectedListener listener = new GLAdapterView.OnItemSelectedListener(){
@@ -96,7 +97,7 @@ public class GridViewActivity extends BaseViewActivity {
 			}
 		};
 
-		gridView = new GLGridViewPage( this, 2, 3 );
+		gridView = new GLGridViewPage( this, 1, 1 );
 		gridView.setLayoutParams(500, 500, 40, 40);
 		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
 		gridView.setHorizontalSpacing( 20.0f);
@@ -166,7 +167,7 @@ public class GridViewActivity extends BaseViewActivity {
 
 
 		GLTextView textView = new GLTextView(this);
-		textView.setLayoutParams( 1000, 1400, 1000, 200 );
+		textView.setLayoutParams( 1000, 2000, 1000, 200 );
 		textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
 		textView.setText("111的境况");
 		textView.setTextSize(100);
@@ -214,7 +215,7 @@ public class GridViewActivity extends BaseViewActivity {
 		cursorView.setBackground(new GLColor(1.0f, 0, 0));
 		cursorView.setDepth(3);
 		rootView.addView(cursorView);
-
+		//rootView.setBackgroundColor( 0xFFFFFF );
 
 
 
