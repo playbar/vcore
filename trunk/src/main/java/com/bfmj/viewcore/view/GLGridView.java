@@ -141,8 +141,6 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 			mGLAdapter.unregisterDataSetObserver( mDataSetObserver);
 		}
 
-		removeAllView();
-
 		//清除以前的数据
 		mGLAdapter = adapter;
 		this.mTotalCount = adapter.getCount();
@@ -165,7 +163,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if((tempIndex > this.mNumOneScreen && this.mNumOneScreen != -1) || tempIndex > this.mTotalCount-1){
 					break;
 				}
-				final GLRectView view = this.mGLAdapter.getGLView(tempIndex, convertView, null);
+				GLRectView view = this.mGLAdapter.getGLView(tempIndex, convertView, null);
 				if (col == 0 && rows == 0) {
 					mFirstView = view;
 				}
@@ -241,7 +239,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if((tempIndex > this.mNumOneScreen && this.mNumOneScreen != -1) || tempIndex > this.mTotalCount-1){
 					break;
 				}
-				final GLRectView view = this.mGLAdapter.getGLView(tempIndex, convertView, null);
+				GLRectView view = this.mGLAdapter.getGLView(tempIndex, convertView, null);
 				if (col == 0 && row == 0) {
 					mFirstView = view;
 				}
@@ -310,6 +308,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	public void requestLayout(){
 		if(this.mGLAdapter ==null)
 			return;
+		removeAllView();
 		this.mTotalCount = mGLAdapter.getCount();
 		if( mOrientation.equals( GLOrientation.HORIZONTAL )){
 			showHItem(mStartIndex);
