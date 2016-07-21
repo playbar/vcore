@@ -12,6 +12,7 @@ import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLAdapterView;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLGridView;
+import com.bfmj.viewcore.view.GLGridViewPage;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
@@ -82,7 +83,7 @@ public class GridViewActivity extends BaseViewActivity {
 			}
 		};
 
-		gridView = new GLGridView( this, 3, 3 );
+		gridView = new GLGridViewPage( this, 3, 3 );
 		gridView.setLayoutParams(500, 500, 40, 40);
 		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
 		gridView.setHorizontalSpacing( 20.0f);
