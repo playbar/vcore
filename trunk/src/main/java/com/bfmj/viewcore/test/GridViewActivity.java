@@ -6,6 +6,8 @@ import android.view.MotionEvent;
 
 import com.androidquery.AQuery;
 import com.bfmj.viewcore.R;
+import com.bfmj.viewcore.interfaces.GLOnKeyListener;
+import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLConstant;
 import com.bfmj.viewcore.view.BaseViewActivity;
@@ -14,6 +16,7 @@ import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLGridView;
 import com.bfmj.viewcore.view.GLGridViewPage;
 import com.bfmj.viewcore.view.GLImageView;
+import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
 import com.bfmj.viewcore.view.GLView;
@@ -43,7 +46,7 @@ public class GridViewActivity extends BaseViewActivity {
 
 	public List<Map<String, Object>> getData(){
 		//cion和iconName的长度是相同的，这里任选其一都可以
-		for(index=0; index<3; ++index){
+		for(index=0; index<8; ++index){
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("image", icon[index]);
 			map.put("text", iconName[index]);
@@ -83,7 +86,7 @@ public class GridViewActivity extends BaseViewActivity {
 			}
 		};
 
-		gridView = new GLGridViewPage( this, 3, 3 );
+		gridView = new GLGridViewPage( this, 2, 3 );
 		gridView.setLayoutParams(500, 500, 40, 40);
 		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
 		gridView.setHorizontalSpacing( 20.0f);
@@ -96,9 +99,11 @@ public class GridViewActivity extends BaseViewActivity {
 		adapter = new GridViewAdapter(listData, this);
 		gridView.setOnItemSelectedListener( listener );
 		gridView.setOnItemClickListener( clickListener );
-		gridView.setAdapter( adapter );
 		gridView.setWidth(1000);
 		gridView.setHeight(800);
+		gridView.setAdapter( adapter );
+
+
 
 
 
@@ -151,10 +156,39 @@ public class GridViewActivity extends BaseViewActivity {
 
 
 		GLTextView textView = new GLTextView(this);
-		textView.setLayoutParams( 1000, 1200, 1000, 200 );
+		textView.setLayoutParams( 1000, 1400, 1000, 200 );
 		textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
 		textView.setText("111的境况");
 		textView.setTextSize(100);
+		textView.setOnKeyListener(new GLOnKeyListener() {
+			@Override
+			public boolean onKeyDown(GLRectView view, int keycode) {
+				view.setAlpha( 0.3f );
+				return false;
+			}
+
+			@Override
+			public boolean onKeyUp(GLRectView view, int keycode) {
+				view.setAlpha( 1.0f );
+				return false;
+			}
+
+			@Override
+			public boolean onKeyLongPress(GLRectView view, int keycode) {
+				return false;
+			}
+		});
+		textView.setFocusListener(new GLViewFocusListener() {
+			@Override
+			public void onFocusChange(GLRectView view, boolean focused) {
+				if( focused )
+					view.setAlpha( 0.3f );
+				else
+					view.setAlpha( 1.0f );
+			}
+		});
+
+		//gridView.addView( textView );
 		rootView.addView(textView);
 
 //		GLCursorView imageView = new GLCursorView(this);

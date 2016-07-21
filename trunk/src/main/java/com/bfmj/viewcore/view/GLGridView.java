@@ -71,6 +71,10 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 		this.mNumOneScreen = oneScreen;
 	}
 
+	public int getNumOneScreen(){
+		return mNumOneScreen;
+	}
+
 	/**
 	 * GLGridView构造函数
 	 * @param context
@@ -306,6 +310,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 
 	@Override
 	public void requestLayout(){
+		mNumOneScreen =  mNumRows * mNumColumns;
 		if(this.mGLAdapter ==null)
 			return;
 		removeAllView();

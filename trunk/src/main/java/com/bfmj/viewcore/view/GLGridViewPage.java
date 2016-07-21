@@ -6,6 +6,7 @@ import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
+import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLConstant.GLOrientation;
 
 import java.util.ArrayList;
@@ -108,6 +109,34 @@ public class GLGridViewPage extends GLGridView {
 	@Override
 	public void setAdapter(GLListAdapter adapter) {
 		super.setAdapter( adapter );
+		showPage();
+	}
+
+	//创建分页
+	public void showPage(){
+
+		int count = getTotalNum() / getNumOneScreen();
+		++count;
+
+		for( int i = 1; i <= count; ++i ) {
+
+			GLTextView textView = new GLTextView(this.getContext());
+			textView.setLayoutParams(getX() + getWidth() - 120 * (count + 1 - i), getY() + getHeight() - 140, 120, 120);
+			textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
+			textView.setText("" + i);
+			textView.setTextSize(100);
+			textView.setFocusListener(new GLViewFocusListener() {
+				@Override
+				public void onFocusChange(GLRectView view, boolean focused) {
+					if (focused)
+						view.setAlpha(0.3f);
+					else
+						view.setAlpha(1.0f);
+				}
+			});
+			addView(textView);
+		}
+		return;
 	}
 
 	@Override

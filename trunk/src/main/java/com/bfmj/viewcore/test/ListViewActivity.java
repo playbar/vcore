@@ -115,10 +115,7 @@ public class ListViewActivity extends BaseViewActivity {
 		imageView.setHeight(10);
 		imageView.setBackground(new GLColor(1.0f, 1.0f, 1.0f));
 		imageView.setDepth(3);
-//		imageView.setImage(R.drawable.ic_launcher);
-//		textView.setText("北京欢迎你");
-//		textView.setAlpha(0.3f);
-		imageView.setLayoutParams(1000, 1000, 100, 100);
+		imageView.setLayoutParams(1000, 1000, 10, 10);
 		
 		rootView.addView(imageView);
 //		rootView.addView(listView);		
