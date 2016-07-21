@@ -101,8 +101,8 @@ public class GLSenceView extends GLView {
 		
 		mResId = resId;
 		mBitmap = null;
-		
-		initImage();
+
+		getRootView().mCreateTextureQueue.offer(this);
 	}
 	
 	/**
@@ -118,8 +118,8 @@ public class GLSenceView extends GLView {
 		
 		mBitmap = bitmap;
 		mResId = 0;
-		
-		initImage();
+
+		getRootView().mCreateTextureQueue.offer(this);
 	}
 	
 	/**
@@ -176,7 +176,7 @@ public class GLSenceView extends GLView {
 	@Override
 	public void initDraw() {
 		isSurfaceCreated = true;
-		initImage();
+		getRootView().mCreateTextureQueue.offer(this);
 	}
 
 	@Override
@@ -298,8 +298,9 @@ public class GLSenceView extends GLView {
 		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
 				GLES20.GL_STATIC_DRAW);
 	}
-	
-	private void initImage(){
+
+	@Override
+	public void createTexture(){
 		if (!isSurfaceCreated){
 			return;
 		}

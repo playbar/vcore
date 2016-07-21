@@ -170,6 +170,15 @@ public abstract class GLView implements GLRenderListener {
 		Matrix.rotateM(headView, 0, (float)yaw, 0, 1, 0);		
 	}
 
+	public GLRootView getRootView(){
+		BaseViewActivity activity = (BaseViewActivity)getContext();
+		if (activity != null) {
+			return activity.getRootView();
+		}
+
+		return null;
+	}
+
 	public float getEyeDeviation() {
 		return mEyeDeviation;
 	}
@@ -177,6 +186,8 @@ public abstract class GLView implements GLRenderListener {
 	public void setEyeDeviation(float mEyeDeviation) {
 		this.mEyeDeviation = mEyeDeviation;
 	}
+
+	public void createTexture(){}
 	
 	protected void releaseTexture(final int textureId) {
 		GLTextureUtils.releaseTexture(textureId);

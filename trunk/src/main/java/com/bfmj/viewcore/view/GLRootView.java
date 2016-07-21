@@ -3,6 +3,8 @@ package com.bfmj.viewcore.view;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -59,6 +61,8 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     private float mXangle = 0;
     private boolean isResetGroy = false;
     private boolean mIsDouble = true;
+
+    public Queue<GLView> mCreateTextureQueue = new LinkedList<>();
 
     public GLRootView(Context context) {
         super(context);
@@ -356,6 +360,11 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         times ++;
         if (mChild == null || mChild.size() == 0) {
             return;
+        }
+
+        GLView v = mCreateTextureQueue.poll();
+        if (v != null){
+            v.createTexture();
         }
 
         for (int i = 0; i < mChild.size(); i++) {

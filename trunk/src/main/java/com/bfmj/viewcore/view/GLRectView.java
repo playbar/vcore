@@ -1505,15 +1505,6 @@ public class GLRectView extends GLView {
 		}
 	}
 	
-	public GLRootView getRootView(){
-		BaseViewActivity activity = (BaseViewActivity)getContext();
-		if (activity != null) {
-			return activity.getRootView();
-		}
-		
-		return null;
-	}
-	
 	/**
 	 * 获取View与默认位置的夹角
 	 * @author lixianke  @Date 2015-6-23 下午2:32:51 
