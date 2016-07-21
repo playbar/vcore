@@ -66,6 +66,8 @@ public class GLGroupView extends GLRectView {
 		if (view.isFocusable()){
 			setFocusable(true);
 		}
+
+		view.setFixed(isFixed());
 		
 		if (isInitDraw) {
 			view.initDraw();
@@ -86,6 +88,8 @@ public class GLGroupView extends GLRectView {
 		if (view.isFocusable()){
 			setFocusable(true);
 		}
+
+		view.setFixed(isFixed());
 		
 		if (isInitDraw) {
 			view.initDraw();
@@ -1248,5 +1252,13 @@ public class GLGroupView extends GLRectView {
 			mChildView.get(i).setZIndex(index);
 		}
 		super.setZIndex(index);
+	}
+
+	@Override
+	public void setFixed(boolean fixed) {
+		for (int i = 0; i < mChildView.size(); i++) {
+			mChildView.get(i).setFixed(fixed);
+		}
+		super.setFixed(fixed);
 	}
 }
