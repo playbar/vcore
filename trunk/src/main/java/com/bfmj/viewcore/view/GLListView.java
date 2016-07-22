@@ -199,7 +199,6 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 
 		this.mTotalCount = mGLListAdapter.getCount();
 		float mX = GLListView.this.getX();
-		//final GLRectView[] views = new GLRectView[this.mNumOneScreen];
 		for(int j=0;j<this.mNumOneScreen;j++){
 
 			if(j >this.mTotalCount-1)
@@ -212,13 +211,12 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 			if(this.mOrderType == this.HORIZONTAL){
 				view.setX(mX);
 				view.setY(GLListView.this.getY() + view.getMarginTop());
-
 				mX += view.getWidth() + view.getMarginRight() + this.mItemSpacing;
-			}
-			else{
+			} else{
 				view.setX(GLListView.this.getX() + view.getMarginRight());
-				view.setY(view.getMarginTop() + (view.getHeight() + this.mItemSpacing + view.getMarginTop() + view.getMarginBottom())*j);
-			}
+				view.setY(getY() + (view.getHeight() + view.getMarginTop() + view.getMarginBottom())*j);
+                //view.setY(view.getMarginTop() + (view.getHeight() + this.mItemSpacing + view.getMarginTop() + view.getMarginBottom())*j);
+            }
 			mDefaultDepth = view.getDepth();
 			//views[j] = view;
 			this.addView( view );

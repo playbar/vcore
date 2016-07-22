@@ -75,9 +75,9 @@ public class ListViewActivity extends BaseViewActivity {
 			}
 		};
 
-		for(index =0;  index < 4; index++){
-			listData.add(iconName[index]);
-		}
+//		for(index =0;  index < 2; index++){
+//			listData.add(iconName[index]);
+//		}
 
 		listView.setOnItemSelectedListener( onItemSelectedListener );
 		adapter = new ListViewAdapter(listData, ListViewActivity.this);
