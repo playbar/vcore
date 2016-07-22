@@ -2,6 +2,7 @@ package com.bfmj.viewcore.view;
 
 import android.content.Context;
 
+import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
@@ -114,64 +115,108 @@ public class GLGridViewPage extends GLGridView {
 		showPage();
 	}
 
-	private void prvBtn(){
-		GLTextView textView = new GLTextView(this.getContext());
-		textView.setLayoutParams(mStart - mStep, getY() + getHeight() + 20, 100, 100);
-		textView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
-		textView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
-		textView.setAlignment(GLTextView.ALIGN_CENTER);
+	@Override
+	public boolean onKeyDown(int keycode){
+		return false;
+	}
 
-		textView.setText("<");
-		textView.setTextSize(80);
-		textView.setFocusListener(new GLViewFocusListener() {
+	@Override
+	public boolean onKeyUp(int keycode){
+		if( keycode == MojingKeyCode.KEYCODE_DPAD_CENTER) {
+			getRootView().queueEvent(new Runnable() {
+				@Override
+				public void run() {
+					if( nextBtnView.isFocused()) {
+						++mCurIndex;
+						setStartIndex((mCurIndex - 1) * getNumOneScreen());
+						requestLayout();
+						showPage();
+					}else if( prvBtnView.isFocused() ){
+						--mCurIndex;
+						setStartIndex((mCurIndex - 1) * getNumOneScreen());
+						requestLayout();
+						showPage();
+					}else if( mbIndexFocused) {
+						setStartIndex( (mCurIndex - 1) * getNumOneScreen() );
+						requestLayout();
+						showPage();
+					}
+
+				}
+			});
+
+		}
+		return false;
+	}
+
+	@Override
+	public boolean onKeyLongPress(int keycode){
+		return false;
+	}
+
+
+	private void prvBtn(){
+
+		prvBtnView.setLayoutParams(mStart - mStep, getY() + getHeight() + 20, 100, 100);
+		prvBtnView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
+		prvBtnView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
+
+		prvBtnView.setAlignment(GLTextView.ALIGN_CENTER);
+
+		prvBtnView.setText("<");
+		prvBtnView.setTextSize(80);
+		prvBtnView.setFocusListener(new GLViewFocusListener() {
 			@Override
 			public void onFocusChange(GLRectView view, boolean focused) {
 				if (focused) {
 					view.setAlpha(0.3f);
-					--mCurIndex;
-					setStartIndex((mCurIndex - 1) * getNumOneScreen());
-					requestLayout();
-					showPage();
+//					--mCurIndex;
+//					setStartIndex((mCurIndex - 1) * getNumOneScreen());
+//					requestLayout();
+//					showPage();
 				} else {
 					view.setAlpha(1.0f);
 				}
 			}
 		});
-		addView(textView);
+		addView(prvBtnView);
 		return;
 	}
 
 	private void nextBtn(){
-		GLTextView textView = new GLTextView(this.getContext());
-		textView.setLayoutParams(mStart + mShowMaxCount * mStep, getY() + getHeight() + 20, 100, 100);
-		textView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
-		textView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
-		textView.setAlignment(GLTextView.ALIGN_CENTER);
 
-		textView.setText(">");
-		textView.setTextSize(80);
-		textView.setFocusListener(new GLViewFocusListener() {
+		nextBtnView.setLayoutParams(mStart + mShowMaxCount * mStep, getY() + getHeight() + 20, 100, 100);
+		nextBtnView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
+		nextBtnView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
+		nextBtnView.setAlignment(GLTextView.ALIGN_CENTER);
+
+		nextBtnView.setText(">");
+		nextBtnView.setTextSize(80);
+		nextBtnView.setFocusListener(new GLViewFocusListener() {
 			@Override
 			public void onFocusChange(GLRectView view, boolean focused) {
 				if (focused) {
 					view.setAlpha(0.3f);
-					++mCurIndex;
-					setStartIndex((mCurIndex -1) * getNumOneScreen());
-					requestLayout();
-					showPage();
+//					++mCurIndex;
+//					setStartIndex((mCurIndex -1) * getNumOneScreen());
+//					requestLayout();
+//					showPage();
 				} else {
 					view.setAlpha(1.0f);
 				}
 			}
 		});
-		addView(textView);
+		addView(nextBtnView);
 	}
 
+	GLTextView prvBtnView = new GLTextView(this.getContext());
+	private GLTextView nextBtnView = new GLTextView(this.getContext());
 	private float mStart = 0.0f;
 	private float mStep = 120.0f;
 	private int mCurIndex = 1; //当前分页的位置,从1开始计数
 	private int mCount = 0;  // 分页的个数, 从1开始计数
 	private int mShowMaxCount = 0;
+	private boolean mbIndexFocused = false;
 
 	private final static int MAXSHOW = 5;
 
@@ -237,13 +282,13 @@ public class GLGridViewPage extends GLGridView {
 				@Override
 				public void onFocusChange(GLRectView view, boolean focused) {
 					if (focused){
+						mbIndexFocused = true;
 						view.setAlpha(0.3f);
-						setStartIndex( (index - 1) * getNumOneScreen() );
 						mCurIndex = index;
-						requestLayout();
-						showPage();
+
 					}
 					else{
+						mbIndexFocused = false;
 						view.setAlpha(1.0f);
 					}
 				}

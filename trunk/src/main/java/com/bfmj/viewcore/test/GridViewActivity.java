@@ -2,9 +2,11 @@ package com.bfmj.viewcore.test;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.androidquery.AQuery;
+import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.viewcore.R;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
@@ -135,35 +137,33 @@ public class GridViewActivity extends BaseViewActivity {
 		//rootView.setRotationX( 90 );
 
 		//gridView.setItemSpacing(20);
-		
-//		listView.setOnKeyListener(new GLOnKeyListener() {
-//			
-//			@Override
-//			public boolean onKeyUp(int keycode) {
-//				// TODO Auto-generated method stub
-//				return false;
-//			}
-//			
-//			@Override
-//			public boolean onKeyLongPress(int keycode) {
-//				// TODO Auto-generated method stub
-//				return false;
-//			}
-//			
-//			
-//			@Override
-//			public boolean onKeyDown(int keycode) {
-//
+
+		gridView.setOnKeyListener(new GLOnKeyListener() {
+
+			@Override
+			public boolean onKeyDown(GLRectView view, int keycode) {
 //				if(keycode == MojingKeyCode.KEYCODE_DPAD_RIGHT){
 //					listView.moveLeft();
 //				}
 //				if(keycode == MojingKeyCode.KEYCODE_DPAD_LEFT){
 //					listView.moveRight();
 //				}
-//				
-//				return true;
-//			}
-//		});
+				Log.e("onCreate", "onKeyDown");
+				return false;
+			}
+
+			@Override
+			public boolean onKeyUp(GLRectView view, int keycode) {
+				Log.e("onCreate", "onKeyUp");
+				return false;
+			}
+
+			@Override
+			public boolean onKeyLongPress(GLRectView view, int keycode) {
+				return false;
+			}
+
+		});
 
 
 		GLTextView textView = new GLTextView(this);
@@ -224,6 +224,21 @@ public class GridViewActivity extends BaseViewActivity {
 	}
 
 
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		Log.e("onKeyUp", "onKeyUpn code =" + keyCode);
+		gridView.onKeyUp( keyCode );
+		switch (keyCode) {
+			case KeyEvent.KEYCODE_MENU:
+				return true;
+			case KeyEvent.KEYCODE_BACK:
+				return true;
+			default:
+				break;
+		}
+		return false;
+		//return super.onKeyUp(keyCode, event);
+	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {

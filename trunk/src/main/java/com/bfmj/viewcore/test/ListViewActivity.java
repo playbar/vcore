@@ -156,13 +156,13 @@ public class ListViewActivity extends BaseViewActivity {
 			//listView.changeItem(false);
 //			listview.move();
 
-//			getRootView().queueEvent(new Runnable() {
-//				@Override
-//				public void run() {
-//					listData.add(iconName[++index]);
-//					adapter.notifyDataSetChanged();
-//				}
-//			});
+			getRootView().queueEvent(new Runnable() {
+				@Override
+				public void run() {
+					listData.add(iconName[++index]);
+					adapter.notifyDataSetChanged();
+				}
+			});
 
 			//listView.moveLeft();
 
