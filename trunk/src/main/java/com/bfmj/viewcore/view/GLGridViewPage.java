@@ -137,7 +137,8 @@ public class GLGridViewPage extends GLGridView {
 						requestLayout();
 						showPage();
 					}else if( mbIndexFocused) {
-						setStartIndex( (mCurIndex - 1) * getNumOneScreen() );
+						setStartIndex( (mCurFocuseIndex - 1) * getNumOneScreen() );
+						mCurIndex = mCurFocuseIndex;
 						requestLayout();
 						showPage();
 					}
@@ -209,11 +210,12 @@ public class GLGridViewPage extends GLGridView {
 		addView(nextBtnView);
 	}
 
-	GLTextView prvBtnView = new GLTextView(this.getContext());
+	private GLTextView prvBtnView = new GLTextView(this.getContext());
 	private GLTextView nextBtnView = new GLTextView(this.getContext());
 	private float mStart = 0.0f;
 	private float mStep = 120.0f;
 	private int mCurIndex = 1; //当前分页的位置,从1开始计数
+	private int mCurFocuseIndex = 0;
 	private int mCount = 0;  // 分页的个数, 从1开始计数
 	private int mShowMaxCount = 0;
 	private boolean mbIndexFocused = false;
@@ -251,7 +253,7 @@ public class GLGridViewPage extends GLGridView {
 			mStart = mid;
 		}
 
-		int istart = 0;
+		int istart = 1;
 		int iend = mCount;
 		if( mCount > MAXSHOW ) {
 			if( mCurIndex <= MAXSHOW / 2 ){
@@ -259,11 +261,11 @@ public class GLGridViewPage extends GLGridView {
 			} else{
 				istart = (mCurIndex + MAXSHOW/2) < mCount ? mCurIndex - MAXSHOW / 2 : (mCount + 1 - MAXSHOW);
 			}
-			iend = istart + MAXSHOW;
+			iend = istart + MAXSHOW - 1;
 
 		}
 
-		for( int i = istart; i < iend; ++i ) {
+		for( int i = istart; i <= iend; ++i ) {
 
 			GLTextView textView = new GLTextView(this.getContext());
 			textView.setLayoutParams(mStart + (i - istart) * mStep, getY() + getHeight() + 20, 100, 100);
@@ -284,7 +286,7 @@ public class GLGridViewPage extends GLGridView {
 					if (focused){
 						mbIndexFocused = true;
 						view.setAlpha(0.3f);
-						mCurIndex = index;
+						mCurFocuseIndex = index;
 
 					}
 					else{
