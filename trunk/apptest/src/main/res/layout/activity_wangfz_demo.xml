@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    <bfmj.viewcore.view.GLRootView
+    <com.bfmj.viewcore.view.GLRootView
         android:id="@+id/rootview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
