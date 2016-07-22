@@ -76,7 +76,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     private void init(Context context) {
         mContext = context;
         setEGLContextClientVersion(3);
-        setMultiThread(true);
+        //setMultiThread(true);
         //多重采样，抗锯齿
 //		setEGLConfigChooser(new EGLConfigChooser() {  
 //			@Override

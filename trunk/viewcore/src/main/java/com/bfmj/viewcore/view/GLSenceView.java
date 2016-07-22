@@ -331,7 +331,7 @@ public class GLSenceView extends GLView {
 
     	if (bitmap != null){
     		releaseTexture(mTextureId);
-			mTextureId = GLTextureUtils.initImageTexture(getContext(), bitmap, true);
+			mTextureId = GLTextureUtils.initImageTexture(getContext(), bitmap, isRecycle);
 		}
 	}
 	
