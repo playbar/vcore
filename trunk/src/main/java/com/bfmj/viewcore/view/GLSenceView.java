@@ -181,6 +181,7 @@ public class GLSenceView extends GLView {
 	public void initDraw() {
 		isSurfaceCreated = true;
 		createTexture();
+		init();
 	}
 
 	@Override
@@ -330,12 +331,8 @@ public class GLSenceView extends GLView {
 
     	if (bitmap != null){
     		releaseTexture(mTextureId);
-			mTextureId = GLTextureUtils.initImageTexture(getContext(), bitmap, isRecycle);
+			mTextureId = GLTextureUtils.initImageTexture(getContext(), bitmap, true);
 		}
-    	
-    	if (mTextureId > 0){
-    		init();
-    	}
 	}
 	
 	@Override
