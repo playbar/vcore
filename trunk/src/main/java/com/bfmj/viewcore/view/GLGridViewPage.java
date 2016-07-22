@@ -223,7 +223,11 @@ public class GLGridViewPage extends GLGridView {
 			GLTextView textView = new GLTextView(this.getContext());
 			textView.setLayoutParams(mStart + (i - istart) * mStep, getY() + getHeight() + 20, 100, 100);
 			textView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
-			textView.setBackground( new GLColor( 0.43f,  0.4f, 0.34f));
+			if( mCurIndex == i ){
+				textView.setBackground( new GLColor(0.21f, 0.45f, 0.68f ));
+			}else {
+				textView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
+			}
 			textView.setAlignment( GLTextView.ALIGN_CENTER );
 
 			textView.setText("" + i);
