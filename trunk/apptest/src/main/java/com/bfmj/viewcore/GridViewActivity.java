@@ -97,13 +97,14 @@ public class GridViewActivity extends BaseViewActivity {
 			}
 		};
 
-		gridView = new GLGridViewPage( this, 1, 1 );
+		gridView = new GLGridViewPage( this, 2, 2 );
 		gridView.setLayoutParams(500, 500, 40, 40);
 		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
 		gridView.setHorizontalSpacing( 20.0f);
 		gridView.setVerticalSpacing( 20.0f);
 		gridView.setMargin(10, 10, 10, 10 );
 		gridView.setPadding( 10, 10, 10, 10);
+		gridView.setMargin( 10, 10, 10, 10 );
 		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
 
 		getData();
