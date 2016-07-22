@@ -102,7 +102,9 @@ public class GLSenceView extends GLView {
 		mResId = resId;
 		mBitmap = null;
 
-		getRootView().mCreateTextureQueue.offer(this);
+		if (isSurfaceCreated){
+			getRootView().mCreateTextureQueue.offer(this);
+		}
 	}
 	
 	/**
@@ -119,7 +121,9 @@ public class GLSenceView extends GLView {
 		mBitmap = bitmap;
 		mResId = 0;
 
-		getRootView().mCreateTextureQueue.offer(this);
+		if (isSurfaceCreated){
+			getRootView().mCreateTextureQueue.offer(this);
+		}
 	}
 	
 	/**

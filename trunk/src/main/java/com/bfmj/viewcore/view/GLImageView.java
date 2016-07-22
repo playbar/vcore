@@ -41,7 +41,9 @@ public class GLImageView extends GLRectView {
 		mResId = resId;
 		mBitmap = null;
 
-		getRootView().mCreateTextureQueue.offer(this);
+		if (isSurfaceCreated()){
+			getRootView().mCreateTextureQueue.offer(this);
+		}
 	}
 	
 	/**
@@ -57,8 +59,10 @@ public class GLImageView extends GLRectView {
 		
 		mBitmap = bitmap;
 		mResId = 0;
-		
-		getRootView().mCreateTextureQueue.offer(this);
+
+		if (isSurfaceCreated()){
+			getRootView().mCreateTextureQueue.offer(this);
+		}
 	}
 
 	@Override
