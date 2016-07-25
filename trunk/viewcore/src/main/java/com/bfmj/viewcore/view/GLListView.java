@@ -211,10 +211,10 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 			if(this.mOrderType == this.HORIZONTAL){
 				view.setX(mX);
 				view.setY(GLListView.this.getY() + getMarginTop());
-				mX += view.getWidth() + getMarginLeft() + this.mItemSpacing;
+				mX += view.getWidth() + this.mItemSpacing;
 			} else{
 				view.setX(GLListView.this.getX() + getMarginLeft());
-				view.setY(getY() + getMarginTop() + (view.getHeight() + this.mItemSpacing + getMarginTop())*j);
+				view.setY(getY() + getMarginTop() + (view.getHeight() + this.mItemSpacing)*j);
 				//view.setY(view.getMarginTop() + (view.getHeight() + this.mItemSpacing + view.getMarginTop() + view.getMarginBottom())*j);
 			}
 			mDefaultDepth = view.getDepth();
