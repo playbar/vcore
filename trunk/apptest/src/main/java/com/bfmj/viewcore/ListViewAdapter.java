@@ -3,6 +3,7 @@ package com.bfmj.viewcore;
 import java.util.List;
 
 import com.bfmj.viewcore.adapter.GLBaseAdapter;
+import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.view.GLGroupView;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLRectView;
@@ -86,7 +87,21 @@ public class ListViewAdapter extends GLBaseAdapter {
 		image.setWidth( 200 );
 		image.setHeight( 200 );
 		image.setImage(R.drawable.a1);
-		
+		image.setFocusListener(new GLViewFocusListener() {
+			@Override
+			public void onFocusChange(GLRectView view, boolean focused) {
+				Log.e("ListViewAdapter", "focuseed is " + focused );
+			}
+		});
+		return image;
+
+//		grv.setFocusListener(new GLViewFocusListener() {
+//			@Override
+//			public void onFocusChange(GLRectView view, boolean focused) {
+//				Log.e("ListViewAdapter", "focuseed is " + focused );
+//			}
+//		});
+//
 		/** 
          * 显示图片 
          * 参数1：图片url 
@@ -145,8 +160,8 @@ public class ListViewAdapter extends GLBaseAdapter {
 //		mAq.im
 		
 //		image.setImage(list.get(position));
-		Log.d("bbbbb",list.get(position) + "");
-		return grv;
+//		Log.d("bbbbb",list.get(position) + "");
+//		return grv;
 		
 	}
 	

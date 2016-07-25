@@ -50,11 +50,33 @@ public class ListViewActivity extends BaseViewActivity {
 //		aq = new AQuery(this);
 		rootView = getRootView();
 		rootView.onResume();		
-		listView = new GLListView(ListViewActivity.this, GLListView.HORIZONTAL);
+		listView = new GLListView(ListViewActivity.this, GLListView.VERTICAL);
 		listView.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
 
-		listView.setLayoutParams(280, 400, 1000, 400);
+		listView.setMargin(50, 50, 40,40);
+		listView.setLayoutParams(280, 400, 1000, 800);
 		listView.setItemSpacing(20);
+
+		listView.setOnKeyListener(new GLOnKeyListener() {
+
+			@Override
+			public boolean onKeyUp(GLRectView view, int keycode) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean onKeyLongPress(GLRectView view, int keycode) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+
+			@Override
+			public boolean onKeyDown(GLRectView view, int keycode) {
+				return true;
+			}
+		});
 
 
 		final GLAdapterView.OnItemSelectedListener onItemSelectedListener = new GLAdapterView.OnItemSelectedListener() {
@@ -95,29 +117,7 @@ public class ListViewActivity extends BaseViewActivity {
 
 		rootView.addView(listView);
 
-//		listView.setOnKeyListener(new GLOnKeyListener() {
-//
-//			@Override
-//			public boolean onKeyUp(GLRectView view, int keycode) {
-//				// TODO Auto-generated method stub
-//				return false;
-//			}
-//
-//			@Override
-//			public boolean onKeyLongPress(GLRectView view, int keycode) {
-//				// TODO Auto-generated method stub
-//				return false;
-//			}
-//
-//
-//			@Override
-//			public boolean onKeyDown(GLRectView view, int keycode) {
-//
-//
-//
-//				return true;
-//			}
-//		});
+
 		
 		
 		
