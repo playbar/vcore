@@ -8,6 +8,7 @@ import org.json.JSONException;
 
 import com.androidquery.callback.AjaxStatus;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
+import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLAdapterView;
@@ -19,6 +20,7 @@ import com.bfmj.viewcore.view.GLView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 public class ListViewActivity extends BaseViewActivity {
@@ -48,10 +50,10 @@ public class ListViewActivity extends BaseViewActivity {
 //		aq = new AQuery(this);
 		rootView = getRootView();
 		rootView.onResume();		
-		listView = new GLListView(ListViewActivity.this, GLListView.VERTICAL);
+		listView = new GLListView(ListViewActivity.this, GLListView.HORIZONTAL);
 		listView.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
 
-		listView.setLayoutParams(280, 400, 1000, 800);
+		listView.setLayoutParams(280, 400, 1000, 400);
 		listView.setItemSpacing(20);
 
 
@@ -59,18 +61,20 @@ public class ListViewActivity extends BaseViewActivity {
 			@Override
 			public void onItemSelected(GLAdapterView<?> glparent,
 									   GLView glview, int position, long id) {
-				Log.e("LxkTestActivity", "OnItemSelectedListener.onItemSelected");
+				Log.e("ListViewActivity", "OnItemSelectedListener.onItemSelected");
+				//glview.setAlpha( 0.3f );
 			}
 
 			@Override
 			public void onNothingSelected(GLAdapterView<?> glparent,
 										  GLView glview, int position, long id) {
-				Log.e("LxkTestActivity", "OnItemSelectedListener.onNothingSelected");
+				Log.e("ListViewActivity", "OnItemSelectedListener.onNothingSelected");
+				//glview.setAlpha( 1.0f );
 			}
 
 			@Override
 			public void onNoItemData() {
-				Log.e("LxkTestActivity", "OnItemSelectedListener.onNoItemData");
+				Log.e("ListViewActivity", "OnItemSelectedListener.onNoItemData");
 			}
 		};
 
@@ -79,33 +83,41 @@ public class ListViewActivity extends BaseViewActivity {
 		}
 
 		listView.setOnItemSelectedListener( onItemSelectedListener );
+		//listView.setOpenHeadControl( false );
 		adapter = new ListViewAdapter(listData, ListViewActivity.this);
 		listView.setAdapter(adapter);
+//		listView.setFocusListener( new GLViewFocusListener(){
+//			@Override
+//			public void onFocusChange( GLRectView view, boolean bfocused ){
+//				Log.e("ListViewActivity", "listView is on focused");
+//			}
+//		});
+
 		rootView.addView(listView);
 
-		listView.setOnKeyListener(new GLOnKeyListener() {
-
-			@Override
-			public boolean onKeyUp(GLRectView view, int keycode) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-
-			@Override
-			public boolean onKeyLongPress(GLRectView view, int keycode) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-
-
-			@Override
-			public boolean onKeyDown(GLRectView view, int keycode) {
-
-
-
-				return true;
-			}
-		});
+//		listView.setOnKeyListener(new GLOnKeyListener() {
+//
+//			@Override
+//			public boolean onKeyUp(GLRectView view, int keycode) {
+//				// TODO Auto-generated method stub
+//				return false;
+//			}
+//
+//			@Override
+//			public boolean onKeyLongPress(GLRectView view, int keycode) {
+//				// TODO Auto-generated method stub
+//				return false;
+//			}
+//
+//
+//			@Override
+//			public boolean onKeyDown(GLRectView view, int keycode) {
+//
+//
+//
+//				return true;
+//			}
+//		});
 		
 		
 		
@@ -145,6 +157,19 @@ public class ListViewActivity extends BaseViewActivity {
 			
 			
 		}	        
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		Log.e("onKeyUp", "onKeyUpn code =" + keyCode);
+		listView.onKeyUp( keyCode );
+		return false;
+	}
+
+	public boolean onKeyDown( int keyCode, KeyEvent event ){
+		Log.e("onKeyDown", "onKeyDown code = " + keyCode );
+		listView.onKeyDown( keyCode );
+		return false;
 	}
 	
 	@Override

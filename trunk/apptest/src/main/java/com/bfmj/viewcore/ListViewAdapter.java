@@ -83,8 +83,8 @@ public class ListViewAdapter extends GLBaseAdapter {
 		}
 
 		final GLImageView image = (GLImageView)grv.getView("timage");
-		image.setWidth( 500 );
-		image.setHeight( 250 );
+		image.setWidth( 200 );
+		image.setHeight( 200 );
 		image.setImage(R.drawable.a1);
 		
 		/** 

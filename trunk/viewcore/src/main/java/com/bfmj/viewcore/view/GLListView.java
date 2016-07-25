@@ -218,6 +218,30 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
                 //view.setY(view.getMarginTop() + (view.getHeight() + this.mItemSpacing + view.getMarginTop() + view.getMarginBottom())*j);
             }
 			mDefaultDepth = view.getDepth();
+
+//			final int position = j;
+//			view.setFocusListener(new GLViewFocusListener() {
+//
+//				@Override
+//				public void onFocusChange(GLRectView view, boolean focused) {
+//					// TODO Auto-generated method stub
+//					if( mOnItemSelectedListener == null ){
+//						return;
+//					}
+//					if( focused ){
+//						mOnItemSelectedListener.onItemSelected( null, view, position, position);
+//					}else{
+//						mOnItemSelectedListener.onNothingSelected( null, view, position, position);
+//					}
+//
+//
+//				}
+//			});
+
+			if( view.getDepth() > this.getDepth() ){
+				view.setDepth( this.getDepth() );
+			}
+
 			//views[j] = view;
 			this.addView( view );
 		}
@@ -243,13 +267,13 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 //
 //		}
 
-		for(int k=0;k<GLListView.this.getChildView().size();k++){
-			GLRectView view1 = GLListView.this.getView(k);
-			if(view1.getDepth() > GLListView.this.getDepth()){
-				view1.setDepth(GLListView.this.getDepth());
-			}
-		}
-
+//		for(int k=0;k<GLListView.this.getChildView().size();k++){
+//			GLRectView view1 = GLListView.this.getView(k);
+//			if(view1.getDepth() > GLListView.this.getDepth()){
+//				view1.setDepth(GLListView.this.getDepth());
+//			}
+//		}
+//
 		if(!isOpenHeadControl()){
 			setNoHeadListen();
 		}
@@ -259,6 +283,15 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 				@Override
 				public void onFocusChange(GLRectView view, boolean focused) {
 					// TODO Auto-generated method stub
+					if( mOnItemSelectedListener == null ){
+						return;
+					}
+					if( focused ){
+						mOnItemSelectedListener.onItemSelected( null, view, mSelectedPosition, mSelectedPosition);
+					}else{
+						mOnItemSelectedListener.onNothingSelected( null, view, mSelectedPosition, mSelectedPosition);
+					}
+
 
 				}
 			});
@@ -322,7 +355,8 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 					}
 
 //					if(mSelectedIndex >= mTotalCount-1) return true;
-					if(!isAnimationFinished) return true;
+					if(!isAnimationFinished)
+						return true;
 					isMoveRight = true;
 					moveLeft();	
 					return true;
@@ -366,6 +400,22 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 				}
 				
 				if (mOrderType == HORIZONTAL && (keycode == MojingKeyCode.KEYCODE_DPAD_DOWN || keycode == MojingKeyCode.KEYCODE_DPAD_UP)) {
+					//回调控件使用者注册的事件监听对象
+					if (outViewKeyListener!=null) {
+						if(outViewKeyListener.onKeyDown(view, keycode)){
+							if(mFocusIndex >= 0 && mFocusIndex < mTotalCount) {
+								mSelectedIndex = mStartIndex + mFocusIndex;
+								//回调失去焦点事件
+								if(mOnItemSelectedListener!=null){
+									mOnItemSelectedListener.onNothingSelected(null, GLListView.this.getView(mFocusIndex), mFocusIndex, mSelectedIndex);
+								}
+							}
+							return true;
+						}
+					}
+				}
+
+				if (mOrderType == VERTICAL && (keycode == MojingKeyCode.KEYCODE_DPAD_DOWN || keycode == MojingKeyCode.KEYCODE_DPAD_UP)) {
 					//回调控件使用者注册的事件监听对象
 					if (outViewKeyListener!=null) {
 						if(outViewKeyListener.onKeyDown(view, keycode)){

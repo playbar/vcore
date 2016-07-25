@@ -2,7 +2,7 @@ package com.bfmj.viewcore.render;
 
 public class GLConstant {
 	//ORIENTATION
-	public static enum GLOrientation{HORIZONTAL, VERTICAL}
+	public static enum GLOrientation{HORIZONTAL, VERTICAL, VERTICAL_RIGHT }
 	
 	//ALIGN
 	public static enum GLAlign{LEFT, RIGHT, TOP, BOTTOM, LEFT_TOP, RIGHT_TOP, LEFT_BOTTOM, RIGHT_BOTTOM, CENTER, CENTER_VERTICAL, CENTER_HORIZONTAL, DEFAULT}

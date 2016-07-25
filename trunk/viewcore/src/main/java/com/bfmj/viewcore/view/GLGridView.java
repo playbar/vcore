@@ -308,6 +308,82 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	}
 
 
+	public void showVRItem( int cIndex ){
+		int tempIndex=cIndex;
+		//int width = getInnerWidth()
+
+		for(int col=this.mNumColumns -1; col >= 0; --col )
+		{
+			for(int row=0; row<this.mNumRows; row++)
+			{
+				//如果大于设置的一屏显示数则不再添加
+				if( tempIndex > this.mNumOneScreen + cIndex || tempIndex > this.mTotalCount-1){
+					break;
+				}
+				GLRectView view = this.mGLAdapter.getGLView(tempIndex, convertView, null);
+				if (col == 0 && row == 0) {
+					mFirstView = view;
+				}
+				view.setX(getX() + getPaddingLeft() + getMarginLeft() + (view.getWidth() + this.mHorizontalSpacing) * (col + 1) );
+				view.setY(getY() + getPaddingTop() + getMarginTop() + view.getHeight() * row + this.mVerticalSpacing * row);
+
+				view.setId("gridview_" + tempIndex);
+
+				final int position = mNumColumns*row+col;
+				view.setFocusListener(new GLViewFocusListener() {
+
+					@Override
+					public void onFocusChange(GLRectView view, boolean focused) {
+						if (mOnItemSelectedListener == null) {
+							return;
+						}
+						if (focused) {
+							mOnItemSelectedListener.onItemSelected(null, view, position, position);
+						} else {
+							mOnItemSelectedListener.onNothingSelected(null, view, position, position);
+						}
+					}
+				});
+				view.setOnKeyListener(new GLOnKeyListener() {
+
+					@Override
+					public boolean onKeyUp(GLRectView view, int keycode) {
+						return false;
+					}
+
+					@Override
+					public boolean onKeyLongPress(GLRectView view, int keycode) {
+						return false;
+					}
+
+					@Override
+					public boolean onKeyDown(GLRectView view, int keycode) {
+						if (mOnItemClickListener == null) {
+							return false;
+						}
+
+						if (keycode == MojingKeyCode.KEYCODE_ENTER) {
+							mOnItemClickListener.onItemClick(null, view, position, position);
+						}
+						mPrevIndex = position;
+						return false;
+					}
+				});
+				this.addView(view);
+//				GLGridView.this.addView(view);
+//				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
+//					@Override
+//					public void run() {
+//						synchronized (this) {
+//							GLGridView.this.addView(view);
+//						}
+//					}
+//				});
+				tempIndex++;
+			}
+		}
+	}
+
 	@Override
 	public void requestLayout(){
 		mNumOneScreen =  mNumRows * mNumColumns;
@@ -317,8 +393,10 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 		this.mTotalCount = mGLAdapter.getCount();
 		if( mOrientation.equals( GLConstant.GLOrientation.HORIZONTAL )){
 			showHItem(mStartIndex);
-		}else{
+		}else if( mOrientation.equals(GLConstant.GLOrientation.VERTICAL )){
 			showVItem(mStartIndex);
+		}else {
+			showVRItem( mStartIndex );
 		}
 		return;
 
