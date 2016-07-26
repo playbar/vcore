@@ -1,4 +1,4 @@
-package com.bn.mojing;
+package com.bfmj.mojing;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,9 +26,7 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.baofeng.mojing.MojingSurfaceView;
-import com.bn.mojing.GL2JNIView;
-import com.bn.mojing.MatrixState;
-import com.bn.mojing.SphereModel;
+
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -55,7 +53,6 @@ class GL2JNIView extends MojingSurfaceView implements Serializable{
     
     static int g_frameBufferObject = 0;
 
-	
 
     public GL2JNIView(Context context) {
         super(context);
@@ -102,24 +99,24 @@ class GL2JNIView extends MojingSurfaceView implements Serializable{
 //			renderToTexture();        	
 //			//renderTextureToWindow();
 //
-//        	// com.baofeng.mojing.MojingSDK.DrawTexture(g_sphereTexId, 0);
-//			//com.baofeng.mojing.MojingSDK.DrawTexture(0, 0);
+//        	// com.baofeng.com.bfmj.mojing.MojingSDK.DrawTexture(g_sphereTexId, 0);
+//			//com.baofeng.com.bfmj.mojing.MojingSDK.DrawTexture(0, 0);
 //        	}
 //
 //        public void onSurfaceChanged(GL10 gl, int width, int height) {
-//			com.baofeng.mojing.MojingSDK.SetCenterLine(4, 255,255,255,255);
-//			com.baofeng.mojing.MojingSDK.LogTrace("EnterMojingWorld");
+//			com.baofeng.com.bfmj.mojing.MojingSDK.SetCenterLine(4, 255,255,255,255);
+//			com.baofeng.com.bfmj.mojing.MojingSDK.LogTrace("EnterMojingWorld");
 //			
-//            float fFOV = com.baofeng.mojing.MojingSDK.GetMojingWorldFOV(); 
+//            float fFOV = com.baofeng.com.bfmj.mojing.MojingSDK.GetMojingWorldFOV();
 //
 //            float ratio = (float) Math.tan(Math.toRadians(fFOV/2)) * 1.0f;
 //            MatrixState.setProjectFrustum(-ratio, ratio, -ratio, ratio, 1.f, 800);
 //            MatrixState.setCamera(0,0,0,		
 //								  0f,0.0f,-0.1f,
 //								  0f,1.0f,0.0f);  
-//			//com.baofeng.mojing.MojingSDK.OnSurfaceChanged(width , height);
+//			//com.baofeng.com.bfmj.mojing.MojingSDK.OnSurfaceChanged(width , height);
 //
-//			float ff = com.baofeng.mojing.MojingSDK.GetGlassesSeparationInPix();
+//			float ff = com.baofeng.com.bfmj.mojing.MojingSDK.GetGlassesSeparationInPix();
 //        }
 //
 //        public void onSurfaceCreated(GL10 gl, EGLConfig config) 
@@ -147,13 +144,13 @@ class GL2JNIView extends MojingSurfaceView implements Serializable{
 //
 //			sphere = new SphereModel(100);    
 //
-//			com.baofeng.mojing.MojingSDK.SetCenterLine(4, 255,255,255,255);
-//			com.baofeng.mojing.MojingSDK.LogTrace("EnterMojingWorld");
+//			com.baofeng.com.bfmj.mojing.MojingSDK.SetCenterLine(4, 255,255,255,255);
+//			com.baofeng.com.bfmj.mojing.MojingSDK.LogTrace("EnterMojingWorld");
 //
-//			com.baofeng.mojing.MojingSDKPrivate.FuncTest();
+//			com.baofeng.com.bfmj.mojing.MojingSDKPrivate.FuncTest();
 //
 //
-//			com.baofeng.mojing.MojingSDK.StartTrackerCalibration();
+//			com.baofeng.com.bfmj.mojing.MojingSDK.StartTrackerCalibration();
 //        }
 //        
 //        
@@ -229,7 +226,7 @@ class GL2JNIView extends MojingSurfaceView implements Serializable{
 //            MatrixState.pushMatrix(); 
 //
 //			float[] fM  = new float[16];
-//		    com.baofeng.mojing.MojingSDK.getLastHeadView(fM);
+//		    com.baofeng.com.bfmj.mojing.MojingSDK.getLastHeadView(fM);
 //	        MatrixState.setViewMatrix(fM);
 //            sphere.drawSelf(g_TexId);
 //            MatrixState.popMatrix();   
@@ -242,7 +239,7 @@ class GL2JNIView extends MojingSurfaceView implements Serializable{
 //			int texWidth = g_textureImgWidth, texHeight = g_textureImgHeight;
 //			GLES20.glViewport(0, 0, texWidth, texHeight);    
 //            // save current context.
-//            com.baofeng.mojing.MojingSDK.DrawTexture(g_TexId, 0); 
+//            com.baofeng.com.bfmj.mojing.MojingSDK.DrawTexture(g_TexId, 0);
 //    	}
 //
 //    	public void renderToTexture() {	
@@ -252,7 +249,7 @@ class GL2JNIView extends MojingSurfaceView implements Serializable{
 //			for (int iEye = 0 ; iEye < 2 ; iEye++)
 //			{
 //				GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, g_frameBufferObject);
-//				com.baofeng.mojing.EyeTextureParameter EyeTexture = com.baofeng.mojing.MojingSDK.GetEyeTextureParameter(iEye + 1);
+//				com.baofeng.com.bfmj.mojing.EyeTextureParameter EyeTexture = com.baofeng.com.bfmj.mojing.MojingSDK.GetEyeTextureParameter(iEye + 1);
 //			
 //				EyeTex[iEye] = EyeTexture.m_EyeTexID;
 //				if (EyeTex[iEye] != 0 && GLES20.glIsTexture(EyeTex[iEye]))
@@ -278,7 +275,7 @@ class GL2JNIView extends MojingSurfaceView implements Serializable{
 //										  0f,1.0f,0.0f);  
 //
 //						float[] fM  = new float[16];
-//						com.baofeng.mojing.MojingSDK.getLastHeadView(fM);
+//						com.baofeng.com.bfmj.mojing.MojingSDK.getLastHeadView(fM);
 //	        			MatrixState.setViewMatrix(fM);
 //						sphere.drawSelf(g_TexId);
 //						MatrixState.popMatrix(); 
@@ -289,8 +286,8 @@ class GL2JNIView extends MojingSurfaceView implements Serializable{
 //				GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,0);
 //			}// end for 
 //			
-//			com.baofeng.mojing.MojingSDK.DrawTexture(EyeTex[0], EyeTex[1]);
-//			//com.baofeng.mojing.MojingSDK.DrawTexture(0, 0);
+//			com.baofeng.com.bfmj.mojing.MojingSDK.DrawTexture(EyeTex[0], EyeTex[1]);
+//			//com.baofeng.com.bfmj.mojing.MojingSDK.DrawTexture(0, 0);
 //    	}
 //    } // end of Render
     

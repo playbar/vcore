@@ -1,11 +1,10 @@
-package com.bn.mojing;
-import static com.bn.mojing.ShaderUtil.createProgram;
+package com.bfmj.mojing;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-import java.util.ArrayList;
+
 import android.opengl.GLES20;
 public class SkyBoxModel {
 	int mProgram;			//Shader的运行脚本ID
@@ -197,7 +196,7 @@ public class SkyBoxModel {
     public void initShader(String vertexShader, String fragmentShader)
     {
         //鍩轰簬椤剁偣鐫�鑹插櫒涓庣墖鍏冪潃鑹插櫒鍒涘缓绋嬪簭
-        mProgram = createProgram(vertexShader, fragmentShader);
+        mProgram = ShaderUtil.createProgram(vertexShader, fragmentShader);
         //鑾峰彇绋嬪簭涓《鐐逛綅缃睘鎬у紩鐢╥d  
         maPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
         //鑾峰彇绋嬪簭涓《鐐圭汗鐞嗗潗鏍囧睘鎬у紩鐢╥d  

@@ -67,14 +67,14 @@ public class MojingSDKServiceManager {
 		mActivity = activity;
 		
 		Intent intent = new Intent();
-		intent.setAction("com.baofeng.com.baofeng.mojing.com.baofeng.mojing.service.MojingSDKAIDLService");
+		intent.setAction("com.baofeng.com.baofeng.com.bfmj.mojing.com.baofeng.com.bfmj.mojing.service.MojingSDKAIDLService");
 		intent.setPackage("com.baofeng.mj");
 		mActivity.startService(intent);
 	}
 	
 	public void onResume() {
 		Intent intent = new Intent();
-		intent.setAction("com.baofeng.com.baofeng.mojing.com.baofeng.mojing.service.MojingSDKAIDLService");
+		intent.setAction("com.baofeng.com.baofeng.com.bfmj.mojing.com.baofeng.com.bfmj.mojing.service.MojingSDKAIDLService");
 		intent.setPackage("com.baofeng.mj");
 		if (!mActivity.bindService(intent, connection, Context.BIND_AUTO_CREATE)) {
 			Log.w(TAG, "ServiceApp 'com.baofeng.mj' not found!");

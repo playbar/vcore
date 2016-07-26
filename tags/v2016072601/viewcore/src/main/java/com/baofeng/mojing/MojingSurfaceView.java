@@ -172,7 +172,7 @@ public class MojingSurfaceView extends SurfaceView implements SurfaceHolder.Call
 //	static 
 //	 {
 //		System.loadLibrary("mdklog");
-//        System.loadLibrary("com.baofeng.mojing");
+//        System.loadLibrary("com.baofeng.com.bfmj.mojing");
 //    }
 
 	private native static boolean EnterMojingWorld(String GlassesName, boolean bMultiThread, boolean bUseTimeWarp);

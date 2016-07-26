@@ -62,7 +62,7 @@ public class MojingVrActivity extends Activity {
 		com.baofeng.mojing.MojingVrLib.startVsync(this);
         mMojingSurfaceView.onResume();
 		MojingSDKReport.onResume(this);
-		//MojingSDKReport.onEvent("buy magic bean", "com.baofeng.mojing shop", "money", 100, "magic bean", 1000);
+		//MojingSDKReport.onEvent("buy magic bean", "com.baofeng.com.bfmj.mojing shop", "money", 100, "magic bean", 1000);
     }
     
 	@Override

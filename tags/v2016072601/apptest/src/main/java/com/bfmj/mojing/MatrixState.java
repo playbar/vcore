@@ -1,4 +1,4 @@
-package com.bn.mojing;
+package com.bfmj.mojing;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;

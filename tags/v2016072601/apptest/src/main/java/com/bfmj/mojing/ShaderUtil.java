@@ -1,4 +1,4 @@
-package com.bn.mojing;
+package com.bfmj.mojing;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;

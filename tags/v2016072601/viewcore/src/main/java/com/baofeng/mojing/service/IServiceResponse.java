@@ -8,14 +8,14 @@ public interface IServiceResponse extends android.os.IInterface
 /** Local-side IPC implementation stub class. */
 public static abstract class Stub extends android.os.Binder implements com.baofeng.mojing.service.IServiceResponse
 {
-private static final String DESCRIPTOR = "com.baofeng.com.baofeng.mojing.com.baofeng.mojing.service.IServiceResponse";
+private static final String DESCRIPTOR = "com.baofeng.com.baofeng.com.bfmj.mojing.com.baofeng.com.bfmj.mojing.service.IServiceResponse";
 /** Construct the stub at attach it to the interface. */
 public Stub()
 {
 this.attachInterface(this, DESCRIPTOR);
 }
 /**
- * Cast an IBinder object into an com.baofeng.com.baofeng.mojing.com.baofeng.mojing.service.IServiceResponse interface,
+ * Cast an IBinder object into an com.baofeng.com.baofeng.com.bfmj.mojing.com.baofeng.com.bfmj.mojing.service.IServiceResponse interface,
  * generating a proxy if needed.
  */
 public static com.baofeng.mojing.service.IServiceResponse asInterface(android.os.IBinder obj)

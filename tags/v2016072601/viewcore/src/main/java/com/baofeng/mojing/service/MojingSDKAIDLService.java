@@ -8,14 +8,14 @@ public interface MojingSDKAIDLService extends android.os.IInterface
 /** Local-side IPC implementation stub class. */
 public static abstract class Stub extends android.os.Binder implements com.baofeng.mojing.service.MojingSDKAIDLService
 {
-private static final String DESCRIPTOR = "com.baofeng.com.baofeng.mojing.com.baofeng.mojing.service.MojingSDKAIDLService";
+private static final String DESCRIPTOR = "com.baofeng.com.baofeng.com.bfmj.mojing.com.baofeng.com.bfmj.mojing.service.MojingSDKAIDLService";
 /** Construct the stub at attach it to the interface. */
 public Stub()
 {
 this.attachInterface(this, DESCRIPTOR);
 }
 /**
- * Cast an IBinder object into an com.baofeng.com.baofeng.mojing.com.baofeng.mojing.service.MojingSDKAIDLService interface,
+ * Cast an IBinder object into an com.baofeng.com.baofeng.com.bfmj.mojing.com.baofeng.com.bfmj.mojing.service.MojingSDKAIDLService interface,
  * generating a proxy if needed.
  */
 public static com.baofeng.mojing.service.MojingSDKAIDLService asInterface(android.os.IBinder obj)

@@ -26,7 +26,7 @@ import android.view.MotionEvent;
 public class ListViewActivity extends BaseViewActivity {
 
 	private GLListView listView;
-	private String Url = "http://img.static.com.baofeng.mojing.cn/resource/list/3.js";
+	private String Url = "http://img.static.com.baofeng.com.bfmj.mojing.cn/resource/list/3.js";
 //	private AQuery aq;
 	private int index = 0;
 	private GLRootView rootView;

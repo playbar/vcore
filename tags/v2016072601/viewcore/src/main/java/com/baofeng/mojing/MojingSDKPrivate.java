@@ -5,7 +5,7 @@ public class MojingSDKPrivate
 {
 //	static 
 //	 {
-//         System.loadLibrary("com.baofeng.mojing");
+//         System.loadLibrary("com.baofeng.com.bfmj.mojing");
 //     }
 	
 	private static native void Log(int logLevel, String sInfo, String sFileName, int line);

@@ -1,4 +1,4 @@
-package com.bn.mojing;
+package com.bfmj.mojing;
 
 import java.io.InputStream;
 import android.app.Activity;
@@ -14,8 +14,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.baofeng.mojing.MojingSDK;
-import com.bn.mojing.MatrixState;
-import com.bn.mojing.SphereModel;
 
 import android.opengl.GLES20;
 import android.opengl.GLES30;
@@ -96,27 +94,27 @@ public class VrPhotoRender implements GLSurfaceView.Renderer
 //			//renderToWindow();
 ////        	if (EndOfRender)
 ////        	{
-////        		com.baofeng.mojing.MojingSDK.LeaveMojingWorld();
+////        		com.baofeng.com.bfmj.mojing.MojingSDK.LeaveMojingWorld();
 ////				EndOfRender =false;
 ////        		return;
 ////        	}
 //        	
 //
-//			//float fRate = com.baofeng.mojing.MojingSDK.IsTrackerCalibrated();
+//			//float fRate = com.baofeng.com.bfmj.mojing.MojingSDK.IsTrackerCalibrated();
 //			//renderToWindow();
 //            //initFontBitmap();
 //			renderToTexture();        	
 //			//renderTextureToWindow();
 //
-//        	// com.baofeng.mojing.MojingSDK.DrawTexture(g_sphereTexId, 0);
-//			// com.baofeng.mojing.MojingSDK.DrawTexture(0, 0);
+//        	// com.baofeng.com.bfmj.mojing.MojingSDK.DrawTexture(g_sphereTexId, 0);
+//			// com.baofeng.com.bfmj.mojing.MojingSDK.DrawTexture(0, 0);
 //        	}
 //
 //        public void onSurfaceChanged(GL10 gl, int width, int height) {
-//			com.baofeng.mojing.MojingSDK.SetCenterLine(4, 255,255,255,255);
-//			com.baofeng.mojing.MojingSDK.LogTrace("EnterMojingWorld");
+//			com.baofeng.com.bfmj.mojing.MojingSDK.SetCenterLine(4, 255,255,255,255);
+//			com.baofeng.com.bfmj.mojing.MojingSDK.LogTrace("EnterMojingWorld");
 //			
-//            float fFOV = com.baofeng.mojing.MojingSDK.GetMojingWorldFOV(); 
+//            float fFOV = com.baofeng.com.bfmj.mojing.MojingSDK.GetMojingWorldFOV();
 //			//float fFOV = 90; 
 //            float ratio = (float) Math.tan(Math.toRadians(fFOV/2)) * 1.0f;
 //            Log.e("Mojing", String.format("radio is %f", ratio));
@@ -126,9 +124,9 @@ public class VrPhotoRender implements GLSurfaceView.Renderer
 //            MatrixState.setCamera(0,0,0,		
 //								  0f,0.0f,-0.1f,
 //								  0f,1.0f,0.0f);  
-//			//com.baofeng.mojing.MojingSDK.OnSurfaceChanged(width , height);
+//			//com.baofeng.com.bfmj.mojing.MojingSDK.OnSurfaceChanged(width , height);
 //
-//			float ff = com.baofeng.mojing.MojingSDK.GetGlassesSeparationInPix();
+//			float ff = com.baofeng.com.bfmj.mojing.MojingSDK.GetGlassesSeparationInPix();
 //        }
 //
 //        
@@ -139,7 +137,7 @@ public class VrPhotoRender implements GLSurfaceView.Renderer
 //			
 //            // we pass the surface to the SDK for building OpenGL context
 //			//
-//			// com.baofeng.mojing.MojingSDK.EnterMojingWorld(MJ3, true);
+//			// com.baofeng.com.bfmj.mojing.MojingSDK.EnterMojingWorld(MJ3, true);
 //			
 //			if (display.widthPixels > display.heightPixels)
 //			{
@@ -164,13 +162,13 @@ public class VrPhotoRender implements GLSurfaceView.Renderer
 //			sphere.CreateVBO();
 //
 //
-//			// com.baofeng.mojing.MojingSDKPrivate.FuncTest();
+//			// com.baofeng.com.bfmj.mojing.MojingSDKPrivate.FuncTest();
 //			SkyBox = new SkyBoxModel(g_Radius , 1.0f/202.0f);
 //			SkyBox.CreateVBO();
-//			// com.baofeng.mojing.MojingSDK.StartTrackerCalibration();
+//			// com.baofeng.com.bfmj.mojing.MojingSDK.StartTrackerCalibration();
 //			
-//			com.baofeng.mojing.MojingSDK.SetCenterLine(4, 255,255,255,255);
-//			com.baofeng.mojing.MojingSDK.LogTrace("EnterMojingWorld");
+//			com.baofeng.com.bfmj.mojing.MojingSDK.SetCenterLine(4, 255,255,255,255);
+//			com.baofeng.com.bfmj.mojing.MojingSDK.LogTrace("EnterMojingWorld");
 //        }
 //        
 //        
@@ -265,7 +263,7 @@ public class VrPhotoRender implements GLSurfaceView.Renderer
 //			// save the matrix.            MatrixState.pushMatrix(); 
 //
 //			float[] fM  = new float[16];
-//		    com.baofeng.mojing.MojingSDK.getLastHeadView(fM);
+//		    com.baofeng.com.bfmj.mojing.MojingSDK.getLastHeadView(fM);
 //	        MatrixState.setViewMatrix(fM);
 //            //sphere.drawSelf(g_TexId);
 //		   sphere.Draw(g_TexId);
@@ -279,7 +277,7 @@ public class VrPhotoRender implements GLSurfaceView.Renderer
 //			int texWidth = g_textureImgWidth, texHeight = g_textureImgHeight;
 //			GLES20.glViewport(0, 0, texWidth, texHeight);    
 //			// save current context.
-//            com.baofeng.mojing.MojingSDK.DrawTexture(g_TexId, 0); 
+//            com.baofeng.com.bfmj.mojing.MojingSDK.DrawTexture(g_TexId, 0);
 //    	}
 //
 //		float[] fM  = new float[16];
@@ -296,7 +294,7 @@ public class VrPhotoRender implements GLSurfaceView.Renderer
 //			{
 //				//Log.e("Draw Eye", "Start Eye: " + iEye);
 //				GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, g_frameBufferObject);
-//				com.baofeng.mojing.EyeTextureParameter EyeTexture = com.baofeng.mojing.MojingSDK.GetEyeTextureParameter(iEye + 1);
+//				com.baofeng.com.bfmj.mojing.EyeTextureParameter EyeTexture = com.baofeng.com.bfmj.mojing.MojingSDK.GetEyeTextureParameter(iEye + 1);
 //			
 //				EyeTex[iEye] = EyeTexture.m_EyeTexID;
 //				
@@ -322,7 +320,7 @@ public class VrPhotoRender implements GLSurfaceView.Renderer
 //										  0f,0.0f,-0.1f,
 //										  0f,1.0f,200.0f);  
 //
-//						com.baofeng.mojing.MojingSDK.getLastHeadView(fM);
+//						com.baofeng.com.bfmj.mojing.MojingSDK.getLastHeadView(fM);
 //	        			MatrixState.setViewMatrix(fM);
 //						//sphere.drawSelf(g_TexId);
 //						// sphere.Draw(g_TexId);
@@ -337,35 +335,35 @@ public class VrPhotoRender implements GLSurfaceView.Renderer
 //				//Log.e("Draw Eye", "End Eye: " + iEye);
 //			}// end for 
 //			
-//			com.baofeng.mojing.MojingSDK.SetOverlayPosition(0.0f,0.0f,1,1);
-//			com.baofeng.mojing.MojingSDK.DrawTextureWithOverlay(EyeTex[0], EyeTex[iMaxRender-1]  , g_LeftTexLayout, 0);
+//			com.baofeng.com.bfmj.mojing.MojingSDK.SetOverlayPosition(0.0f,0.0f,1,1);
+//			com.baofeng.com.bfmj.mojing.MojingSDK.DrawTextureWithOverlay(EyeTex[0], EyeTex[iMaxRender-1]  , g_LeftTexLayout, 0);
 //
-//			//com.baofeng.mojing.MojingSDK.DrawTexture(EyeTex[0], EyeTex[iMaxRender-1]  );
+//			//com.baofeng.com.bfmj.mojing.MojingSDK.DrawTexture(EyeTex[0], EyeTex[iMaxRender-1]  );
 //
-//		//	com.baofeng.mojing.MojingSDK.DrawTexture(0,0);
+//		//	com.baofeng.com.bfmj.mojing.MojingSDK.DrawTexture(0,0);
 //			
 ////			float fFrame = iFrameCount;
 ////
 ////			if ( bUsingLayer && iFrameCount > 100)
 ////			{
-////				com.baofeng.mojing.MojingSDK.SetOverlayPosition(0.0f,0.0f,1.0f,1.0f);
-////				com.baofeng.mojing.MojingSDK.DrawTextureWithOverlay(EyeTex[0], EyeTex[iMaxRender-1]  , g_LeftTexLayout, g_RightTexLayout);
+////				com.baofeng.com.bfmj.mojing.MojingSDK.SetOverlayPosition(0.0f,0.0f,1.0f,1.0f);
+////				com.baofeng.com.bfmj.mojing.MojingSDK.DrawTextureWithOverlay(EyeTex[0], EyeTex[iMaxRender-1]  , g_LeftTexLayout, g_RightTexLayout);
 ////			}
 ////			else
 ////			{
-////				com.baofeng.mojing.MojingSDK.SetOverlayPosition3D(3 , 0.04f , 0.04f , 2.0f);
-////				com.baofeng.mojing.MojingSDK.DrawTextureWithOverlay(EyeTex[0], EyeTex[iMaxRender-1]  , g_LeftTexLayout, g_LeftTexLayout);
+////				com.baofeng.com.bfmj.mojing.MojingSDK.SetOverlayPosition3D(3 , 0.04f , 0.04f , 2.0f);
+////				com.baofeng.com.bfmj.mojing.MojingSDK.DrawTextureWithOverlay(EyeTex[0], EyeTex[iMaxRender-1]  , g_LeftTexLayout, g_LeftTexLayout);
 ////			}
 ////
 ////			iFrameCount = (iFrameCount + 1) % 200;
 ////			if (iFrameCount == 50)
 ////			{
 ////				String sUserSetting = "{\"ClassName\":\"UserSettingProfile\",\"EnableScreenSize\":0,\"ScreenSize\":9}";
-////				com.baofeng.mojing.MojingSDK.SetUserSettings(sUserSetting);
+////				com.baofeng.com.bfmj.mojing.MojingSDK.SetUserSettings(sUserSetting);
 ////			}if (iFrameCount == 150)
 ////			{
 ////				String sUserSetting = "{\"ClassName\":\"UserSettingProfile\",\"EnableScreenSize\":1,\"ScreenSize\":6.7}";
-////				com.baofeng.mojing.MojingSDK.SetUserSettings(sUserSetting);
+////				com.baofeng.com.bfmj.mojing.MojingSDK.SetUserSettings(sUserSetting);
 ////			}
 //			
 //    	}

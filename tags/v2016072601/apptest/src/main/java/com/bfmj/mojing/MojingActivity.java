@@ -1,9 +1,6 @@
-package com.bn.mojing;
+package com.bfmj.mojing;
 
-import java.io.Serializable;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.baofeng.mojing.MojingSurfaceView;
 import com.baofeng.mojing.MojingVrActivity;
@@ -14,9 +11,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.util.SparseArray;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 
@@ -88,7 +83,7 @@ public class MojingActivity extends MojingVrActivity{
 
     private Runnable runnable = new Runnable( ) {
     	public void run ( ) {
-//	    	Log.e("TEST", "GetLightSensation:" + com.baofeng.mojing.MojingSDK.GetLightSensation() + " GetProximitySensation:" + com.baofeng.mojing.MojingSDK.GetProximitySensation());
+//	    	Log.e("TEST", "GetLightSensation:" + com.baofeng.com.bfmj.mojing.MojingSDK.GetLightSensation() + " GetProximitySensation:" + com.baofeng.com.bfmj.mojing.MojingSDK.GetProximitySensation());
 		    handler.postDelayed(this,1000);
 	    }
     };
@@ -189,7 +184,7 @@ public class MojingActivity extends MojingVrActivity{
 			//jump2AdjustActivity();
 			String MojingType = KeyList[StartCount];
 			mView.setGlassesKey(MojingType);
-			//com.baofeng.mojing.MojingSDK.ChangeMojingWorld(MojingType);
+			//com.baofeng.com.bfmj.mojing.MojingSDK.ChangeMojingWorld(MojingType);
 			StartCount  = StartCount + 1;
 			StartCount %=  KeyList.length;
 		}	
@@ -206,10 +201,10 @@ public class MojingActivity extends MojingVrActivity{
 	}
 
     @Override protected void onPause() {
-        //com.baofeng.mojing.MojingVrLib.stopVsync(this);
+        //com.baofeng.com.bfmj.mojing.MojingVrLib.stopVsync(this);
         super.onPause();
         //mView.onPause();
-		//com.baofeng.mojing.MojingSDK.StopTracker();
+		//com.baofeng.com.bfmj.mojing.MojingSDK.StopTracker();
 		
 		//MojingSDKReport.onPause(this);
         
@@ -222,12 +217,12 @@ public class MojingActivity extends MojingVrActivity{
 
         //ZGameBTUtil.setMzKeyCallback(this);
         
-		//int ii = com.baofeng.mojing.MojingSDK.CheckSensors();
-		//com.baofeng.mojing.MojingSDK.StartTracker(100);
-		//ii = com.baofeng.mojing.MojingSDK.CheckSensors();
-		//com.baofeng.mojing.MojingVrLib.startVsync(this);
+		//int ii = com.baofeng.com.bfmj.mojing.MojingSDK.CheckSensors();
+		//com.baofeng.com.bfmj.mojing.MojingSDK.StartTracker(100);
+		//ii = com.baofeng.com.bfmj.mojing.MojingSDK.CheckSensors();
+		//com.baofeng.com.bfmj.mojing.MojingVrLib.startVsync(this);
 		//MojingSDKReport.onResume(this);
-		//MojingSDKReport.onEvent("buy magic bean", "mojing shop", "money", 100, "magic bean", 1000);
+		//MojingSDKReport.onEvent("buy magic bean", "com.bfmj.mojing shop", "money", 100, "magic bean", 1000);
         
 //        handler.postDelayed(runnable, 1000);
     }
