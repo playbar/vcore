@@ -115,6 +115,24 @@ public class GLGridViewPage extends GLGridView {
 		showPage();
 	}
 
+	public void nextPage(){
+		if( mCurIndex < mCount ){
+			++mCurIndex;
+			setStartIndex((mCurIndex - 1) * getNumOneScreen());
+			requestLayout();
+			showPage();
+		}
+	}
+
+	public void lastPage(){
+		if( mCurIndex > 0 ){
+			--mCurIndex;
+			setStartIndex((mCurIndex - 1) * getNumOneScreen());
+			requestLayout();
+			showPage();
+		}
+	}
+
 	@Override
 	public boolean onKeyDown(int keycode){
 		return false;
