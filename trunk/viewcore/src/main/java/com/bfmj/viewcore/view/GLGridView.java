@@ -324,7 +324,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if (col == 0 && row == 0) {
 					mFirstView = view;
 				}
-				view.setX(getX() + getPaddingLeft() + getMarginLeft() + (view.getWidth() + this.mHorizontalSpacing) * (col + 1) );
+				view.setX((getX() + getWidth()) - getPaddingLeft() - getMarginRight() - (view.getWidth() + this.mHorizontalSpacing) * (mNumColumns - col) );
 				view.setY(getY() + getPaddingTop() + getMarginTop() + view.getHeight() * row + this.mVerticalSpacing * row);
 
 				view.setId("gridview_" + tempIndex);

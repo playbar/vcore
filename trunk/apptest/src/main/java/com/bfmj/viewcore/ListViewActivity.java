@@ -33,14 +33,25 @@ public class ListViewActivity extends BaseViewActivity {
 	private ListViewAdapter adapter;
 	private List<String> listData = new ArrayList<String>();
 
-    // 图片封装为一个数组
-    private int[] icon = { R.drawable.address_book, R.drawable.calendar,
-            R.drawable.camera, R.drawable.clock, R.drawable.games_control,
-            R.drawable.messenger, R.drawable.ringtone, R.drawable.settings,
-            R.drawable.speech_balloon, R.drawable.weather, R.drawable.world,
-            R.drawable.youtube };
-    private String[] iconName = { "通讯录", "日历", "照相机", "时钟", "游戏", "短信", "铃声",
-            "设置", "语音", "天气", "浏览器", "视频" };
+	// 图片封装为一个数组
+	private int[] icon = {
+			R.drawable.address_book,
+			R.drawable.calendar,
+			R.drawable.camera,
+			R.drawable.clock,
+			R.drawable.games_control,
+			R.drawable.messenger,
+			R.drawable.ringtone,
+			R.drawable.settings,
+			R.drawable.speech_balloon,
+			R.drawable.weather,
+			R.drawable.world,
+			R.drawable.youtube
+	};
+	private String[] iconName = {
+			"通讯录", "日历", "照相机", "时钟", "游戏", "短信",
+			"铃声", "设置", "语音", "天气", "浏览器", "视频"
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +65,7 @@ public class ListViewActivity extends BaseViewActivity {
 		listView.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
 
 		listView.setMargin(50, 50, 40,40);
-		listView.setLayoutParams(280, 400, 1000, 800);
+		listView.setLayoutParams(280, 400, 1000, 500);
 		listView.setItemSpacing(20);
 
 		listView.setOnKeyListener(new GLOnKeyListener() {
@@ -100,7 +111,7 @@ public class ListViewActivity extends BaseViewActivity {
 			}
 		};
 
-		for(index =0;  index < 4; index++){
+		for(index =0;  index < 2; index++){
 			listData.add(iconName[index]);
 		}
 
