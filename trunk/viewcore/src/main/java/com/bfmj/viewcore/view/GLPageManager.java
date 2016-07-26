@@ -144,9 +144,9 @@ public class GLPageManager {
 					mRootView.removeView(mCurrentView);
 				}
 				mRootView.addView(view, true);
-				if (!view.isFocused()){
-					view.doRequestFocus();
-				}
+//				if (!view.isFocused()){
+//					view.doRequestFocus();
+//				}
 				mCurrentView = view;
 				onResume();
 			}

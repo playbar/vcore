@@ -166,11 +166,11 @@ public class GLFocusUtils {
 			}
 			
 			GLRectView v = (GLRectView)views.get(i);
-			if (!v.isVisible()){
+			if (!v.isVisible() || !v.hasListeter()){
 				continue;
 			}
 			
-			if (v.getParent() == null && v instanceof GLGroupView 
+			if (v.getParent() == null && v instanceof GLGroupView
 					&& v.hasListeter() && v.isFocusable() && v.isEnable()){
 				parentView = v;
 			}
@@ -246,21 +246,21 @@ public class GLFocusUtils {
 			}
 		}
 		
-		if (!hasFocused){
-			if (parentView != null){
-				if (parentView != mFocusedView){
-					if (mFocusedView != null){
-						mFocusedView.onFocusChange(TO_UNKNOWN, false);
-					}
-					parentView.onFocusChange(TO_UNKNOWN, true);
-					mFocusedView = parentView;
-					parentView.onHeadFocusChange(true);
-				}
-			} else if (mFocusedView != null){
-				mFocusedView.onFocusChange(TO_UNKNOWN, false);
-				mFocusedView = null;
-			}
-		}
+//		if (!hasFocused){
+//			if (parentView != null){
+//				if (parentView != mFocusedView){
+//					if (mFocusedView != null){
+//						mFocusedView.onFocusChange(TO_UNKNOWN, false);
+//					}
+//					parentView.onFocusChange(TO_UNKNOWN, true);
+//					mFocusedView = parentView;
+//					parentView.onHeadFocusChange(true);
+//				}
+//			} else if (mFocusedView != null){
+//				mFocusedView.onFocusChange(TO_UNKNOWN, false);
+//				mFocusedView = null;
+//			}
+//		}
 		
 		if (mCursorDepthChangeListener != null && !isAdjustCursor) {
 			mCursorDepthChangeListener.onCursorDepthChange(GLScreenParams.getDefualtDepth());

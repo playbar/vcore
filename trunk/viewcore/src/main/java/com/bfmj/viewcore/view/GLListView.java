@@ -278,23 +278,23 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 			setNoHeadListen();
 		}
 		else{
-			this.setFocusListener(new GLViewFocusListener() {
-
-				@Override
-				public void onFocusChange(GLRectView view, boolean focused) {
-					// TODO Auto-generated method stub
-					if( mOnItemSelectedListener == null ){
-						return;
-					}
-					if( focused ){
-						mOnItemSelectedListener.onItemSelected( null, view, mSelectedPosition, mSelectedPosition);
-					}else{
-						mOnItemSelectedListener.onNothingSelected( null, view, mSelectedPosition, mSelectedPosition);
-					}
-
-
-				}
-			});
+//			this.setFocusListener(new GLViewFocusListener() {
+//
+//				@Override
+//				public void onFocusChange(GLRectView view, boolean focused) {
+//					// TODO Auto-generated method stub
+//					if( mOnItemSelectedListener == null ){
+//						return;
+//					}
+//					if( focused ){
+//						mOnItemSelectedListener.onItemSelected( null, view, mSelectedPosition, mSelectedPosition);
+//					}else{
+//						mOnItemSelectedListener.onNothingSelected( null, view, mSelectedPosition, mSelectedPosition);
+//					}
+//
+//
+//				}
+//			});
 		}
 	}
 
@@ -450,11 +450,11 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 					// TODO Auto-generated method stub
 					if(focused){
 						mFocusIndex = location;
-						if( mOnItemClickListener != null ) {
+						if( mOnItemSelectedListener != null ) {
 							mOnItemSelectedListener.onItemSelected(GLListView.this, view, location, mStartIndex + location);
 						}
 					}
-					else if( mOnItemClickListener != null ){
+					else if( mOnItemSelectedListener != null ){
 						mOnItemSelectedListener.onNothingSelected(GLListView.this, view, location, mStartIndex + location);
 					}
 				}
