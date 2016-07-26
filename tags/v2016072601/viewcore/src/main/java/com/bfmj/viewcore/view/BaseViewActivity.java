@@ -48,7 +48,7 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 		
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		
-		MojingSDK.Init(this);
+		MojingSDK.Init(this, true );
 		
 		rootView = new GLRootView(this);
 		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
