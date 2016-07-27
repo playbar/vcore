@@ -1,4 +1,4 @@
-package com.bfmj.mojing;
+package com.baofeng.mojing;
 
 import java.io.InputStream;
 import android.app.Activity;

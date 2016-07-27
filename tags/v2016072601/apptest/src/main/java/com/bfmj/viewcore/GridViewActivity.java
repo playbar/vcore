@@ -1,10 +1,8 @@
 package com.bfmj.viewcore;
 
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -12,8 +10,7 @@ import android.view.MotionEvent;
 import com.androidquery.AQuery;
 import com.baofeng.mojing.MojingSurfaceView;
 import com.bfmj.mojing.MatrixState;
-import com.bfmj.mojing.MojingActivity;
-import com.bfmj.mojing.VrPhotoRender;
+import com.baofeng.mojing.VrPhotoRender;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
@@ -34,7 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.lang.reflect.TypeVariable;
 
 public class GridViewActivity extends BaseViewActivity {
 

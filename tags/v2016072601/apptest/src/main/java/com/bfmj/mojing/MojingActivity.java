@@ -4,6 +4,7 @@ import java.lang.ref.WeakReference;
 
 import com.baofeng.mojing.MojingSurfaceView;
 import com.baofeng.mojing.MojingVrActivity;
+import com.baofeng.mojing.VrPhotoRender;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -11,7 +12,6 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.SparseArray;
 import android.view.MotionEvent;
 
 

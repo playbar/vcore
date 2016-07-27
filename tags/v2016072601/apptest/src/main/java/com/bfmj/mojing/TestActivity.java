@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 
 import com.baofeng.mojing.MojingSurfaceView;
 import com.baofeng.mojing.MojingVrActivity;
+import com.baofeng.mojing.VrPhotoRender;
 
 import java.lang.ref.WeakReference;
 
