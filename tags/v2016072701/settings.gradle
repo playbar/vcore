@@ -1,0 +1,2 @@
+include ':viewcore'
+include ':apptest'
