@@ -129,6 +129,8 @@ public class GLColorRect extends GLRect {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexNew);
 		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verLen, vertexBuffer,
 				GLES20.GL_STATIC_DRAW);
+        GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
+        return;
 	}
     
     public void release(){
