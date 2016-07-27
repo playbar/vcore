@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.opengl.Matrix;
 
+import com.baofeng.mojing.MojingSDK;
 import com.bfmj.viewcore.render.GLScreenParams;
 import com.bfmj.viewcore.view.GLGroupView;
 import com.bfmj.viewcore.view.GLRectView;
@@ -131,7 +132,17 @@ public class GLFocusUtils {
 	private float getY(float y){
 		return (GLScreenParams.getYDpi() / 2 - y) / GLScreenParams.getYDpi() * GLScreenParams.getScreenHeight();
 	}
-	
+
+	private static int[] mCurosrPosition = new int[]{-1, -1};
+
+	/**
+	 * 获取当前的焦点位置
+	 * @return 焦点位置
+     */
+	public static int[] getCursorPosition(){
+		return mCurosrPosition;
+	}
+
 	/**
 	 * 处理焦点
 	 * @author lixianke  @Date 2015-3-16 上午10:52:11
@@ -152,115 +163,75 @@ public class GLFocusUtils {
 		} else {
 			mComputeTimes = 0;
 		}
-		
-		boolean hasFocused = false;
-		float x = -1;
-		float y = -1;
+
 		float defualtDepth = GLScreenParams.getDefualtDepth();
-		GLRectView parentView = null;
 		boolean isAdjustCursor = false;
-		
-		for (int i = views.size() - 1; i >= 0; i--) {
-			if (! (views.get(i) instanceof GLRectView)){
-				continue;
-			}
-			
-			GLRectView v = (GLRectView)views.get(i);
-			if (!v.isVisible() || !v.hasListeter()){
-				continue;
-			}
-			
-			if (v.getParent() == null && v instanceof GLGroupView
-					&& v.hasListeter() && v.isFocusable() && v.isEnable()){
-				parentView = v;
-			}
-			
-			// 计算相对于View选转后光标的位置
-			float[] position = getCursorPosition(v.getLookAngle());
-			x = position[0];
-			y = position[1];
-			
-			float s = defualtDepth / v.getDepth();
-			float vx1 = getX(v.getLeft() + v.getX());
-			float vy1 = getY(v.getTop() + v.getY());
 
-			float vx2 = getX(v.getLeft() + v.getX() + v.getWidth());
-			float vy2 = getY(v.getTop() + v.getY() + v.getHeight());
+		float x1 = getX(0);
+		float y1 = getY(0);
 
-			float[][] pos = {
-					{vx1,vy1,-v.getDepth(), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					{vx2,vy1,-v.getDepth(), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					{vx1,vy2,-v.getDepth(), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					{vx2,vy2,-v.getDepth(), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-			};
+		float x2 = getX(GLScreenParams.getXDpi());
+		float y2 = getY(GLScreenParams.getYDpi());
 
-			float[] mtx = v.getMatrixState().getFinalMatrix();
-			float minX = 10,  minY = 10, maxX = -10,  maxY = -10;
+		float[] outPos = new float[]{0, 0};
 
-			for (int j = 0; j < pos.length; j++){
-				Matrix.multiplyMM(pos[j], 0, mtx, 0, pos[j], 0);
-				minX = Math.min(minX, pos[j][0]);
-				minY = Math.min(minY, pos[j][1]);
-				maxX = Math.max(maxX, pos[j][0]);
-				maxY = Math.max(maxY, pos[j][1]);
-			}
+		boolean isFoused = MojingSDK.DirectionalRadiaInRect(headView, new float[]{x1, y1}, new float[]{x2, y2}, -defualtDepth, outPos);
 
-//			int valx1 = (int)((vx1 - 480) * s + 480);
-//			int valx2 = (int)((vx2 - 480) * s + 480);
-//
-//			int valy1 = (int)((vy1 - 480) * s + 480);
-//			int valy2 = (int)((vy2 - 480) * s + 480);
+		float rate = GLScreenParams.getXDpi() / GLScreenParams.getScreenWidth();
 
-//			if (x >= scale(vx1, s) && x < scale(vx2, s)
-//					&& y >= scale(vy1, s) && y < scale(vy2, s))
-			if( minX <= 0 && minY <= 0 && maxX >= 0 && maxY >= 0 )
-			{
-//				
-				if (!isAdjustCursor) {
-					isAdjustCursor = true;
-					if (mCursorDepthChangeListener != null) {
-						mCursorDepthChangeListener.onCursorDepthChange(v.getDepth());
-					}
-				}
-//				
-//				Log.d("video", "view x = " + x + "; y = " + y + "; s = " + s);
-//				Log.d("video", "view v1 = " + vx1 + "; y = " + vy1);
-//				Log.d("video", "view v2 = " + vx2 + "; y = " + vy2);
-				
-				if (!v.hasListeter() || !v.isFocusable() || !v.isEnable()){
+		mCurosrPosition[0] = (int)(outPos[0] * rate);
+		mCurosrPosition[1] = (int)(outPos[1] * rate);
+
+		if (isFoused) {
+
+			for (int i = views.size() - 1; i >= 0; i--) {
+				if (!(views.get(i) instanceof GLRectView)) {
 					continue;
 				}
 
-				if (v != mFocusedView){
-					if (mFocusedView != null && !v.isGrandParent(mFocusedView)){
-						mFocusedView.onFocusChange(TO_UNKNOWN, false);
-					}
-					
-					v.doRequestFocus();
+				GLRectView v = (GLRectView) views.get(i);
+				if (!v.isVisible() || !v.hasListeter()) {
+					continue;
 				}
-				
-				hasFocused = true;
-				mFocusedView = v;
-				v.onHeadFocusChange(true);
-				return;
+
+				float vx1 = v.getLeft() + v.getX();
+				float vy1 = v.getTop() + v.getY();
+
+				float vx2 = v.getLeft() + v.getX() + v.getWidth();
+				float vy2 = v.getTop() + v.getY() + v.getHeight();
+
+				if (vx1 <= mCurosrPosition[0] && vy1 <= mCurosrPosition[1] && vx2 >= mCurosrPosition[0] && vy2 >= mCurosrPosition[1]) {
+//				
+					if (!isAdjustCursor) {
+						isAdjustCursor = true;
+						if (mCursorDepthChangeListener != null) {
+							mCursorDepthChangeListener.onCursorDepthChange(v.getDepth());
+						}
+					}
+
+					if (!v.hasListeter() || !v.isFocusable() || !v.isEnable()) {
+						continue;
+					}
+
+					if (v != mFocusedView) {
+						if (mFocusedView != null && !v.isGrandParent(mFocusedView)) {
+							mFocusedView.onFocusChange(TO_UNKNOWN, false);
+						}
+
+						v.doRequestFocus();
+					}
+
+					mFocusedView = v;
+					v.onHeadFocusChange(true);
+					return;
+				}
+			}
+
+		} else {
+			if (mFocusedView !=null){
+				mFocusedView.onFocusChange(TO_UNKNOWN, false);
 			}
 		}
-		
-//		if (!hasFocused){
-//			if (parentView != null){
-//				if (parentView != mFocusedView){
-//					if (mFocusedView != null){
-//						mFocusedView.onFocusChange(TO_UNKNOWN, false);
-//					}
-//					parentView.onFocusChange(TO_UNKNOWN, true);
-//					mFocusedView = parentView;
-//					parentView.onHeadFocusChange(true);
-//				}
-//			} else if (mFocusedView != null){
-//				mFocusedView.onFocusChange(TO_UNKNOWN, false);
-//				mFocusedView = null;
-//			}
-//		}
 		
 		if (mCursorDepthChangeListener != null && !isAdjustCursor) {
 			mCursorDepthChangeListener.onCursorDepthChange(GLScreenParams.getDefualtDepth());
