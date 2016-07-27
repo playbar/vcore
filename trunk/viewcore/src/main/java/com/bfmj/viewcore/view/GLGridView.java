@@ -173,7 +173,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				}
 
 				view.setX(getX() + getPaddingLeft() + getMarginLeft() + view.getWidth() * col + this.mHorizontalSpacing * col);
-				view.setY(getY() + getPaddingTop() + getMarginTop() + view.getHeight() * rows + this.mVerticalSpacing * rows);
+				view.setY(getY() + getPaddingTop() + view.getHeight() * rows + this.mVerticalSpacing * rows);
 
 				view.setId("gridview_" + tempIndex);
 //				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {

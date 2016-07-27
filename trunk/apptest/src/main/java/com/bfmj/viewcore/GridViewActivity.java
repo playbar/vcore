@@ -75,6 +75,7 @@ public class GridViewActivity extends BaseViewActivity {
 
 		rootView.onResume();
 		//rootView.setDoubleScreen(false);
+		rootView.setDistortionEnable( true );
 		GLAdapterView.OnItemSelectedListener listener = new GLAdapterView.OnItemSelectedListener(){
 			public void onItemSelected(GLAdapterView<?> glparent, GLView glview, int position, long id){
 				Log.e("com/bfmj/viewcore/test", "onItemSelected:" + glview.toString());

@@ -3,6 +3,7 @@ package com.bfmj.viewcore.view;
 import java.lang.reflect.Method;
 
 import com.baofeng.mojing.MojingSDK;
+import com.baofeng.mojing.MojingSDKServiceManager;
 import com.baofeng.mojing.input.base.MojingKeyCode;
 //import com.bfmj.viewcore.util.StickUtil;
 
@@ -37,6 +38,8 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 	private String mMojingType = "F79F2H-Q8ZNXN-2HQN2F-2ZA9YV-QG4H9H-QGAYAE";
 	private boolean isTouchControl = false;
 
+	MojingSDKServiceManager mMojingSDKServiceManager;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);	
@@ -47,9 +50,7 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 		instance = this;
 		
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		
-		MojingSDK.Init(this, true );
-		
+
 		rootView = new GLRootView(this);
 		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		
@@ -68,6 +69,8 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 		rootLayout.addView(rootView);
 		setContentView(rootLayout);
 
+		mMojingSDKServiceManager = new MojingSDKServiceManager(this);
+		MojingSDK.Init(this, true );
 		initLog();
 //		StickUtil.getInstance(this);
 	}
@@ -285,6 +288,8 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 //			mPageManager.onResume();
 //		}
 		super.onResume();
+		mMojingSDKServiceManager.onResume();
+		return;
 	}
 	
 
@@ -302,6 +307,7 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 			mPageManager.onPause();
 		}
 		super.onPause();
+		mMojingSDKServiceManager.onPause();
 	}
 	
 	@Override

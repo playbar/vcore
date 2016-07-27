@@ -1,21 +1,20 @@
 package com.bfmj.mojing;
 
-import java.lang.ref.WeakReference;
-
-import com.baofeng.mojing.MojingSurfaceView;
-import com.baofeng.mojing.MojingVrActivity;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.SparseArray;
 import android.view.MotionEvent;
 
+import com.baofeng.mojing.MojingSurfaceView;
+import com.baofeng.mojing.MojingVrActivity;
 
-public class MojingActivity extends MojingVrActivity{
+import java.lang.ref.WeakReference;
+
+
+public class TestActivity extends MojingVrActivity{
 
    static int StartCount = 0;
 
@@ -73,15 +72,15 @@ public class MojingActivity extends MojingVrActivity{
 	
 	GLMsgHandler mGLMsgHandler;
 	private static class GLMsgHandler extends Handler {
-		private final WeakReference<MojingActivity> mActivity;
+		private final WeakReference<TestActivity> mActivity;
 
-		public GLMsgHandler(MojingActivity activity) {
-			mActivity = new WeakReference<MojingActivity>(activity);
+		public GLMsgHandler(TestActivity activity) {
+			mActivity = new WeakReference<TestActivity>(activity);
 		}
 
 		@Override
 		public void handleMessage(Message msg) {
-			MojingActivity activity = mActivity.get();
+			TestActivity activity = mActivity.get();
 			if (activity != null) {
 				if (msg.what == MojingSurfaceView.ON_CHANGE_MOJING_WORLD) 
 				{
