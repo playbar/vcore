@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 
 import com.baofeng.mojing.MojingSDK;
 import com.baofeng.mojing.input.base.MojingKeyCode;
-//import com.bfmj.viewcore.util.StickUtil;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -31,7 +30,6 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 	private float mLight = 0;
 	private boolean isGroyEnable = true;
 	private boolean isDistortionEnable = true;
-//	private boolean isSavingMode = true;
 	private boolean isLockViewAngle = false;
 	private float mLockedAngle = 0f;
 	private String mMojingType = "F79F2H-Q8ZNXN-2HQN2F-2ZA9YV-QG4H9H-QGAYAE";
@@ -39,9 +37,7 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		requestWindowFeature(Window.FEATURE_NO_TITLE);	
-//		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 
 		instance = this;
@@ -69,7 +65,6 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 		setContentView(rootLayout);
 
 		initLog();
-//		StickUtil.getInstance(this);
 	}
 
 	public static void log(String msg){
@@ -162,137 +157,26 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 	 * @author lixianke  @Date 2015-5-14 下午2:14:23
 	 */
 	public void showCursorView(){}
-	
-	/**
-	 * 显示阴影，具体由子类实
-	 * @author lixianke  @Date 2015-5-14 下午2:14:23
-	 */
-	public void showShadow(){}
-	
-	/**
-	 * 隐藏阴影，具体由子类实
-	 * @author lixianke  @Date 2015-5-14 下午2:14:23
-	 */
-	public void hideShadow(){}
-	
-	/**
-	 * 缩放阴影，具体由子类实
-	 * @author lixianke  @Date 2015-5-14 下午2:14:23
-	 */
-	public void scaleShaow(float sx, float sy, float sz){}
-	
-//	@Override
-//	public boolean onKeyDown(int keyCode, KeyEvent event) {
-//		
-//		switch (keyCode) {
-//			case KeyEvent.KEYCODE_MENU:
-//				onMojingKeyDown("", MojingKeyCode.KEYCODE_MENU);
-//				event.startTracking();
-//				return true;
-//			case KeyEvent.KEYCODE_BACK:
-//				onMojingKeyDown("", MojingKeyCode.KEYCODE_BACK);
-//				event.startTracking();
-//				return true;
-//			default:
-//				break;
-//		}
-//
-//		return super.onKeyDown(keyCode, event);
-//	}
-//	
-//	@Override
-//	public boolean onKeyUp(int keyCode, KeyEvent event) {
-//		
-//		switch (keyCode) {
-//			case KeyEvent.KEYCODE_MENU:
-//				onMojingKeyUp("", MojingKeyCode.KEYCODE_MENU);
-//				return true;
-//			case KeyEvent.KEYCODE_BACK:
-//				onMojingKeyUp("", MojingKeyCode.KEYCODE_BACK);
-//				return true;
-//			default:
-//				break;
-//		}
-//		
-//		return super.onKeyUp(keyCode, event);
-//	}
-//	
-//	@Override
-//	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-//		
-//		switch (keyCode) {
-//			case KeyEvent.KEYCODE_MENU:
-//				onMojingKeyLongPress("", MojingKeyCode.KEYCODE_MENU);
-//				return true;
-//			case KeyEvent.KEYCODE_BACK:
-//				onMojingKeyLongPress("", MojingKeyCode.KEYCODE_BACK);
-//				return true;
-//			default:
-//				break;
-//		}
-//		
-//		return super.onKeyLongPress(keyCode, event);
-//	}
-//	
-//	@Override public boolean dispatchKeyEvent(KeyEvent event) {
-//		if (StickUtil.dispatchKeyEvent(event))
-//			return true;
-//		else
-//			return super.dispatchKeyEvent(event);
-//	}
-//
-//	@Override 
-//	public boolean dispatchGenericMotionEvent(MotionEvent event) {
-//		if (StickUtil.dispatchGenericMotionEvent(event))
-//			return true;
-//		else
-//			return super.dispatchGenericMotionEvent(event);
-//	}
-//	
-//	@Override
-//	public boolean onTouchEvent(MotionEvent event) {
-//		if (!isTouchControl) {
-//			return false;
-//		}
-//		
-//		switch (event.getAction()) {
-//			case MotionEvent.ACTION_DOWN:
-//				onMojingKeyDown("", MojingKeyCode.KEYCODE_ENTER);
-//				break;
-//			case MotionEvent.ACTION_UP:
-//				onMojingKeyUp("", MojingKeyCode.KEYCODE_ENTER);
-//				break;
-//	
-//			default:
-//				break;
-//		}
-//		
-//		return false;
-//	}
+
 	
 	@Override
 	protected void onResume() {
 		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT), 
             SensorManager.SENSOR_DELAY_GAME);
 		
-//		StickUtil.setCallback(this);
-		
 		if (rootView != null){
 			rootView.onResume();
 		}
 		
-//		if (mPageManager != null){
-//			mPageManager.onResume();
-//		}
+		if (mPageManager != null){
+			mPageManager.onResume();
+		}
 		super.onResume();
 	}
-	
 
 	@Override
 	protected void onPause() {
 		mSensorManager.unregisterListener(this);
-		
-//		StickUtil.setCallback(null);
 		
 		if (rootView != null){
 			rootView.onPause();
@@ -306,6 +190,10 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 	
 	@Override
 	protected void onDestroy() {
+		if (mPageManager != null){
+			mPageManager.finish();
+		}
+
 		if (rootView != null){
 			rootView.onDestroy();
 		}
@@ -384,18 +272,6 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
         }
 	}
 
-//	public boolean isSavingMode() {
-//		return isSavingMode;
-//	}
-
-//	public void setSavingMode(boolean isSavingMode) {
-//		this.isSavingMode = isSavingMode;
-//		
-//		if (rootView != null){
-//			rootView.setSavingMode(isSavingMode);
-//		}
-//	}
-
 	public boolean isGroyEnable() {
 		return isGroyEnable;
 	}
@@ -451,14 +327,6 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 	public void setMojingType(String mojingType) {
 		this.mMojingType = mojingType;
 	}
-
-	public boolean isTouchControl() {
-		return isTouchControl;
-	}
-
-	public void setTouchControl(boolean isTouchControl) {
-		this.isTouchControl = isTouchControl;
-	}
 	
 	public boolean onZKeyDown(final int keyCode) {		
 		rootView.queueEvent(new Runnable() {
@@ -495,62 +363,4 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 		});
 		return false;
 	}
-
-//	@Override
-//	public void onBluetoothAdapterStateChanged(int arg0) {
-//	}
-//
-//	@Override
-//	public void onMojingDeviceAttached(String arg0) {
-//	}
-//
-//	@Override
-//	public void onMojingDeviceDetached(String arg0) {
-//	}
-//
-//	@Override
-//	public boolean onMojingKeyDown(String deviceName, final int keyCode) {
-//		rootView.queueEvent(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				boolean flag = rootView.onKeyDown(keyCode);
-//				if (keyCode == MojingKeyCode.KEYCODE_BACK && !flag){
-//					mPageManager.pop();
-//				}
-//			}
-//		});
-//		return false;
-//	}
-//
-//	@Override
-//	public boolean onMojingKeyLongPress(String deviceName, final int keyCode) {	
-//		rootView.queueEvent(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				rootView.onKeyLongPress(keyCode);
-//			}
-//		});
-//		return false;
-//	}
-//
-//	@Override
-//	public boolean onMojingKeyUp(String deviceName, final int keyCode) {
-//		rootView.queueEvent(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				rootView.onKeyUp(keyCode);
-//			}
-//		});
-//		return false;
-//	}
-//
-//	@Override
-//	public boolean onMojingMove(String arg0, int arg1, int arg2, int arg3,
-//			int arg4) {
-//		return false;
-//	}
-
 }

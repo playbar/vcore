@@ -78,13 +78,26 @@ public class GLPageManager {
 		if (mPageStack.size() > 1){
 			onPause();
 			GLViewPage page = mPageStack.lastElement();
+			page.onFinish();
 			mPageStack.pop();
 			GLRectView view = page.getView(null);
 			view.release();
 			updateCrurrentView();
 		}
 	}
-	
+
+	/**
+	 * 释放所有页面
+	 */
+	public void finish(){
+		for (GLViewPage page : mPageStack){
+			page.onFinish();
+			GLRectView view = page.getView(null);
+			view.release();
+		}
+		mPageStack.clear();
+	}
+
 	/**
 	 * 获取页面栈里的页面数量是否大于1
 	 * @author lixianke  @Date 2015-6-19 下午5:22:34
