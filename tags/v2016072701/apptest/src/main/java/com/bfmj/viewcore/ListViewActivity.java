@@ -126,12 +126,13 @@ public class ListViewActivity extends BaseViewActivity {
 //			}
 //		});
 
+		GLRectView view = new GLRectView(this);
+		view.setLayoutParams(0, 0, 2400, 2400);
+		view.setBackground(new GLColor(0x00ff00));
+		getRootView().addView(view);
+
 		rootView.addView(listView);
 
-
-		
-		
-		
 		GLCursorView imageView = new GLCursorView(this);
 		imageView.setWidth(10);
 		imageView.setHeight(10);
