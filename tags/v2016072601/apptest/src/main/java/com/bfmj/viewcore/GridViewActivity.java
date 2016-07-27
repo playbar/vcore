@@ -153,138 +153,159 @@ public class GridViewActivity extends BaseViewActivity {
 		return listData;
 	}
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+
+		// 获取渲染模式
+//		String glassKey = "FPQ8D2-2NHGWY-93S32F-DXD8YG-9QDCSG-444YZT"; //96
+//		setMojingType(glassKey);
+
+		super.onCreate(savedInstanceState);
+
+		rootView = getRootView();
+
+		createGridView();
+		//createSkyBox();
+
+
+//		rootView.addView(listView);
+
+	}
+
 	private void createGridView(){
 
 		//rootView.onResume();
 		//rootView.setDoubleScreen(false);
-//		GLAdapterView.OnItemSelectedListener listener = new GLAdapterView.OnItemSelectedListener(){
-//			public void onItemSelected(GLAdapterView<?> glparent, GLView glview, int position, long id){
-//				Log.e("com/bfmj/viewcore/test", "onItemSelected:" + glview.toString());
-//				glview.setAlpha(0.3f);
-//			}
-//
-//			public void onNothingSelected(GLAdapterView<?> glparent, GLView glview, int position, long id){
-//				Log.e("com/bfmj/viewcore/test", "onNothingSelected:" + glview.toString() );
-//				glview.setAlpha( 1.0f);
-//			}
-//			public void onNoItemData(){
-//				Log.e("com/bfmj/viewcore/test", "onNoItemData");
-//			}
-//		};
-//
-//		GLAdapterView.OnItemClickListener clickListener = new GLAdapterView.OnItemClickListener(){
-//			public void onItemClick(GLAdapterView<?> glparent, GLView glview, int position, long id){
-//				Log.e("com/bfmj/viewcore/test", "onItemClick");
-//
-//			}
-//		};
-//
-//		gridView = new GLGridViewPage( this, 2, 3 );
-//		gridView.setLayoutParams(500, 500, 40, 40);
-//		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
-//		gridView.setHorizontalSpacing( 20.0f);
-//		gridView.setVerticalSpacing( 20.0f);
-//		gridView.setMargin(10, 10, 10, 10 );
-//		gridView.setPadding( 10, 10, 10, 10);
-//		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
-//
-//		getData();
-//		adapter = new GridViewAdapter(listData, this);
-//		gridView.setOnItemSelectedListener( listener );
-//		gridView.setOnItemClickListener( clickListener );
-//		gridView.setWidth(1000);
-//		gridView.setHeight(800);
-//		gridView.setAdapter( adapter );
-//
-//
-//		//gridView.rotate(90.0f, 1.0f, 0.0f, 0.0f );
-//		rootView.addView(gridView);
-//
-//		GLImageView lineH = new GLImageView(this);
-//		lineH.setLayoutParams(0, 500, 960, 2 );
-//		lineH.setBackground( new GLColor( 1, 1, 1));
-//		rootView.addView(lineH);
-//
-//		GLImageView line = new GLImageView(this);
-//		line.setLayoutParams(500, 0, 2, 960);
-//		line.setBackground(new GLColor(0, 1, 0));
-//		rootView.addView(line);
-//
-//		//rootView.setRotationX( 90 );
-//
-//		//gridView.setItemSpacing(20);
-//
-//		gridView.setOnKeyListener(new GLOnKeyListener() {
-//
-//			@Override
-//			public boolean onKeyDown(GLRectView view, int keycode) {
-////				if(keycode == MojingKeyCode.KEYCODE_DPAD_RIGHT){
-////					listView.moveLeft();
-////				}
-////				if(keycode == MojingKeyCode.KEYCODE_DPAD_LEFT){
-////					listView.moveRight();
-////				}
-//				Log.e("onCreate", "onKeyDown");
-//				return false;
-//			}
-//
-//			@Override
-//			public boolean onKeyUp(GLRectView view, int keycode) {
-//				Log.e("onCreate", "onKeyUp");
-//				return false;
-//			}
-//
-//			@Override
-//			public boolean onKeyLongPress(GLRectView view, int keycode) {
-//				return false;
-//			}
-//
-//		});
-//
-//
-//		GLTextView textView = new GLTextView(this);
-//		textView.setLayoutParams( 1000, 2000, 1000, 200 );
-//		textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
-//		textView.setText("111的境况");
-//		textView.setTextSize(100);
-//		textView.setOnKeyListener(new GLOnKeyListener() {
-//			@Override
-//			public boolean onKeyDown(GLRectView view, int keycode) {
-//				view.setAlpha( 0.3f );
-//				return false;
-//			}
-//
-//			@Override
-//			public boolean onKeyUp(GLRectView view, int keycode) {
-//				view.setAlpha( 1.0f );
-//				return false;
-//			}
-//
-//			@Override
-//			public boolean onKeyLongPress(GLRectView view, int keycode) {
-//				return false;
-//			}
-//		});
-//		textView.setFocusListener(new GLViewFocusListener() {
-//			@Override
-//			public void onFocusChange(GLRectView view, boolean focused) {
-//				if( focused )
-//					view.setAlpha( 0.3f );
-//				else
-//					view.setAlpha( 1.0f );
-//			}
-//		});
-//
-//		//gridView.addView( textView );
-//		rootView.addView(textView);
-//
-////		GLCursorView imageView = new GLCursorView(this);
-////		imageView.setWidth(10);
-////		imageView.setHeight(10);
-////		imageView.setBackground(new GLColor(1.0f, 1.0f, 1.0f));
-////		imageView.setDepth(3);
-////		imageView.setLayoutParams(1000, 1000, 100, 100);
-////		rootView.addView(imageView);
+
+		GLAdapterView.OnItemSelectedListener listener = new GLAdapterView.OnItemSelectedListener(){
+			public void onItemSelected(GLAdapterView<?> glparent, GLView glview, int position, long id){
+				Log.e("com/bfmj/viewcore/test", "onItemSelected:" + glview.toString());
+				glview.setAlpha(0.3f);
+			}
+
+			public void onNothingSelected(GLAdapterView<?> glparent, GLView glview, int position, long id){
+				Log.e("com/bfmj/viewcore/test", "onNothingSelected:" + glview.toString() );
+				glview.setAlpha( 1.0f);
+			}
+			public void onNoItemData(){
+				Log.e("com/bfmj/viewcore/test", "onNoItemData");
+			}
+		};
+
+		GLAdapterView.OnItemClickListener clickListener = new GLAdapterView.OnItemClickListener(){
+			public void onItemClick(GLAdapterView<?> glparent, GLView glview, int position, long id){
+				Log.e("com/bfmj/viewcore/test", "onItemClick");
+
+			}
+		};
+
+		gridView = new GLGridViewPage( this, 2, 3 );
+		gridView.setLayoutParams(500, 500, 40, 40);
+		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
+		gridView.setHorizontalSpacing( 20.0f);
+		gridView.setVerticalSpacing( 20.0f);
+		gridView.setMargin(10, 10, 10, 10 );
+		gridView.setPadding( 10, 10, 10, 10);
+		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
+
+		getData();
+		adapter = new GridViewAdapter(listData, this);
+		gridView.setOnItemSelectedListener( listener );
+		gridView.setOnItemClickListener( clickListener );
+		gridView.setWidth(1000);
+		gridView.setHeight(800);
+		gridView.setAdapter( adapter );
+
+
+		//gridView.rotate(90.0f, 1.0f, 0.0f, 0.0f );
+		rootView.addView(gridView);
+
+		GLImageView lineH = new GLImageView(this);
+		lineH.setLayoutParams(0, 500, 960, 2 );
+		lineH.setBackground( new GLColor( 1, 1, 1));
+		rootView.addView(lineH);
+
+		GLImageView line = new GLImageView(this);
+		line.setLayoutParams(500, 0, 2, 960);
+		line.setBackground(new GLColor(0, 1, 0));
+		rootView.addView(line);
+
+		//rootView.setRotationX( 90 );
+
+		//gridView.setItemSpacing(20);
+
+		gridView.setOnKeyListener(new GLOnKeyListener() {
+
+			@Override
+			public boolean onKeyDown(GLRectView view, int keycode) {
+//				if(keycode == MojingKeyCode.KEYCODE_DPAD_RIGHT){
+//					listView.moveLeft();
+//				}
+//				if(keycode == MojingKeyCode.KEYCODE_DPAD_LEFT){
+//					listView.moveRight();
+//				}
+				Log.e("onCreate", "onKeyDown");
+				return false;
+			}
+
+			@Override
+			public boolean onKeyUp(GLRectView view, int keycode) {
+				Log.e("onCreate", "onKeyUp");
+				return false;
+			}
+
+			@Override
+			public boolean onKeyLongPress(GLRectView view, int keycode) {
+				return false;
+			}
+
+		});
+
+
+		GLTextView textView = new GLTextView(this);
+		textView.setLayoutParams( 1000, 2000, 1000, 200 );
+		textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
+		textView.setText("111的境况");
+		textView.setTextSize(100);
+		textView.setOnKeyListener(new GLOnKeyListener() {
+			@Override
+			public boolean onKeyDown(GLRectView view, int keycode) {
+				view.setAlpha( 0.3f );
+				return false;
+			}
+
+			@Override
+			public boolean onKeyUp(GLRectView view, int keycode) {
+				view.setAlpha( 1.0f );
+				return false;
+			}
+
+			@Override
+			public boolean onKeyLongPress(GLRectView view, int keycode) {
+				return false;
+			}
+		});
+		textView.setFocusListener(new GLViewFocusListener() {
+			@Override
+			public void onFocusChange(GLRectView view, boolean focused) {
+				if( focused )
+					view.setAlpha( 0.3f );
+				else
+					view.setAlpha( 1.0f );
+			}
+		});
+
+		//gridView.addView( textView );
+		rootView.addView(textView);
+
+//		GLCursorView imageView = new GLCursorView(this);
+//		imageView.setWidth(10);
+//		imageView.setHeight(10);
+//		imageView.setBackground(new GLColor(1.0f, 1.0f, 1.0f));
+//		imageView.setDepth(3);
+//		imageView.setLayoutParams(1000, 1000, 100, 100);
+//		rootView.addView(imageView);
 
 
 		GLCursorView cursorView = new GLCursorView(this);
@@ -349,26 +370,6 @@ public class GridViewActivity extends BaseViewActivity {
 		com.baofeng.mojing.MojingSDK.LogTrace("strProductList 2 >>>>" + strProductList);
 		com.baofeng.mojing.MojingSDK.LogTrace("strGlassList 2 >>>>" + strGlassList);
 		com.baofeng.mojing.MojingSDK.LogTrace("strGlassInfo 2 >>>>" + strGlassInfo);
-	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-
-		// 获取渲染模式
-//		String glassKey = "FPQ8D2-2NHGWY-93S32F-DXD8YG-9QDCSG-444YZT"; //96
-//		setMojingType(glassKey);
-
-		super.onCreate(savedInstanceState);
-		
-		rootView = getRootView();
-
-		createGridView();
-		createSkyBox();
-
-
-//		rootView.addView(listView);		
-
 	}
 
 

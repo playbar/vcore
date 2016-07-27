@@ -12,6 +12,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.baofeng.mojing.MojingSDK;
+import com.baofeng.mojing.MojingSDK3288;
 import com.baofeng.mojing.MojingSurfaceView;
 import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.distortion.Distortion;
@@ -317,8 +318,8 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         }
 
         GLColorRect.initInstance();
-        //GLImageRect.initInstance();
-        //GLVideoRect.initInstance();
+        GLImageRect.initInstance();
+        GLVideoRect.initInstance();
     }
 
     @Override
@@ -336,19 +337,19 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             view.onSurfaceChanged(width, height);
         }
 
-        //////////////////
-
-        float[] modelView = {-0.5f, 0.0f, 0.0f, // leftCameraPos
-                0.5f, 0.0f, 0.0f, // rightCameraPos
-                0.0f, 0.0f, -1.0f, // lookAt
-                0.0f, 1.0f, 0.0f // upVec
-        };
-        float[] perspective = {
-                1.5707963268f, 1.0f, 0.1f, 100.0f, // left(fov, w/h, near, far)
-                1.5707963268f, 1.0f, 0.1f, 100.0f // right
-        };
-
-        com.baofeng.mojing.MojingSDK3288.RenderInit(width, height, 0, modelView, perspective);
+//        //////////////////
+//
+//        float[] modelView = {-0.5f, 0.0f, 0.0f, // leftCameraPos
+//                0.5f, 0.0f, 0.0f, // rightCameraPos
+//                0.0f, 0.0f, -1.0f, // lookAt
+//                0.0f, 1.0f, 0.0f // upVec
+//        };
+//        float[] perspective = {
+//                1.5707963268f, 1.0f, 0.1f, 100.0f, // left(fov, w/h, near, far)
+//                1.5707963268f, 1.0f, 0.1f, 100.0f // right
+//        };
+//
+//        MojingSDK3288.RenderInit(width, height, 0, modelView, perspective);
 
     }
 
@@ -367,94 +368,94 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        float[] fM  = new float[16];
-        MojingSDK.getLastHeadView(fM);
-        com.baofeng.mojing.MojingSDK3288.RenderFrame(fM);
+//        float[] fM  = new float[16];
+//        MojingSDK.getLastHeadView(fM);
+//        com.baofeng.mojing.MojingSDK3288.RenderFrame(fM);
 
-//
-//        times ++;
-//        if (mChild == null || mChild.size() == 0) {
-//            return;
-//        }
-//
-//        GLView v = mCreateTextureQueue.poll();
-//        if (v != null){
-//            v.createTexture();
-//        }
-//
-////        for (int i = 0; i < mChild.size(); i++) {
-////            GLView view = mChild.get(i);
-////            if (view != null) {
-////                view.onBeforeDraw();
-////            }
-////        }
-//
-//        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-//
-//
-//        ArrayList<GLView> allViews = getAllViews();
-//
-//        if (mGroyEnable) {
-//            MojingSDK.getLastHeadView(headView);
-//        }
-//
-//        float[] groyMatrix = getGroyMatrix();
-//
-//        int height = mWidth / 2;
-//        float nearRight = GLScreenParams.getNear() * (float)Math.tan(GLScreenParams.getFOV() / 2);
-//
-//        //双屏
-//        if (mIsDouble) {
-//            for (int i = 0; i < 2; i++) {
-//                if (mDistortion != null) {
-//                    mDistortion.beforeDraw(i);
-//                } else {
-//                    GLES20.glViewport(i * mWidth / 2, (mHeight - height) / 2, mWidth / 2, height);
-//                }
-//
-//                for (int j = 0; j < allViews.size(); j++) {
-//                    GLView view = allViews.get(j);
-//                    if (view != null) {
-//                        view.getMatrixState().setVMatrix(groyMatrix);
-//                        Matrix.frustumM(view.getMatrixState().getProjMatrix(), 0, -nearRight, nearRight, -nearRight, nearRight, GLScreenParams.getNear(), GLScreenParams.getFar());
-//                        //					Matrix.orthoM(view.getMatrixState().getProjMatrix(), 0, -40, 40, -40, 40, GLScreenParams.getNear(), GLScreenParams.getFar());
-//                        //			Matrix.setLookAtM(view.getMatrixState().getVMatrix(), 0, 0, 0, 0, headView[2], -headView[6], headView[10], 0, 1, 0);
-//
-//                        view.draw(i == 0 ? true : false);
-//                    }
-//                }
-//            }
-//
-//            if (mDistortion != null) {
-//                mDistortion.afterDraw();
-//            }
-//        }
-//        else { //单屏
-//            GLES20.glViewport(0, 0, mWidth, mHeight);
-//            float ratio = (float) mHeight / mWidth;
-//            for (int j = 0; j < allViews.size(); j++) {
-//                GLView view = allViews.get(j);
-//                if (view != null) {
-//                    view.getMatrixState().setVMatrix(groyMatrix);
-//                    Matrix.frustumM(view.getMatrixState().getProjMatrix(), 0, -nearRight, nearRight, -nearRight * ratio, nearRight * ratio, GLScreenParams.getNear(), GLScreenParams.getFar());
-////					Matrix.orthoM(view.getMatrixState().getProjMatrix(), 0, -40, 40, -40, 40, GLScreenParams.getNear(), GLScreenParams.getFar());
-//                    //Matrix.setLookAtM(view.getMatrixState().getVMatrix(), 0, 0, 0, 0, 0, 0, -10, 0, 1, 0);
-//
-//                    view.draw(true);
-//                }
-//            }
-//        }
-//
-//        mGlFocusUtils.handleFocused(groyMatrix, allViews);
-//
-////        for (int i = 0; i < mChild.size(); i++) {
-////            GLView view = mChild.get(i);
-////            if (view != null) {
-////                view.onAfterDraw();
-////            }
-////        }
-//
-//        ///////
+
+        times ++;
+        if (mChild == null || mChild.size() == 0) {
+            return;
+        }
+
+        GLView v = mCreateTextureQueue.poll();
+        if (v != null){
+            v.createTexture();
+        }
+
+        for (int i = 0; i < mChild.size(); i++) {
+            GLView view = mChild.get(i);
+            if (view != null) {
+                view.onBeforeDraw();
+            }
+        }
+
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+
+
+        ArrayList<GLView> allViews = getAllViews();
+
+        if (mGroyEnable) {
+            MojingSDK.getLastHeadView(headView);
+        }
+
+        float[] groyMatrix = getGroyMatrix();
+
+        int height = mWidth / 2;
+        float nearRight = GLScreenParams.getNear() * (float)Math.tan(GLScreenParams.getFOV() / 2);
+
+        //双屏
+        if (mIsDouble) {
+            for (int i = 0; i < 2; i++) {
+                if (mDistortion != null) {
+                    mDistortion.beforeDraw(i);
+                } else {
+                    GLES20.glViewport(i * mWidth / 2, (mHeight - height) / 2, mWidth / 2, height);
+                }
+
+                for (int j = 0; j < allViews.size(); j++) {
+                    GLView view = allViews.get(j);
+                    if (view != null) {
+                        view.getMatrixState().setVMatrix(groyMatrix);
+                        Matrix.frustumM(view.getMatrixState().getProjMatrix(), 0, -nearRight, nearRight, -nearRight, nearRight, GLScreenParams.getNear(), GLScreenParams.getFar());
+                        //					Matrix.orthoM(view.getMatrixState().getProjMatrix(), 0, -40, 40, -40, 40, GLScreenParams.getNear(), GLScreenParams.getFar());
+                        //			Matrix.setLookAtM(view.getMatrixState().getVMatrix(), 0, 0, 0, 0, headView[2], -headView[6], headView[10], 0, 1, 0);
+
+                        view.draw(i == 0 ? true : false);
+                    }
+                }
+            }
+
+            if (mDistortion != null) {
+                mDistortion.afterDraw();
+            }
+        }
+        else { //单屏
+            GLES20.glViewport(0, 0, mWidth, mHeight);
+            float ratio = (float) mHeight / mWidth;
+            for (int j = 0; j < allViews.size(); j++) {
+                GLView view = allViews.get(j);
+                if (view != null) {
+                    view.getMatrixState().setVMatrix(groyMatrix);
+                    Matrix.frustumM(view.getMatrixState().getProjMatrix(), 0, -nearRight, nearRight, -nearRight * ratio, nearRight * ratio, GLScreenParams.getNear(), GLScreenParams.getFar());
+//					Matrix.orthoM(view.getMatrixState().getProjMatrix(), 0, -40, 40, -40, 40, GLScreenParams.getNear(), GLScreenParams.getFar());
+                    //Matrix.setLookAtM(view.getMatrixState().getVMatrix(), 0, 0, 0, 0, 0, 0, -10, 0, 1, 0);
+
+                    view.draw(true);
+                }
+            }
+        }
+
+        mGlFocusUtils.handleFocused(groyMatrix, allViews);
+
+        for (int i = 0; i < mChild.size(); i++) {
+            GLView view = mChild.get(i);
+            if (view != null) {
+                view.onAfterDraw();
+            }
+        }
+
+        ///////
 
 
 
