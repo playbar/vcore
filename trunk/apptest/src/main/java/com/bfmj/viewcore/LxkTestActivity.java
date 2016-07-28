@@ -83,7 +83,7 @@ public class LxkTestActivity extends BaseViewActivity {
 
 		for (int i = 0; i < imageViews.length; i++) {
 			imageViews[i].setBackground(new GLColor(1, 1, 1));
-//			imageViews[i].setDepth(40f);
+//			imageViews[i].setDepth(f);
 			imageViews[i].setFocusListener(listener);
 			rootView.addView(imageViews[i]);
 		}

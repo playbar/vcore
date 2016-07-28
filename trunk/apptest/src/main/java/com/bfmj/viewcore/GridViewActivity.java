@@ -201,6 +201,8 @@ public class GridViewActivity extends BaseViewActivity {
 
 		//gridView.addView( textView );
 		rootView.addView(textView);
+//
+//		gridView.setDepth(-4);
 
 //		GLCursorView imageView = new GLCursorView(this);
 //		imageView.setWidth(10);
