@@ -180,8 +180,8 @@ public class GLSenceView extends GLView {
 	@Override
 	public void initDraw() {
 		isSurfaceCreated = true;
-		createTexture();
 		init();
+		createTexture();
 	}
 
 	@Override
@@ -192,7 +192,7 @@ public class GLSenceView extends GLView {
     	
     	if (isNeedInitVertex){
     		initVertex();
-    		isNeedInitVertex = false;
+			initTextureBuffer();
     	}
     	
     	GLMatrixState state = getMatrixState();
@@ -270,20 +270,19 @@ public class GLSenceView extends GLView {
 	}
 	
 	protected void initVertex(){
-		if (vertices == null){
-			return;
+		isNeedInitVertex = false;
+		if (vertices != null) {
+			verLen = vertices.length * 4;
+			ByteBuffer bb = ByteBuffer.allocateDirect(verLen);
+			bb.order(ByteOrder.nativeOrder());
+			vertexBuffer = bb.asFloatBuffer();
+			vertexBuffer.put(vertices);
+			vertexBuffer.position(0);
+
+			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexNew);
+			GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verLen, vertexBuffer,
+					GLES20.GL_STATIC_DRAW);
 		}
-		
-		verLen = vertices.length*4;
-        ByteBuffer bb = ByteBuffer.allocateDirect(verLen);
-        bb.order(ByteOrder.nativeOrder());
-        vertexBuffer = bb.asFloatBuffer();
-        vertexBuffer.put(vertices);
-        vertexBuffer.position(0);
-       
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexNew);
-		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verLen, vertexBuffer,
-				GLES20.GL_STATIC_DRAW);
 	}
 	
 	private void initTextureBuffer(){
