@@ -2,6 +2,7 @@ package com.bfmj.viewcore.view;
 
 import android.content.Context;
 
+import com.baofeng.mojing.input.base.MojingInputConfig;
 import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
@@ -61,6 +62,9 @@ public class GLGridViewPage extends GLGridView {
 		super.setHorizontalSpacing( horizontalSpacing );
 	}
 
+	public void setBottomSpaceing( float spaceing){
+		mBtnSpace = spaceing;
+	}
 	/**
 	 * 设置一屏显示几条数据
 	 * @param oneScreen
@@ -90,12 +94,12 @@ public class GLGridViewPage extends GLGridView {
 		// TODO Auto-generated method stub
 		super.addView(view);
 	}
-	
+
 	@Override
 	public void addView(int index, GLRectView view) {
 		// TODO Auto-generated method stub
 		super.addView(index, view);
-		
+
 	}
 
 	@Override
@@ -135,48 +139,51 @@ public class GLGridViewPage extends GLGridView {
 
 	@Override
 	public boolean onKeyDown(int keycode){
-		return false;
+		return super.onKeyDown(keycode);
 	}
 
 	@Override
 	public boolean onKeyUp(int keycode){
-		if( keycode == MojingKeyCode.KEYCODE_DPAD_CENTER) {
-			getRootView().queueEvent(new Runnable() {
-				@Override
-				public void run() {
-					if( nextBtnView.isFocused()) {
-						++mCurIndex;
-						setStartIndex((mCurIndex - 1) * getNumOneScreen());
-						requestLayout();
-						showPage();
-					}else if( prvBtnView.isFocused() ){
-						--mCurIndex;
-						setStartIndex((mCurIndex - 1) * getNumOneScreen());
-						requestLayout();
-						showPage();
-					}else if( mbIndexFocused) {
-						setStartIndex( (mCurFocuseIndex - 1) * getNumOneScreen() );
-						mCurIndex = mCurFocuseIndex;
-						requestLayout();
-						showPage();
+		if( nextBtnView.isFocused() || prvBtnView.isFocused() || mbIndexFocused ) {
+			if (keycode == MojingKeyCode.KEYCODE_DPAD_CENTER) {
+				getRootView().queueEvent(new Runnable() {
+					@Override
+					public void run() {
+						if (nextBtnView.isFocused()) {
+							++mCurIndex;
+							setStartIndex((mCurIndex - 1) * getNumOneScreen());
+							requestLayout();
+							showPage();
+						} else if (prvBtnView.isFocused()) {
+							--mCurIndex;
+							setStartIndex((mCurIndex - 1) * getNumOneScreen());
+							requestLayout();
+							showPage();
+						} else if (mbIndexFocused) {
+							setStartIndex((mCurFocuseIndex - 1) * getNumOneScreen());
+							mCurIndex = mCurFocuseIndex;
+							requestLayout();
+							showPage();
+						}
 					}
+				});
 
-				}
-			});
-
+			}
+			return true;
+		}else {
+			return super.onKeyUp(keycode);
 		}
-		return false;
 	}
 
 	@Override
 	public boolean onKeyLongPress(int keycode){
-		return false;
+		return super.onKeyLongPress(keycode);
 	}
 
 
 	private void prvBtn(){
 
-		prvBtnView.setLayoutParams(mStart - mStep, getY() + getHeight() + 20, 100, 100);
+		prvBtnView.setLayoutParams(mStart - mStep, getY() + getHeight() + mBtnSpace, 100, 100);
 		prvBtnView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
 		prvBtnView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
 
@@ -204,7 +211,7 @@ public class GLGridViewPage extends GLGridView {
 
 	private void nextBtn(){
 
-		nextBtnView.setLayoutParams(mStart + mShowMaxCount * mStep, getY() + getHeight() + 20, 100, 100);
+		nextBtnView.setLayoutParams(mStart + mShowMaxCount * mStep, getY() + getHeight() + mBtnSpace, 100, 100);
 		nextBtnView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
 		nextBtnView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
 		nextBtnView.setAlignment(GLTextView.ALIGN_CENTER);
@@ -239,6 +246,7 @@ public class GLGridViewPage extends GLGridView {
 	private boolean mbIndexFocused = false;
 
 	private final static int MAXSHOW = 5;
+	private float mBtnSpace = 20; // 底部按钮也GridView之间的距离
 
 	//创建分页
 	public void showPage(){
@@ -286,7 +294,7 @@ public class GLGridViewPage extends GLGridView {
 		for( int i = istart; i <= iend; ++i ) {
 
 			GLTextView textView = new GLTextView(this.getContext());
-			textView.setLayoutParams(mStart + (i - istart) * mStep, getY() + getHeight() + 20, 100, 100);
+			textView.setLayoutParams(mStart + (i - istart) * mStep, getY() + getHeight() + mBtnSpace, 100, 100);
 			textView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
 			if( mCurIndex == i ){
 				textView.setBackground( new GLColor(0.21f, 0.45f, 0.68f ));
@@ -322,7 +330,7 @@ public class GLGridViewPage extends GLGridView {
 	public GLView getSelectedGLView() {
 		return super.getSelectedGLView();
 	}
-	
+
 	/**
 	 * 返回索引为index的项
 	 * @param index
@@ -332,7 +340,7 @@ public class GLGridViewPage extends GLGridView {
 
 		return null;
 	}
-	
+
 	/**
 	 * 得到总个数
 	 * @return
@@ -340,7 +348,7 @@ public class GLGridViewPage extends GLGridView {
 	public int getTotalNum(){
 		return super.getTotalNum();
 	}
-	
+
 	/**
 	 * 删除一个View
 	 * @param index 要删除的索引
@@ -348,7 +356,7 @@ public class GLGridViewPage extends GLGridView {
 	public void removeView(int index){
 		super.removeView( index );
 	}
-	
+
 	/**
 	 * 添加一个控件到最后
 	 * @param view
@@ -357,7 +365,7 @@ public class GLGridViewPage extends GLGridView {
 
 		super.addChildView( view );
 	}
-	
+
 	/**
 	 * 添加一个控件到指定的索引处
 	 * @param view
@@ -377,11 +385,11 @@ public class GLGridViewPage extends GLGridView {
 	public int getPrevIndex() {
 		return super.getPrevIndex();
 	}
-	
+
 	public void setChildFocus() {
 		super.setChildFocus();
 	}
-	
+
 	/**
 	 * 获取列数
 	 * @author linzanxian  @Date 2015-7-9 下午3:09:13

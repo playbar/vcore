@@ -46,7 +46,9 @@ public class GLColor {
 		init(r / 255.0f, g / 255.0f, b / 255.0f, a);
 	}
 
-	public GLColor(int r, int g, int b, float a){new GLColor(r, g, b, a);}
+	public GLColor(int r, int g, int b, float a) {
+		init(r, g, b, a);
+	}
 
 	private void init(float r, float g, float b, float a){
 		this.r = r;
