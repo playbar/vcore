@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.opengl.Matrix;
+import android.util.Log;
 
 import com.baofeng.mojing.MojingSDK;
 import com.bfmj.viewcore.render.GLScreenParams;
@@ -99,31 +100,6 @@ public class GLFocusUtils {
 		eulerAngles[(offset + 1)] = (-pitch);
 		eulerAngles[(offset + 2)] = (-roll);
 	}
-	
-	private float[] getCursorPosition(float offsetXAngle){
-		float[] position = new float[2];
-		float[] matrix = new float[16];
-		
-		System.arraycopy(headView, 0, matrix, 0, 16);
-		
-		if (offsetXAngle != 0){
-			Matrix.rotateM(matrix, 0, offsetXAngle,0, 1, 0);
-		}
-		
-		float[] out = new float[3];
-		getEulerAngles(matrix, out, 0);
-		
-		float screenWidth = GLScreenParams.getScreenWidth();
-		float screenHeight = GLScreenParams.getScreenHeight();
-		float xDpi = GLScreenParams.getXDpi();
-		float yDpi = GLScreenParams.getYDpi();
-		float depth = GLScreenParams.getDefualtDepth() * GLRectView.getDepthScale();
-
-		position[0] = xDpi/2 -(float)(depth * Math.tan(out[0])) / screenWidth * xDpi;
-		position[1] = yDpi/2 - (float)(depth * Math.tan(out[1])) / screenHeight * yDpi;
-		
-		return position;
-	}
 
 	private float getX(float x){
 		return (x - GLScreenParams.getXDpi() / 2) / GLScreenParams.getXDpi() * GLScreenParams.getScreenWidth();
@@ -166,6 +142,7 @@ public class GLFocusUtils {
 
 		float defualtDepth = GLScreenParams.getDefualtDepth();
 		boolean isAdjustCursor = false;
+		boolean hasFocused = false;
 
 		float x1 = getX(0);
 		float y1 = getY(0);
@@ -176,6 +153,16 @@ public class GLFocusUtils {
 		float[] outPos = new float[]{0, 0};
 
 		boolean isFoused = MojingSDK.DirectionalRadiaInRect(headView, new float[]{x1, y1}, new float[]{x2, y2}, -defualtDepth, outPos);
+
+//		String msg = "headview = {";
+//		for (int m = 0; m < headView.length; m++){
+//			msg += headView[m];
+//			if (m < headView.length - 1){
+//				msg += ", ";
+//			}
+//		}
+//		msg += "}, Pos1 = {" + x1 + ", " + y1 + "}, Pos2 = {" + x2 + ", " + y2 + "}, z = " + -defualtDepth + ", outPos = {" + outPos[0] + ", " + outPos[1] + "}";
+//		Log.e("DirectionalRadiaInRect", msg);
 
 		float rate = GLScreenParams.getXDpi() / GLScreenParams.getScreenWidth();
 
@@ -190,7 +177,7 @@ public class GLFocusUtils {
 				}
 
 				GLRectView v = (GLRectView) views.get(i);
-				if (!v.isVisible() || !v.hasListeter()) {
+				if (!v.isVisible() || !v.hasListeter() || !v.isFocusable() || !v.isEnable()) {
 					continue;
 				}
 
@@ -209,28 +196,23 @@ public class GLFocusUtils {
 						}
 					}
 
-					if (!v.hasListeter() || !v.isFocusable() || !v.isEnable()) {
-						continue;
-					}
-
 					if (v != mFocusedView) {
 						if (mFocusedView != null && !v.isGrandParent(mFocusedView)) {
 							mFocusedView.onFocusChange(TO_UNKNOWN, false);
 						}
-
 						v.doRequestFocus();
 					}
-
+					hasFocused = true;
 					mFocusedView = v;
 					v.onHeadFocusChange(true);
 					return;
 				}
 			}
+		}
 
-		} else {
-			if (mFocusedView !=null){
-				mFocusedView.onFocusChange(TO_UNKNOWN, false);
-			}
+		if (!hasFocused && mFocusedView !=null){
+			mFocusedView.onFocusChange(TO_UNKNOWN, false);
+			mFocusedView = null;
 		}
 		
 		if (mCursorDepthChangeListener != null && !isAdjustCursor) {

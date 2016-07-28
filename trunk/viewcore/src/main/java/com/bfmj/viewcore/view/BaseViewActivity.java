@@ -33,7 +33,6 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 	private boolean isLockViewAngle = false;
 	private float mLockedAngle = 0f;
 	private String mMojingType = "F79F2H-Q8ZNXN-2HQN2F-2ZA9YV-QG4H9H-QGAYAE";
-	private boolean isTouchControl = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
