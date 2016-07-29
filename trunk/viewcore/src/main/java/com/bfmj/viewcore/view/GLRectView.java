@@ -41,6 +41,7 @@ import android.view.animation.AnimationUtils;
  * description:
  */
 public class GLRectView extends GLView {
+	private boolean mbNeedUpdate = false;
 	public static final int MATCH_PARENT = -1;
 	public static final int WRAP_CONTENT = -2;
 	
@@ -330,7 +331,7 @@ public class GLRectView extends GLView {
 	 */
 	public void setX(float x){
 		this.x = x;
-		updateRect();
+		mbNeedUpdate = true;
 	}
 	
 	/**
@@ -351,7 +352,7 @@ public class GLRectView extends GLView {
 	 */
 	public void setY(float y){
 		this.y = y;
-		updateRect();
+		mbNeedUpdate = true;
 	}
 	
 	/**
@@ -361,6 +362,7 @@ public class GLRectView extends GLView {
 	 * @return 宽度
 	 */
 	public float getWidth(){
+		updateRect();
 		return width;
 	}
 	
@@ -371,6 +373,7 @@ public class GLRectView extends GLView {
 	 * @return 内容宽度
 	 */
 	float getInnerWidth(){
+		updateRect();
 		return width - paddingLeft - paddingRight;
 	}
 	
@@ -382,7 +385,7 @@ public class GLRectView extends GLView {
 	 */
 	public void setWidth(float width){
 		this.width = width;
-		updateRect();
+		mbNeedUpdate = true;
 	}
 	
 	/**
@@ -392,6 +395,7 @@ public class GLRectView extends GLView {
 	 * @return 高度
 	 */
 	public float getHeight(){
+		updateRect();
 		return height;
 	}
 	
@@ -402,6 +406,7 @@ public class GLRectView extends GLView {
 	 * @return 内容高度
 	 */
 	float getInnerHeight(){
+		updateRect();
 		return height - paddingTop - paddingBottom;
 	}
 	
@@ -413,7 +418,7 @@ public class GLRectView extends GLView {
 	 */
 	public void setHeight(float height){
 		this.height = height;
-		updateRect();
+		mbNeedUpdate = true;
 	}
 	
 	/**
@@ -424,8 +429,8 @@ public class GLRectView extends GLView {
 	 */
 	protected void setLeft(float left) {
 		this.left = left;
-		
-		updateRect();
+		mbNeedUpdate = true;
+		//updateRect();
 	}
 	
 	/**
@@ -446,8 +451,7 @@ public class GLRectView extends GLView {
 	 */
 	protected void setTop(float top){
 		this.top = top;
-		
-		updateRect();
+		mbNeedUpdate = true;
 	}
 	
 	/**
@@ -469,12 +473,10 @@ public class GLRectView extends GLView {
 	 * @param height 高度
 	 * @return
 	 */
-	public void setLayoutParams(float x, float y, float width, float height){
-		this.x = x;
-		this.y = y;
+	public void setLayoutParams(float width, float height){
 		this.width = width;
 		this.height = height;
-		updateRect();
+		mbNeedUpdate = true;
 	}
 	
 	/**
@@ -491,7 +493,7 @@ public class GLRectView extends GLView {
 		paddingTop = top;
 		paddingRight = right;
 		paddingBottom = bottom;
-		updateRect();
+		mbNeedUpdate = true;
 	}
 	
 	/**
@@ -548,6 +550,7 @@ public class GLRectView extends GLView {
 		marginTop = top;
 		marginRight = right;
 		marginBottom = bottom;
+		mbNeedUpdate = true;
 	}
 	
 	/**
@@ -611,8 +614,11 @@ public class GLRectView extends GLView {
 	}
 	
 	private void updateRect(){
-		updateCenterPosition();
-		updateSize();
+		if( mbNeedUpdate ){
+			updateSize();
+			updateCenterPosition();
+			mbNeedUpdate = false;
+		}
 	}
 	
 	private void updateCenterPosition(){
@@ -975,6 +981,7 @@ public class GLRectView extends GLView {
 
 	@Override
 	public void draw(boolean isLeft) {
+		updateRect();
 		if (!isVisible() || !isSurfaceCreated){
 			return;
 		}
@@ -1434,6 +1441,7 @@ public class GLRectView extends GLView {
 	 * @return X坐标
 	 */
 	public float getCenterX() {
+		updateRect();
 		return centerX;
 	}
 	
@@ -1444,6 +1452,7 @@ public class GLRectView extends GLView {
 	 * @return Y坐标
 	 */
 	public float getCenterY() {
+		updateRect();
 		return centerY;
 	}
 

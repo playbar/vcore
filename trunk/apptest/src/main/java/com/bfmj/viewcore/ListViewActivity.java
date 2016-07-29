@@ -65,7 +65,9 @@ public class ListViewActivity extends BaseViewActivity {
 		listView.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
 
 		listView.setMargin(50, 50, 40,40);
-		listView.setLayoutParams(280, 400, 1000, 500);
+		listView.setX( 280);
+		listView.setY(400);
+		listView.setLayoutParams(1000, 500);
 		listView.setItemSpacing(20);
 
 		listView.setOnKeyListener(new GLOnKeyListener() {
@@ -137,7 +139,9 @@ public class ListViewActivity extends BaseViewActivity {
 		imageView.setHeight(10);
 		imageView.setBackground(new GLColor(1.0f, 1.0f, 1.0f));
 		imageView.setDepth(3);
-		imageView.setLayoutParams(1195, 1195, 10, 10);
+		imageView.setX( 1195);
+		imageView.setY( 1195);
+		imageView.setLayoutParams( 10, 10);
 		
 		rootView.addView(imageView);
 //		rootView.addView(listView);		

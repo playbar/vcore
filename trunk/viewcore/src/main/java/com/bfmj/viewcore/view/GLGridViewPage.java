@@ -183,7 +183,9 @@ public class GLGridViewPage extends GLGridView {
 
 	private void prvBtn(){
 
-		prvBtnView.setLayoutParams(mStart - mStep, getY() + getHeight() + mBtnSpace, 100, 100);
+		prvBtnView.setX(mStart - mStep);
+		prvBtnView.setY(getY() + getHeight() + mBtnSpace);
+		prvBtnView.setLayoutParams(100, 100);
 		prvBtnView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
 		prvBtnView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
 
@@ -211,7 +213,9 @@ public class GLGridViewPage extends GLGridView {
 
 	private void nextBtn(){
 
-		nextBtnView.setLayoutParams(mStart + mShowMaxCount * mStep, getY() + getHeight() + mBtnSpace, 100, 100);
+		nextBtnView.setX(mStart + mShowMaxCount * mStep);
+		nextBtnView.setY(getY() + getHeight() + mBtnSpace);
+		nextBtnView.setLayoutParams(100, 100);
 		nextBtnView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
 		nextBtnView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
 		nextBtnView.setAlignment(GLTextView.ALIGN_CENTER);
@@ -294,14 +298,17 @@ public class GLGridViewPage extends GLGridView {
 		for( int i = istart; i <= iend; ++i ) {
 
 			GLTextView textView = new GLTextView(this.getContext());
-			textView.setLayoutParams(mStart + (i - istart) * mStep, getY() + getHeight() + mBtnSpace, 100, 100);
+			textView.setX(mStart + (i - istart) * mStep);
+			textView.setY(getY() + getHeight() + mBtnSpace);
+			textView.setLayoutParams(100, 100);
 			textView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
 			if( mCurIndex == i ){
 				textView.setBackground( new GLColor(0.21f, 0.45f, 0.68f ));
 			}else {
 				textView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
 			}
-			textView.setAlignment( GLTextView.ALIGN_CENTER );
+			//textView.setAlignment( GLTextView.ALIGN_CENTER );
+			textView.setPadding(50, -20, 0, 0 );
 
 			textView.setText("" + i);
 			textView.setTextSize(80);

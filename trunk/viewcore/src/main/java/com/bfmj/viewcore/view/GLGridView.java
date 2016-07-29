@@ -225,6 +225,9 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 						return false;
 					}
 				});
+				if( view.getDepth() > this.getDepth() ){
+					view.setDepth( this.getDepth() );
+				}
 				this.addView(view);
 				tempIndex++;
 			}
@@ -292,6 +295,9 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 						return false;
 					}
 				});
+				if( view.getDepth() > this.getDepth() ){
+					view.setDepth( this.getDepth() );
+				}
 				this.addView(view);
 //				GLGridView.this.addView(view);
 //				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
@@ -369,6 +375,9 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 						return false;
 					}
 				});
+				if( view.getDepth() > this.getDepth() ){
+					view.setDepth( this.getDepth() );
+				}
 				this.addView(view);
 //				GLGridView.this.addView(view);
 //				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {

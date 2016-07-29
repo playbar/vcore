@@ -45,37 +45,59 @@ public class LxkTestActivity extends BaseViewActivity {
 		GLImageView[] imageViews = new GLImageView[10];
 
 		imageViews[0] = new GLImageView(this);
-		imageViews[0].setLayoutParams(getX(1150), getY(1150), getWidth(100), getHeight(100));
+		imageViews[0].setX(getX(1150));
+		imageViews[0].setY(getY(1150));
+		imageViews[0].setLayoutParams( getWidth(100), getHeight(100));
 
 		imageViews[1] = new GLImageView(this);
-		imageViews[1].setLayoutParams(getX(850), getY(1150), getWidth(100), getHeight(100));
+		imageViews[1].setX(getX(850));
+		imageViews[1].setY(getY(1150));
+		imageViews[1].setLayoutParams(getWidth(100), getHeight(100));
 
 		imageViews[2] = new GLImageView(this);
-		imageViews[2].setLayoutParams(getX(550), getY(1150), getWidth(100), getHeight(100));
+		imageViews[2].setX(getX(550));
+		imageViews[2].setY(getY(1150));
+		imageViews[2].setLayoutParams(getWidth(100), getHeight(100));
 
 		imageViews[3] = new GLImageView(this);
-		imageViews[3].setLayoutParams(getX(250), getY(1150), getWidth(100), getHeight(100));
+		imageViews[3].setX(getX(250));
+		imageViews[3].setY(getY(1150));
+		imageViews[3].setLayoutParams( getWidth(100), getHeight(100));
 
 		imageViews[4] = new GLImageView(this);
-		imageViews[4].setLayoutParams(getX(1150), getY(850), getWidth(100), getHeight(100));
+		imageViews[4].setX(getX(1150));
+		imageViews[4].setY(getY(850));
+		imageViews[4].setLayoutParams(getWidth(100), getHeight(100));
 
 		imageViews[5] = new GLImageView(this);
-		imageViews[5].setLayoutParams(getX(1150), getY(550), getWidth(100), getHeight(100));
+		imageViews[5].setX(getX(1150));
+		imageViews[5].setY(getY(550));
+		imageViews[5].setLayoutParams(getWidth(100), getHeight(100));
 
 		imageViews[6] = new GLImageView(this);
-		imageViews[6].setLayoutParams(getX(1150), getY(250), getWidth(100), getHeight(100));
+		imageViews[6].setX(getX(1150));
+		imageViews[6].setY(getY(250));
+		imageViews[6].setLayoutParams( getWidth(100), getHeight(100));
 
 		imageViews[7] = new GLImageView(this);
-		imageViews[7].setLayoutParams(getX(850), getY(850), getWidth(100), getHeight(100));
+		imageViews[7].setX(getX(850));
+		imageViews[7].setY(getY(850));
+		imageViews[7].setLayoutParams(getWidth(100), getHeight(100));
 
 		imageViews[8] = new GLImageView(this);
-		imageViews[8].setLayoutParams(getX(550), getY(550), getWidth(100), getHeight(100));
+		imageViews[8].setX( getX(550));
+		imageViews[8].setY( getY(550));
+		imageViews[8].setLayoutParams(getWidth(100), getHeight(100));
 
 		imageViews[9] = new GLImageView(this);
-		imageViews[9].setLayoutParams(getX(250), getY(250), getWidth(100), getHeight(100));
+		imageViews[9].setX( getX( 250));
+		imageViews[9].setY( getY(250));
+		imageViews[9].setLayoutParams(getWidth(100), getHeight(100));
 
 		GLImageView line = new GLImageView(this);
-		line.setLayoutParams(1198, 0, 4, 2400);
+		line.setX( 1198);
+		line.setY( 0);
+		line.setLayoutParams(4, 2400);
 		line.setBackground(new GLColor(0, 1, 0));
 		rootView.addView(line);
 
@@ -91,13 +113,17 @@ public class LxkTestActivity extends BaseViewActivity {
 //		imageViews[0].setBackground(new GLColor(1, 0, 0));
 
 		GLCursorView cursorView = new GLCursorView(this);
-		cursorView.setLayoutParams(1190, 1190, 20, 20);
+		cursorView.setX( 1190);
+		cursorView.setY( 1190);
+		cursorView.setLayoutParams(20, 20);
 		cursorView.setBackground(new GLColor(1.0f, 0, 0));
 		cursorView.setDepth(3);
 		rootView.addView(cursorView);
 
 		GLTextView textView = new GLTextView(this);
-		textView.setLayoutParams( 1000, 1200, 1000, 200 );
+		textView.setX( 1000 );
+		textView.setY( 1200);
+		textView.setLayoutParams( 1000, 200 );
 		textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
 		textView.setText("北京欢迎你");
 		textView.setTextSize(100);

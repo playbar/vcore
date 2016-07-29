@@ -41,17 +41,17 @@ public class GLGroupView extends GLRectView {
 		mGlFocusUtils = new GLFocusUtils();
 	}
 	
-	/**
-	 * 设置属性
-	 * @author linzanxian  @Date 2015年3月13日 下午2:55:28
-	 * description:设置属性 （宽、高）
-	 * @param width 宽
-	 * @param height 高
-	 * @return void
-	 */
-	public void setLayoutParams(float width, float height) {
-		setLayoutParams(0, 0, width, height);
-	}
+//	/**
+//	 * 设置属性
+//	 * @author linzanxian  @Date 2015年3月13日 下午2:55:28
+//	 * description:设置属性 （宽、高）
+//	 * @param width 宽
+//	 * @param height 高
+//	 * @return void
+//	 */
+//	public void setLayoutParams(float width, float height) {
+//		setLayoutParams(0, 0, width, height);
+//	}
 
 	/**
 	 * 添加view

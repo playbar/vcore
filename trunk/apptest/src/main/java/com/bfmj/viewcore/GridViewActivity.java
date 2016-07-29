@@ -56,7 +56,7 @@ public class GridViewActivity extends BaseViewActivity {
 
 	public List<Map<String, Object>> getData(){
 		//cion和iconName的长度是相同的，这里任选其一都可以
-		for(index=0; index < 5; ++index){
+		for(index=0; index < 12; ++index){
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("image", icon[index]);
 			map.put("text", iconName[index]);
@@ -99,14 +99,16 @@ public class GridViewActivity extends BaseViewActivity {
 		};
 
 		gridView = new GLGridViewPage( this, 2, 3 );
-		gridView.setLayoutParams(500, 500, 40, 40);
+		gridView.setX(500);
+		gridView.setY(500);
+		gridView.setLayoutParams(40, 40);
 		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
 		gridView.setHorizontalSpacing( 20.0f);
 		gridView.setVerticalSpacing( 20.0f);
 		gridView.setMargin(10, 10, 10, 10 );
 		gridView.setPadding( 10, 10, 10, 10);
 		gridView.setMargin( 10, 10, 10, 10 );
-		gridView.setOrientation(GLConstant.GLOrientation.VERTICAL_RIGHT );
+		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
 
 		getData();
 		adapter = new GridViewAdapter(listData, this);
@@ -125,12 +127,16 @@ public class GridViewActivity extends BaseViewActivity {
 		rootView.addView(gridView);
 
 		GLImageView lineH = new GLImageView(this);
-		lineH.setLayoutParams(0, 500, 960, 2 );
+		lineH.setX(0);
+		lineH.setY(500);
+		lineH.setLayoutParams( 960, 2 );
 		lineH.setBackground( new GLColor( 1, 1, 1));
 		rootView.addView(lineH);
 
 		GLImageView line = new GLImageView(this);
-		line.setLayoutParams(500, 0, 2, 960);
+		line.setX(500);
+		line.setY( 0);
+		line.setLayoutParams(2, 960);
 		line.setBackground(new GLColor(0, 1, 0));
 		rootView.addView(line);
 
@@ -167,7 +173,9 @@ public class GridViewActivity extends BaseViewActivity {
 
 
 		GLTextView textView = new GLTextView(this);
-		textView.setLayoutParams( 1000, 2000, 1000, 200 );
+		textView.setX( 1000);
+		textView.setY( 2000 );
+		textView.setLayoutParams(1000, 200 );
 		textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
 		textView.setText("111的境况");
 		textView.setTextSize(100);
@@ -213,7 +221,9 @@ public class GridViewActivity extends BaseViewActivity {
 //		rootView.addView(imageView);
 
 		GLCursorView cursorView = new GLCursorView(this);
-		cursorView.setLayoutParams(1190, 1190, 20, 20);
+		cursorView.setX(1190);
+		cursorView.setY(1190);
+		cursorView.setLayoutParams( 20, 20);
 		cursorView.setBackground(new GLColor(1.0f, 0, 0));
 		cursorView.setDepth(3);
 		rootView.addView(cursorView);
@@ -251,20 +261,20 @@ public class GridViewActivity extends BaseViewActivity {
 //			listview.changeItem(false);
 //			listview.move();
 //			listView.moveLeft();
-			getRootView().queueEvent(new Runnable() {
-				@Override
-				public void run() {
-					Map<String, Object> map = new HashMap<String, Object>();
-					map.put("image", icon[index]);
-					map.put("text", iconName[index]);
-					listData.add(map);
-					adapter.notifyDataSetChanged();
-					// todo
-					//gridView.showItem(0);
-					index++;
-					Log.e("OnTouchEvent", "add item");
-				}
-			});
+//			getRootView().queueEvent(new Runnable() {
+//				@Override
+//				public void run() {
+//					Map<String, Object> map = new HashMap<String, Object>();
+//					map.put("image", icon[index]);
+//					map.put("text", iconName[index]);
+//					listData.add(map);
+//					adapter.notifyDataSetChanged();
+//					// todo
+//					//gridView.showItem(0);
+//					index++;
+//					Log.e("OnTouchEvent", "add item");
+//				}
+//			});
 
 		}
 		if(event.getAction() == MotionEvent.ACTION_MOVE){

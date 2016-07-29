@@ -344,9 +344,8 @@ public abstract class GLPlayerView extends GLRectView {
 	}
 	
 	@Override
-	public void setLayoutParams(float x, float y, float width, float height) {
-		super.setLayoutParams(x, y, width, height);
-		
+	public void setLayoutParams(float width, float height) {
+		super.setLayoutParams(width, height);
 		updateSize();
 	}
 	

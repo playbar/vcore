@@ -34,12 +34,12 @@ public class ZhangActivity extends BaseViewActivity {
 		final GLImageView imageView2 = new GLImageView(this);
 		imageView2.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
 		imageView2.setImage(R.drawable.ic_launcher);
-		imageView2.setLayoutParams(0, 0, 200, 200);
+		imageView2.setLayoutParams(200, 200);
 
 		GLImageView imageView = new GLImageView(this);
 		imageView.setBackground(new GLColor(0.0f, 1.0f, 0.0f));
 		imageView.setImage(R.drawable.ic_launcher);
-		imageView.setLayoutParams(0, 0, 200, 200);
+		imageView.setLayoutParams(200, 200);
 		imageView.setMargin(200, 0,0,0);
 		
 //		GLSenceView senceView = new GLSenceView(this);

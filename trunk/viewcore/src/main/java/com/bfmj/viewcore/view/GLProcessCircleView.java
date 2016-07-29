@@ -88,21 +88,21 @@ public class GLProcessCircleView extends GLRelativeView {
 		
 		if (mDirection == GLConstant.GLDirection.ANTICLOCKWISE) {
 			GLImageView leftImageView = new GLImageView(mContext);
-			leftImageView.setLayoutParams(0, 0, mDiameter, mDiameter);
+			leftImageView.setLayoutParams( mDiameter, mDiameter);
 			leftImageView.setCutting(false);
 			leftImageView.setImage(mProcessResId);
 			leftImageView.rotate(180, 0, 0, 1);
 			leftImageView.setId("1");
 			
 			GLImageView leftImageView2 = new GLImageView(mContext);
-			leftImageView2.setLayoutParams(0, 0, mDiameter, mDiameter);
+			leftImageView2.setLayoutParams(mDiameter, mDiameter);
 			leftImageView2.setCutting(false);
 			leftImageView2.setImage(mBgResId);
 			leftImageView2.rotate(180, 0, 0, 1);
 			leftImageView2.setId("2");
 			
 			GLImageView rightImageView = new GLImageView(mContext);
-			rightImageView.setLayoutParams(0, 0, mDiameter, mDiameter);
+			rightImageView.setLayoutParams( mDiameter, mDiameter);
 			rightImageView.setCutting(false);
 			rightImageView.setImage(mBgResId);
 			rightImageView.setId("3");
@@ -113,20 +113,20 @@ public class GLProcessCircleView extends GLRelativeView {
 			this.addView(rightImageView);
 		} else {
 			GLImageView leftImageView = new GLImageView(mContext);
-			leftImageView.setLayoutParams(0, 0, mDiameter, mDiameter);
+			leftImageView.setLayoutParams(mDiameter, mDiameter);
 			leftImageView.setCutting(false);
 			leftImageView.setImage(mProcessResId);
 			leftImageView.setId("1");
 			
 			GLImageView leftImageView2 = new GLImageView(mContext);
-			leftImageView2.setLayoutParams(0, 0, mDiameter, mDiameter);
+			leftImageView2.setLayoutParams( mDiameter, mDiameter);
 			leftImageView2.setCutting(false);
 			leftImageView2.setImage(mBgResId);
 			leftImageView2.rotate(180, 0, 0, 1);
 			leftImageView2.setId("2");
 			
 			GLImageView rightImageView = new GLImageView(mContext);
-			rightImageView.setLayoutParams(0, 0, mDiameter, mDiameter);
+			rightImageView.setLayoutParams( mDiameter, mDiameter);
 			rightImageView.setCutting(false);
 			rightImageView.setImage(mBgResId);
 			rightImageView.setId("3");
@@ -139,7 +139,7 @@ public class GLProcessCircleView extends GLRelativeView {
 		
 		//文本
 		GLTextView textView = new GLTextView(mContext);
-		textView.setLayoutParams(0, 0, mTextSize*3, mTextSize);
+		textView.setLayoutParams(mTextSize*3, mTextSize);
 		//textView.setBackground(new GLColor(0.2f,0.2f,0.2f));
 		textView.setTextSize(mTextSize);
 		textView.setTextColor(mTextColor);

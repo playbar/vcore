@@ -45,7 +45,7 @@ public class GLProcessCircleCanvasView extends GLImageView {
 	public void setLayoutParams(float width, float height) {
 		mWidth = width;
 		mHeight = height;
-		super.setLayoutParams(getX(), getY(), width, height);
+		super.setLayoutParams(width, height);
 	}
 
 	/**

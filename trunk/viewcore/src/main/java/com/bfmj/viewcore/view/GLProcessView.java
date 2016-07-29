@@ -111,16 +111,16 @@ public class GLProcessView extends GLGroupView {
 		}
 	}
 
-	/**
-	 * 设置大小
-	 * @author linzanxian  @Date 2015年3月17日 上午10:12:49
-	 * @param width 宽
-	 * @param height 高  
-	 * @return void
-	 */
-	public void setLayoutParams(float width, float height) {
-		setLayoutParams(0, 0, width, height);
-	}
+//	/**
+//	 * 设置大小
+//	 * @author linzanxian  @Date 2015年3月17日 上午10:12:49
+//	 * @param width 宽
+//	 * @param height 高
+//	 * @return void
+//	 */
+//	public void setLayoutParams(float width, float height) {
+//		setLayoutParams(0, 0, width, height);
+//	}
 
 	/**
 	 * 设置进度颜色
@@ -176,7 +176,9 @@ public class GLProcessView extends GLGroupView {
 		}
 		mProcess = process;
 
-		mImageView.setLayoutParams(getX()+getPaddingLeft(), getY()+getPaddingTop(), (getWidth()-getPaddingLeft()-getPaddingRight())/100 * process, getHeight()-getPaddingTop()-getPaddingBottom());
+		mImageView.setX(getX()+getPaddingLeft());
+		mImageView.setY(getY()+getPaddingTop());
+		mImageView.setLayoutParams( (getWidth()-getPaddingLeft()-getPaddingRight())/100 * process, getHeight()-getPaddingTop()-getPaddingBottom());
 	}
 	
 	public void setProcess(int process) {
@@ -216,7 +218,9 @@ public class GLProcessView extends GLGroupView {
 		this.addView(mImageView);
 		
 		if (mGlProcessMode == GLConstant.GLProcessMode.CIRCLE) {
-			mImageView.setLayoutParams(getX(), getY(), getWidth(), getHeight());
+			mImageView.setX(getX());
+			mImageView.setY(getY());
+			mImageView.setLayoutParams(getWidth(), getHeight());
 			if (!mRotate) {
 				mRotate = true;
 				rotate();

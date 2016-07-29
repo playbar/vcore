@@ -81,7 +81,7 @@ public class GLScoreView extends GLLinearView {
 		}
 		for (int i = 1; i <= full; i++) {
 			GLImageView fullView = new GLImageView(mContext);
-			fullView.setLayoutParams(0, 0, mSingleWidth, mSingleHeight);
+			fullView.setLayoutParams( mSingleWidth, mSingleHeight);
 			fullView.setImage(mStar1);
 			if (i != 1) {
 				fullView.setMargin(mSpacing, 0, 0, 0);
@@ -94,7 +94,7 @@ public class GLScoreView extends GLLinearView {
 		float leave = Score%2;
 		if (leave >= 0.5f) {
 			GLImageView halfView = new GLImageView(mContext);
-			halfView.setLayoutParams(0, 0, mSingleWidth, mSingleHeight);
+			halfView.setLayoutParams(mSingleWidth, mSingleHeight);
 			halfView.setImage(mStar2);
 			halfView.setMargin(mSpacing, 0, 0, 0);
 			
@@ -106,7 +106,7 @@ public class GLScoreView extends GLLinearView {
 			int total = 5 - num;
 			for (int i = 0; i < total; i++) {
 				GLImageView emptyView = new GLImageView(mContext);
-				emptyView.setLayoutParams(0, 0, mSingleWidth, mSingleHeight);
+				emptyView.setLayoutParams(mSingleWidth, mSingleHeight);
 				emptyView.setImage(mStar3);
 				emptyView.setMargin(mSpacing, 0, 0, 0);
 				

@@ -263,11 +263,10 @@ public class GLTextView extends GLRectView {
 	}
 	
 	@Override
-	public void setLayoutParams(float x, float y, float width, float height) {
+	public void setLayoutParams(float width, float height) {
 		mDefaultWidth = width;
 		mDefaultHeight = height;
-		
-		super.setLayoutParams(x, y, width, height);
+		super.setLayoutParams( width, height);
 	}
 
 	/**

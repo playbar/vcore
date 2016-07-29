@@ -174,7 +174,9 @@ public class WangFZDemoActivity extends BaseViewActivity {
 //		imageView.setImage(R.drawable.ic_launcher);
 //		textView.setText("北京欢迎你");
 //		textView.setAlpha(0.3f);
-		imageView.setLayoutParams(460, 460, 40, 40);
+		imageView.setX( 460 );
+		imageView.setY( 460);
+		imageView.setLayoutParams(40, 40);
 		
 //		rootView.addView(grid);
 		rootView.addView(listview);
