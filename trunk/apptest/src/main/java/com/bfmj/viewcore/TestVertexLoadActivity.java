@@ -3,6 +3,7 @@ package com.bfmj.viewcore;
 import android.os.Bundle;
 
 import com.bfmj.viewcore.view.BaseViewActivity;
+import com.bfmj.viewcore.view.GLPanoView;
 import com.bfmj.viewcore.view.GLSenceView;
 
 /**
@@ -13,7 +14,6 @@ public class TestVertexLoadActivity extends BaseViewActivity {
     public static final int SCENE_TYPE_DEFAULT = 0x0;
     public static final int SCENE_TYPE_CINEMA = 0x1;
     private int mSceneType = -1;
-    private GLSenceView mSkyboxView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +32,10 @@ public class TestVertexLoadActivity extends BaseViewActivity {
                 getRootView().queueEvent(new Runnable() {
                     @Override
                     public void run() {
-                        hideSkyBox();
-                        GLSenceView senceView2 = new GLSenceView(TestVertexLoadActivity.this);
-                        senceView2.setObjFile("sphere.obj");
+                        GLPanoView  senceView2 = GLPanoView.getSharedPanoView(TestVertexLoadActivity.this);
+                        senceView2.reset();
+                        senceView2.setSceneType(GLPanoView.SCENE_TYPE_HALF_SPHERE);
                         senceView2.setImage(R.drawable.sence);
-                        getRootView().addView(senceView2);
                     }
                 });
             }
@@ -53,11 +52,9 @@ public class TestVertexLoadActivity extends BaseViewActivity {
         }
         mSceneType = type;
 
-        if (mSkyboxView == null){
-            mSkyboxView = new GLSenceView(this);
-            mSkyboxView.setObjFile("skybox.obj");
-            getRootView().addView(mSkyboxView);
-        }
+        GLPanoView  mSkyboxView = GLPanoView.getSharedPanoView(this);
+        mSkyboxView.setRenderType(GLPanoView.RENDER_TYPE_VIDEO);
+        mSkyboxView.setPlayType(GLPanoView.PLAY_TYPE_3D_LR);
 
         if(type == SCENE_TYPE_CINEMA){
             mSkyboxView.setImage(R.drawable.skybox_launcher);
@@ -72,9 +69,7 @@ public class TestVertexLoadActivity extends BaseViewActivity {
      * 隐藏天空盒场景
      */
     public void hideSkyBox(){
-        if (mSkyboxView != null){
-            mSkyboxView.setVisible(false);
-        }
+        GLPanoView.getSharedPanoView(this).setVisible(false);
     }
 
 }
