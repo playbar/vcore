@@ -1,0 +1,467 @@
+package com.bfmj.viewcore.view;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.opengl.GLES20;
+import android.opengl.Matrix;
+
+import com.bfmj.viewcore.render.GLMesh;
+import com.bfmj.viewcore.render.GLVector2;
+import com.bfmj.viewcore.render.GLVector3;
+import com.bfmj.viewcore.util.GLMatrixState;
+import com.bfmj.viewcore.util.GLObjFileUtils;
+import com.bfmj.viewcore.util.GLShaderManager;
+import com.bfmj.viewcore.util.GLTextureUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+
+/**
+ * Created by lixianke on 2016/7/29.
+ */
+public class GLPanoView extends GLView {
+    public static final int RENDER_TYPE_IMAGE = 0x0;
+    public static final int RENDER_TYPE_VIDEO = 0x1;
+
+    public static final int SCENE_TYPE_SKYBOX = 0x0;
+    public static final int SCENE_TYPE_SPHERE = 0x1;
+    public static final int SCENE_TYPE_HALF_SPHERE = 0x2;
+
+    public static final int PLAY_TYPE_2D = 0x0;
+    public static final int PLAY_TYPE_3D_LR = 0x1; //左右3d
+    public static final int PLAY_TYPE_3D_TB = 0x2; //上下3d
+
+    private static final int RENDER_TYPE_COUNT = 2;
+    private static final int SCENE_TYPE_COUNT = 3;
+
+    private static final int PLAY_UV_2D = 0x0;
+    private static final int PLAY_UV_3D_L = 0x1;
+    private static final int PLAY_UV_3D_R = 0x2;
+    private static final int PLAY_UV_3D_T = 0x3;
+    private static final int PLAY_UV_3D_B = 0x4;
+    private static final int PLAY_UV_COUNT = 5;
+
+    private static final String[] SCENE_OBJS = {"skybox.obj", "sphere.obj", "half_sphere.obj"}; //TODO half
+
+    private int mSceneType = SCENE_TYPE_SKYBOX;
+    private int mPlayType = PLAY_TYPE_2D;
+    private int mRenderType = RENDER_TYPE_IMAGE;
+
+    private int[] mPrograms = new int[RENDER_TYPE_COUNT];
+    private int[] muMVPMatrixHandles = new int[RENDER_TYPE_COUNT];
+    private int[] muAlphaHandles = new int[RENDER_TYPE_COUNT];
+    private int[] muMaskHandles = new int[RENDER_TYPE_COUNT];
+    private int[] mPositionHandles = new int[RENDER_TYPE_COUNT];
+    private int[] mTextureCoordHandles = new int[RENDER_TYPE_COUNT];
+
+    private float[][] vertices = new float[SCENE_TYPE_COUNT][];
+    private float[][][] texCoors = new float[SCENE_TYPE_COUNT][PLAY_UV_COUNT][];
+
+    private int[] vboVertexBufferIds = new int[SCENE_TYPE_COUNT];
+    private int[][] vboTexCoorBufferIds = new int[SCENE_TYPE_COUNT][PLAY_UV_COUNT];
+
+    private boolean isSurfaceCreated = false;
+    private boolean isNeedInitVertex = false;
+    private int mTextureId = -1;
+    private int mResId;
+    private Bitmap mBitmap;
+
+    private static GLPanoView instance = null;
+
+    /**
+     * 获取共享的GLPanoView
+     * @param context 上下文
+     * @return GLPanoView
+     */
+    public static  GLPanoView getSharedPanoView(Context context){
+        if (instance == null){
+            instance = new GLPanoView(context);
+            instance.getRootView().addView(instance);
+        }
+        return instance;
+    }
+
+    public GLPanoView(Context context) {
+        super(context);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loadObj();
+            }
+        }).start();
+    }
+
+    private void loadObj(){
+        for (int i = 0; i < SCENE_TYPE_COUNT && i < SCENE_OBJS.length; i++){
+            setObjFile(SCENE_OBJS[i], i);
+        }
+        isNeedInitVertex = true;
+    }
+
+    /**
+     * 设置OBJ模型文件
+     * @author lixianke  @Date 2015-3-12 下午3:45:46
+     * @param filename 文件名，需将obj文件放置到assets文件夹
+     * @return
+     */
+    private void setObjFile(String filename, int sceneType){
+        GLMesh mesh = GLObjFileUtils.LoadMesh(getContext().getResources(), filename);
+
+        int vCount = mesh.getVertexIndexs().length;
+        vertices[sceneType] = new float[vCount * 3];
+        for(int i=0;i < vCount; i++){
+            GLVector3 vector3 = mesh.getVertices()[mesh.getVertexIndexs()[i]];
+            vertices[sceneType][i * 3]= vector3.getX();
+            vertices[sceneType][i * 3 + 1]= vector3.getY();
+            vertices[sceneType][i * 3 + 2]= vector3.getZ();
+        }
+
+        int tCount = mesh.getTextureIndexs().length;
+        for (int m = 0; m < PLAY_UV_COUNT; m++){
+            texCoors[sceneType][m] = new float[tCount * 2];
+        }
+        for(int i=0;i < tCount; i++){
+            GLVector2 vector2 = mesh.getTextures()[mesh.getTextureIndexs()[i]];
+            texCoors[sceneType][PLAY_UV_2D][i * 2] = vector2.getS();
+            texCoors[sceneType][PLAY_UV_2D][i * 2 + 1] = vector2.getT();
+            texCoors[sceneType][PLAY_UV_3D_L][i * 2] = vector2.getS() / 2;
+            texCoors[sceneType][PLAY_UV_3D_L][i * 2 + 1] = vector2.getT();
+            texCoors[sceneType][PLAY_UV_3D_R][i * 2] = vector2.getS() / 2 + 0.5F;
+            texCoors[sceneType][PLAY_UV_3D_R][i * 2 + 1] = vector2.getT();
+            texCoors[sceneType][PLAY_UV_3D_T][i * 2] = vector2.getS();
+            texCoors[sceneType][PLAY_UV_3D_T][i * 2 + 1] = vector2.getT() / 2;
+            texCoors[sceneType][PLAY_UV_3D_B][i * 2] = vector2.getS();
+            texCoors[sceneType][PLAY_UV_3D_B][i * 2 + 1] = vector2.getT() / 2 + 0.5F;
+        }
+    }
+
+    /**
+     * 获取场景类型
+     * @return SCENE_TYPE_SKYBOX SCENE_TYPE_SPHERE  SCENE_TYPE_HALF_SPHERE
+     */
+    public int getSceneType() {
+        return mSceneType;
+    }
+
+    /**
+     * 设置场景类型
+     * @param sceneType SCENE_TYPE_SKYBOX SCENE_TYPE_SPHERE  SCENE_TYPE_HALF_SPHERE
+     */
+    public void setSceneType(int sceneType) {
+        mSceneType = sceneType;
+    }
+
+    /**
+     *  获取播放类型
+     * @return PLAY_TYPE_2D PLAY_TYPE_3D_LR  PLAY_TYPE_3D_TB
+     */
+    public int getPlayType() {
+        return mPlayType;
+    }
+
+    /**
+     * 设置播放类型
+     * @param playType PLAY_TYPE_2D PLAY_TYPE_3D_LR  PLAY_TYPE_3D_TB
+     */
+    public void setPlayType(int playType) {
+        mPlayType = playType;
+    }
+
+    /**
+     * 获取渲染类型
+     * @return RENDER_TYPE_IMAGE RENDER_TYPE_VIDEO
+     */
+    public int getRenderType() {
+        return mRenderType;
+    }
+
+    /**
+     * 设置然后类型
+     * @param renderType RENDER_TYPE_IMAGE RENDER_TYPE_VIDEO
+     */
+    public void setRenderType(int renderType) {
+        mRenderType = renderType;
+    }
+
+    public void reset(){
+        mRenderType = RENDER_TYPE_IMAGE;
+        mSceneType = SCENE_TYPE_SKYBOX;
+        mPlayType = PLAY_TYPE_2D;
+    }
+
+    /**
+     * 设置图片
+     * @author lixianke  @Date 2015-3-11 下午5:06:59
+     * @param resId 资源ID
+     * @return
+     */
+    public void setImage(int resId){
+        if (mResId == resId){
+            return;
+        }
+
+        mResId = resId;
+        mBitmap = null;
+
+        if (isSurfaceCreated){
+            getRootView().mCreateTextureQueue.offer(this);
+        }
+    }
+
+    /**
+     * 设置图片
+     * @author lixianke  @Date 2015-3-11 下午5:07:28
+     * @param bitmap Bitmap对象
+     * @return
+     */
+    public void setImage(Bitmap bitmap){
+        if (mBitmap == bitmap){
+            return;
+        }
+
+        mBitmap = bitmap;
+        mResId = 0;
+
+        if (isSurfaceCreated){
+            getRootView().mCreateTextureQueue.offer(this);
+        }
+    }
+
+    protected void setTextureId(int textureId){
+        mTextureId = textureId;
+    }
+
+    /**
+     * 旋转场景
+     * @author lixianke  @Date 2015-6-19 下午5:39:51
+     * @param angle 旋转角度
+     * @param rx 沿x的向量分量
+     * @param ry 沿y的向量分量
+     * @param rz 沿z的向量分量
+     * @return
+     */
+    public void rotate(float angle, float rx, float ry, float rz){
+        Matrix.rotateM(getMatrixState().getCurrentMatrix(), 0, angle, rx, ry, rz);
+    }
+
+    @Override
+    public void initDraw() {
+        isSurfaceCreated = true;
+        createProgram();
+        createTexture();
+    }
+
+    @Override
+    public void draw(boolean isLeft) {
+        if (!isVisible() || !isSurfaceCreated || vertices[mSceneType] == null || mTextureId < 0){
+            return;
+        }
+
+        if (isNeedInitVertex){
+            initVertex();
+            initTextureBuffer();
+        }
+
+        GLMatrixState state = getMatrixState();
+
+        getEyeMatrix(state.getVMatrix(), isLeft);
+
+        state.pushMatrix();
+
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        GLES20.glEnable(GLES20.GL_BLEND);
+
+        GLES20.glUseProgram(mPrograms[mRenderType]);
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureId);
+
+        GLES20.glUniformMatrix4fv(muMVPMatrixHandles[mRenderType], 1, false, getMatrixState().getFinalMatrix(), 0);
+        GLES20.glUniform1f(muAlphaHandles[mRenderType], getAlpha());
+        GLES20.glUniform1f(muMaskHandles[mRenderType], getMask());
+
+        vertexVBO();
+
+        int uvType = PLAY_UV_2D;
+        if (mPlayType == PLAY_TYPE_3D_LR){
+            if (isLeft){
+                uvType = PLAY_UV_3D_L;
+            } else {
+                uvType = PLAY_UV_3D_R;
+            }
+        } else if (mPlayType == PLAY_TYPE_3D_TB) {
+            if (isLeft){
+                uvType = PLAY_UV_3D_T;
+            } else {
+                uvType = PLAY_UV_3D_B;
+            }
+        }
+        textureVBO(uvType);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices[mSceneType].length / 3);
+
+        GLES20.glDisableVertexAttribArray(0);
+        GLES20.glDisableVertexAttribArray(1);
+
+        GLES20.glDisable(GLES20.GL_BLEND);
+
+        state.popMatrix();
+    }
+
+    private void createProgram(){
+        for (int i = 0; i < RENDER_TYPE_COUNT; i++){
+            int vertexShader    = GLShaderManager.loadShader(GLES20.GL_VERTEX_SHADER, GLShaderManager.VERTEX_SENCE);
+            int fragmentShader  = GLShaderManager.loadShader(GLES20.GL_FRAGMENT_SHADER, GLShaderManager.FRAGMENT_SENCE);
+
+            mPrograms[i] = GLES20.glCreateProgram();       // create empty OpenGL ES Program
+            GLES20.glAttachShader(mPrograms[i], vertexShader);   // add the vertex shader to program
+            GLES20.glAttachShader(mPrograms[i], fragmentShader); // add the fragment shader to program
+            GLES20.glLinkProgram(mPrograms[i]);                  // creates OpenGL ES program executables
+            muMVPMatrixHandles[i] = GLES20.glGetUniformLocation(mPrograms[i], "uMVPMatrix");
+            muAlphaHandles[i] = GLES20.glGetUniformLocation(mPrograms[i], "uAlpha");
+            muMaskHandles[i] = GLES20.glGetUniformLocation(mPrograms[i], "uMask");
+            mTextureCoordHandles[i] = GLES20.glGetAttribLocation(mPrograms[i], "inputTextureCoordinate");
+            mPositionHandles[i] = GLES20.glGetAttribLocation(mPrograms[i], "aPosition");
+        }
+    }
+
+    private void vertexVBO() {
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexBufferIds[mSceneType]);
+        // 传送顶点位置数据
+        GLES20.glVertexAttribPointer(mPositionHandles[mRenderType], 3, GLES20.GL_FLOAT,
+                false, 0, 0);
+        GLES20.glEnableVertexAttribArray(0);
+    }
+
+    private void textureVBO(int uvType) {
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTexCoorBufferIds[mSceneType][uvType]);
+        // 传送顶点位置数据
+        GLES20.glVertexAttribPointer(mTextureCoordHandles[mRenderType], 2, GLES20.GL_FLOAT,
+                false, 0, 0);
+        GLES20.glEnableVertexAttribArray(1);
+
+    }
+
+    protected void initVertex(){
+        isNeedInitVertex = false;
+        for (int i = 0; i < vertices.length; i++){
+            if (vertices[i] != null) {
+                int verLen = vertices[i].length * 4;
+                ByteBuffer bb = ByteBuffer.allocateDirect(verLen);
+                bb.order(ByteOrder.nativeOrder());
+                FloatBuffer vertexBuffer = bb.asFloatBuffer();
+                vertexBuffer.put(vertices[i]);
+                vertexBuffer.position(0);
+
+                IntBuffer buffers = IntBuffer.allocate(1);
+                GLES20.glGenBuffers(1,buffers);
+                vboVertexBufferIds[i] = buffers.get(0);
+                GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexBufferIds[i]);
+                GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verLen, vertexBuffer,
+                        GLES20.GL_STATIC_DRAW);
+            }
+        }
+
+    }
+
+    private void initTextureBuffer(){
+        for (int i = 0; i < texCoors.length; i++){
+            for (int j = 0; j < texCoors[i].length; j++){
+                if (texCoors[i][j] != null){
+                    int textureLen = texCoors[i][j].length*4;
+                    ByteBuffer llbb = ByteBuffer.allocateDirect(textureLen);
+                    llbb.order(ByteOrder.nativeOrder());
+                    FloatBuffer textureVerticesBuffer=llbb.asFloatBuffer();
+                    textureVerticesBuffer.put(texCoors[i][j]);
+                    textureVerticesBuffer.position(0);
+
+                    IntBuffer buffers = IntBuffer.allocate(1);
+                    GLES20.glGenBuffers(1,buffers);
+                    vboTexCoorBufferIds[i][j] = buffers.get(0);
+                    GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTexCoorBufferIds[i][j]);
+                    GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
+                            GLES20.GL_STATIC_DRAW);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void createTexture(){
+        if (!isSurfaceCreated){
+            return;
+        }
+
+        boolean isRecycle = true;
+        Bitmap bitmap = null;
+        if (mResId != 0){
+            InputStream is = getContext().getResources().openRawResource(mResId);
+
+            try {
+                bitmap = BitmapFactory.decodeStream(is);
+            } finally {
+                try {
+                    is.close();
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (mBitmap != null){
+            bitmap = mBitmap;
+            isRecycle = false;
+        }
+
+        if (bitmap != null){
+            releaseTexture(mTextureId);
+            mTextureId = GLTextureUtils.initImageTexture(getContext(), bitmap, isRecycle);
+        }
+    }
+
+    @Override
+    public void onBeforeDraw() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onAfterDraw() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onSurfaceCreated() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onSurfaceChanged(int width, int height) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void release() {
+        if (mTextureId > -1){
+            BaseViewActivity activity = (BaseViewActivity)getContext();
+            if (activity != null && activity.getRootView() != null) {
+                activity.getRootView().queueEvent(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        GLTextureUtils.releaseTexture(mTextureId);
+                        mTextureId = -1;
+                    }
+                });
+            }
+        }
+    }
+}

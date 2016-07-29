@@ -572,6 +572,10 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     }
 
     public void addView(GLView view) {
+        if (mChild.contains(view)){
+            return;
+        }
+
         if (isSurfaceCreated) {
             view.initDraw();
         }

@@ -1,6 +1,7 @@
 package com.bfmj.viewcore.util;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,6 +12,7 @@ import com.bfmj.viewcore.render.GLVector2;
 import com.bfmj.viewcore.render.GLVector3;
 
 import android.content.res.Resources;
+import android.util.Log;
 
 public class GLObjFileUtils {
 	public static String LoadShader(String pathName){
@@ -141,7 +143,9 @@ public class GLObjFileUtils {
 				}
 			}
 			meshReader.close();
-		}catch(Exception e){
+		} catch (FileNotFoundException e){
+			e.printStackTrace();
+		} catch(Exception e){
 			e.printStackTrace();
 		}
 		
