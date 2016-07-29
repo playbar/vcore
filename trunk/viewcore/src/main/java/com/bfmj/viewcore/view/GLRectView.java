@@ -51,7 +51,7 @@ public class GLRectView extends GLView {
 	private List<GLRenderParams> mRenders = new ArrayList<GLRenderParams>();
 	private GLGroupView mParent;
 	private String mId = "";
-	
+
 	private boolean isFocusable = false;
 	private boolean isFocused = false;
 	private boolean isSelected = false;
@@ -373,7 +373,6 @@ public class GLRectView extends GLView {
 	 * @return 内容宽度
 	 */
 	float getInnerWidth(){
-		updateRect();
 		return width - paddingLeft - paddingRight;
 	}
 	
@@ -406,7 +405,6 @@ public class GLRectView extends GLView {
 	 * @return 内容高度
 	 */
 	float getInnerHeight(){
-		updateRect();
 		return height - paddingTop - paddingBottom;
 	}
 	
