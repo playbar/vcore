@@ -128,13 +128,17 @@ public class GLGridViewPage extends GLGridView {
 		}
 	}
 
-	public void lastPage(){
+	public void previousPage(){
 		if( mCurIndex > 0 ){
 			--mCurIndex;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
 			requestLayout();
 			showPage();
 		}
+	}
+
+	public boolean isLastPage(){
+		return (mCurIndex == mCount);
 	}
 
 	@Override
