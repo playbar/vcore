@@ -56,7 +56,7 @@ public class GLShaderManager {
 	            "vMask = uMask;" +
 	        "}";
 		
-	public static final String FRAGMENT_SENCE =
+	public static final String FRAGMENT_SENCE_IMAGE =
 			"precision mediump float;" +
 	        "varying vec2 textureCoordinate;\n" +
 	        "uniform sampler2D s_texture;\n" +
@@ -66,6 +66,18 @@ public class GLShaderManager {
 	        	"vec4 color = texture2D( s_texture, textureCoordinate );\n" +
 	        	"gl_FragColor = vec4(color.r * vMask, color.g * vMask, color.b * vMask, color.a * vAlpha);\n" +
 	        "}";
+
+	public static final String FRAGMENT_SENCE_VIDEO =
+			"#extension GL_OES_EGL_image_external : require\n"+
+			"precision mediump float;" +
+			"varying vec2 textureCoordinate;\n" +
+			"uniform samplerExternalOES s_texture;\n" +
+			"varying float vAlpha;" +
+			"varying float vMask;" +
+			"void main() {" +
+			"vec4 color = texture2D( s_texture, textureCoordinate );\n" +
+			"gl_FragColor = vec4(color.r * vMask, color.g * vMask, color.b * vMask, color.a * vAlpha);\n" +
+			"}";
 	
 	public static final String VERTEX_COLOR =
 		"uniform mat4 uMVPMatrix;" +

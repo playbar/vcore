@@ -46,7 +46,7 @@ public class GLPanoView extends GLView {
     private static final int PLAY_UV_3D_B = 0x4;
     private static final int PLAY_UV_COUNT = 5;
 
-    private static final String[] SCENE_OBJS = {"skybox.obj", "sphere.obj", "half_sphere.obj"}; //TODO half
+    private static final String[] SCENE_OBJS = {"skybox.obj", "sphere.obj", "half_sphere.obj"};
 
     private int mSceneType = SCENE_TYPE_SKYBOX;
     private int mPlayType = PLAY_TYPE_2D;
@@ -314,9 +314,10 @@ public class GLPanoView extends GLView {
     }
 
     private void createProgram(){
+        String[] fs = new String[]{GLShaderManager.FRAGMENT_SENCE_IMAGE, GLShaderManager.FRAGMENT_SENCE_VIDEO};
         for (int i = 0; i < RENDER_TYPE_COUNT; i++){
             int vertexShader    = GLShaderManager.loadShader(GLES20.GL_VERTEX_SHADER, GLShaderManager.VERTEX_SENCE);
-            int fragmentShader  = GLShaderManager.loadShader(GLES20.GL_FRAGMENT_SHADER, GLShaderManager.FRAGMENT_SENCE);
+            int fragmentShader  = GLShaderManager.loadShader(GLES20.GL_FRAGMENT_SHADER, fs[i]);
 
             mPrograms[i] = GLES20.glCreateProgram();       // create empty OpenGL ES Program
             GLES20.glAttachShader(mPrograms[i], vertexShader);   // add the vertex shader to program
@@ -425,28 +426,16 @@ public class GLPanoView extends GLView {
     }
 
     @Override
-    public void onBeforeDraw() {
-        // TODO Auto-generated method stub
-
-    }
+    public void onBeforeDraw() {}
 
     @Override
-    public void onAfterDraw() {
-        // TODO Auto-generated method stub
-
-    }
+    public void onAfterDraw() {}
 
     @Override
-    public void onSurfaceCreated() {
-        // TODO Auto-generated method stub
-
-    }
+    public void onSurfaceCreated() {}
 
     @Override
-    public void onSurfaceChanged(int width, int height) {
-        // TODO Auto-generated method stub
-
-    }
+    public void onSurfaceChanged(int width, int height) {}
 
     @Override
     public void release() {
