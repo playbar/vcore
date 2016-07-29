@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
+import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
@@ -307,7 +308,8 @@ public class GLPanoView extends GLView {
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureId);
+        GLES20.glBindTexture(mRenderType == RENDER_TYPE_VIDEO ? GLES11Ext.GL_TEXTURE_EXTERNAL_OES :
+                    GLES20.GL_TEXTURE_2D, mTextureId);
 
         GLES20.glUniformMatrix4fv(muMVPMatrixHandles[mRenderType], 1, false, getMatrixState().getFinalMatrix(), 0);
         GLES20.glUniform1f(muAlphaHandles[mRenderType], getAlpha());
