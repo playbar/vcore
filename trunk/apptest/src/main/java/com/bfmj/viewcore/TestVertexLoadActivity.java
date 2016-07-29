@@ -2,7 +2,6 @@ package com.bfmj.viewcore;
 
 import android.os.Bundle;
 
-import com.bfmj.viewcore.util.GLExtraData;
 import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLSenceView;
 
@@ -14,33 +13,7 @@ public class TestVertexLoadActivity extends BaseViewActivity {
     public static final int SCENE_TYPE_DEFAULT = 0x0;
     public static final int SCENE_TYPE_CINEMA = 0x1;
     private int mSceneType = -1;
-    private GLSenceView[] mSceneViews = new GLSenceView[6];
-    private int[]  mDefaultSceneResourceIds = {
-            R.drawable.launch_cube_front, //顺序前、左、后、右、上、下
-            R.drawable.launch_cube_left,
-            R.drawable.launch_cube_back,
-            R.drawable.launch_cube_right,
-            R.drawable.launch_cube_top,
-            R.drawable.launch_cube_bottom
-    };
-
-    private int[]  mCinemaSceneResourceIds = {
-            R.drawable.cinema_cube_front, //顺序前、左、后、右、上、下
-            R.drawable.cinema_cube_left,
-            R.drawable.cinema_cube_back,
-            R.drawable.cinema_cube_right,
-            R.drawable.cinema_cube_top,
-            R.drawable.cinema_cube_bottom
-    };
-
-    private String[] mSceneObjs = {
-            "gl_cube_front.obj",
-            "gl_cube_left.obj",
-            "gl_cube_back.obj",
-            "gl_cube_right.obj",
-            "gl_cube_top.obj",
-            "gl_cube_bottom.obj"
-    };
+    private GLSenceView mSkyboxView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +34,8 @@ public class TestVertexLoadActivity extends BaseViewActivity {
                     public void run() {
                         hideSkyBox();
                         GLSenceView senceView2 = new GLSenceView(TestVertexLoadActivity.this);
-                        senceView2.setObjFile("qiu.obj");
-                        senceView2.setImage(R.drawable.four);
+                        senceView2.setObjFile("sphere.obj");
+                        senceView2.setImage(R.drawable.sence);
                         getRootView().addView(senceView2);
                     }
                 });
@@ -80,37 +53,27 @@ public class TestVertexLoadActivity extends BaseViewActivity {
         }
         mSceneType = type;
 
-        for (int i = 0; i < 6; i++){
-            if (mSceneViews[i] == null){
-                mSceneViews[i] = new GLSenceView(this);
-                getRootView().addView(mSceneViews[i]);
-                if(i == 4){
-                    mSceneViews[i].rotate(90, 0, 1, 0);
-                } else if(i == 5){
-                    mSceneViews[i].rotate(180, 0, 1, 0);
-                }
-
-                mSceneViews[i].setObjFile(mSceneObjs[i]);
-            }
-
-            if(type == SCENE_TYPE_CINEMA){
-                mSceneViews[i].setImage(mCinemaSceneResourceIds[i]);
-            } else {
-                mSceneViews[i].setImage(mDefaultSceneResourceIds[i]);
-            }
-
-            mSceneViews[i].setVisible(true);
+        if (mSkyboxView == null){
+            mSkyboxView = new GLSenceView(this);
+            mSkyboxView.setObjFile("skybox.obj");
+            getRootView().addView(mSkyboxView);
         }
+
+        if(type == SCENE_TYPE_CINEMA){
+            mSkyboxView.setImage(R.drawable.skybox_launcher);
+        } else {
+            mSkyboxView.setImage(R.drawable.skybox_launcher);
+        }
+
+        mSkyboxView.setVisible(true);
     }
 
     /**
      * 隐藏天空盒场景
      */
     public void hideSkyBox(){
-        for (int i = 0; i < 6; i++){
-            if (mSceneViews[i] != null){
-                mSceneViews[i].setVisible(false);
-            }
+        if (mSkyboxView != null){
+            mSkyboxView.setVisible(false);
         }
     }
 
