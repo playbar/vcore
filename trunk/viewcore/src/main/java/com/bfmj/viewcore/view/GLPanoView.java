@@ -3,6 +3,7 @@ package com.bfmj.viewcore.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
@@ -68,6 +69,7 @@ public class GLPanoView extends GLView {
     private boolean isSurfaceCreated = false;
     private boolean isNeedInitVertex = false;
     private int mTextureId = -1;
+    private SurfaceTexture mSurfaceTexture = null;
     private int mResId;
     private Bitmap mBitmap;
 
@@ -186,12 +188,23 @@ public class GLPanoView extends GLView {
      */
     public void setRenderType(int renderType) {
         mRenderType = renderType;
+
+        if (renderType == RENDER_TYPE_VIDEO){
+            mTextureId = GLTextureUtils.createVideoTextureID();
+            if (mTextureId > -1){
+                mSurfaceTexture = new SurfaceTexture(mTextureId);
+            }
+        } else {
+            mSurfaceTexture = null;
+        }
     }
 
     public void reset(){
         mRenderType = RENDER_TYPE_IMAGE;
         mSceneType = SCENE_TYPE_SKYBOX;
         mPlayType = PLAY_TYPE_2D;
+        mTextureId = -1;
+        mSurfaceTexture = null;
     }
 
     /**
@@ -232,8 +245,12 @@ public class GLPanoView extends GLView {
         }
     }
 
-    protected void setTextureId(int textureId){
-        mTextureId = textureId;
+    /**
+     * h
+     * @return
+     */
+    public SurfaceTexture getSurfaceTexture(){
+        return mSurfaceTexture;
     }
 
     /**
@@ -265,6 +282,16 @@ public class GLPanoView extends GLView {
         if (isNeedInitVertex){
             initVertex();
             initTextureBuffer();
+        }
+
+        if (mRenderType == RENDER_TYPE_VIDEO && mSurfaceTexture != null && isLeft){
+            try {
+                mSurfaceTexture.updateTexImage();
+                float[] mtx = new float[16];
+                mSurfaceTexture.getTransformMatrix(mtx);
+            } catch (RuntimeException e) {
+                return;
+            }
         }
 
         GLMatrixState state = getMatrixState();
