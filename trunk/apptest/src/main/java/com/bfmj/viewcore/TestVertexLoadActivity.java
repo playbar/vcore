@@ -1,10 +1,17 @@
 package com.bfmj.viewcore;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.Surface;
 
+import com.bfmj.viewcore.interfaces.IGLPlayerListener;
+import com.bfmj.viewcore.player.GLSystemPlayer;
 import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLPanoView;
+import com.bfmj.viewcore.view.GLPlayerView;
 import com.bfmj.viewcore.view.GLSenceView;
+
+import java.io.IOException;
 
 /**
  * Created by lixianke on 2016/7/28.
@@ -14,12 +21,19 @@ public class TestVertexLoadActivity extends BaseViewActivity {
     public static final int SCENE_TYPE_DEFAULT = 0x0;
     public static final int SCENE_TYPE_CINEMA = 0x1;
     private int mSceneType = -1;
+    MediaPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        showSkyBox(SCENE_TYPE_DEFAULT);
+//        showSkyBox(SCENE_TYPE_DEFAULT);
+
+        final GLPanoView panoView = GLPanoView.getSharedPanoView(this);
+        panoView.setRenderType(GLPanoView.RENDER_TYPE_VIDEO);
+
+         player = new MediaPlayer();
+
 
         new Thread(new Runnable() {
             @Override
@@ -29,15 +43,36 @@ public class TestVertexLoadActivity extends BaseViewActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
                 getRootView().queueEvent(new Runnable() {
                     @Override
                     public void run() {
-                        GLPanoView  senceView2 = GLPanoView.getSharedPanoView(TestVertexLoadActivity.this);
-                        senceView2.reset();
-                        senceView2.setSceneType(GLPanoView.SCENE_TYPE_HALF_SPHERE);
-                        senceView2.setImage(R.drawable.sence);
+                        try {
+                            player.setDataSource("/mnt/sdcard/Download/1.mp4");
+                            player.setSurface(new Surface(panoView.getSurfaceTexture()));
+
+                            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                @Override
+                                public void onPrepared(MediaPlayer mp) {
+                                    mp.start();
+                                }
+                            });
+                            player.prepareAsync();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
+
+//                getRootView().queueEvent(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        GLPanoView  senceView2 = GLPanoView.getSharedPanoView(TestVertexLoadActivity.this);
+//                        senceView2.reset();
+//                        senceView2.setSceneType(GLPanoView.SCENE_TYPE_HALF_SPHERE);
+//                        senceView2.setImage(R.drawable.sence);
+//                    }
+//                });
             }
         }).start();
     }
