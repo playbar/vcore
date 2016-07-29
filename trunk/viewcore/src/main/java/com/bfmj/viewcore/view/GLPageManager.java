@@ -37,9 +37,11 @@ public class GLPageManager {
 		if (page == null){
 			return;
 		}
-		
-		onPause();
-		
+
+		if (mPageStack.size() > 1){
+			onPause();
+		}
+
 		page.setPageManager(this);
 		page.getView(data);
 		mPageStack.push(page);
