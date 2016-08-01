@@ -137,8 +137,19 @@ public class GLGridViewPage extends GLGridView {
 		}
 	}
 
+	public void resetPage(){
+		mCurIndex = 0;
+		mCount = 0;
+		mbIndexFocused = false;
+		mCurFocuseIndex = 0;
+	}
+
 	public boolean isLastPage(){
 		return (mCurIndex == mCount);
+	}
+
+	public boolean isFirstPage(){
+		return ( mCurIndex == 1 );
 	}
 
 	@Override

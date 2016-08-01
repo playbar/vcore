@@ -159,6 +159,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	public void showHItem( int cIndex ){
 		int tempIndex=cIndex;
 		//int width = getInnerWidth()
+		int ipos = 0;
 		for(int rows=0; rows<this.mNumRows; rows++)
 		{
 			for(int col=0;col<this.mNumColumns;col++)
@@ -185,7 +186,9 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 //					}
 //				});
 
-				final int position = mNumColumns*rows+col;
+				//final int position = mNumColumns*rows+col;
+				final int position = ipos;
+				ipos++;
 				view.setFocusListener(new GLViewFocusListener() {
 
 					@Override
@@ -237,7 +240,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	public void showVItem( int cIndex ){
 		int tempIndex=cIndex;
 		//int width = getInnerWidth()
-
+		int ipos = 0;
 		for(int col=0; col<this.mNumColumns; col++)
 		{
 			for(int row=0; row<this.mNumRows; row++)
@@ -255,7 +258,9 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 
 				view.setId("gridview_" + tempIndex);
 
-				final int position = mNumColumns*row+col;
+				//final int position = mNumColumns*row+col;
+				final int position = ipos;
+				ipos++;
 				view.setFocusListener(new GLViewFocusListener() {
 
 					@Override
@@ -318,6 +323,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 		int tempIndex=cIndex;
 		//int width = getInnerWidth()
 
+		int ipos = 0;
 		for(int col=this.mNumColumns -1; col >= 0; --col )
 		{
 			for(int row=0; row<this.mNumRows; row++)
@@ -335,7 +341,9 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 
 				view.setId("gridview_" + tempIndex);
 
-				final int position = mNumColumns*row+col;
+				//final int position = mNumColumns*row+col;
+				final int position = ipos;
+				ipos++;
 				view.setFocusListener(new GLViewFocusListener() {
 
 					@Override

@@ -108,6 +108,7 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setMargin(10, 10, 10, 10 );
 		gridView.setPadding( 10, 10, 10, 10);
 		gridView.setMargin( 10, 10, 10, 10 );
+
 		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
 
 		getData();
