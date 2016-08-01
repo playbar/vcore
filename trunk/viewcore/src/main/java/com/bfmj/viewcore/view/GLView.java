@@ -161,9 +161,9 @@ public abstract class GLView implements GLRenderListener {
 		Matrix.rotateM(headView, 0, -(float)yaw, 0, 1, 0);
 		
 		if (isLeft){
-        	Matrix.translateM(headView, 0, mEyeDeviation, 0, 0);
+        	Matrix.translateM(headView, 0, mEyeDeviation / 2, 0, 0);
         } else {
-        	Matrix.translateM(headView, 0, -mEyeDeviation, 0, 0);
+        	Matrix.translateM(headView, 0, -mEyeDeviation/ 2, 0, 0);
         }
 		
 		Matrix.rotateM(headView, 0, (float)yaw, 0, 1, 0);		

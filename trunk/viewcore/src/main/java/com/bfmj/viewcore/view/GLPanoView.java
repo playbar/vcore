@@ -7,6 +7,7 @@ import android.graphics.SurfaceTexture;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.Log;
 
 import com.bfmj.viewcore.render.GLMesh;
 import com.bfmj.viewcore.render.GLVector2;
@@ -74,6 +75,10 @@ public class GLPanoView extends GLView {
     private int mResId;
     private Bitmap mBitmap;
 
+    private float mRotateHeadviewX = 0;
+    private float mRotateHeadviewY = 0;
+    private float mRotateHeadviewZ = 0;
+
     private static GLPanoView instance = null;
 
     /**
@@ -103,6 +108,19 @@ public class GLPanoView extends GLView {
         for (int i = 0; i < SCENE_TYPE_COUNT && i < SCENE_OBJS.length; i++){
             setObjFile(SCENE_OBJS[i], i);
         }
+//        String data = "float[][] vertices = {";
+//        for (int i = 0; i < vertices.length; i++){
+//            data += "{";
+//                for ( int j = 0; j < vertices[i].length; j++){
+//                    data += vertices[i][j];
+//                    if (j < vertices[i].length - 1){
+//                        data += ",";
+//                    }
+//                }
+//            data += "},";
+//        }
+//        data += "};";
+//        Log.d("aaaaaaaaaaaaaaaaa", data);
         isNeedInitVertex = true;
     }
 
@@ -268,6 +286,12 @@ public class GLPanoView extends GLView {
         Matrix.rotateM(getMatrixState().getCurrentMatrix(), 0, angle, rx, ry, rz);
     }
 
+    public void setRotateHeadview(float rx, float ry, float rz){
+        mRotateHeadviewX = rx;
+        mRotateHeadviewY = ry;
+        mRotateHeadviewZ = rz;
+    }
+
     @Override
     public void initDraw() {
         isSurfaceCreated = true;
@@ -298,7 +322,12 @@ public class GLPanoView extends GLView {
 
         GLMatrixState state = getMatrixState();
 
-        getEyeMatrix(state.getVMatrix(), isLeft);
+        float[] vMtx = state.getVMatrix();
+        Matrix.rotateM(vMtx, 0, mRotateHeadviewX, 1, 0, 0);
+        Matrix.rotateM(vMtx, 0, mRotateHeadviewY, 0, 1, 0);
+        Matrix.rotateM(vMtx, 0, mRotateHeadviewZ, 0, 0, 1);
+
+        getEyeMatrix(vMtx, isLeft);
 
         state.pushMatrix();
 
