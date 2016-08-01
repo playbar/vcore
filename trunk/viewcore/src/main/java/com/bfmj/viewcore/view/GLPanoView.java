@@ -204,6 +204,7 @@ public class GLPanoView extends GLView {
         mRenderType = RENDER_TYPE_IMAGE;
         mSceneType = SCENE_TYPE_SKYBOX;
         mPlayType = PLAY_TYPE_2D;
+        GLTextureUtils.releaseTexture(mTextureId);
         mTextureId = -1;
         mSurfaceTexture = null;
     }
