@@ -109,7 +109,7 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setPadding( 10, 10, 10, 10);
 		gridView.setMargin( 10, 10, 10, 10 );
 
-		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
+		gridView.setOrientation(GLConstant.GLOrientation.VERTICAL );
 
 		getData();
 		adapter = new GridViewAdapter(listData, this);
@@ -118,11 +118,6 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setWidth(1000);
 		gridView.setHeight(800);
 		gridView.setAdapter( adapter );
-
-
-
-
-
 
 		//gridView.rotate(90.0f, 1.0f, 0.0f, 0.0f );
 		rootView.addView(gridView);

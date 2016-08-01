@@ -465,8 +465,6 @@ public class GLRectView extends GLView {
 	/**
 	 * 设置位置及大小
 	 * @author lixianke  @Date 2015-6-23 下午1:56:44
-	 * @param x X坐标
-	 * @param y Y坐标
 	 * @param width 宽度
 	 * @param height 高度
 	 * @return

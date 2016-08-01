@@ -138,7 +138,7 @@ public class GLGridViewPage extends GLGridView {
 	}
 
 	public void resetPage(){
-		mCurIndex = 0;
+		mCurIndex = 1;
 		mCount = 0;
 		mbIndexFocused = false;
 		mCurFocuseIndex = 0;
