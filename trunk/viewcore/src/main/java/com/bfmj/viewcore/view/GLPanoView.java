@@ -75,9 +75,7 @@ public class GLPanoView extends GLView {
     private int mResId;
     private Bitmap mBitmap;
 
-    private float mRotateHeadviewX = 0;
-    private float mRotateHeadviewY = 0;
-    private float mRotateHeadviewZ = 0;
+    private float[] mRotateHeadview = new float[3];
 
     private static GLPanoView instance = null;
 
@@ -222,6 +220,7 @@ public class GLPanoView extends GLView {
         mRenderType = RENDER_TYPE_IMAGE;
         mSceneType = SCENE_TYPE_SKYBOX;
         mPlayType = PLAY_TYPE_2D;
+        mRotateHeadview = new float[3];
         GLTextureUtils.releaseTexture(mTextureId);
         mTextureId = -1;
         mSurfaceTexture = null;
@@ -286,10 +285,8 @@ public class GLPanoView extends GLView {
         Matrix.rotateM(getMatrixState().getCurrentMatrix(), 0, angle, rx, ry, rz);
     }
 
-    public void setRotateHeadview(float rx, float ry, float rz){
-        mRotateHeadviewX = rx;
-        mRotateHeadviewY = ry;
-        mRotateHeadviewZ = rz;
+    public void setRotateHeadview(float[] view){
+        mRotateHeadview = view;
     }
 
     @Override
@@ -323,9 +320,9 @@ public class GLPanoView extends GLView {
         GLMatrixState state = getMatrixState();
 
         float[] vMtx = state.getVMatrix();
-        Matrix.rotateM(vMtx, 0, mRotateHeadviewX, 1, 0, 0);
-        Matrix.rotateM(vMtx, 0, mRotateHeadviewY, 0, 1, 0);
-        Matrix.rotateM(vMtx, 0, mRotateHeadviewZ, 0, 0, 1);
+        Matrix.rotateM(vMtx, 0, mRotateHeadview[0], 1, 0, 0);
+        Matrix.rotateM(vMtx, 0, mRotateHeadview[1], 0, 1, 0);
+        Matrix.rotateM(vMtx, 0, mRotateHeadview[2], 0, 0, 1);
 
         getEyeMatrix(vMtx, isLeft);
 
