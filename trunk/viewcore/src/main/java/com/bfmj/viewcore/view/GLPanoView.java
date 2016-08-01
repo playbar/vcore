@@ -105,21 +105,8 @@ public class GLPanoView extends GLView {
     private void loadObj(){
         for (int i = 0; i < SCENE_TYPE_COUNT && i < SCENE_OBJS.length; i++){
             setObjFile(SCENE_OBJS[i], i);
+            isNeedInitVertex = true;
         }
-//        String data = "float[][] vertices = {";
-//        for (int i = 0; i < vertices.length; i++){
-//            data += "{";
-//                for ( int j = 0; j < vertices[i].length; j++){
-//                    data += vertices[i][j];
-//                    if (j < vertices[i].length - 1){
-//                        data += ",";
-//                    }
-//                }
-//            data += "},";
-//        }
-//        data += "};";
-//        Log.d("aaaaaaaaaaaaaaaaa", data);
-        isNeedInitVertex = true;
     }
 
     /**
@@ -417,9 +404,11 @@ public class GLPanoView extends GLView {
                 vertexBuffer.put(vertices[i]);
                 vertexBuffer.position(0);
 
-                IntBuffer buffers = IntBuffer.allocate(1);
-                GLES20.glGenBuffers(1,buffers);
-                vboVertexBufferIds[i] = buffers.get(0);
+                if (vboVertexBufferIds[i] < 1){
+                    IntBuffer buffers = IntBuffer.allocate(1);
+                    GLES20.glGenBuffers(1,buffers);
+                    vboVertexBufferIds[i] = buffers.get(0);
+                }
                 GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexBufferIds[i]);
                 GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verLen, vertexBuffer,
                         GLES20.GL_STATIC_DRAW);
@@ -439,9 +428,11 @@ public class GLPanoView extends GLView {
                     textureVerticesBuffer.put(texCoors[i][j]);
                     textureVerticesBuffer.position(0);
 
-                    IntBuffer buffers = IntBuffer.allocate(1);
-                    GLES20.glGenBuffers(1,buffers);
-                    vboTexCoorBufferIds[i][j] = buffers.get(0);
+                    if (vboTexCoorBufferIds[i][j] < 1){
+                        IntBuffer buffers = IntBuffer.allocate(1);
+                        GLES20.glGenBuffers(1,buffers);
+                        vboTexCoorBufferIds[i][j] = buffers.get(0);
+                    }
                     GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTexCoorBufferIds[i][j]);
                     GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
                             GLES20.GL_STATIC_DRAW);
