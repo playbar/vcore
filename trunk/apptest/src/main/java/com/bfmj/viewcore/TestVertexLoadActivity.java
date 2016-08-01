@@ -27,10 +27,10 @@ public class TestVertexLoadActivity extends BaseViewActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        showSkyBox(SCENE_TYPE_DEFAULT);
+        showSkyBox(SCENE_TYPE_DEFAULT);
 
-        final GLPanoView panoView = GLPanoView.getSharedPanoView(this);
-        panoView.setRenderType(GLPanoView.RENDER_TYPE_VIDEO);
+//        final GLPanoView panoView = GLPanoView.getSharedPanoView(this);
+//        panoView.setRenderType(GLPanoView.RENDER_TYPE_VIDEO);
 
          player = new MediaPlayer();
 
@@ -44,25 +44,25 @@ public class TestVertexLoadActivity extends BaseViewActivity {
                     e.printStackTrace();
                 }
 
-                getRootView().queueEvent(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            player.setDataSource("/mnt/sdcard/Download/1.mp4");
-                            player.setSurface(new Surface(panoView.getSurfaceTexture()));
-
-                            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                                @Override
-                                public void onPrepared(MediaPlayer mp) {
-                                    mp.start();
-                                }
-                            });
-                            player.prepareAsync();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+//                getRootView().queueEvent(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            player.setDataSource("/mnt/sdcard/Download/1.mp4");
+////                            player.setSurface(new Surface(panoView.getSurfaceTexture()));
+//
+//                            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                                @Override
+//                                public void onPrepared(MediaPlayer mp) {
+//                                    mp.start();
+//                                }
+//                            });
+////                            player.prepareAsync();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
 
 //                getRootView().queueEvent(new Runnable() {
 //                    @Override
@@ -88,8 +88,8 @@ public class TestVertexLoadActivity extends BaseViewActivity {
         mSceneType = type;
 
         GLPanoView  mSkyboxView = GLPanoView.getSharedPanoView(this);
-        mSkyboxView.setRenderType(GLPanoView.RENDER_TYPE_VIDEO);
-        mSkyboxView.setPlayType(GLPanoView.PLAY_TYPE_3D_LR);
+//        mSkyboxView.setRenderType(GLPanoView.RENDER_TYPE_VIDEO);
+//        mSkyboxView.setPlayType(GLPanoView.PLAY_TYPE_3D_LR);
 
         if(type == SCENE_TYPE_CINEMA){
             mSkyboxView.setImage(R.drawable.skybox_launcher);
