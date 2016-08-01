@@ -89,7 +89,7 @@ public class GLPanoView extends GLView {
         return instance;
     }
 
-    public GLPanoView(Context context) {
+    private GLPanoView(Context context) {
         super(context);
         new Thread(new Runnable() {
             @Override
