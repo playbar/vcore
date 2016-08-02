@@ -38,9 +38,7 @@ public class GLPageManager {
 			return;
 		}
 
-		if (mPageStack.size() > 1){
-			onPause();
-		}
+		onPause();
 
 		page.setPageManager(this);
 		page.getView(data);
@@ -163,7 +161,10 @@ public class GLPageManager {
 //					view.doRequestFocus();
 //				}
 				mCurrentView = view;
-				onResume();
+
+				if (mPageStack.size() > 1){
+					onResume();
+				}
 			}
 		}
 	}

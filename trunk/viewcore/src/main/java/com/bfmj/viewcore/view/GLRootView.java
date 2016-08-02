@@ -270,18 +270,18 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         isGroyTracking = false;
     }
 
-    private void setFov() {
-        float near = 2.4f;
-        if (mDistortionEnable && isSurfaceCreated) {
-            float fov = MojingSDK.GetMojingWorldFOV();
-            if (fov >= 80) {
-                near = (float) (1 / Math.tan(Math.toRadians(fov / 2)));
-            } else if (fov < 60) {
-                mDistortionEnable = false;
-            }
-        }
-        GLScreenParams.setNear(near);
-    }
+//    private void setFov() {
+//        float near = 2.4f;
+//        if (mDistortionEnable && isSurfaceCreated) {
+//            float fov = MojingSDK.GetMojingWorldFOV();
+//            if (fov >= 80) {
+//                near = (float) (1 / Math.tan(Math.toRadians(fov / 2)));
+//            } else if (fov < 60) {
+//                mDistortionEnable = false;
+//            }
+//        }
+//        GLScreenParams.setNear(near);
+//    }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -295,7 +295,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 //		MojingSDK.EnterMojingWorld(mMojingType);
 //		MojingSDK.SetImageYOffset(0.06f);
 //		Log.d("video", "EnterMojingWorld");
-        setFov();
+//        setFov();
 
         startTracker();
         resetScreenDirection();
@@ -513,7 +513,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                 mDistortion = null;
             }
             mDistortionEnable = enable;
-            setFov();
+//            setFov();
         }
     }
 
