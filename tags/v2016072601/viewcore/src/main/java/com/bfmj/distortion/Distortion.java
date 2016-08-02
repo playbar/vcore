@@ -3,10 +3,10 @@ package com.bfmj.distortion;
 
 import java.nio.IntBuffer;
 
+import android.opengl.GLES20;
+
 import com.baofeng.mojing.EyeTextureParameter;
 import com.baofeng.mojing.MojingSDK;
-
-import android.opengl.GLES20;
 
 public class Distortion {	
 	private int[] mTextureIds = {0, 0};

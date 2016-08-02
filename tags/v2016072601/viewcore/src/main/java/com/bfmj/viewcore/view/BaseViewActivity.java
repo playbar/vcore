@@ -4,34 +4,28 @@ import java.lang.reflect.Method;
 
 import com.baofeng.mojing.MojingSDK;
 import com.baofeng.mojing.MojingSDKServiceManager;
-import com.baofeng.mojing.MojingSurfaceView;
 import com.baofeng.mojing.input.base.MojingKeyCode;
-import com.baofeng.mojing.VrPhotoRender;
 //import com.bfmj.viewcore.util.StickUtil;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.PixelFormat;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
-
 public class BaseViewActivity extends Activity implements SensorEventListener {
 	private static BaseViewActivity instance;
-	private FrameLayout rootLayout;
+	private RelativeLayout rootLayout;
 	private GLRootView rootView;
 	private GLPageManager mPageManager;
 	private SensorManager mSensorManager;
@@ -45,12 +39,6 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 	private boolean isTouchControl = false;
 
 	MojingSDKServiceManager mMojingSDKServiceManager;
-	private MojingSurfaceView mMojingSurfaceView;
-	private VrPhotoRender renderer;
-	static boolean   bTimeWarp = true;
-	static boolean   bMultiThread = true;
-	static String MJ4 = "2WF5F5-FPWGZZ-H7AE2C-H3F8SW-EE8KCF-YTHBCN";
-	static String DefaultGlass = MJ4;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +46,6 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 //		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 //		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		super.onCreate(savedInstanceState);
-		MojingSDK.Init(this, true );
 
 		instance = this;
 		
@@ -75,27 +62,15 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 		
 		mPageManager = new GLPageManager();
 		mPageManager.setRootView(rootView);
-
-		mMojingSurfaceView = new MojingSurfaceView(this);
-		mMojingSurfaceView.setTimeWarp(bTimeWarp);
-		mMojingSurfaceView.setMultiThread(true);
-		mMojingSurfaceView.setGlassesKey(DefaultGlass);
-		renderer=new VrPhotoRender(this);
-		mMojingSurfaceView.setRenderer(renderer);
-		mMojingSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-		mMojingSurfaceView.getHolder().setFormat(PixelFormat.TRANSPARENT);
-
-
-		rootLayout = new FrameLayout(this);
+		
+		rootLayout = new RelativeLayout(this);
 		rootLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
 		rootLayout.addView(rootView);
-		rootLayout.addView( mMojingSurfaceView);
-
 		setContentView(rootLayout);
 
-		mMojingSDKServiceManager = new MojingSDKServiceManager(this);
-
+		mMojingSDKServiceManager = new MojingSDKServiceManager();
+		MojingSDK.Init(this );
 		initLog();
 //		StickUtil.getInstance(this);
 	}
@@ -171,7 +146,7 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 		return rootView;
 	}
 	
-	public FrameLayout getRootLayout(){
+	public RelativeLayout getRootLayout(){
 		return rootLayout;
 	}
 	
@@ -313,7 +288,7 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 //			mPageManager.onResume();
 //		}
 		super.onResume();
-		mMojingSDKServiceManager.onResume();
+		mMojingSDKServiceManager.onResume(this);
 		return;
 	}
 	
@@ -332,7 +307,7 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 			mPageManager.onPause();
 		}
 		super.onPause();
-		mMojingSDKServiceManager.onPause();
+		mMojingSDKServiceManager.onPause(this);
 	}
 	
 	@Override

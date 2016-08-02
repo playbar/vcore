@@ -8,9 +8,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.androidquery.AQuery;
-import com.baofeng.mojing.MojingSurfaceView;
-import com.bfmj.mojing.MatrixState;
-import com.baofeng.mojing.VrPhotoRender;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
@@ -25,6 +22,7 @@ import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
 import com.bfmj.viewcore.view.GLView;
+import com.baofeng.mojing.*;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -76,7 +74,7 @@ public class GridViewActivity extends BaseViewActivity {
 	static boolean   bTimeWarp = true;
 	static boolean   bMultiThread = true;
 	static String DefaultGlass = MJ4;
-	private VrPhotoRender renderer;
+//	private VrPhotoRender renderer;
 
 	private Handler handler = new Handler( );
 
@@ -110,9 +108,9 @@ public class GridViewActivity extends BaseViewActivity {
 
 	public void onChangeMojingWorld()
 	{
-		float fov = com.baofeng.mojing.MojingSDK.GetMojingWorldFOV() / 2.f;
+		float fov = MojingSDK.GetMojingWorldFOV() / 2.f;
 		float ratio = (float)Math.tan(Math.toRadians(fov));
-		MatrixState.setProjectFrustum(-ratio, ratio, -ratio, ratio, 1.f, 800);
+//		MatrixState.setProjectFrustum(-ratio, ratio, -ratio, ratio, 1.f, 800);
 	}
 
 
@@ -165,7 +163,7 @@ public class GridViewActivity extends BaseViewActivity {
 
 		if( rootView.mbShowGridView ) {
 			createGridView();
-		}else{
+//		}else{
 			createSkyBox();
 		}
 
@@ -217,6 +215,7 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setWidth(1000);
 		gridView.setHeight(800);
 		gridView.setAdapter( adapter );
+//		gridView.setDepth(3);
 
 
 		//gridView.rotate(90.0f, 1.0f, 0.0f, 0.0f );

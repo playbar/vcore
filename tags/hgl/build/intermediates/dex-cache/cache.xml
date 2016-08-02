@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/mac/MyWorks/Baofeng/MJViewCore/tags/hgl/apptest/build/intermediates/exploded-aar/hgl/viewcore/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="b8e0e1323cf534a431102bf3c28befff44a7118b">
+        <dex dex="/Users/mac/MyWorks/Baofeng/MJViewCore/tags/hgl/apptest/build/intermediates/pre-dexed/debug/hgl-viewcore-unspecified_e81f87bae2b65e7f040d974181793d7b6eb7b856.jar" />
+    </item>
+    <item
+        jar="/Users/mac/MyWorks/Baofeng/MJViewCore/tags/hgl/apptest/build/intermediates/exploded-aar/hgl/viewcore/unspecified/jars/libs/MoJingSDK.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="dea1df9292b3a4e374eec0e7ef9a02bf60348ae0">
+        <dex dex="/Users/mac/MyWorks/Baofeng/MJViewCore/tags/hgl/apptest/build/intermediates/pre-dexed/debug/MoJingSDK_044e753088be9dd47134997995c765421b8914d8.jar" />
+    </item>
+
+</items>
