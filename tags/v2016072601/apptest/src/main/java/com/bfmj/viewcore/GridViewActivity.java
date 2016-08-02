@@ -161,8 +161,11 @@ public class GridViewActivity extends BaseViewActivity {
 
 		rootView = getRootView();
 
-		createGridView();
-		//createSkyBox();
+		if( rootView.mbShowGridView ) {
+			createGridView();
+		}else{
+			createSkyBox();
+		}
 
 
 //		rootView.addView(listView);
