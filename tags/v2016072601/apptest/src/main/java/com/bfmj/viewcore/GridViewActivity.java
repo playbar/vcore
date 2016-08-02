@@ -149,13 +149,15 @@ public class GridViewActivity extends BaseViewActivity {
 		return listData;
 	}
 
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 
 		// 获取渲染模式
-//		String glassKey = "FPQ8D2-2NHGWY-93S32F-DXD8YG-9QDCSG-444YZT"; //96
-//		setMojingType(glassKey);
+
+		setMojingType(MJ4);
 
 		super.onCreate(savedInstanceState);
 

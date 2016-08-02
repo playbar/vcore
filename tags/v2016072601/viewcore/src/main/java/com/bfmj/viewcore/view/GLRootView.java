@@ -40,7 +40,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     private boolean isSurfaceCreated = false;
     private boolean isVisible = true;
 
-    public static boolean mbShowGridView = false;
+    public static boolean mbShowGridView = true;
 
     //	private MoJingGroy mMoJingGroy;
     private GLFocusUtils mGlFocusUtils;
