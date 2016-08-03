@@ -120,6 +120,7 @@ public class GLGridViewPage extends GLGridView {
 	}
 
 	public void nextPage(){
+		mbIndexFocused = false;
 		if( mCurIndex < mCount ){
 			++mCurIndex;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
@@ -129,6 +130,7 @@ public class GLGridViewPage extends GLGridView {
 	}
 
 	public void previousPage(){
+		mbIndexFocused = false;
 		if( mCurIndex > 0 ){
 			--mCurIndex;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
@@ -160,7 +162,7 @@ public class GLGridViewPage extends GLGridView {
 	@Override
 	public boolean onKeyUp(int keycode){
 		if( nextBtnView.isFocused() || prvBtnView.isFocused() || mbIndexFocused ) {
-			if (keycode == MojingKeyCode.KEYCODE_DPAD_CENTER) {
+			if (keycode == MojingKeyCode.KEYCODE_ENTER) {
 				getRootView().queueEvent(new Runnable() {
 					@Override
 					public void run() {
