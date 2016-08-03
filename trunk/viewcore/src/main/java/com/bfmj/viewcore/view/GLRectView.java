@@ -930,37 +930,37 @@ public class GLRectView extends GLView {
 			mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_COLOR);
 			mBackgroundRender.setColor(mBackgroundColor);
 			updateRenderSize(mBackgroundRender, width, height);
-		}
-		
-		boolean isRecycle = true;
-		int textureId = -1;
-		Bitmap bitmap = null;
-		if (mBackgroundResId != 0){
-			InputStream is = getContext().getResources().openRawResource(mBackgroundResId);
-	        
-	        try {
-	        	bitmap = BitmapFactory.decodeStream(is);
-	        } finally {
-	            try {
-	                is.close();
-	            } catch(IOException e) {
-	                e.printStackTrace();
-	            }
-	        }
-		} else if (mBackgroundBitmap != null){
-			bitmap = mBackgroundBitmap;
-			isRecycle = false;
-		}
-		
-		if (bitmap != null){
-			GLTextureUtils.mUseMipMap = getMipMap();
-			textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
-		}
-		
-		if (textureId > -1){
-			mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-			mBackgroundRender.setTextureId(textureId);
-			updateRenderSize(mBackgroundRender, width, height);
+		} else {
+			boolean isRecycle = true;
+			int textureId = -1;
+			Bitmap bitmap = null;
+			if (mBackgroundResId != 0) {
+				InputStream is = getContext().getResources().openRawResource(mBackgroundResId);
+
+				try {
+					bitmap = BitmapFactory.decodeStream(is);
+				} finally {
+					try {
+						is.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			} else if (mBackgroundBitmap != null) {
+				bitmap = mBackgroundBitmap;
+				isRecycle = false;
+			}
+
+			if (bitmap != null) {
+				GLTextureUtils.mUseMipMap = getMipMap();
+				textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
+			}
+
+			if (textureId > -1) {
+				mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+				mBackgroundRender.setTextureId(textureId);
+				updateRenderSize(mBackgroundRender, width, height);
+			}
 		}
 		
 		if (mBackgroundRender != null){
