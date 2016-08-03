@@ -136,7 +136,7 @@ public class GLFocusUtils {
 			return;
 		}
 		
-		if (mComputeTimes < 20){
+		if (mComputeTimes < 10){
 			mComputeTimes++;
 			return;
 		} else {
