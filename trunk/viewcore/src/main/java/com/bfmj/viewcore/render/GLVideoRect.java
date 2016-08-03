@@ -28,11 +28,12 @@ public class GLVideoRect extends GLRect {
     private int mPositionHandle;
     private int mTextureCoordHandle;
 	
-	private int vboVertexNew = bufferIndex++;
-	private int vboTextureNew = bufferIndex++;
-	private int vboTextureLeftNew = bufferIndex++;
-	private int vboTextureRightNew = bufferIndex++;
-	
+	private int vboVertexNew = 0; 	//bufferIndex++;
+	private int vboTextureNew = 0;	//bufferIndex++;
+	private int vboTextureLeftNew = 0;	//bufferIndex++;
+	private int vboTextureRightNew = 0;	//bufferIndex++;
+	private int []mvbo = new int[4];
+
 	private TextureType mTextureType = TextureType.TEXTURE_TYPE_ALL;
 	
 	private float vertices[] = {
@@ -93,6 +94,12 @@ public class GLVideoRect extends GLRect {
     }
     
     private void init(){
+		GLES20.glGenBuffers( 4, mvbo, 0 );
+		vboVertexNew = mvbo[0];
+		vboTextureNew = mvbo[1];
+		vboTextureLeftNew = mvbo[2];
+		vboTextureRightNew = mvbo[3];
+
     	initVertex();
     	initTextureBuffer();
     	
@@ -130,6 +137,7 @@ public class GLVideoRect extends GLRect {
         GLES20.glDisableVertexAttribArray(1);
         
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+		GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
 	}
     
     private void createProgram(){

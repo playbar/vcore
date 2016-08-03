@@ -24,8 +24,8 @@ public class GLColorRect extends GLRect {
     
     private int verLen=0;
 	
-	private int vboVertexNew = bufferIndex++;
-    
+	private int vboVertexNew = 0;   //bufferIndex++;
+    private int []mvbo = new int[2];
     private float[] mColor;
     
     public static GLColorRect getInstance(){
@@ -48,6 +48,8 @@ public class GLColorRect extends GLRect {
     }
     
     private void init(){
+        GLES20.glGenBuffers( 2, mvbo, 0 );
+        vboVertexNew = mvbo[0];
 		initVertex();
     	
     	createProgram();
@@ -95,6 +97,8 @@ public class GLColorRect extends GLRect {
         GLES20.glDisableVertexAttribArray(0);
         
         GLES20.glDisable(GLES20.GL_BLEND);
+        GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
+
 	}
     
     private void createProgram(){
@@ -129,6 +133,8 @@ public class GLColorRect extends GLRect {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexNew);
 		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verLen, vertexBuffer,
 				GLES20.GL_STATIC_DRAW);
+        GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
+        return;
 	}
     
     public void release(){

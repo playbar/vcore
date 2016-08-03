@@ -1,7 +1,7 @@
 package com.bfmj.viewcore.render;
 
 public abstract class GLRect {
-	public static int bufferIndex = 1;
+//	public static int bufferIndex = 1;
 	
 	private float mAlpha = 1.0f;
 	private float mMask = 1.0f;

@@ -42,9 +42,10 @@ public class GLSenceView extends GLView {
     
     private int verLen = 0;
     private int textureLen = 0;
-	
-	private int vboVertexNew = GLRect.bufferIndex++;
-	private int vboTextureNew = GLRect.bufferIndex++;
+
+	private int vboVertexNew = 0;//GLRect.bufferIndex++;
+	private int vboTextureNew = 0;//GLRect.bufferIndex++;
+	private int [] mvbo = new int[2];
 	
 	private boolean isSurfaceCreated = false;
 	private boolean isNeedInitVertex = false;
@@ -227,7 +228,10 @@ public class GLSenceView extends GLView {
 	}
 	
 	private void init(){
-		
+		GLES20.glGenBuffers( 2, mvbo, 0 );
+		vboVertexNew = mvbo[0];
+		vboTextureNew = mvbo[1];
+
     	initVertex();
 
     	initTextureBuffer();

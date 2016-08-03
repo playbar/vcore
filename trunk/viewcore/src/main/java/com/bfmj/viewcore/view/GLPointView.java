@@ -30,9 +30,10 @@ public class GLPointView extends GLView {
     
 	IntBuffer ibb = null;
 	
-	private int vboVertexNew = GLRect.bufferIndex++;
-	private int vboSizeNew = GLRect.bufferIndex++;
-	private int vboColorNew = GLRect.bufferIndex++;
+	private int vboVertexNew = 0;//GLRect.bufferIndex++;
+	private int vboSizeNew = 0;//GLRect.bufferIndex++;
+	private int vboColorNew = 0;//GLRect.bufferIndex++;
+	private int []mvbo = new int[3];
 	
 	private boolean isNeedInitVertex = false;
 	
@@ -47,6 +48,10 @@ public class GLPointView extends GLView {
 	@Override
 	public void initDraw() {
 		if (points != null){
+			GLES20.glGenBuffers( 3, mvbo, 0 );
+			vboVertexNew = mvbo[0];
+			vboSizeNew = mvbo[1];
+			vboColorNew = mvbo[2];
 			initVertex();
 			isNeedInitVertex = false;
 		}
@@ -143,7 +148,8 @@ public class GLPointView extends GLView {
         GLES20.glDisableVertexAttribArray(2);
         
         GLES20.glDisable(GLES20.GL_BLEND);
-        
+		GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
+
         state.popMatrix();
 	}
 	
