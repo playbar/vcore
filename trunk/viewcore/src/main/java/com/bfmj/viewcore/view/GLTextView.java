@@ -58,8 +58,12 @@ public class GLTextView extends GLRectView {
 	 * @return 
 	 */
 	public void setText(String text){
-		if (mText == text){
-			//return;
+		if (text == null || text.isEmpty()){
+			text = "";
+		}
+
+		if (text.equals(mText)){
+			return;
 		}
 		
 		mText = text;
