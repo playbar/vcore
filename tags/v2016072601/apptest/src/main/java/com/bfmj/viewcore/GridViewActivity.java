@@ -163,7 +163,7 @@ public class GridViewActivity extends BaseViewActivity {
 
 		if( rootView.mbShowGridView ) {
 			createGridView();
-		}else{
+//		}else{
 			createSkyBox();
 		}
 
