@@ -19,7 +19,7 @@ import android.opengl.GLES20;
  */
 public class GLVideoRect extends GLRect {
 	public enum TextureType {
-		TEXTURE_TYPE_ALL, TEXTURE_TYPE_LEFT, TEXTURE_TYPE_RIGHT
+		TEXTURE_TYPE_ALL, TEXTURE_TYPE_LEFT, TEXTURE_TYPE_RIGHT, TEXTURE_TYPE_TOP, TEXTURE_TYPE_BOTTOM
 	}
 	private static GLVideoRect instance;
 	
@@ -32,6 +32,8 @@ public class GLVideoRect extends GLRect {
 	private int vboTextureNew = 0;	//bufferIndex++;
 	private int vboTextureLeftNew = 0;	//bufferIndex++;
 	private int vboTextureRightNew = 0;	//bufferIndex++;
+	private int vboTextureTopNew = 0;
+	private int vboTextureBottomNew = 0;
 	private int []mvbo = new int[4];
 
 	private TextureType mTextureType = TextureType.TEXTURE_TYPE_ALL;
@@ -71,6 +73,24 @@ public class GLVideoRect extends GLRect {
         1.0f, 1.0f,
         1.0f, 0.0f
     };
+
+	public static float[] texture_top = {
+			0.0f, 0.0f,
+			0.0f, 0.5f,
+			1.0f, 0.5f,
+			0.0f, 0.0f,
+			1.0f, 0.5f,
+			1.0f, 0.0f
+	};
+
+	public static float[] texture_bottom = {
+			0.0f, 0.5f,
+			0.0f, 1.0f,
+			1.0f, 1.0f,
+			0.0f, 0.5f,
+			1.0f, 1.0f,
+			1.0f, 0.5f
+	};
     
     private int mTextureId = -1;
     
@@ -94,11 +114,13 @@ public class GLVideoRect extends GLRect {
     }
     
     private void init(){
-		GLES20.glGenBuffers( 4, mvbo, 0 );
+		GLES20.glGenBuffers( 6, mvbo, 0 );
 		vboVertexNew = mvbo[0];
 		vboTextureNew = mvbo[1];
 		vboTextureLeftNew = mvbo[2];
 		vboTextureRightNew = mvbo[3];
+		vboTextureTopNew = mvbo[2];
+		vboTextureBottomNew = mvbo[3];
 
     	initVertex();
     	initTextureBuffer();
@@ -164,11 +186,20 @@ public class GLVideoRect extends GLRect {
     
     private void textureVBO() {
     	int buffer = vboTextureNew;
-		
-		if (mTextureType == TextureType.TEXTURE_TYPE_LEFT){
-			buffer = vboTextureLeftNew;
-		} else if (mTextureType == TextureType.TEXTURE_TYPE_RIGHT){
-			buffer = vboTextureRightNew;
+
+		switch (mTextureType){
+			case TEXTURE_TYPE_LEFT:
+				buffer = vboTextureLeftNew;
+				break;
+			case TEXTURE_TYPE_RIGHT:
+				buffer = vboTextureRightNew;
+				break;
+			case TEXTURE_TYPE_TOP:
+				buffer = vboTextureTopNew;
+				break;
+			case TEXTURE_TYPE_BOTTOM:
+				buffer = vboTextureBottomNew;
+				break;
 		}
 		
 		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffer);
@@ -233,9 +264,37 @@ public class GLVideoRect extends GLRect {
 		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTextureRightNew);
 		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
 				GLES20.GL_STATIC_DRAW);
+
+		// right
+		texCoor = texture_top;
+
+		textureLen = texCoor.length*4;
+		llbb = ByteBuffer.allocateDirect(textureLen);
+		llbb.order(ByteOrder.nativeOrder());
+		textureVerticesBuffer=llbb.asFloatBuffer();
+		textureVerticesBuffer.put(texCoor);
+		textureVerticesBuffer.position(0);
+
+		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTextureTopNew);
+		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
+				GLES20.GL_STATIC_DRAW);
+
+		// right
+		texCoor = texture_bottom;
+
+		textureLen = texCoor.length*4;
+		llbb = ByteBuffer.allocateDirect(textureLen);
+		llbb.order(ByteOrder.nativeOrder());
+		textureVerticesBuffer=llbb.asFloatBuffer();
+		textureVerticesBuffer.put(texCoor);
+		textureVerticesBuffer.position(0);
+
+		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTextureBottomNew);
+		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
+				GLES20.GL_STATIC_DRAW);
 	}
 	
 	public void release(){
-		GLES20.glDeleteBuffers(4, new int[]{vboVertexNew, vboTextureNew, vboTextureLeftNew, vboTextureRightNew}, 0);
+		GLES20.glDeleteBuffers(4, new int[]{vboVertexNew, vboTextureNew, vboTextureLeftNew, vboTextureRightNew, vboTextureTopNew, vboTextureBottomNew}, 0);
 	}
 }

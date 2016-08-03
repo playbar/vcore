@@ -21,10 +21,8 @@ import com.bfmj.viewcore.render.GLVideoRect;
  */
 public abstract class GLPlayerView extends GLRectView {
 	public static int MODE_2D = 0x01;
-	public static int MODE_3D_LEFT_RIGHT_FULL = 0x02;
-	public static int MODE_3D_LEFT_RIGHT_HALF = 0x03;
-	public static int MODE_3D_UP_DOWN_FULL = 0x04;
-	public static int MODE_3D_UP_DOWN_HALF = 0x05;
+	public static int MODE_3D_LEFT_RIGHT = 0x02;
+	public static int MODE_3D_UP_DOWN = 0x03;
 	
 	private SurfaceTexture mSurfaceTexture;
 	private GLRenderParams mRenderParams;
@@ -218,7 +216,7 @@ public abstract class GLPlayerView extends GLRectView {
 	/**
 	 * 设置是否为3d
 	 * @author lixianke  @Date 2015-3-17 下午2:55:17
-	 * @param is3d 是否为3d
+	 * @param mode 是否为3d
 	 * @return 
 	 */
 	public void setPlayMode(int mode){
@@ -308,10 +306,6 @@ public abstract class GLPlayerView extends GLRectView {
 		}
 		
 		float ratio = mVideoHeight / mVideoWidth;
-		
-		if (mPlayMode == MODE_3D_LEFT_RIGHT_HALF) {
-			ratio = ratio * 2;
-		}
 		
 		float width = getWidth();
 		float height = getHeight();
@@ -428,23 +422,28 @@ public abstract class GLPlayerView extends GLRectView {
 		if (mRenderParams == null){
 			return;
 		}
+
+		if (isReverseScreen()) {
+			isLeft = !isLeft;
+		}
 		
 		
-		
-		if (mPlayMode == MODE_3D_LEFT_RIGHT_FULL || mPlayMode == MODE_3D_LEFT_RIGHT_HALF){
-			if (isReverseScreen()) {
-				isLeft = !isLeft;
-			}
-			
+		if (mPlayMode == MODE_3D_LEFT_RIGHT){
 			if (isLeft){
 				mRenderParams.setTextureType(GLVideoRect.TextureType.TEXTURE_TYPE_LEFT);
 			} else {
 				mRenderParams.setTextureType(GLVideoRect.TextureType.TEXTURE_TYPE_RIGHT);
 			}
+		} else if(mPlayMode == MODE_3D_UP_DOWN){
+			if (isLeft){
+				mRenderParams.setTextureType(GLVideoRect.TextureType.TEXTURE_TYPE_TOP);
+			} else {
+				mRenderParams.setTextureType(GLVideoRect.TextureType.TEXTURE_TYPE_BOTTOM);
+			}
 		} else {
 			mRenderParams.setTextureType(GLVideoRect.TextureType.TEXTURE_TYPE_ALL);
 		}
-		
+
 		super.draw(isLeft);
 	}
 	
