@@ -28,8 +28,9 @@ public class GLImageRect extends GLRect {
     private int verLen=0;
     private int textureLen = 0;
 	
-	private int vboVertexNew = bufferIndex++;
-	private int vboTextureNew = bufferIndex++;
+	private int vboVertexNew = 0;  //bufferIndex++;
+	private int vboTextureNew = 0; // bufferIndex++;
+	private int []mvbo = new int[2];
 
     private float texCoor[] = {
     	0.0f, 0.0f,
@@ -62,6 +63,10 @@ public class GLImageRect extends GLRect {
     }
     
     private void init(){
+		GLES20.glGenBuffers( 2, mvbo, 0 );
+		vboVertexNew = mvbo[0];
+		vboTextureNew = mvbo[1];
+
     	initVertex();
     	initTextureBuffer();
     	
@@ -99,6 +104,8 @@ public class GLImageRect extends GLRect {
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
         GLES20.glDisable(GLES20.GL_BLEND);
+		GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
+
 	}
     
     private void createProgram(){
@@ -126,7 +133,6 @@ public class GLImageRect extends GLRect {
 	}
     
     private void textureVBO() {
-		
 		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTextureNew);
 		// 传送顶点位置数据
 		GLES20.glVertexAttribPointer(mTextureCoordHandle, 2, GLES20.GL_FLOAT,

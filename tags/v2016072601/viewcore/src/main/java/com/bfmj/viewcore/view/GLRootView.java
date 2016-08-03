@@ -499,6 +499,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                                 view.draw(i == 0 ? true : false);
                             }
                         }
+//                        GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
 
                         GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, 0, 0);
                         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);

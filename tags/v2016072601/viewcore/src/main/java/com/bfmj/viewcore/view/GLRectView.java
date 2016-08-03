@@ -1030,15 +1030,15 @@ public class GLRectView extends GLView {
 	    	
 	    	if (render.getType() == GLRenderParams.RENDER_TYPE_COLOR){
 	    		GLColorRect rect = GLColorRect.getInstance();
-	    		
+
 	    		GLColor color = render.getColor();
 	    		rect.setColor(new float[]{
 	    			color.getR(), color.getG(), color.getB(), color.getA()
 	    		});
 	    		rect.setMask(render.getMask());
-	    		
+
 	    		rect.draw(state.getFinalMatrix());
-				GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
+
 	    		
 	    	} else if (render.getType() == GLRenderParams.RENDER_TYPE_IMAGE){
 	    		GLImageRect rect = GLImageRect.getInstance();
@@ -1048,7 +1048,7 @@ public class GLRectView extends GLView {
 	    		rect.setMask(render.getMask());
 
 	    		rect.draw(state.getFinalMatrix());
-				GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
+
 	    		
 	    	} else if (render.getType() == GLRenderParams.RENDER_TYPE_VIDEO){
 	    		GLVideoRect rect = GLVideoRect.getInstance();
