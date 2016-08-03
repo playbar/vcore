@@ -283,7 +283,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         float near = 2.4f;
         if (mDistortionEnable && isSurfaceCreated) {
             float fov = MojingSDK.GetMojingWorldFOV();
-            if (fov >= 100) {
+            if (fov >= 90) {
                 near = (float) (1 / Math.tan(Math.toRadians(fov / 2)));
             } else if (fov < 60) {
                 mDistortionEnable = false;
@@ -349,10 +349,10 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         }
 
         GLColorRect.initInstance();
-//        if( mbShowGridView) {
-//        GLImageRect.initInstance();
-//        GLVideoRect.initInstance();
-//        }
+        if( mbShowGridView) {
+        GLImageRect.initInstance();
+        GLVideoRect.initInstance();
+        }
         fboTexs[0] = initImageTexture(R.drawable.skybox);
     }
 
@@ -371,7 +371,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             for (GLView view : mChild) {
                 view.onSurfaceChanged(width, height);
             }
-//        } else {
+        } else {
             //////////////////
             float[] modelView = {-0.5f, 0.0f, 0.0f, // leftCameraPos
                     0.5f, 0.0f, 0.0f, // rightCameraPos
@@ -412,87 +412,88 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
 
         if( mbShowGridView) {
-//            times++;
-//            if (mChild == null || mChild.size() == 0) {
-//                return;
-//            }
-//
-//            GLView v = mCreateTextureQueue.poll();
-//            if (v != null) {
-//                v.createTexture();
-//            }
-//
-//            for (int i = 0; i < mChild.size(); i++) {
-//                GLView view = mChild.get(i);
-//                if (view != null) {
-//                    view.onBeforeDraw();
-//                }
-//            }
-//
-//            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-//
-//
+            times++;
+            if (mChild == null || mChild.size() == 0) {
+                return;
+            }
+
+            GLView v = mCreateTextureQueue.poll();
+            if (v != null) {
+                v.createTexture();
+            }
+
+            for (int i = 0; i < mChild.size(); i++) {
+                GLView view = mChild.get(i);
+                if (view != null) {
+                    view.onBeforeDraw();
+                }
+            }
+
+            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+
+
             ArrayList<GLView> allViews = getAllViews();
-//
-//            if (mGroyEnable) {
-//                MojingSDK.getLastHeadView(headView);
-//            }
+
+            if (mGroyEnable) {
+                MojingSDK.getLastHeadView(headView);
+            }
 
             float[] groyMatrix = getGroyMatrix();
-//
-//            int height = mWidth / 2;
+
+            int height = mWidth / 2;
             float nearRight = GLScreenParams.getNear() * (float) Math.tan(GLScreenParams.getFOV() / 2);
 
             //双屏
             if (mIsDouble) {
                 for (int i = 0; i < 2; i++) {
-                    GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboIds[0]);
-                    com.baofeng.mojing.EyeTextureParameter EyeTexture = com.baofeng.mojing.MojingSDK.GetEyeTextureParameter(i + 1);
-
-                    EyeTex[i] = EyeTexture.m_EyeTexID;
-                    GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, EyeTexture.m_EyeTexID, 0);
-
-                    GLES20.glViewport(0, 0, EyeTexture.m_Width, EyeTexture.m_Height);
-
-//                    GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_SRC_COLOR);
-//                    GLES20.glEnable(GLES20.GL_BLEND);
-
-                    int status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
-                    if (status == GLES20.GL_FRAMEBUFFER_COMPLETE) {
-//                        GLES20.glClearColor(0, 0, 0, 1);
-
-//                        MatrixState.setCamera(0, 0, 200,
-//                                0f, 0.0f, -0.1f,
-//                                0f, 1.0f, 200.0f);
-
-                        com.baofeng.mojing.MojingSDK.getLastHeadView(fM);
-                        com.baofeng.mojing.MojingSDK3288.RenderFrame(fM);
-
-//                    if (mDistortion != null) {
-//                        mDistortion.beforeDraw(i);
-//                    } else {
-//                        GLES20.glViewport(i * mWidth / 2, (mHeight - height) / 2, mWidth / 2, height);
-//                    }
-
-//                        for (int j = 0; j < allViews.size(); j++) {
-//                            GLView view = allViews.get(j);
-//                            if (view != null) {
-//                                view.getMatrixState().setVMatrix(groyMatrix);
-//                                Matrix.frustumM(view.getMatrixState().getProjMatrix(), 0, -nearRight, nearRight, -nearRight, nearRight, GLScreenParams.getNear(), GLScreenParams.getFar());
-//                                //					Matrix.orthoM(view.getMatrixState().getProjMatrix(), 0, -40, 40, -40, 40, GLScreenParams.getNear(), GLScreenParams.getFar());
-//                                //			Matrix.setLookAtM(view.getMatrixState().getVMatrix(), 0, 0, 0, 0, headView[2], -headView[6], headView[10], 0, 1, 0);
+//                    GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboIds[0]);
+//                    com.baofeng.mojing.EyeTextureParameter EyeTexture = com.baofeng.mojing.MojingSDK.GetEyeTextureParameter(i + 1);
 //
-//                                view.draw(i == 0 ? true : false);
-//                            }
-//                        }
+//                    EyeTex[i] = EyeTexture.m_EyeTexID;
+//                    GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, EyeTexture.m_EyeTexID, 0);
+//
+//                    GLES20.glViewport(0, 0, EyeTexture.m_Width, EyeTexture.m_Height);
+//
+////                    GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_SRC_COLOR);
+////                    GLES20.glEnable(GLES20.GL_BLEND);
+//
+//                    int status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
+//                    if (status == GLES20.GL_FRAMEBUFFER_COMPLETE) {
+////                        GLES20.glClearColor(0, 0, 0, 1);
+//
+////                        MatrixState.setCamera(0, 0, 200,
+////                                0f, 0.0f, -0.1f,
+////                                0f, 1.0f, 200.0f);
+//
+//                        com.baofeng.mojing.MojingSDK.getLastHeadView(fM);
+//                        com.baofeng.mojing.MojingSDK3288.RenderFrame(fM);
 
-                        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, 0, 0);
-                        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+                    if (mDistortion != null) {
+                        mDistortion.beforeDraw(i);
+                    } else {
+                        GLES20.glViewport(i * mWidth / 2, (mHeight - height) / 2, mWidth / 2, height);
                     }
 
-//                if (mDistortion != null) {
-//                    mDistortion.afterDraw();
-//                }
+                        for (int j = 0; j < allViews.size(); j++) {
+                            GLView view = allViews.get(j);
+                            if (view != null) {
+                                view.getMatrixState().setVMatrix(groyMatrix);
+                                Matrix.frustumM(view.getMatrixState().getProjMatrix(), 0, -nearRight, nearRight, -nearRight, nearRight, GLScreenParams.getNear(), GLScreenParams.getFar());
+                                //					Matrix.orthoM(view.getMatrixState().getProjMatrix(), 0, -40, 40, -40, 40, GLScreenParams.getNear(), GLScreenParams.getFar());
+                                //			Matrix.setLookAtM(view.getMatrixState().getVMatrix(), 0, 0, 0, 0, headView[2], -headView[6], headView[10], 0, 1, 0);
+
+                                view.draw(i == 0 ? true : false);
+                            }
+                        }
+
+//                        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, 0, 0);
+//                        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+
+                        if (mDistortion != null) {
+                            mDistortion.afterDraw();
+                        }
+
+//                    }
                 }
             }
 //            else { //单屏
@@ -511,14 +512,14 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 //                }
 //            }
 
-//            mGlFocusUtils.handleFocused(groyMatrix, allViews);
-//
-//            for (int i = 0; i < mChild.size(); i++) {
-//                GLView view = mChild.get(i);
-//                if (view != null) {
-//                    view.onAfterDraw();
-//                }
-//            }
+            mGlFocusUtils.handleFocused(groyMatrix, allViews);
+
+            for (int i = 0; i < mChild.size(); i++) {
+                GLView view = mChild.get(i);
+                if (view != null) {
+                    view.onAfterDraw();
+                }
+            }
 
         }
         else{
@@ -528,7 +529,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         }
         ///////
 
-        com.baofeng.mojing.MojingSDK.DrawTexture(EyeTex[0], EyeTex[1] );
+//        com.baofeng.mojing.MojingSDK.DrawTexture(EyeTex[0], EyeTex[1] );
 
     }
 

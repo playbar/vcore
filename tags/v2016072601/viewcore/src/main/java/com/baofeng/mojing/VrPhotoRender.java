@@ -57,7 +57,7 @@ public class VrPhotoRender implements GLSurfaceView.Renderer
 
 
 
-        com.baofeng.mojing.MojingSDK3288.RenderInit(width, height, 0, modelView, perspective);
+//        com.baofeng.mojing.MojingSDK3288.RenderInit(width, height, 0, modelView, perspective);
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
