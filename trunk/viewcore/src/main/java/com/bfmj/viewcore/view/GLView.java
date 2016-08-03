@@ -23,6 +23,8 @@ public abstract class GLView implements GLRenderListener {
 	private float mMask = 1.0f;
 	private boolean isVisible = true;
 	private float mEyeDeviation = GLScreenParams.getEyeDistance();
+	private boolean isFixed = false;
+	private boolean isCostomHeadView;
 	
 	public GLView(Context context){
 		mContext = context;
@@ -190,5 +192,22 @@ public abstract class GLView implements GLRenderListener {
 	
 	protected void releaseTexture(final int textureId) {
 		GLTextureUtils.releaseTexture(textureId);
+	}
+
+
+	public void setFixed(boolean fixed){
+		isFixed = fixed;
+	}
+
+	public boolean isFixed(){
+		return isFixed;
+	}
+
+	public boolean isCostomHeadView() {
+		return isCostomHeadView;
+	}
+
+	public void setCostomHeadView(boolean costomHeadView) {
+		isCostomHeadView = costomHeadView;
 	}
 }

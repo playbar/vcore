@@ -28,7 +28,7 @@ public class GLFocusUtils {
 	
 	private static OnCursorDepthChangeListener mCursorDepthChangeListener;
 	
-	private GLRectView mFocusedView;
+	private static GLRectView mFocusedView;
 	private int mComputeTimes = 0;
 	
 	/**
@@ -57,11 +57,11 @@ public class GLFocusUtils {
 	 * @param 
 	 * @return 索引
 	 */
-	public GLRectView getFocusedView(){
+	public static GLRectView getFocusedView(){
 		return mFocusedView;
 	}
 	
-	public void setFousedView(GLRectView view){
+	public static void setFousedView(GLRectView view){
 		mFocusedView = view;
 	}
 
@@ -93,11 +93,21 @@ public class GLFocusUtils {
 		eulerAngles[(offset + 2)] = (-roll);
 	}
 
-	private float getX(float x){
+	/**
+	 * 获取实际坐标x值
+	 * @param x
+	 * @return
+     */
+	public static float getX(float x){
 		return (x - GLScreenParams.getXDpi() / 2) / GLScreenParams.getXDpi() * GLScreenParams.getScreenWidth();
 	}
 
-	private float getY(float y){
+	/**
+	 * 获取实际坐标y值
+	 * @param y
+	 * @return
+     */
+	public static float getY(float y){
 		return (GLScreenParams.getYDpi() / 2 - y) / GLScreenParams.getYDpi() * GLScreenParams.getScreenHeight();
 	}
 
@@ -168,7 +178,7 @@ public class GLFocusUtils {
 				float vx2 = getX(v.getLeft() + v.getX() + v.getWidth());
 				float vy2 = getY(v.getTop() + v.getY() + v.getHeight());
 
-				if (MojingSDK.DirectionalRadiaInRect(headView, new float[]{vx1, vy1}, new float[]{vx2, vy2}, -v.getDepth(), new float[2])){
+				if (MojingSDK.DirectionalRadiaInRect(v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView, new float[]{vx1, vy1}, new float[]{vx2, vy2}, -v.getDepth(), new float[2])){
 					if (v != null) {
 						if (v != mFocusedView) {
 							if (mFocusedView != null && !v.isGrandParent(mFocusedView)) {
@@ -184,7 +194,7 @@ public class GLFocusUtils {
 			}
 		}
 
-		if (!hasFocused && mFocusedView !=null){
+		if (!hasFocused && mFocusedView != null){
 			mFocusedView.onFocusChange(TO_UNKNOWN, false);
 			mFocusedView = null;
 		}

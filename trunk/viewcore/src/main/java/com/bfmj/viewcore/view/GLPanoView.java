@@ -306,6 +306,12 @@ public class GLPanoView extends GLView {
 
         GLMatrixState state = getMatrixState();
 
+        if (isFixed()){
+            float[] mtx = new float[16];
+            Matrix.setIdentityM(mtx, 0);
+            state.setVMatrix(mtx);
+        }
+
         float[] vMtx = state.getVMatrix();
         Matrix.rotateM(vMtx, 0, mRotateHeadview[0], 1, 0, 0);
         Matrix.rotateM(vMtx, 0, mRotateHeadview[1], 0, 1, 0);
