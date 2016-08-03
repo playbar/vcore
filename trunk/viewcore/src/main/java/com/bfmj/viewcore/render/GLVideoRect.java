@@ -34,7 +34,7 @@ public class GLVideoRect extends GLRect {
 	private int vboTextureRightNew = 0;	//bufferIndex++;
 	private int vboTextureTopNew = 0;
 	private int vboTextureBottomNew = 0;
-	private int []mvbo = new int[4];
+	private int []mvbo = new int[6];
 
 	private TextureType mTextureType = TextureType.TEXTURE_TYPE_ALL;
 	
@@ -119,8 +119,8 @@ public class GLVideoRect extends GLRect {
 		vboTextureNew = mvbo[1];
 		vboTextureLeftNew = mvbo[2];
 		vboTextureRightNew = mvbo[3];
-		vboTextureTopNew = mvbo[2];
-		vboTextureBottomNew = mvbo[3];
+		vboTextureTopNew = mvbo[4];
+		vboTextureBottomNew = mvbo[5];
 
     	initVertex();
     	initTextureBuffer();
