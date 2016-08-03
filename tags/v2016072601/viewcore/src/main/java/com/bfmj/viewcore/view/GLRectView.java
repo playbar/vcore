@@ -32,6 +32,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.Matrix;
 import android.view.animation.AnimationUtils;
+import android.opengl.GLES20;
 
 /**
  * 
@@ -1037,15 +1038,17 @@ public class GLRectView extends GLView {
 	    		rect.setMask(render.getMask());
 	    		
 	    		rect.draw(state.getFinalMatrix());
+				GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
 	    		
 	    	} else if (render.getType() == GLRenderParams.RENDER_TYPE_IMAGE){
 	    		GLImageRect rect = GLImageRect.getInstance();
-	    		
+
 	    		rect.setTextureId(render.getTextureId());
 	    		rect.setAlpha(render.getAlpha());
 	    		rect.setMask(render.getMask());
-	    		
+
 	    		rect.draw(state.getFinalMatrix());
+				GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
 	    		
 	    	} else if (render.getType() == GLRenderParams.RENDER_TYPE_VIDEO){
 	    		GLVideoRect rect = GLVideoRect.getInstance();

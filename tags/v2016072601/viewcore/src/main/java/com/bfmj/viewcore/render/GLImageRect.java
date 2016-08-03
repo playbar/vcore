@@ -73,18 +73,19 @@ public class GLImageRect extends GLRect {
     }
     
     public void draw(float[] mtx) {
+
     	if (mTextureId < 0){
     		return;
     	}
-    	
+
     	GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
     	GLES20.glEnable(GLES20.GL_BLEND);
-    	
+
 		GLES20.glUseProgram(mProgram);
-		
+
 		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureId);
-        
+
         GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mtx, 0);
         GLES20.glUniform1f(muAlphaHandle, getAlpha());
         GLES20.glUniform1f(muMaskHandle, getMask());
@@ -95,7 +96,7 @@ public class GLImageRect extends GLRect {
 
         GLES20.glDisableVertexAttribArray(0);
         GLES20.glDisableVertexAttribArray(1);
-        
+
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
         GLES20.glDisable(GLES20.GL_BLEND);
 	}
@@ -145,6 +146,7 @@ public class GLImageRect extends GLRect {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexNew);
 		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verLen, vertexBuffer,
 				GLES20.GL_STATIC_DRAW);
+//		GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
 	}
 	
 	private void initTextureBuffer(){
