@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 
 import com.baofeng.mojing.MojingSDK;
 import com.bfmj.viewcore.render.GLScreenParams;
+import com.bfmj.viewcore.view.GLGroupView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLView;
 
@@ -196,6 +197,9 @@ public class GLFocusUtils {
 
 		if (!hasFocused && mFocusedView != null){
 			mFocusedView.onFocusChange(TO_UNKNOWN, false);
+			if (mFocusedView instanceof GLGroupView){
+				((GLGroupView)mFocusedView).lostParentFocus();
+			}
 			mFocusedView = null;
 		}
 	}

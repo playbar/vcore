@@ -1111,6 +1111,13 @@ public class GLGroupView extends GLRectView {
 			mGlFocusUtils.handleFocused(direction, null, mChildView);
 		}
 	}
+
+	public void lostParentFocus(){
+		if (getParent() != null && getParent().isFocused()){
+			getParent().onFocusChange(GLFocusUtils.TO_UNKNOWN, false);
+			getParent().lostParentFocus();
+		}
+	}
 	
 	/**
 	 * 缩放修正
