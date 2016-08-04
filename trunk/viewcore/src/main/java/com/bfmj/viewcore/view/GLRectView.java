@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.baofeng.mojing.MojingSDK;
 import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.viewcore.animation.GLAnimation;
 import com.bfmj.viewcore.animation.GLRotateAnimation;
@@ -986,6 +987,13 @@ public class GLRectView extends GLView {
 		if (isFixed()){
 			float[] mtx = new float[16];
 			Matrix.setIdentityM(mtx, 0);
+
+			float[] out = new float[3];
+			MojingSDK.getLastHeadEulerAngles(out);
+			double zAngle = Math.toDegrees(out[2]);
+			if (Math.abs(zAngle) > 90.0){
+				Matrix.rotateM(mtx, 0, 180, 0, 0, 1);
+			}
 			state.setVMatrix(mtx);
 		}
 

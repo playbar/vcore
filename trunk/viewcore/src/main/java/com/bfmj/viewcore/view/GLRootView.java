@@ -145,7 +145,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         }
 
 //		queueEvent(new Runnable() {
-//			
+//
 //			@Override
 //			public void run() {
 //				MojingSDK.LeaveMojingWorld();
@@ -247,7 +247,10 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 //		}
 //	}
 
-    private void startTracker() {
+    /**
+     * 启动采集陀螺仪数据
+     */
+    public void startTracker() {
         if (isGroyTracking) {
             return;
         }
@@ -262,7 +265,10 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 //		Log.d("video", "StartTracker");
     }
 
-    private void stopTracker() {
+    /**
+     * 关闭采集陀螺仪数据
+     */
+    public void stopTracker() {
         if (!isGroyTracking) {
             return;
         }

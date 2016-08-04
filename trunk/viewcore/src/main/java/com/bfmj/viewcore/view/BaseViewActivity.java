@@ -164,7 +164,7 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
             SensorManager.SENSOR_DELAY_GAME);
 		
 		if (rootView != null){
-			rootView.onResume();
+			rootView.startTracker();
 		}
 		
 		if (mPageManager != null){
@@ -178,7 +178,7 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 		mSensorManager.unregisterListener(this);
 		
 		if (rootView != null){
-			rootView.onPause();
+			rootView.stopTracker();
 		}
 		
 		if (mPageManager != null){

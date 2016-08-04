@@ -7,8 +7,8 @@ import android.graphics.SurfaceTexture;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.util.Log;
 
+import com.baofeng.mojing.MojingSDK;
 import com.bfmj.viewcore.render.GLMesh;
 import com.bfmj.viewcore.render.GLVector2;
 import com.bfmj.viewcore.render.GLVector3;
@@ -324,6 +324,13 @@ public class GLPanoView extends GLView {
         if (isFixed()){
             float[] mtx = new float[16];
             Matrix.setIdentityM(mtx, 0);
+            float[] out = new float[3];
+            MojingSDK.getLastHeadEulerAngles(out);
+            double zAngle = Math.toDegrees(out[2]);
+
+            if (Math.abs(zAngle) > 90.0){
+                Matrix.rotateM(mtx, 0, 180, 0, 0, 1);
+            }
             state.setVMatrix(mtx);
         }
 
