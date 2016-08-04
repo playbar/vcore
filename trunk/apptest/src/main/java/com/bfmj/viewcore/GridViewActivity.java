@@ -108,7 +108,8 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setMargin(10, 10, 10, 10 );
 		gridView.setPadding( 10, 10, 10, 10);
 		gridView.setMargin( 10, 10, 10, 10 );
-		gridView.setNumDefaultColor( new GLColor(1.0f, 0.0f, 1.0f ));
+//		gridView.setNumDefaultColor( new GLColor(1.0f, 0.0f, 1.0f ));
+		gridView.setNumOnFouseColor( new GLColor(1.0f, 0.0f, 1.0f ));
 		gridView.setFlipLeftID(R.drawable.flip_leftarrow);
 		gridView.setFlipRightID( R.drawable.flip_rightarrow );
 //		gridView.setNumVisible( false );
@@ -119,7 +120,7 @@ public class GridViewActivity extends BaseViewActivity {
 		adapter = new GridViewAdapter(listData, this);
 		gridView.setOnItemSelectedListener( listener );
 		gridView.setOnItemClickListener( clickListener );
-		gridView.setWidth(1000);
+		gridView.setWidth(1134);
 		gridView.setHeight(800);
 		gridView.setAdapter( adapter );
 

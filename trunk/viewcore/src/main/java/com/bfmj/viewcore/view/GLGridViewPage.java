@@ -8,7 +8,6 @@ import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLConstant;
-import com.example.viewcore.R;
 
 public class GLGridViewPage extends GLGridView {
 
@@ -316,12 +315,7 @@ public class GLGridViewPage extends GLGridView {
 		if( getTotalNum() % getNumOneScreen() != 0 )
 			++mCount;
 
-//		GLRectView rectView = new GLRectView( this.getContext() );
-//		rectView.setLayoutParams( getX(), getY() + getHeight() - 140 , getWidth(), 140 );
-//		rectView.setBackground(new GLColor( 1.0f, 1.0f, 0.0f));
-//		addView( rectView );
-
-		float mid = getX() + getWidth() / 2;
+		float mid = getX() + getMarginLeft() + getWidth() / 2;
 
 		mShowMaxCount = mCount > MAXSHOW ? MAXSHOW : mCount;
 		if( mCount > 1 ){
@@ -365,7 +359,7 @@ public class GLGridViewPage extends GLGridView {
 				textView.setBackground(mDefaultColor);
 			}
 			//textView.setAlignment( GLTextView.ALIGN_CENTER );
-			textView.setPadding(30, 0, 0, 0 );
+			textView.setPadding(30, 10, 0, 0 );
 
 			textView.setText("" + i);
 			textView.setTextSize(40);
@@ -375,15 +369,15 @@ public class GLGridViewPage extends GLGridView {
 				public void onFocusChange(GLRectView view, boolean focused) {
 					if (focused){
 						mbIndexFocused = true;
-						view.setBackground(mOnFouseColor);
+						if( mCurIndex != index ) {
+							view.setBackground(mOnFouseColor);
+						}
 						mCurFocuseIndex = index;
 
 					}
 					else{
 						mbIndexFocused = false;
-						if( mCurIndex == index ){
-							view.setBackground( mSelectedColor );
-						}else {
+						if( mCurIndex != index ){
 							view.setBackground(mDefaultColor);
 						}
 					}
