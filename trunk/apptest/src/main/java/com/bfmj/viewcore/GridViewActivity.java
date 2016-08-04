@@ -13,7 +13,6 @@ import com.bfmj.viewcore.render.GLConstant;
 import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLAdapterView;
 import com.bfmj.viewcore.view.GLCursorView;
-import com.bfmj.viewcore.view.GLGridView;
 import com.bfmj.viewcore.view.GLGridViewPage;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLRectView;
@@ -110,8 +109,8 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setMargin( 10, 10, 10, 10 );
 //		gridView.setNumDefaultColor( new GLColor(1.0f, 0.0f, 1.0f ));
 		gridView.setNumOnFouseColor( new GLColor(1.0f, 0.0f, 1.0f ));
-		gridView.setFlipLeftID(R.drawable.flip_leftarrow);
-		gridView.setFlipRightID( R.drawable.flip_rightarrow );
+		gridView.setFlipLeftIcon(R.drawable.flip_leftarrow);
+		gridView.setFlipRightIcon( R.drawable.flip_rightarrow );
 //		gridView.setNumVisible( false );
 
 		gridView.setOrientation(GLConstant.GLOrientation.VERTICAL );

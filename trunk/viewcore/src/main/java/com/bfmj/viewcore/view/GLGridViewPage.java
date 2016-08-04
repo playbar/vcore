@@ -200,7 +200,7 @@ public class GLGridViewPage extends GLGridView {
 
 	private void prvBtn(){
 
-		prvBtnImgView.setX(mStart - mStep);
+		prvBtnImgView.setX(mStart - mStep - 20 );
 		prvBtnImgView.setY(getY() + getHeight() + mBtnSpace);
 		prvBtnImgView.setLayoutParams(60, 60);
 		prvBtnImgView.setImage(mFlipLeftID );
@@ -228,7 +228,7 @@ public class GLGridViewPage extends GLGridView {
 
 	private void nextBtn(){
 
-		nextBtnImgView.setX(mStart + mShowMaxCount * mStep);
+		nextBtnImgView.setX(mStart + mShowMaxCount * mStep + 20);
 		nextBtnImgView.setY(getY() + getHeight() + mBtnSpace);
 		nextBtnImgView.setLayoutParams(60, 60);
 		nextBtnImgView.setImage(mFlipRightID);
@@ -294,12 +294,12 @@ public class GLGridViewPage extends GLGridView {
 	}
 
 	//设置向左箭头资源
-	public void setFlipLeftID( int id ){
+	public void setFlipLeftIcon(int id ){
 		mFlipLeftID = id;
 	}
 
 	//设置向右选择箭头资源
-	public void setFlipRightID(int id ){
+	public void setFlipRightIcon(int id ){
 		mFlipRightID = id;
 	}
 
