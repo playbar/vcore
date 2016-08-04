@@ -92,6 +92,16 @@ public class GLPanoView extends GLView {
         return instance;
     }
 
+    public static void finish(){
+        if (instance != null){
+            GLES20.glDeleteBuffers(instance.vboVertexBufferIds.length, instance.vboVertexBufferIds, 0);
+            for (int i = 0; i < instance.vboTexCoorBufferIds.length; i++){
+                GLES20.glDeleteBuffers(instance.vboTexCoorBufferIds[i].length, instance.vboTexCoorBufferIds[i], 0);
+            }
+            instance = null;
+        }
+    }
+
     private GLPanoView(Context context) {
         super(context);
         new Thread(new Runnable() {

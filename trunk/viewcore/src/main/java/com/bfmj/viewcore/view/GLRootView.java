@@ -27,6 +27,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.AttributeSet;
+import android.util.Log;
 
 public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Renderer {
     private ArrayList<GLView> mChild = new ArrayList<GLView>();
@@ -252,6 +253,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         }
 
         if (!MojingSDK.StartTracker(groyRate)) {
+            Log.d("headview", "StartTracker false");
             setGroyEnable(false);
         } else {
             isGroyTracking = true;
@@ -266,6 +268,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         }
 
         MojingSDK.StopTracker();
+        Log.d("headview", "StopTracker");
 //		Log.d("video", "StopTracker");
         isGroyTracking = false;
     }
@@ -380,6 +383,14 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
         if (mGroyEnable) {
             MojingSDK.getLastHeadView(headView);
+            String msg = "{";
+            for (int h = 0; h < headView.length; h++){
+                msg += headView[h];
+                if (h < headView.length - 1){
+                    msg += ",";
+                }
+            }
+            Log.d("headview", "getLastHeadView = " + msg + "}");
         }
 
         float[] groyMatrix = getGroyMatrix();
