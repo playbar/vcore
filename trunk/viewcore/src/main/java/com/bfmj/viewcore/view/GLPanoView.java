@@ -282,6 +282,7 @@ public class GLPanoView extends GLView {
     public void initDraw() {
         if (!isSurfaceCreated){
             isSurfaceCreated = true;
+            isNeedInitVertex = true;
             createProgram();
             createTexture();
         }
