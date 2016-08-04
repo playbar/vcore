@@ -29,7 +29,7 @@ import java.util.Map;
 public class GridViewActivity extends BaseViewActivity {
 
 	private GLRootView rootView;
-	private GLGridView gridView;
+	private GLGridViewPage gridView;
 	private AQuery aq;
 	private GridViewAdapter adapter;
 	private int index;
@@ -98,7 +98,7 @@ public class GridViewActivity extends BaseViewActivity {
 			}
 		};
 
-		gridView = new GLGridViewPage( this, 2, 3 );
+		gridView = new GLGridViewPage( this, 2, 2 );
 		gridView.setX(500);
 		gridView.setY(500);
 		gridView.setLayoutParams(40, 40);
@@ -108,6 +108,10 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setMargin(10, 10, 10, 10 );
 		gridView.setPadding( 10, 10, 10, 10);
 		gridView.setMargin( 10, 10, 10, 10 );
+		gridView.setNumDefaultColor( new GLColor(1.0f, 0.0f, 1.0f ));
+		gridView.setFlipLeftID(R.drawable.flip_leftarrow);
+		gridView.setFlipRightID( R.drawable.flip_rightarrow );
+//		gridView.setNumVisible( false );
 
 		gridView.setOrientation(GLConstant.GLOrientation.VERTICAL );
 

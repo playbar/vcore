@@ -8,6 +8,7 @@ import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLConstant;
+import com.example.viewcore.R;
 
 public class GLGridViewPage extends GLGridView {
 
@@ -161,17 +162,17 @@ public class GLGridViewPage extends GLGridView {
 
 	@Override
 	public boolean onKeyUp(int keycode){
-		if( nextBtnView.isFocused() || prvBtnView.isFocused() || mbIndexFocused ) {
+		if( nextBtnImgView.isFocused() || prvBtnImgView.isFocused() || mbIndexFocused ) {
 			if (keycode == MojingKeyCode.KEYCODE_ENTER) {
 				getRootView().queueEvent(new Runnable() {
 					@Override
 					public void run() {
-						if (nextBtnView.isFocused()) {
+						if (nextBtnImgView.isFocused()) {
 							++mCurIndex;
 							setStartIndex((mCurIndex - 1) * getNumOneScreen());
 							requestLayout();
 							showPage();
-						} else if (prvBtnView.isFocused()) {
+						} else if (prvBtnImgView.isFocused()) {
 							--mCurIndex;
 							setStartIndex((mCurIndex - 1) * getNumOneScreen());
 							requestLayout();
@@ -200,77 +201,116 @@ public class GLGridViewPage extends GLGridView {
 
 	private void prvBtn(){
 
-		prvBtnView.setX(mStart - mStep);
-		prvBtnView.setY(getY() + getHeight() + mBtnSpace);
-		prvBtnView.setLayoutParams(100, 100);
-		prvBtnView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
-		prvBtnView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
+		prvBtnImgView.setX(mStart - mStep);
+		prvBtnImgView.setY(getY() + getHeight() + mBtnSpace);
+		prvBtnImgView.setLayoutParams(60, 60);
+		prvBtnImgView.setImage(mFlipLeftID );
+		prvBtnImgView.setBackground( mDefaultColor);
 
-		prvBtnView.setAlignment(GLTextView.ALIGN_CENTER);
-
-		prvBtnView.setText("<");
-		prvBtnView.setTextSize(80);
-		prvBtnView.setFocusListener(new GLViewFocusListener() {
+		prvBtnImgView.setFocusListener(new GLViewFocusListener() {
 			@Override
 			public void onFocusChange(GLRectView view, boolean focused) {
 				if (focused) {
-					view.setAlpha(0.3f);
+					prvBtnImgView.setBackground( mOnFouseColor );
+//					view.setAlpha(0.3f);
 //					--mCurIndex;
 //					setStartIndex((mCurIndex - 1) * getNumOneScreen());
 //					requestLayout();
 //					showPage();
 				} else {
-					view.setAlpha(1.0f);
+//					view.setAlpha(1.0f);
+					prvBtnImgView.setBackground(mDefaultColor );
 				}
 			}
 		});
-		addView(prvBtnView);
+		addView(prvBtnImgView);
 		return;
 	}
 
 	private void nextBtn(){
 
-		nextBtnView.setX(mStart + mShowMaxCount * mStep);
-		nextBtnView.setY(getY() + getHeight() + mBtnSpace);
-		nextBtnView.setLayoutParams(100, 100);
-		nextBtnView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
-		nextBtnView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
-		nextBtnView.setAlignment(GLTextView.ALIGN_CENTER);
+		nextBtnImgView.setX(mStart + mShowMaxCount * mStep);
+		nextBtnImgView.setY(getY() + getHeight() + mBtnSpace);
+		nextBtnImgView.setLayoutParams(60, 60);
+		nextBtnImgView.setImage(mFlipRightID);
+		nextBtnImgView.setBackground( mDefaultColor );
 
-		nextBtnView.setText(">");
-		nextBtnView.setTextSize(80);
-		nextBtnView.setFocusListener(new GLViewFocusListener() {
+		nextBtnImgView.setFocusListener(new GLViewFocusListener() {
 			@Override
 			public void onFocusChange(GLRectView view, boolean focused) {
 				if (focused) {
-					view.setAlpha(0.3f);
+					nextBtnImgView.setBackground( mOnFouseColor );
+//					view.setAlpha(0.3f);
 //					++mCurIndex;
 //					setStartIndex((mCurIndex -1) * getNumOneScreen());
 //					requestLayout();
 //					showPage();
 				} else {
-					view.setAlpha(1.0f);
+//					view.setAlpha(1.0f);
+					nextBtnImgView.setBackground( mDefaultColor );
 				}
 			}
 		});
-		addView(nextBtnView);
+		addView(nextBtnImgView);
 	}
 
-	private GLTextView prvBtnView = new GLTextView(this.getContext());
-	private GLTextView nextBtnView = new GLTextView(this.getContext());
+	private GLImageView prvBtnImgView = new GLImageView( this.getContext() );
+	private GLImageView nextBtnImgView = new GLImageView(this.getContext());
 	private float mStart = 0.0f;
-	private float mStep = 120.0f;
+	private float mStep = 80.0f;
 	private int mCurIndex = 1; //当前分页的位置,从1开始计数
 	private int mCurFocuseIndex = 0;
 	private int mCount = 0;  // 分页的个数, 从1开始计数
 	private int mShowMaxCount = 0;
 	private boolean mbIndexFocused = false;
 
-	private final static int MAXSHOW = 5;
+	private final static int MAXSHOW = 7;
 	private float mBtnSpace = 20; // 底部按钮也GridView之间的距离
+
+	private boolean mbNumListVisible = true;
+	private GLColor mDefaultColor = new GLColor(0.43f, 0.4f, 0.34f); // 默认页码选中状态
+	private GLColor mSelectedColor = new GLColor(0.21f, 0.45f, 0.68f );
+	private GLColor mOnFouseColor = new GLColor( 0.33f, 0.3f, 0.23f );
+	private int mFlipLeftID = 0;  //R.drawable.flip_leftarrow;
+	private int mFlipRightID = 0; //R.drawable.flip_rightarrow;
+
+	//是否显示页码
+	public void setNumVisible( boolean b ){
+		mbNumListVisible = b;
+	}
+
+	//设置页码默认颜色
+	public void setNumDefaultColor( GLColor color ){
+		mDefaultColor = color;
+	}
+
+	//设置页码选中状态颜色
+	public void setNumSelectedColor( GLColor  color ){
+		mSelectedColor = color;
+	}
+
+	//设置焦点在页码上颜色位置
+	public void setNumOnFouseColor( GLColor color ){
+		mOnFouseColor = color;
+	}
+
+	//设置向左箭头资源
+	public void setFlipLeftID( int id ){
+		mFlipLeftID = id;
+	}
+
+	//设置向右选择箭头资源
+	public void setFlipRightID(int id ){
+		mFlipRightID = id;
+	}
+
 
 	//创建分页
 	public void showPage(){
+
+		if ( ! mbNumListVisible ){
+			return;
+		}
 
 		mCount = getTotalNum() / getNumOneScreen();
 		if( getTotalNum() % getNumOneScreen() != 0 )
@@ -317,31 +357,35 @@ public class GLGridViewPage extends GLGridView {
 			GLTextView textView = new GLTextView(this.getContext());
 			textView.setX(mStart + (i - istart) * mStep);
 			textView.setY(getY() + getHeight() + mBtnSpace);
-			textView.setLayoutParams(100, 100);
+			textView.setLayoutParams(60, 60);
 			textView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
 			if( mCurIndex == i ){
-				textView.setBackground( new GLColor(0.21f, 0.45f, 0.68f ));
+				textView.setBackground( mSelectedColor );
 			}else {
-				textView.setBackground(new GLColor(0.43f, 0.4f, 0.34f));
+				textView.setBackground(mDefaultColor);
 			}
 			//textView.setAlignment( GLTextView.ALIGN_CENTER );
-			textView.setPadding(50, -20, 0, 0 );
+			textView.setPadding(30, 0, 0, 0 );
 
 			textView.setText("" + i);
-			textView.setTextSize(80);
+			textView.setTextSize(40);
 			final int index = i;
 			textView.setFocusListener(new GLViewFocusListener() {
 				@Override
 				public void onFocusChange(GLRectView view, boolean focused) {
 					if (focused){
 						mbIndexFocused = true;
-						view.setAlpha(0.3f);
+						view.setBackground(mOnFouseColor);
 						mCurFocuseIndex = index;
 
 					}
 					else{
 						mbIndexFocused = false;
-						view.setAlpha(1.0f);
+						if( mCurIndex == index ){
+							view.setBackground( mSelectedColor );
+						}else {
+							view.setBackground(mDefaultColor);
+						}
 					}
 				}
 			});
