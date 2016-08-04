@@ -363,6 +363,7 @@ public class GLPanoView extends GLView {
         GLES20.glDisableVertexAttribArray(1);
 
         GLES20.glDisable(GLES20.GL_BLEND);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
         state.popMatrix();
     }
