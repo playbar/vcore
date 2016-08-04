@@ -120,6 +120,7 @@ public abstract class GLViewPage {
 	 * @return
 	 */
 	public void finish(){
+		onFinish();
 		mPageManager.pop(this);
 	}
 }

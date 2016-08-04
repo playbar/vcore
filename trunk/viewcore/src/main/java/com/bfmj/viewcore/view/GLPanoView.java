@@ -72,7 +72,7 @@ public class GLPanoView extends GLView {
     private boolean isNeedInitVertex = false;
     private int mTextureId = -1;
     private SurfaceTexture mSurfaceTexture = null;
-    private int mResId;
+    private int mResId = -1;
     private Bitmap mBitmap;
 
     private float[] mRotateHeadview = new float[3];
@@ -211,6 +211,8 @@ public class GLPanoView extends GLView {
         GLTextureUtils.releaseTexture(mTextureId);
         mTextureId = -1;
         mSurfaceTexture = null;
+        mResId = -1;
+        mBitmap = null;
     }
 
     /**
@@ -244,7 +246,7 @@ public class GLPanoView extends GLView {
         }
 
         mBitmap = bitmap;
-        mResId = 0;
+        mResId = -1;
 
         if (isSurfaceCreated){
             getRootView().mCreateTextureQueue.offer(this);
@@ -455,7 +457,7 @@ public class GLPanoView extends GLView {
 
         boolean isRecycle = true;
         Bitmap bitmap = null;
-        if (mResId != 0){
+        if (mResId > -1){
             InputStream is = getContext().getResources().openRawResource(mResId);
 
             try {
