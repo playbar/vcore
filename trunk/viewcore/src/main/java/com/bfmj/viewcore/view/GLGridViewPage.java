@@ -303,6 +303,11 @@ public class GLGridViewPage extends GLGridView {
 		mFlipRightID = id;
 	}
 
+	//获取当前分页位置,从1开始
+	public int getCurIndexPage(){
+		return mCurIndex;
+	}
+
 
 	//创建分页
 	public void showPage(){
