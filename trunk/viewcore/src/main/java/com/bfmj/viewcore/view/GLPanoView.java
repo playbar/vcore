@@ -280,9 +280,11 @@ public class GLPanoView extends GLView {
 
     @Override
     public void initDraw() {
-        isSurfaceCreated = true;
-        createProgram();
-        createTexture();
+        if (!isSurfaceCreated){
+            isSurfaceCreated = true;
+            createProgram();
+            createTexture();
+        }
     }
 
     @Override
@@ -494,6 +496,7 @@ public class GLPanoView extends GLView {
 
     @Override
     public void release() {
+        isSurfaceCreated = false;
         if (mTextureId > -1){
             BaseViewActivity activity = (BaseViewActivity)getContext();
             if (activity != null && activity.getRootView() != null) {
