@@ -358,14 +358,18 @@ public class GLGridViewPage extends GLGridView {
 			textView.setY(getY() + getHeight() + mBtnSpace);
 			textView.setLayoutParams(60, 60);
 			textView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
+			textView.setTextPadding( 0 );
 			if( mCurIndex == i ){
 				textView.setBackground( mSelectedColor );
 			}else {
 				textView.setBackground(mDefaultColor);
 			}
 			//textView.setAlignment( GLTextView.ALIGN_CENTER );
-			textView.setPadding(30, 10, 0, 0 );
-
+			if( i >= 10 ){
+				textView.setPadding( 10, 0, 0, 0);
+			}else {
+				textView.setPadding(30, 0, 0, 0 );
+			}
 			textView.setText("" + i);
 			textView.setTextSize(40);
 			final int index = i;
