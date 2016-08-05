@@ -135,31 +135,56 @@ public class GLVideoRect extends GLRect {
     public void setTextureType(TextureType type){
     	mTextureType = type;
     }
+
+	public void beginDraw(){
+		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+		GLES20.glUseProgram(mProgram);
+		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+
+		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexNew);
+		GLES20.glEnableVertexAttribArray(0);
+		GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, 0);
+
+		GLES20.glEnableVertexAttribArray(1);
+	}
+
+	public void endDraw(){
+		GLES20.glDisableVertexAttribArray(0);
+		GLES20.glDisableVertexAttribArray(1);
+		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+		GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
+	}
     
     @SuppressLint("InlinedApi")
 	public void draw(float[] mtx) {
     	if (mTextureId < 0){
     		return;
     	}
-    	
-    	GLES20.glDisable(GLES20.GL_DEPTH_TEST);
-    	
-		GLES20.glUseProgram(mProgram);
-		
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureId);
-        
         GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mtx, 0);
 
-        vertexVBO();
-        textureVBO();
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 2);
+		int buffer = vboTextureNew;
 
-        GLES20.glDisableVertexAttribArray(0);
-        GLES20.glDisableVertexAttribArray(1);
-        
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-		GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
+		switch (mTextureType){
+			case TEXTURE_TYPE_LEFT:
+				buffer = vboTextureLeftNew;
+				break;
+			case TEXTURE_TYPE_RIGHT:
+				buffer = vboTextureRightNew;
+				break;
+			case TEXTURE_TYPE_TOP:
+				buffer = vboTextureTopNew;
+				break;
+			case TEXTURE_TYPE_BOTTOM:
+				buffer = vboTextureBottomNew;
+				break;
+		}
+
+		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffer);
+		GLES20.glVertexAttribPointer(mTextureCoordHandle, 2, GLES20.GL_FLOAT, false, 0, 0);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 2);
+		return;
 	}
     
     private void createProgram(){

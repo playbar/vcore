@@ -69,16 +69,28 @@ public class GLColorRect extends GLRect {
     public void setAlpha(float alpha){
     	mColor[3] = alpha;
     }
+
+    public void beginDraw(){
+
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_SRC_COLOR);
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glUseProgram(mProgram);
+
+        GLES20.glEnableVertexAttribArray(0);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexNew);
+        GLES20.glVertexAttribPointer(maPositionHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+    }
+
+    public void endDraw(){
+        GLES20.glDisableVertexAttribArray(0);
+        GLES20.glDisable(GLES20.GL_BLEND);
+        GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
+    }
     
     public void draw(float[] mtx) {
     	if (mColor == null){
     		return;
     	}
-
-    	GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_SRC_COLOR);
-    	GLES20.glEnable(GLES20.GL_BLEND);
-
-		GLES20.glUseProgram(mProgram);
         
         GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mtx, 0);
         
@@ -91,13 +103,7 @@ public class GLColorRect extends GLRect {
         
         GLES20.glUniform4fv(muColorHandle, 1, color, 0);
 
-        vertexVBO();
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, getVertices().length / 3);
-
-        GLES20.glDisableVertexAttribArray(0);
-        
-        GLES20.glDisable(GLES20.GL_BLEND);
-        GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
 
 	}
     

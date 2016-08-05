@@ -34,8 +34,6 @@ import android.graphics.BitmapFactory;
 import android.opengl.Matrix;
 import android.view.animation.AnimationUtils;
 
-import javax.microedition.khronos.opengles.GL;
-
 /**
  * 
  * ClassName: GLRectView <br/>
@@ -1087,7 +1085,9 @@ public class GLRectView extends GLView {
         doAnimation();
         	  
         float d = -depth * depthScale;
-        
+
+		GLColorRect rectColor = GLColorRect.getInstance();
+		rectColor.beginDraw();
 	    for (int i = 0; i < mRendersColor.size(); i++) {
 	    	GLRenderParams render = null;
 	    	try {
@@ -1114,16 +1114,20 @@ public class GLRectView extends GLView {
 	    		Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
 	    	}
 
-			GLColorRect rect = GLColorRect.getInstance();
 			GLColor color = render.getColor();
-			rect.setColor(new float[]{color.getR(), color.getG(), color.getB(), color.getA()});
-			rect.setMask(render.getMask());
-			rect.draw(state.getFinalMatrix());
+			rectColor.setColor(new float[]{color.getR(), color.getG(), color.getB(), color.getA()});
+			rectColor.setMask(render.getMask());
+			rectColor.draw(state.getFinalMatrix());
 
 			d += 0.0004f;
 	    	state.popMatrix();
-		}
 
+		}
+		rectColor.endDraw();
+
+
+		GLImageRect rectImg = GLImageRect.getInstance();
+		rectImg.beginDraw();
 		for (int i = 0; i < mRendersImage.size(); i++) {
 			GLRenderParams render = null;
 			try {
@@ -1150,17 +1154,18 @@ public class GLRectView extends GLView {
 				Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
 			}
 
-
-			GLImageRect rect = GLImageRect.getInstance();
-			rect.setTextureId(render.getTextureId());
-			rect.setAlpha(render.getAlpha());
-			rect.setMask(render.getMask());
-			rect.draw(state.getFinalMatrix());
+			rectImg.setTextureId(render.getTextureId());
+			rectImg.setAlpha(render.getAlpha());
+			rectImg.setMask(render.getMask());
+			rectImg.draw(state.getFinalMatrix());
 
 			d += 0.0004f;
 			state.popMatrix();
 		}
+		rectImg.endDraw();
 
+		GLVideoRect rectVideo = GLVideoRect.getInstance();
+		rectVideo.beginDraw();
 		for (int i = 0; i < mRendersVideo.size(); i++) {
 			GLRenderParams render = null;
 			try {
@@ -1187,16 +1192,16 @@ public class GLRectView extends GLView {
 				Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
 			}
 
-			GLVideoRect rect = GLVideoRect.getInstance();
-			rect.setTextureId(render.getTextureId());
-			rect.setAlpha(render.getAlpha());
-			rect.setMask(render.getMask());
-			rect.setTextureType(render.getTextureType());
-			rect.draw(state.getFinalMatrix());
+			rectVideo.setTextureId(render.getTextureId());
+			rectVideo.setAlpha(render.getAlpha());
+			rectVideo.setMask(render.getMask());
+			rectVideo.setTextureType(render.getTextureType());
+			rectVideo.draw(state.getFinalMatrix());
 
 			d += 0.0004f;
 			state.popMatrix();
 		}
+		rectVideo.endDraw();
         
 	    state.popMatrix();
 	}
