@@ -16,6 +16,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -78,8 +79,12 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 
 	private void initLog(){
 		final TextView fps = new TextView(this);
+//		LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+//		lp.setMargins(0, 300, 0, 0);
+//		fps.setLayoutParams(lp);
+		fps.setPadding(0, 400, 0, 0);
 		fps.setTextColor(Color.RED);
-		fps.setTextSize(36);
+		fps.setTextSize(30);
 
 		getRootLayout().addView(fps);
 

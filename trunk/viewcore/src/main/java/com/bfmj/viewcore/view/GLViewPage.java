@@ -76,11 +76,7 @@ public abstract class GLViewPage {
 	 * @param 
 	 * @return
 	 */
-	public void onPause(){
-		if (mView != null){
-			mView.release();
-		}
-	}
+	public void onPause(){}
 	
 	/**
 	 * 页面关闭的回调
@@ -120,7 +116,7 @@ public abstract class GLViewPage {
 	 * @return
 	 */
 	public void finish(){
-		onFinish();
 		mPageManager.pop(this);
+		onFinish();
 	}
 }
