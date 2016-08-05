@@ -408,6 +408,9 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 			return;
 		removeAllView();
 		this.mTotalCount = mGLAdapter.getCount();
+		if( mStartIndex > mTotalCount ){
+			mStartIndex = 0;
+		}
 		if( mOrientation.equals( GLConstant.GLOrientation.HORIZONTAL )){
 			showHItem(mStartIndex);
 		}else if( mOrientation.equals(GLConstant.GLOrientation.VERTICAL )){
