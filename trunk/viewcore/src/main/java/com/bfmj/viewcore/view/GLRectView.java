@@ -34,6 +34,8 @@ import android.graphics.BitmapFactory;
 import android.opengl.Matrix;
 import android.view.animation.AnimationUtils;
 
+import javax.microedition.khronos.opengles.GL;
+
 /**
  * 
  * ClassName: GLRectView <br/>
@@ -49,7 +51,11 @@ public class GLRectView extends GLView {
 	private static float depthScale = 1.0f;
 	
 	private Context mContext;
-	private List<GLRenderParams> mRenders = new ArrayList<GLRenderParams>();
+	private List<GLRenderParams> mRendersColor = new ArrayList<GLRenderParams>();
+	private List<GLRenderParams> mRendersImage = new ArrayList<GLRenderParams>();
+	private List<GLRenderParams> mRendersVideo = new ArrayList<GLRenderParams>();
+
+
 	private GLGroupView mParent;
 	private String mId = "";
 
@@ -657,13 +663,30 @@ public class GLRectView extends GLView {
 			return;
 		}
 		
-		for (GLRenderParams render : mRenders){
+		for (GLRenderParams render : mRendersColor){
 			if (render != mBackgroundRender){
 				updateRenderSize(render, getInnerWidth(), getInnerHeight());
 			} else {
 				updateRenderSize(render, width, height);
 			}
 		}
+
+		for(GLRenderParams render : mRendersImage ){
+			if( render != mBackgroundRender ){
+				updateRenderSize( render, getInnerWidth(), getInnerHeight() );
+			}else{
+				updateRenderSize( render, width, height );
+			}
+		}
+
+		for( GLRenderParams render : mRendersVideo ){
+			if( render != mBackgroundRender ){
+				updateRenderSize( render, getInnerWidth(), getInnerHeight() );
+			}else{
+				updateRenderSize( render, width, height );
+			}
+		}
+		return;
 	}
 	
 	protected void updateRenderSize(GLRenderParams render, float width, float height){
@@ -805,24 +828,53 @@ public class GLRectView extends GLView {
 		if (mBackgroundColor != null){
 			mBackgroundColor.setA(alpha);
 		}
-		
-		for (int i = 0; i < mRenders.size(); i++) {
-			mRenders.get(i).setAlpha(alpha);
+		int i = 0;
+		int ilen = mRendersColor.size();
+		for ( i = 0; i < ilen; i++) {
+			mRendersColor.get(i).setAlpha(alpha);
 		}
+		ilen = mRendersImage.size();
+		for( i = 0; i < ilen; ++i ){
+			mRendersImage.get(i).setAlpha( alpha );
+		}
+
+		ilen = mRendersVideo.size();
+		for( i = 0; i < ilen; ++i ){
+			mRendersVideo.get(i).setAlpha( alpha );
+		}
+
 	}
 	
 	@Override
 	public void setMask(float mask) {
 		super.setMask(mask);
-		
-		for (int i = 0; i < mRenders.size(); i++) {
-			mRenders.get(i).setMask(mask);
+
+		int i = 0;
+		int ilen = mRendersColor.size();
+		for (i = 0; i < ilen; i++) {
+			mRendersColor.get(i).setMask(mask);
+		}
+
+		ilen = mRendersImage.size();
+		for( i = 0; i < ilen; ++i ){
+			mRendersImage.get(i).setMask( mask );
+		}
+
+		ilen = mRendersVideo.size();
+		for( i = 0; i < ilen; ++i ){
+			mRendersVideo.get(i).setMask( mask );
 		}
 	}
 
 	protected void addRender(GLRenderParams render) {
-		mRenders.add(render);
-		
+		if( GLRenderParams.RENDER_TYPE_COLOR == render.getType()) {
+			mRendersColor.add(render);
+		}else if( GLRenderParams.RENDER_TYPE_IMAGE == render.getType() ){
+			mRendersImage.add( render );
+		}else if( GLRenderParams.RENDER_TYPE_VIDEO == render.getType() ){
+			mRendersVideo.add( render );
+		}
+
 		if (render instanceof GLRenderParams){
 			render.setAlpha(getAlpha());
 			render.setMask(getMask());
@@ -830,7 +882,14 @@ public class GLRectView extends GLView {
 	}
 	
 	protected void removeRender(GLRenderParams render) {
-		mRenders.remove(render);
+		if( GLRenderParams.RENDER_TYPE_COLOR == render.getType() ) {
+			mRendersColor.remove(render);
+		}else if( GLRenderParams.RENDER_TYPE_IMAGE == render.getType() ){
+			mRendersImage.remove( render );
+		}else if( GLRenderParams.RENDER_TYPE_VIDEO == render.getType() ){
+			mRendersVideo.remove( render );
+		}
+
 		if (render.getType() == GLRenderParams.RENDER_TYPE_IMAGE){
 			int textureId = render.getTextureId();
 			releaseTexture(textureId);
@@ -905,7 +964,13 @@ public class GLRectView extends GLView {
 	
 	private void removeBackground(){
 		if (mBackgroundRender != null){
-			mRenders.remove(mBackgroundRender);
+			if( GLRenderParams.RENDER_TYPE_COLOR == mBackgroundRender.getType() ) {
+				mRendersColor.remove(mBackgroundRender);
+			}else if( GLRenderParams.RENDER_TYPE_IMAGE == mBackgroundRender.getType() ){
+				mRendersImage.remove( mBackgroundRender);
+			}else if( GLRenderParams.RENDER_TYPE_VIDEO == mBackgroundRender.getType() ){
+				mRendersVideo.remove( mBackgroundRender );
+			}
 			mBackgroundRender = null;
 		}
 		mBackgroundBitmap = null;
@@ -922,7 +987,13 @@ public class GLRectView extends GLView {
 			if (mBackgroundRender.getTextureId() > -1) {
 				releaseTexture(mBackgroundRender.getTextureId());
 			}
-			mRenders.remove(mBackgroundRender);
+			if( GLRenderParams.RENDER_TYPE_COLOR == mBackgroundRender.getType() ) {
+				mRendersColor.remove(mBackgroundRender);
+			}else if( GLRenderParams.RENDER_TYPE_IMAGE == mBackgroundRender.getType() ){
+				mRendersImage.remove( mBackgroundRender);
+			}else if( GLRenderParams.RENDER_TYPE_VIDEO == mBackgroundRender.getType() ){
+				mRendersVideo.remove( mBackgroundRender );
+			}
 			mBackgroundRender = null;
 		}
 		
@@ -965,7 +1036,13 @@ public class GLRectView extends GLView {
 		
 		if (mBackgroundRender != null){
 			mBackgroundRender.setMask(getMask());
-			mRenders.add(0, mBackgroundRender);
+			if( GLRenderParams.RENDER_TYPE_COLOR == mBackgroundRender.getType() ) {
+				mRendersColor.add(0, mBackgroundRender);
+			}else if( GLRenderParams.RENDER_TYPE_IMAGE == mBackgroundRender.getType() ){
+				mRendersImage.add( 0, mBackgroundRender );
+			}else if( GLRenderParams.RENDER_TYPE_VIDEO == mBackgroundRender.getType() ){
+				mRendersVideo.add(0, mBackgroundRender );
+			}
 		}
 	}
 
@@ -1011,10 +1088,10 @@ public class GLRectView extends GLView {
         	  
         float d = -depth * depthScale;
         
-	    for (int i = 0; i < mRenders.size(); i++) {
+	    for (int i = 0; i < mRendersColor.size(); i++) {
 	    	GLRenderParams render = null;
 	    	try {
-	    		render = mRenders.get(i);
+	    		render = mRendersColor.get(i);
 			} catch (Exception e) {}
 
 	    	if (render == null) {
@@ -1036,40 +1113,89 @@ public class GLRectView extends GLView {
 	    	if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
 	    		Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
 	    	}
-	    	
-	    	if (render.getType() == GLRenderParams.RENDER_TYPE_COLOR){
-	    		GLColorRect rect = GLColorRect.getInstance();
-	    		
-	    		GLColor color = render.getColor();
-	    		rect.setColor(new float[]{
-	    			color.getR(), color.getG(), color.getB(), color.getA()
-	    		});
-	    		rect.setMask(render.getMask());
-	    		
-	    		rect.draw(state.getFinalMatrix());
-	    		
-	    	} else if (render.getType() == GLRenderParams.RENDER_TYPE_IMAGE){
-	    		GLImageRect rect = GLImageRect.getInstance();
-	    		
-	    		rect.setTextureId(render.getTextureId());
-	    		rect.setAlpha(render.getAlpha());
-	    		rect.setMask(render.getMask());
-	    		
-	    		rect.draw(state.getFinalMatrix());
-	    		
-	    	} else if (render.getType() == GLRenderParams.RENDER_TYPE_VIDEO){
-	    		GLVideoRect rect = GLVideoRect.getInstance();
-	    		
-	    		rect.setTextureId(render.getTextureId());
-	    		rect.setAlpha(render.getAlpha());
-	    		rect.setMask(render.getMask());
-	    		rect.setTextureType(render.getTextureType());
-	    		
-	    		rect.draw(state.getFinalMatrix());
-	    	}
 
-	    	d += 0.0004f;
+			GLColorRect rect = GLColorRect.getInstance();
+			GLColor color = render.getColor();
+			rect.setColor(new float[]{color.getR(), color.getG(), color.getB(), color.getA()});
+			rect.setMask(render.getMask());
+			rect.draw(state.getFinalMatrix());
+
+			d += 0.0004f;
 	    	state.popMatrix();
+		}
+
+		for (int i = 0; i < mRendersImage.size(); i++) {
+			GLRenderParams render = null;
+			try {
+				render = mRendersImage.get(i);
+			} catch (Exception e) {}
+
+			if (render == null) {
+				continue;
+			}
+
+			state.pushMatrix();
+			Matrix.translateM(curMatrix, 0, 0, 0, d + zPosition * 0.0008f);
+			if (angelX != 0){
+				Matrix.rotateM(curMatrix, 0, angelX, 1, 0, 0);
+			}
+			if (angelY != 0){
+				Matrix.rotateM(curMatrix, 0, angelY, 0, 1, 0);
+			}
+			if (angelZ != 0){
+				Matrix.rotateM(curMatrix, 0, angelZ, 0, 0, 1);
+			}
+
+			if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
+				Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
+			}
+
+
+			GLImageRect rect = GLImageRect.getInstance();
+			rect.setTextureId(render.getTextureId());
+			rect.setAlpha(render.getAlpha());
+			rect.setMask(render.getMask());
+			rect.draw(state.getFinalMatrix());
+
+			d += 0.0004f;
+			state.popMatrix();
+		}
+
+		for (int i = 0; i < mRendersVideo.size(); i++) {
+			GLRenderParams render = null;
+			try {
+				render = mRendersVideo.get(i);
+			} catch (Exception e) {}
+
+			if (render == null) {
+				continue;
+			}
+
+			state.pushMatrix();
+			Matrix.translateM(curMatrix, 0, 0, 0, d + zPosition * 0.0008f);
+			if (angelX != 0){
+				Matrix.rotateM(curMatrix, 0, angelX, 1, 0, 0);
+			}
+			if (angelY != 0){
+				Matrix.rotateM(curMatrix, 0, angelY, 0, 1, 0);
+			}
+			if (angelZ != 0){
+				Matrix.rotateM(curMatrix, 0, angelZ, 0, 0, 1);
+			}
+
+			if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
+				Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
+			}
+
+			GLVideoRect rect = GLVideoRect.getInstance();
+			rect.setTextureId(render.getTextureId());
+			rect.setAlpha(render.getAlpha());
+			rect.setMask(render.getMask());
+			rect.setTextureType(render.getTextureType());
+			rect.draw(state.getFinalMatrix());
+
+			d += 0.0004f;
+			state.popMatrix();
 		}
         
 	    state.popMatrix();
@@ -1494,26 +1620,28 @@ public class GLRectView extends GLView {
 	@Override
 	public void release() {
 		isSurfaceCreated = false;
-		if (mRenders != null){
-			int len = mRenders.size();
-			
-			for (int i = 0; i < len; i++) {
-				if (mRenders.get(i).getType() == GLRenderParams.RENDER_TYPE_IMAGE){
-					final int textureId = mRenders.get(i).getTextureId();
-					mRenders.get(i).setTextureId(-1);
-					if (getRootView() != null) {
-						getRootView().queueEvent(new Runnable() {
-							
-							@Override
-							public void run() {
-								GLTextureUtils.releaseTexture(textureId);
-							}
-						});
-					}
+		if (mRendersColor != null){
+			mRendersColor.clear();
+		}
+		if( mRendersImage != null ){
+			int ilen = mRendersImage.size();
+			for( int i = 0; i < ilen; ++i ){
+				final int textureId = mRendersImage.get(i).getTextureId();
+				mRendersImage.get(i).setTextureId(-1);
+				if (getRootView() != null) {
+					getRootView().queueEvent(new Runnable() {
+
+						@Override
+						public void run() {
+							GLTextureUtils.releaseTexture(textureId);
+						}
+					});
 				}
 			}
-			
-			mRenders.clear();
+			mRendersImage.clear();
+		}
+		if( mRendersVideo != null ){
+			mRendersVideo.clear();
 		}
 	}
 	
