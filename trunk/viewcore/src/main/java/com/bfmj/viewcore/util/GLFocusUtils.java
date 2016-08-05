@@ -169,7 +169,7 @@ public class GLFocusUtils {
 				}
 
 				GLRectView v = (GLRectView) views.get(i);
-				if (!v.isVisible() || !v.hasListeter() || !v.isFocusable() || !v.isEnable()) {
+				if (!v.isVisible()) {
 					continue;
 				}
 
@@ -180,15 +180,20 @@ public class GLFocusUtils {
 				float vy2 = getY(v.getTop() + v.getY() + v.getHeight());
 
 				if (MojingSDK.DirectionalRadiaInRect(v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView, new float[]{vx1, vy1}, new float[]{vx2, vy2}, -v.getDepth(), new float[2])){
-					if (v != null) {
-						if (v != mFocusedView) {
-							if (mFocusedView != null && !v.isGrandParent(mFocusedView)) {
-								mFocusedView.onFocusChange(TO_UNKNOWN, false);
-							}
-							v.doRequestFocus();
-							mFocusedView = v;
-						}
+					if (v.hasListeter()){
 						hasFocused = true;
+					} else if (getHasListenerParent(v) != null){
+						v = getHasListenerParent(v);
+						hasFocused = true;
+					} else {
+						hasFocused = false;
+					}
+					if (hasFocused && v != mFocusedView && v.isEnable()) {
+						if (mFocusedView != null && !v.isGrandParent(mFocusedView)) {
+							mFocusedView.onFocusChange(TO_UNKNOWN, false);
+						}
+						v.doRequestFocus();
+						mFocusedView = v;
 					}
 					break;
 				}
@@ -202,6 +207,17 @@ public class GLFocusUtils {
 			}
 			mFocusedView = null;
 		}
+	}
+
+	private GLGroupView getHasListenerParent(GLRectView view){
+		GLGroupView parent = view.getParent();
+		while (parent != null){
+			if (parent.hasListeter()){
+				return  parent;
+			}
+			parent = view.getParent();
+		}
+		return null;
 	}
 	
 	/**
