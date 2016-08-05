@@ -27,7 +27,6 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.AttributeSet;
-import android.util.Log;
 
 public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Renderer {
     private ArrayList<GLView> mChild = new ArrayList<GLView>();
@@ -55,6 +54,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     private int groyRate = 100; //陀罗仪频率
     private boolean isGroyTracking = false;
     private boolean isReverseScreen = false;
+    private boolean isReverseEnter = false;
 
     private float mResetXAngle = 0;
     private float mLastXangle = 0;
@@ -256,7 +256,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         }
 
         if (!MojingSDK.StartTracker(groyRate)) {
-            Log.d("headview", "StartTracker false");
             setGroyEnable(false);
         } else {
             isGroyTracking = true;
@@ -274,8 +273,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         }
 
         MojingSDK.StopTracker();
-        Log.d("headview", "StopTracker");
-//		Log.d("video", "StopTracker");
         isGroyTracking = false;
     }
 
@@ -307,7 +304,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 //        setFov();
 
         startTracker();
-        resetScreenDirection();
+        resetScreenDirection(true);
 
 //		changeRenderMode(RENDERMODE_CONTINUOUSLY);
 
@@ -396,7 +393,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                     msg += ",";
                 }
             }
-            Log.d("headview", "getLastHeadView = " + msg + "}");
         }
 
         float[] groyMatrix = getGroyMatrix();
@@ -496,6 +492,8 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
                     if (isReverseScreen) {
                         Matrix.rotateM(matrix, 0, mResetXAngle, 0, 1, 0);
+                    } else if (isReverseEnter) {
+                        Matrix.rotateM(matrix, 0, mResetXAngle - mLastXangle, 0, 1, 0);
                     }
                 }
             } else {
@@ -536,27 +534,16 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     public void initHeadView() {
         if (mGroyEnable) {
-//			if (isLockViewAngle){
-//				if (mMoJingGroy != null){
-//					mMoJingGroy.onReset();
-//				} else {
-//					mMoJingGroy = new MoJingGroy(mContext);
-//				}
-//			} else {
-            //TODO reset
             if (isSurfaceCreated) {
                 MojingSDK.ResetTracker();
-//				Log.d("video", "ResetSensorOrientation");
-
-                resetScreenDirection();
+                resetScreenDirection(false);
             }
-//			}
         } else {
             Matrix.setLookAtM(headView, 0, 0, 0, 0, 0, 0, -4, 0, 1, 0);
         }
     }
 
-    private void resetScreenDirection() {
+    private void resetScreenDirection(final boolean isFirst) {
         if (!mGroyEnable) {
             return;
         }
@@ -570,14 +557,17 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                 MojingSDK.getLastHeadView(matrix);
                 GLFocusUtils.getEulerAngles(matrix, out, 0);
                 double zAngle = Math.toDegrees(out[2]);
-//				Log.d("video", "zAngle = " + zAngle );
                 if (mIsDouble) {
                     if (Math.abs(zAngle) > 90.0) {
                         mResetXAngle = (float) Math.toDegrees(out[0]);
-//						Log.d("video", "mResetXAngle = " + mResetXAngle );
                         isReverseScreen = true;
+                        mLastXangle = 0;
                     } else {
                         isReverseScreen = false;
+                        mLastXangle = 180;
+                    }
+                    if (isFirst && isReverseScreen){
+                        isReverseEnter = true;
                     }
                 } else {
                     mResetXAngle = (float) Math.toDegrees(out[0]) + mLastXangle;
