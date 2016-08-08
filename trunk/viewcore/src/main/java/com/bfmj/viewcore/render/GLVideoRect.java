@@ -3,12 +3,17 @@ package com.bfmj.viewcore.render;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
+import com.bfmj.viewcore.util.GLMatrixState;
 import com.bfmj.viewcore.util.GLShaderManager;
+import com.bfmj.viewcore.view.GLRectView;
+import com.bfmj.viewcore.view.GLView;
 
 import android.annotation.SuppressLint;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 
 /**
  * 
@@ -135,6 +140,57 @@ public class GLVideoRect extends GLRect {
     public void setTextureType(TextureType type){
     	mTextureType = type;
     }
+
+	public void drawViews(ArrayList<GLView> views){
+		beginDraw();
+		for (int j = 0; j < views.size(); j++) {
+			if (views.get(j) instanceof GLRectView){
+				GLRectView view = (GLRectView) views.get(j);
+				if (view != null) {
+					draw(view);
+				}
+			}
+		}
+		endDraw();
+	}
+
+	private void draw(GLRectView view){
+		float d = -view.getDepth();
+		for (int i = 0; i < view.getRenders().size(); i++) {
+			GLRenderParams render = null;
+			try {
+				render = view.getRenders().get(i);
+			} catch (Exception e) {}
+
+			if (render != null && render.getType() == GLRenderParams.RENDER_TYPE_IMAGE) {
+				GLMatrixState state = view.getMatrixState();
+				state.pushMatrix();
+				float[] curMatrix = state.getCurrentMatrix();
+				Matrix.translateM(curMatrix, 0, 0, 0, d + view.getZPosition() * 0.0008f);
+				if (view.getAngelX() != 0){
+					Matrix.rotateM(curMatrix, 0, view.getAngelX(), 1, 0, 0);
+				}
+				if (view.getAngelY() != 0){
+					Matrix.rotateM(curMatrix, 0, view.getAngelY(), 0, 1, 0);
+				}
+				if (view.getAngelZ() != 0){
+					Matrix.rotateM(curMatrix, 0, view.getAngelZ(), 0, 0, 1);
+				}
+
+				if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
+					Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
+				}
+
+				setTextureId(render.getTextureId());
+				setAlpha(render.getAlpha());
+				setMask(render.getMask());
+				draw(state.getFinalMatrix());
+
+				d += 0.0004f;
+				state.popMatrix();
+			}
+		}
+	}
 
 	public void beginDraw(){
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);

@@ -104,35 +104,33 @@ public class GLImageRect extends GLRect {
 				render = view.getRenders().get(i);
 			} catch (Exception e) {}
 
-			if (render == null) {
-				continue;
-			}
+			if (render != null && render.getType() == GLRenderParams.RENDER_TYPE_IMAGE){
+				GLMatrixState state = view.getMatrixState();
+				state.pushMatrix();
+				float[] curMatrix = state.getCurrentMatrix();
+				Matrix.translateM(curMatrix, 0, 0, 0, d + view.getZPosition() * 0.0008f);
+				if (view.getAngelX() != 0){
+					Matrix.rotateM(curMatrix, 0, view.getAngelX(), 1, 0, 0);
+				}
+				if (view.getAngelY() != 0){
+					Matrix.rotateM(curMatrix, 0, view.getAngelY(), 0, 1, 0);
+				}
+				if (view.getAngelZ() != 0){
+					Matrix.rotateM(curMatrix, 0, view.getAngelZ(), 0, 0, 1);
+				}
 
-			GLMatrixState state = view.getMatrixState();
-			state.pushMatrix();
-			float[] curMatrix = state.getCurrentMatrix();
-			Matrix.translateM(curMatrix, 0, 0, 0, d + view.getZPosition() * 0.0008f);
-			if (view.getAngelX() != 0){
-				Matrix.rotateM(curMatrix, 0, view.getAngelX(), 1, 0, 0);
-			}
-			if (view.getAngelY() != 0){
-				Matrix.rotateM(curMatrix, 0, view.getAngelY(), 0, 1, 0);
-			}
-			if (view.getAngelZ() != 0){
-				Matrix.rotateM(curMatrix, 0, view.getAngelZ(), 0, 0, 1);
-			}
+				if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
+					Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
+				}
 
-			if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
-				Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
+				setTextureId(render.getTextureId());
+				setAlpha(render.getAlpha());
+				setMask(render.getMask());
+				draw(state.getFinalMatrix());
+
+				d += 0.0004f;
+				state.popMatrix();
 			}
-
-			setTextureId(render.getTextureId());
-			setAlpha(render.getAlpha());
-			setMask(render.getMask());
-			draw(state.getFinalMatrix());
-
-			d += 0.0004f;
-			state.popMatrix();
 		}
 	}
 
