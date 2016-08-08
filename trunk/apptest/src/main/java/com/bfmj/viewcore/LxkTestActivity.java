@@ -1,7 +1,9 @@
 package com.bfmj.viewcore;
 
 import android.annotation.SuppressLint;
+import android.opengl.Matrix;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.player.GLSystemPlayer;
@@ -35,76 +37,30 @@ public class LxkTestActivity extends BaseViewActivity {
 			@Override
 			public void onFocusChange(GLRectView view, boolean focused) {
 				if (focused){
-					view.setBackground(new GLColor(0, 0, 1));
+					view.setBackground(R.drawable.a1);
 				} else {
-					view.setBackground(new GLColor(1, 1, 1));
+					view.setBackground(R.drawable.a2);
 				}
 			}
 		};
 
-		GLImageView[] imageViews = new GLImageView[10];
+		GLImageView[] imageViews = new GLImageView[200];
 
-		imageViews[0] = new GLImageView(this);
-		imageViews[0].setX(getX(1150));
-		imageViews[0].setY(getY(1150));
-		imageViews[0].setLayoutParams( getWidth(100), getHeight(100));
-
-		imageViews[1] = new GLImageView(this);
-		imageViews[1].setX(getX(850));
-		imageViews[1].setY(getY(1150));
-		imageViews[1].setLayoutParams(getWidth(100), getHeight(100));
-
-		imageViews[2] = new GLImageView(this);
-		imageViews[2].setX(getX(550));
-		imageViews[2].setY(getY(1150));
-		imageViews[2].setLayoutParams(getWidth(100), getHeight(100));
-
-		imageViews[3] = new GLImageView(this);
-		imageViews[3].setX(getX(250));
-		imageViews[3].setY(getY(1150));
-		imageViews[3].setLayoutParams( getWidth(100), getHeight(100));
-
-		imageViews[4] = new GLImageView(this);
-		imageViews[4].setX(getX(1150));
-		imageViews[4].setY(getY(850));
-		imageViews[4].setLayoutParams(getWidth(100), getHeight(100));
-
-		imageViews[5] = new GLImageView(this);
-		imageViews[5].setX(getX(1150));
-		imageViews[5].setY(getY(550));
-		imageViews[5].setLayoutParams(getWidth(100), getHeight(100));
-
-		imageViews[6] = new GLImageView(this);
-		imageViews[6].setX(getX(1150));
-		imageViews[6].setY(getY(250));
-		imageViews[6].setLayoutParams( getWidth(100), getHeight(100));
-
-		imageViews[7] = new GLImageView(this);
-		imageViews[7].setX(getX(850));
-		imageViews[7].setY(getY(850));
-		imageViews[7].setLayoutParams(getWidth(100), getHeight(100));
-
-		imageViews[8] = new GLImageView(this);
-		imageViews[8].setX( getX(550));
-		imageViews[8].setY( getY(550));
-		imageViews[8].setLayoutParams(getWidth(100), getHeight(100));
-
-		imageViews[9] = new GLImageView(this);
-		imageViews[9].setX( getX( 250));
-		imageViews[9].setY( getY(250));
-		imageViews[9].setLayoutParams(getWidth(100), getHeight(100));
-
-		GLImageView line = new GLImageView(this);
-		line.setX( 1198);
-		line.setY( 0);
-		line.setLayoutParams(4, 2400);
-		line.setBackground(new GLColor(0, 1, 0));
-		rootView.addView(line);
+//		GLImageView line = new GLImageView(this);
+//		line.setX( 1198);
+//		line.setY( 0);
+//		line.setLayoutParams(4, 2400);
+//		line.setBackground(new GLColor(0, 1, 0));
+//		rootView.addView(line);
 
 
 
 		for (int i = 0; i < imageViews.length; i++) {
-			imageViews[i].setBackground(new GLColor(1, 1, 1));
+			imageViews[i] = new GLImageView(this);
+			imageViews[i].setX(i * 10);
+			imageViews[i].setY(i * 10);
+			imageViews[i].setLayoutParams(300, 300);
+			imageViews[i].setBackground(R.drawable.a2);
 //			imageViews[i].setDepth(f);
 			imageViews[i].setFocusListener(listener);
 			rootView.addView(imageViews[i]);
@@ -129,6 +85,38 @@ public class LxkTestActivity extends BaseViewActivity {
 		textView.setTextSize(100);
 		rootView.addView(textView);
 
+		long time =  System.currentTimeMillis();
+
+		for (int i = 0; i < 2000; i++){
+			float[] mMVPMatrix = new float[16];
+			float[] mVMatrix = new float[16];
+			float[] mProjMatrix = new float[16];
+			float[] currMatrix = new float[16];
+
+//			Matrix.setIdentityM(mProjMatrix, 0);
+//			Matrix.setIdentityM(mProjMatrix, 0);
+//			Matrix.setIdentityM(mProjMatrix, 0);
+
+			Matrix.multiplyMM(mMVPMatrix, 0, mVMatrix, 0, currMatrix, 0);
+			Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mMVPMatrix, 0);
+		}
+
+		Log.d("testmmtime", "m1 total = " + (System.currentTimeMillis() - time));
+		time =  System.currentTimeMillis();
+
+		for (int i = 0; i < 2000; i++){
+			float[] mVMatrix = new float[16];
+			float[] mProjMatrix = new float[16];
+			float[] currMatrix = new float[16];
+
+//			Matrix.setIdentityM(mProjMatrix, 0);
+//			Matrix.setIdentityM(mProjMatrix, 0);
+//			Matrix.setIdentityM(mProjMatrix, 0);
+
+			multiplay(multiplay(currMatrix, mVMatrix ), mProjMatrix);
+		}
+
+		Log.d("testmmtime", "m2 total = " + (System.currentTimeMillis() - time));
 
 // 		GLImageView imageView = new GLImageView(this);
 //		imageView.setImage(R.drawable.ic_launcher);
@@ -243,6 +231,19 @@ public class LxkTestActivity extends BaseViewActivity {
 
 	private int getHeight(int h){
 		return h;
+	}
+
+	public float[] multiplay(float[] a, float[] b){
+		float[] d = new float[16];
+		int i = 0;
+		do {
+			d[i * 4] = a[i * 4] * b[0] + a[i * 4 + 1] * b[4] + a[i * 4 + 2] * b[8] + a[i * 4 + 3] * b[12];
+			d[i * 4 + 1] = a[i * 4] * b[1] + a[i * 4 + 1] * b[5] + a[i * 4 + 2] * b[9] + a[i * 4 + 3] * b[13];
+			d[i * 4 + 2] = a[i * 4] * b[2] + a[i * 4 + 1] * b[6] + a[i * 4 + 2] * b[10] + a[i * 4 + 3] * b[14];
+			d[i * 4 + 3] = a[i * 4] * b[3] + a[i * 4 + 1] * b[7] + a[i * 4 + 2] * b[11] + a[i * 4 + 3] * b[15];
+		} while ((++i) < 4);
+
+		return d;
 	}
 
 }

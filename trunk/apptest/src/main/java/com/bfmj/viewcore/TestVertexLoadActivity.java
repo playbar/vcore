@@ -2,11 +2,15 @@ package com.bfmj.viewcore;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Surface;
 
 import com.bfmj.viewcore.interfaces.IGLPlayerListener;
 import com.bfmj.viewcore.player.GLSystemPlayer;
+import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.view.BaseViewActivity;
+import com.bfmj.viewcore.view.GLCursorView;
+import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLPanoView;
 import com.bfmj.viewcore.view.GLPlayerView;
 import com.bfmj.viewcore.view.GLSenceView;
@@ -27,10 +31,19 @@ public class TestVertexLoadActivity extends BaseViewActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        showSkyBox(SCENE_TYPE_DEFAULT);
+//        showSkyBox(SCENE_TYPE_DEFAULT);
 
-//        final GLPanoView panoView = GLPanoView.getSharedPanoView(this);
-//        panoView.setRenderType(GLPanoView.RENDER_TYPE_VIDEO);
+        GLCursorView cursorView = new GLCursorView(this);
+        cursorView.setX( 1150);
+        cursorView.setY( 1150);
+        cursorView.setLayoutParams(100, 100);
+        cursorView.setBackground(R.drawable.a1);
+        cursorView.setDepth(3.9f);
+//		cursorView.setFixed(false);
+        getRootView().addView(cursorView);
+
+        final GLPanoView panoView = GLPanoView.getSharedPanoView(this);
+        panoView.setRenderType(GLPanoView.RENDER_TYPE_VIDEO);
 
          player = new MediaPlayer();
 
@@ -44,25 +57,25 @@ public class TestVertexLoadActivity extends BaseViewActivity {
                     e.printStackTrace();
                 }
 
-//                getRootView().queueEvent(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            player.setDataSource("/mnt/sdcard/Download/1.mp4");
-////                            player.setSurface(new Surface(panoView.getSurfaceTexture()));
-//
-//                            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//                                @Override
-//                                public void onPrepared(MediaPlayer mp) {
-//                                    mp.start();
-//                                }
-//                            });
-////                            player.prepareAsync();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
+                getRootView().queueEvent(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            player.setDataSource("/mnt/sdcard/1.mp4");
+                            player.setSurface(new Surface(panoView.getSurfaceTexture()));
+
+                            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                @Override
+                                public void onPrepared(MediaPlayer mp) {
+                                    mp.start();
+                                }
+                            });
+                            player.prepareAsync();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
 
 //                getRootView().queueEvent(new Runnable() {
 //                    @Override
@@ -82,9 +95,6 @@ public class TestVertexLoadActivity extends BaseViewActivity {
      * @param type 场景类型
      */
     public void showSkyBox(int type){
-        if (mSceneType == type && mSceneType != -1){
-            return;
-        }
         mSceneType = type;
 
         GLPanoView  mSkyboxView = GLPanoView.getSharedPanoView(this);
@@ -107,4 +117,9 @@ public class TestVertexLoadActivity extends BaseViewActivity {
         GLPanoView.getSharedPanoView(this).setVisible(false);
     }
 
+    @Override
+    protected void onDestroy() {
+        GLPanoView.finish();
+        super.onDestroy();
+    }
 }
