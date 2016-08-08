@@ -114,43 +114,43 @@ public class GLPointView extends GLView {
 	}
 
 	@Override
-	public void draw(boolean isLeft) {
+	public void onBeforeDraw(boolean isLeft) {
 		if (points == null || points.size() == 0){
-    		return;
-    	}
-		
+			return;
+		}
+
 		if (isNeedInitVertex){
-    		initVertex();
-    		isNeedInitVertex = false;
-    	} else {
-    		initColor();
-    	}
-		
+			initVertex();
+			isNeedInitVertex = false;
+		} else {
+			initColor();
+		}
+
 		GLMatrixState state = getMatrixState();
 		state.pushMatrix();
-		
+
 		getEyeMatrix(state.getVMatrix(), isLeft);
-    	
-    	GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_SRC_COLOR);
-    	GLES20.glEnable(GLES20.GL_BLEND);
-    	
+
+		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_SRC_COLOR);
+		GLES20.glEnable(GLES20.GL_BLEND);
+
 		GLES20.glUseProgram(mProgram);
-        
-        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, getMatrixState().getFinalMatrix(), 0);
 
-        vertexVBO();
-        sizeVBO();
-        colorVBO();
-        GLES20.glDrawArrays(GLES20.GL_POINTS, 0, points.size());
+		GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, getMatrixState().getFinalMatrix(), 0);
 
-        GLES20.glDisableVertexAttribArray(0);
-        GLES20.glDisableVertexAttribArray(1);
-        GLES20.glDisableVertexAttribArray(2);
-        
-        GLES20.glDisable(GLES20.GL_BLEND);
+		vertexVBO();
+		sizeVBO();
+		colorVBO();
+		GLES20.glDrawArrays(GLES20.GL_POINTS, 0, points.size());
+
+		GLES20.glDisableVertexAttribArray(0);
+		GLES20.glDisableVertexAttribArray(1);
+		GLES20.glDisableVertexAttribArray(2);
+
+		GLES20.glDisable(GLES20.GL_BLEND);
 		GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
 
-        state.popMatrix();
+		state.popMatrix();
 	}
 	
 	private void createProgram(){
@@ -295,9 +295,8 @@ public class GLPointView extends GLView {
 	}
 
 	@Override
-	public void onBeforeDraw() {
-		// TODO Auto-generated method stub
-		
+	public void draw() {
+
 	}
 
 	@Override

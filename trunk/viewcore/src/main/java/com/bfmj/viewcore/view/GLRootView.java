@@ -373,13 +373,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             v.createTexture();
         }
 
-        for (int i = 0; i < mChild.size(); i++) {
-            GLView view = mChild.get(i);
-            if (view != null) {
-                view.onBeforeDraw();
-            }
-        }
-
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         ArrayList<GLView> allViews = getAllViews();
@@ -408,7 +401,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                 } else {
                     GLES20.glViewport(i * mWidth / 2, (mHeight - height) / 2, mWidth / 2, height);
                 }
-
                 for (int j = 0; j < allViews.size(); j++) {
                     GLView view = allViews.get(j);
                     if (view != null) {
@@ -417,7 +409,20 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                         //					Matrix.orthoM(view.getMatrixState().getProjMatrix(), 0, -40, 40, -40, 40, GLScreenParams.getNear(), GLScreenParams.getFar());
                         //			Matrix.setLookAtM(view.getMatrixState().getVMatrix(), 0, 0, 0, 0, headView[2], -headView[6], headView[10], 0, 1, 0);
 
-                        view.draw(i == 0 ? true : false);
+                        view.onBeforeDraw(i == 0 ? true : false);
+
+                        if (!(view instanceof GLRectView)){
+                            view.draw();
+                        }
+                    }
+                }
+//                GLVideoRect.getInstance().drawViews(allViews);
+                GLImageRect.getInstance().drawViews(allViews);
+
+                for (int j = 0; j < mChild.size(); j++) {
+                    GLView view = mChild.get(j);
+                    if (view != null) {
+                        view.onAfterDraw();
                     }
                 }
             }
@@ -436,19 +441,12 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 //					Matrix.orthoM(view.getMatrixState().getProjMatrix(), 0, -40, 40, -40, 40, GLScreenParams.getNear(), GLScreenParams.getFar());
                     //Matrix.setLookAtM(view.getMatrixState().getVMatrix(), 0, 0, 0, 0, 0, 0, -10, 0, 1, 0);
 
-                    view.draw(true);
+                    view.draw();
                 }
             }
         }
 
         mGlFocusUtils.handleFocused(groyMatrix, allViews);
-
-        for (int i = 0; i < mChild.size(); i++) {
-            GLView view = mChild.get(i);
-            if (view != null) {
-                view.onAfterDraw();
-            }
-        }
     }
 
     private void saveLastAngle() {

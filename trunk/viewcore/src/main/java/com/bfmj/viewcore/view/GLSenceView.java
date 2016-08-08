@@ -186,45 +186,45 @@ public class GLSenceView extends GLView {
 	}
 
 	@Override
-	public void draw(boolean isLeft) {
+	public void onBeforeDraw(boolean isLeft) {
 		if (!isVisible() || !isSurfaceCreated || vertices == null || mTextureId < 0){
-    		return;
-    	}
-    	
-    	if (isNeedInitVertex){
-    		initVertex();
+			return;
+		}
+
+		if (isNeedInitVertex){
+			initVertex();
 			initTextureBuffer();
-    	}
-    	
-    	GLMatrixState state = getMatrixState();
-    	
-    	getEyeMatrix(state.getVMatrix(), isLeft);
-    	
-    	state.pushMatrix();
-    	Matrix.scaleM(state.getCurrentMatrix(), 0, mScaleX, mScaleY, mScaleZ);
-    	
-    	GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-    	GLES20.glEnable(GLES20.GL_BLEND);
-    	
+		}
+
+		GLMatrixState state = getMatrixState();
+
+		getEyeMatrix(state.getVMatrix(), isLeft);
+
+		state.pushMatrix();
+		Matrix.scaleM(state.getCurrentMatrix(), 0, mScaleX, mScaleY, mScaleZ);
+
+		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		GLES20.glEnable(GLES20.GL_BLEND);
+
 		GLES20.glUseProgram(mProgram);
-		
+
 		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureId);
-        
-        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, getMatrixState().getFinalMatrix(), 0);
-        GLES20.glUniform1f(muAlphaHandle, getAlpha());
-        GLES20.glUniform1f(muMaskHandle, getMask());
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureId);
 
-        vertexVBO();
-        textureVBO();
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
+		GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, getMatrixState().getFinalMatrix(), 0);
+		GLES20.glUniform1f(muAlphaHandle, getAlpha());
+		GLES20.glUniform1f(muMaskHandle, getMask());
 
-        GLES20.glDisableVertexAttribArray(0);
-        GLES20.glDisableVertexAttribArray(1);
-        
-        GLES20.glDisable(GLES20.GL_BLEND);
-        
-        state.popMatrix();
+		vertexVBO();
+		textureVBO();
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
+
+		GLES20.glDisableVertexAttribArray(0);
+		GLES20.glDisableVertexAttribArray(1);
+
+		GLES20.glDisable(GLES20.GL_BLEND);
+
+		state.popMatrix();
 	}
 	
 	private void init(){
@@ -337,11 +337,10 @@ public class GLSenceView extends GLView {
 			mTextureId = GLTextureUtils.initImageTexture(getContext(), bitmap, isRecycle);
 		}
 	}
-	
+
 	@Override
-	public void onBeforeDraw() {
-		// TODO Auto-generated method stub
-		
+	public void draw() {
+
 	}
 
 	@Override

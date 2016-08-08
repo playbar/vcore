@@ -261,17 +261,6 @@ public class GLGroupView extends GLRectView {
 		
 		super.onSurfaceChanged(width, height);
 	}
-
-	/**
-	 * 绘制
-	 * @author linzanxian  @Date 2015年3月10日 下午12:04:21
-	 * description:绘制
-	 * @return void
-	 */
-	@Override
-	public void draw(boolean isLeft) {
-		super.draw(isLeft);
-	}
 	
 	/**
 	 * 改变同级view

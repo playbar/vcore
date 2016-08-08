@@ -54,10 +54,9 @@ public abstract class GLView implements GLRenderListener {
 	/**
 	 * 绘制，由系统自动调用
 	 * @author lixianke  @Date 2015-6-19 下午5:10:26
-	 * @param isLeft 是否为左屏 
 	 * @return
 	 */
-	public abstract void draw(boolean isLeft);
+	public abstract void draw();
 	
 	/**
 	 * 释放资源，由系统自动调用

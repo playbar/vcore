@@ -196,16 +196,6 @@ public class GLProcessView extends GLGroupView {
 	}
 	
 	/**
-	 * 绘制
-	 * @author linzanxian  @Date 2015年3月10日 下午12:04:21
-	 * @return void
-	 */
-	@Override
-	public void draw(boolean isLeft) {
-		super.draw(isLeft);
-	}
-	
-	/**
 	 * 设置属性
 	 * @author linzanxian  @Date 2015年3月17日 下午2:35:36
 	 * @return void

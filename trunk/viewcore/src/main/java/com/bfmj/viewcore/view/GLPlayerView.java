@@ -401,13 +401,13 @@ public abstract class GLPlayerView extends GLRectView {
 		
 		addRender(mRenderParams);
 	}
-	
+
 	@Override
-	public void draw(boolean isLeft) {		
+	public void onBeforeDraw(boolean isLeft) {
 		if (mRenderParams == null){
 			return;
 		}
-		
+
 		if (mSurfaceTexture != null && isLeft){
 			try {
 				mSurfaceTexture.updateTexImage();
@@ -416,9 +416,9 @@ public abstract class GLPlayerView extends GLRectView {
 			} catch (RuntimeException e) {
 				return;
 			}
-			
+
 		}
-		
+
 		if (mRenderParams == null){
 			return;
 		}
@@ -426,8 +426,8 @@ public abstract class GLPlayerView extends GLRectView {
 		if (isReverseScreen()) {
 			isLeft = !isLeft;
 		}
-		
-		
+
+
 		if (mPlayMode == MODE_3D_LEFT_RIGHT){
 			if (isLeft){
 				mRenderParams.setTextureType(GLVideoRect.TextureType.TEXTURE_TYPE_LEFT);
@@ -444,7 +444,7 @@ public abstract class GLPlayerView extends GLRectView {
 			mRenderParams.setTextureType(GLVideoRect.TextureType.TEXTURE_TYPE_ALL);
 		}
 
-		super.draw(isLeft);
+		super.onBeforeDraw(isLeft);
 	}
 	
 	private boolean isReverseScreen(){

@@ -8,7 +8,7 @@ package com.bfmj.viewcore.interfaces;
  * description:
  */
 public interface GLRenderListener {
-	void onBeforeDraw();
+	void onBeforeDraw(boolean isLeft);
 	void onAfterDraw();
 	void onSurfaceCreated();
 	void onSurfaceChanged(int width, int height);

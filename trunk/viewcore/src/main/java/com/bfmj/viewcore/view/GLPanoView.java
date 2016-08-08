@@ -299,7 +299,7 @@ public class GLPanoView extends GLView {
     }
 
     @Override
-    public void draw(boolean isLeft) {
+    public void onBeforeDraw(boolean isLeft) {
         if (!isVisible() || !isSurfaceCreated || vertices[mSceneType] == null || mTextureId < 0){
             return;
         }
@@ -351,7 +351,7 @@ public class GLPanoView extends GLView {
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 
         GLES20.glBindTexture(mRenderType == RENDER_TYPE_VIDEO ? GLES11Ext.GL_TEXTURE_EXTERNAL_OES :
-                    GLES20.GL_TEXTURE_2D, mTextureId);
+                GLES20.GL_TEXTURE_2D, mTextureId);
 
         GLES20.glUniformMatrix4fv(muMVPMatrixHandles[mRenderType], 1, false, getMatrixState().getFinalMatrix(), 0);
         GLES20.glUniform1f(muAlphaHandles[mRenderType], getAlpha());
@@ -383,6 +383,11 @@ public class GLPanoView extends GLView {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
         state.popMatrix();
+
+    }
+
+    @Override
+    public void draw() {
     }
 
     private void createProgram(){
@@ -500,9 +505,6 @@ public class GLPanoView extends GLView {
             mTextureId = GLTextureUtils.initImageTexture(getContext(), bitmap, isRecycle);
         }
     }
-
-    @Override
-    public void onBeforeDraw() {}
 
     @Override
     public void onAfterDraw() {}

@@ -448,11 +448,6 @@ public class GLGridViewPage extends GLGridView {
 
 	}
 
-	@Override
-	public void draw(boolean isLeft) {
-		super.draw(isLeft);
-	}
-
 	public int getPrevIndex() {
 		return super.getPrevIndex();
 	}

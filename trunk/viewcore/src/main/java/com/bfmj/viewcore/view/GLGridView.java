@@ -553,13 +553,6 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 		this.addView(view, index);
 	}
 
-	@Override
-	public void draw(boolean isLeft) {
-		//GLES20.glEnable(GLES20.GL_SCISSOR_TEST);
-		//GLES20.glScissor(0, 0, 2000, 600 );
-		super.draw(isLeft);
-	}
-
 	public int getPrevIndex() {
 		return mPrevIndex;
 	}

@@ -18,8 +18,8 @@ public class GLMatrixState {
     private float[] currMatrix;
     
     //保护变换矩阵的栈  
-    static float[][] mStack=new float[10][16];
-    static int stackTop=-1;
+    private float[][] mStack=new float[10][16];
+    private int stackTop=-1;
     
     /**
      * 初始化矩阵
@@ -64,13 +64,23 @@ public class GLMatrixState {
     }
     
     public float[] getFinalMatrix(){
-    	float[] mMVPMatrix=new float[16];
-    	Matrix.multiplyMM(mMVPMatrix, 0, mScaleMatrix, 0, mRotateMatrix, 0);
-    	Matrix.multiplyMM(mMVPMatrix, 0, mTranslationMatrix , 0, mMVPMatrix, 0);
-    	Matrix.multiplyMM(mMVPMatrix, 0, currMatrix, 0, mMVPMatrix, 0);
-    	Matrix.multiplyMM(mMVPMatrix, 0, mVMatrix, 0, mMVPMatrix, 0);
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mMVPMatrix, 0); 
-        return mMVPMatrix;
+//    	float[] mMVPMatrix=new float[16];
+//    	Matrix.multiplyMM(mMVPMatrix, 0, mVMatrix, 0, currMatrix, 0);
+//        Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mMVPMatrix, 0);
+        return multiplay(multiplay(currMatrix, mVMatrix ), mProjMatrix);
+    }
+
+    public float[] multiplay(float[] a, float[] b){
+        float[] d = new float[16];
+        int i = 0;
+        do {
+            d[i * 4] = a[i * 4] * b[0] + a[i * 4 + 1] * b[4] + a[i * 4 + 2] * b[8] + a[i * 4 + 3] * b[12];
+            d[i * 4 + 1] = a[i * 4] * b[1] + a[i * 4 + 1] * b[5] + a[i * 4 + 2] * b[9] + a[i * 4 + 3] * b[13];
+            d[i * 4 + 2] = a[i * 4] * b[2] + a[i * 4 + 1] * b[6] + a[i * 4 + 2] * b[10] + a[i * 4 + 3] * b[14];
+            d[i * 4 + 3] = a[i * 4] * b[3] + a[i * 4 + 1] * b[7] + a[i * 4 + 2] * b[11] + a[i * 4 + 3] * b[15];
+        } while ((++i) < 4);
+
+        return d;
     }
     
     public void setVMatrix(float[] matrix){

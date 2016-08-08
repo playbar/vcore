@@ -31,6 +31,8 @@ import com.bfmj.viewcore.animation.GLAlphaAnimation;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.opengl.Matrix;
 import android.view.animation.AnimationUtils;
 
@@ -49,10 +51,7 @@ public class GLRectView extends GLView {
 	private static float depthScale = 1.0f;
 	
 	private Context mContext;
-	private List<GLRenderParams> mRendersColor = new ArrayList<GLRenderParams>();
-	private List<GLRenderParams> mRendersImage = new ArrayList<GLRenderParams>();
-	private List<GLRenderParams> mRendersVideo = new ArrayList<GLRenderParams>();
-
+	private List<GLRenderParams> mRenders = new ArrayList<GLRenderParams>();
 
 	private GLGroupView mParent;
 	private String mId = "";
@@ -661,27 +660,11 @@ public class GLRectView extends GLView {
 			return;
 		}
 		
-		for (GLRenderParams render : mRendersColor){
+		for (GLRenderParams render : mRenders){
 			if (render != mBackgroundRender){
 				updateRenderSize(render, getInnerWidth(), getInnerHeight());
 			} else {
 				updateRenderSize(render, width, height);
-			}
-		}
-
-		for(GLRenderParams render : mRendersImage ){
-			if( render != mBackgroundRender ){
-				updateRenderSize( render, getInnerWidth(), getInnerHeight() );
-			}else{
-				updateRenderSize( render, width, height );
-			}
-		}
-
-		for( GLRenderParams render : mRendersVideo ){
-			if( render != mBackgroundRender ){
-				updateRenderSize( render, getInnerWidth(), getInnerHeight() );
-			}else{
-				updateRenderSize( render, width, height );
 			}
 		}
 		return;
@@ -790,6 +773,18 @@ public class GLRectView extends GLView {
 			angelZ += angle;
 		}
 	}
+
+	public float getAngelX(){
+		return angelX;
+	}
+
+	public float getAngelY(){
+		return angelY;
+	}
+
+	public float getAngelZ(){
+		return angelZ;
+	}
 	
 	/**
 	 * 获取深度，即View到视点的距离
@@ -827,20 +822,10 @@ public class GLRectView extends GLView {
 			mBackgroundColor.setA(alpha);
 		}
 		int i = 0;
-		int ilen = mRendersColor.size();
+		int ilen = mRenders.size();
 		for ( i = 0; i < ilen; i++) {
-			mRendersColor.get(i).setAlpha(alpha);
+			mRenders.get(i).setAlpha(alpha);
 		}
-		ilen = mRendersImage.size();
-		for( i = 0; i < ilen; ++i ){
-			mRendersImage.get(i).setAlpha( alpha );
-		}
-
-		ilen = mRendersVideo.size();
-		for( i = 0; i < ilen; ++i ){
-			mRendersVideo.get(i).setAlpha( alpha );
-		}
-
 	}
 	
 	@Override
@@ -848,30 +833,14 @@ public class GLRectView extends GLView {
 		super.setMask(mask);
 
 		int i = 0;
-		int ilen = mRendersColor.size();
+		int ilen = mRenders.size();
 		for (i = 0; i < ilen; i++) {
-			mRendersColor.get(i).setMask(mask);
-		}
-
-		ilen = mRendersImage.size();
-		for( i = 0; i < ilen; ++i ){
-			mRendersImage.get(i).setMask( mask );
-		}
-
-		ilen = mRendersVideo.size();
-		for( i = 0; i < ilen; ++i ){
-			mRendersVideo.get(i).setMask( mask );
+			mRenders.get(i).setMask(mask);
 		}
 	}
 
 	protected void addRender(GLRenderParams render) {
-		if( GLRenderParams.RENDER_TYPE_COLOR == render.getType()) {
-			mRendersColor.add(render);
-		}else if( GLRenderParams.RENDER_TYPE_IMAGE == render.getType() ){
-			mRendersImage.add( render );
-		}else if( GLRenderParams.RENDER_TYPE_VIDEO == render.getType() ){
-			mRendersVideo.add( render );
-		}
+		mRenders.add( render );
 
 		if (render instanceof GLRenderParams){
 			render.setAlpha(getAlpha());
@@ -880,18 +849,16 @@ public class GLRectView extends GLView {
 	}
 	
 	protected void removeRender(GLRenderParams render) {
-		if( GLRenderParams.RENDER_TYPE_COLOR == render.getType() ) {
-			mRendersColor.remove(render);
-		}else if( GLRenderParams.RENDER_TYPE_IMAGE == render.getType() ){
-			mRendersImage.remove( render );
-		}else if( GLRenderParams.RENDER_TYPE_VIDEO == render.getType() ){
-			mRendersVideo.remove( render );
-		}
+		mRenders.remove( render );
 
 		if (render.getType() == GLRenderParams.RENDER_TYPE_IMAGE){
 			int textureId = render.getTextureId();
 			releaseTexture(textureId);
 		}
+	}
+
+	public List<GLRenderParams> getRenders(){
+		return mRenders;
 	}
 	
 	/**
@@ -962,13 +929,7 @@ public class GLRectView extends GLView {
 	
 	private void removeBackground(){
 		if (mBackgroundRender != null){
-			if( GLRenderParams.RENDER_TYPE_COLOR == mBackgroundRender.getType() ) {
-				mRendersColor.remove(mBackgroundRender);
-			}else if( GLRenderParams.RENDER_TYPE_IMAGE == mBackgroundRender.getType() ){
-				mRendersImage.remove( mBackgroundRender);
-			}else if( GLRenderParams.RENDER_TYPE_VIDEO == mBackgroundRender.getType() ){
-				mRendersVideo.remove( mBackgroundRender );
-			}
+			mRenders.remove( mBackgroundRender );
 			mBackgroundRender = null;
 		}
 		mBackgroundBitmap = null;
@@ -985,62 +946,49 @@ public class GLRectView extends GLView {
 			if (mBackgroundRender.getTextureId() > -1) {
 				releaseTexture(mBackgroundRender.getTextureId());
 			}
-			if( GLRenderParams.RENDER_TYPE_COLOR == mBackgroundRender.getType() ) {
-				mRendersColor.remove(mBackgroundRender);
-			}else if( GLRenderParams.RENDER_TYPE_IMAGE == mBackgroundRender.getType() ){
-				mRendersImage.remove( mBackgroundRender);
-			}else if( GLRenderParams.RENDER_TYPE_VIDEO == mBackgroundRender.getType() ){
-				mRendersVideo.remove( mBackgroundRender );
-			}
+			mRenders.remove( mBackgroundRender );
 			mBackgroundRender = null;
 		}
-		
-		if (mBackgroundColor != null){
-			mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_COLOR);
-			mBackgroundRender.setColor(mBackgroundColor);
-			updateRenderSize(mBackgroundRender, width, height);
-		} else {
-			boolean isRecycle = true;
-			int textureId = -1;
-			Bitmap bitmap = null;
-			if (mBackgroundResId != 0) {
-				InputStream is = getContext().getResources().openRawResource(mBackgroundResId);
 
+		boolean isRecycle = true;
+		int textureId = -1;
+		Bitmap bitmap = null;
+		if (mBackgroundResId != 0) {
+			InputStream is = getContext().getResources().openRawResource(mBackgroundResId);
+
+			try {
+				bitmap = BitmapFactory.decodeStream(is);
+			} finally {
 				try {
-					bitmap = BitmapFactory.decodeStream(is);
-				} finally {
-					try {
-						is.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			} else if (mBackgroundBitmap != null) {
-				bitmap = mBackgroundBitmap;
-				isRecycle = false;
 			}
+		} else if (mBackgroundBitmap != null) {
+			bitmap = mBackgroundBitmap;
+			isRecycle = false;
+		} else if (mBackgroundColor != null){
+			bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
+			Canvas canvas = new Canvas(bitmap);
+			canvas.drawARGB((int)(mBackgroundColor.getA() * 255), (int)(mBackgroundColor.getR() * 255),
+					(int)(mBackgroundColor.getG() * 255), (int)(mBackgroundColor.getB() * 255));
+		}
 
-			if (bitmap != null) {
-				GLTextureUtils.mUseMipMap = getMipMap();
-				textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
-			}
+		if (bitmap != null) {
+			GLTextureUtils.mUseMipMap = getMipMap();
+			textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
+		}
 
-			if (textureId > -1) {
-				mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-				mBackgroundRender.setTextureId(textureId);
-				updateRenderSize(mBackgroundRender, width, height);
-			}
+		if (textureId > -1) {
+			mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+			mBackgroundRender.setTextureId(textureId);
+			updateRenderSize(mBackgroundRender, width, height);
 		}
 		
 		if (mBackgroundRender != null){
 			mBackgroundRender.setMask(getMask());
-			if( GLRenderParams.RENDER_TYPE_COLOR == mBackgroundRender.getType() ) {
-				mRendersColor.add(0, mBackgroundRender);
-			}else if( GLRenderParams.RENDER_TYPE_IMAGE == mBackgroundRender.getType() ){
-				mRendersImage.add( 0, mBackgroundRender );
-			}else if( GLRenderParams.RENDER_TYPE_VIDEO == mBackgroundRender.getType() ){
-				mRendersVideo.add(0, mBackgroundRender );
-			}
+			mRenders.add(0, mBackgroundRender );
 		}
 	}
 
@@ -1051,12 +999,12 @@ public class GLRectView extends GLView {
 	}
 
 	@Override
-	public void draw(boolean isLeft) {
+	public void onBeforeDraw(boolean isLeft) {
 		updateRect();
 		if (!isVisible() || !isSurfaceCreated){
 			return;
 		}
-		
+
 		GLMatrixState state = getMatrixState();
 
 		if (isFixed()){
@@ -1074,136 +1022,112 @@ public class GLRectView extends GLView {
 
 		float[] curMatrix = state.getCurrentMatrix();
 		state.pushMatrix();
-        
+
 		getEyeMatrix(state.getVMatrix(), isLeft);
 		Matrix.translateM(state.getVMatrix(), 0, 0, 0, mLookTranslateZ);
 		Matrix.rotateM(state.getVMatrix(), 0, mLookAngle, 0, 1, 0);
-        
-        Matrix.translateM(curMatrix, 0, centerX, centerY, 0);
-        
-        //动画处理
-        doAnimation();
-        	  
-        float d = -depth * depthScale;
 
-		GLColorRect rectColor = GLColorRect.getInstance();
-		rectColor.beginDraw();
-	    for (int i = 0; i < mRendersColor.size(); i++) {
-	    	GLRenderParams render = null;
-	    	try {
-	    		render = mRendersColor.get(i);
-			} catch (Exception e) {}
+		Matrix.translateM(curMatrix, 0, centerX, centerY, 0);
 
-	    	if (render == null) {
-				continue;
-			}
-	    	
-	    	state.pushMatrix();
-	    	Matrix.translateM(curMatrix, 0, 0, 0, d + zPosition * 0.0008f);
-	    	if (angelX != 0){
-				Matrix.rotateM(curMatrix, 0, angelX, 1, 0, 0);
-			}
-			if (angelY != 0){
-				Matrix.rotateM(curMatrix, 0, angelY, 0, 1, 0);
-			}
-			if (angelZ != 0){
-				Matrix.rotateM(curMatrix, 0, angelZ, 0, 0, 1);
-			}
-	    	
-	    	if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
-	    		Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
-	    	}
+		//动画处理
+		doAnimation();
+	}
 
-			GLColor color = render.getColor();
-			rectColor.setColor(new float[]{color.getR(), color.getG(), color.getB(), color.getA()});
-			rectColor.setMask(render.getMask());
-			rectColor.draw(state.getFinalMatrix());
-
-			d += 0.0004f;
-	    	state.popMatrix();
-
+	@Override
+	public void onAfterDraw() {
+		if (!isVisible() || !isSurfaceCreated){
+			return;
 		}
-		rectColor.endDraw();
+		getMatrixState().popMatrix();
+	}
+
+	@Override
+	public void draw() {
+//		GLColorRect rectColor = GLColorRect.getInstance();
+//		rectColor.beginDraw();
+//	    for (int i = 0; i < mRendersColor.size(); i++) {
+//	    	GLRenderParams render = null;
+//	    	try {
+//	    		render = mRendersColor.get(i);
+//			} catch (Exception e) {}
+//
+//	    	if (render == null) {
+//				continue;
+//			}
+//
+//	    	state.pushMatrix();
+//	    	Matrix.translateM(curMatrix, 0, 0, 0, d + zPosition * 0.0008f);
+//	    	if (angelX != 0){
+//				Matrix.rotateM(curMatrix, 0, angelX, 1, 0, 0);
+//			}
+//			if (angelY != 0){
+//				Matrix.rotateM(curMatrix, 0, angelY, 0, 1, 0);
+//			}
+//			if (angelZ != 0){
+//				Matrix.rotateM(curMatrix, 0, angelZ, 0, 0, 1);
+//			}
+//
+//	    	if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
+//	    		Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
+//	    	}
+//
+//			GLColor color = render.getColor();
+//			rectColor.setColor(new float[]{color.getR(), color.getG(), color.getB(), color.getA()});
+//			rectColor.setMask(render.getMask());
+//			rectColor.draw(state.getFinalMatrix());
+//
+//			d += 0.0004f;
+//	    	state.popMatrix();
+//
+//		}
+//		rectColor.endDraw();
 
 
 		GLImageRect rectImg = GLImageRect.getInstance();
-		rectImg.beginDraw();
-		for (int i = 0; i < mRendersImage.size(); i++) {
-			GLRenderParams render = null;
-			try {
-				render = mRendersImage.get(i);
-			} catch (Exception e) {}
+//		rectImg.beginDraw();
 
-			if (render == null) {
-				continue;
-			}
+//		rectImg.endDraw();
 
-			state.pushMatrix();
-			Matrix.translateM(curMatrix, 0, 0, 0, d + zPosition * 0.0008f);
-			if (angelX != 0){
-				Matrix.rotateM(curMatrix, 0, angelX, 1, 0, 0);
-			}
-			if (angelY != 0){
-				Matrix.rotateM(curMatrix, 0, angelY, 0, 1, 0);
-			}
-			if (angelZ != 0){
-				Matrix.rotateM(curMatrix, 0, angelZ, 0, 0, 1);
-			}
-
-			if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
-				Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
-			}
-
-			rectImg.setTextureId(render.getTextureId());
-			rectImg.setAlpha(render.getAlpha());
-			rectImg.setMask(render.getMask());
-			rectImg.draw(state.getFinalMatrix());
-
-			d += 0.0004f;
-			state.popMatrix();
-		}
-		rectImg.endDraw();
-
-		GLVideoRect rectVideo = GLVideoRect.getInstance();
-		rectVideo.beginDraw();
-		for (int i = 0; i < mRendersVideo.size(); i++) {
-			GLRenderParams render = null;
-			try {
-				render = mRendersVideo.get(i);
-			} catch (Exception e) {}
-
-			if (render == null) {
-				continue;
-			}
-
-			state.pushMatrix();
-			Matrix.translateM(curMatrix, 0, 0, 0, d + zPosition * 0.0008f);
-			if (angelX != 0){
-				Matrix.rotateM(curMatrix, 0, angelX, 1, 0, 0);
-			}
-			if (angelY != 0){
-				Matrix.rotateM(curMatrix, 0, angelY, 0, 1, 0);
-			}
-			if (angelZ != 0){
-				Matrix.rotateM(curMatrix, 0, angelZ, 0, 0, 1);
-			}
-
-			if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
-				Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
-			}
-
-			rectVideo.setTextureId(render.getTextureId());
-			rectVideo.setAlpha(render.getAlpha());
-			rectVideo.setMask(render.getMask());
-			rectVideo.setTextureType(render.getTextureType());
-			rectVideo.draw(state.getFinalMatrix());
-
-			d += 0.0004f;
-			state.popMatrix();
-		}
-		rectVideo.endDraw();
+//		GLVideoRect rectVideo = GLVideoRect.getInstance();
+//		rectVideo.beginDraw();
+//		for (int i = 0; i < mRendersVideo.size(); i++) {
+//			GLRenderParams render = null;
+//			try {
+//				render = mRendersVideo.get(i);
+//			} catch (Exception e) {}
+//
+//			if (render == null) {
+//				continue;
+//			}
+//
+//			state.pushMatrix();
+//			Matrix.translateM(curMatrix, 0, 0, 0, d + zPosition * 0.0008f);
+//			if (angelX != 0){
+//				Matrix.rotateM(curMatrix, 0, angelX, 1, 0, 0);
+//			}
+//			if (angelY != 0){
+//				Matrix.rotateM(curMatrix, 0, angelY, 0, 1, 0);
+//			}
+//			if (angelZ != 0){
+//				Matrix.rotateM(curMatrix, 0, angelZ, 0, 0, 1);
+//			}
+//
+//			if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
+//				Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
+//			}
+//
+//			rectVideo.setTextureId(render.getTextureId());
+//			rectVideo.setAlpha(render.getAlpha());
+//			rectVideo.setMask(render.getMask());
+//			rectVideo.setTextureType(render.getTextureType());
+//			rectVideo.draw(state.getFinalMatrix());
+//
+//			d += 0.0004f;
+//			state.popMatrix();
+//		}
+//		rectVideo.endDraw();
         
-	    state.popMatrix();
+
 	}
 	
 	/**
@@ -1415,18 +1339,6 @@ public class GLRectView extends GLView {
 		isFocusable = true;
 		onFocusChange(GLFocusUtils.TO_UNKNOWN, true);
 	}
-	
-	@Override
-	public void onBeforeDraw() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onAfterDraw() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void onSurfaceCreated() {
@@ -1625,15 +1537,12 @@ public class GLRectView extends GLView {
 	@Override
 	public void release() {
 		isSurfaceCreated = false;
-		if (mRendersColor != null){
-			mRendersColor.clear();
-		}
-		if( mRendersImage != null ){
-			int ilen = mRendersImage.size();
+		if( mRenders != null ){
+			int ilen = mRenders.size();
 			for( int i = 0; i < ilen; ++i ){
-				final int textureId = mRendersImage.get(i).getTextureId();
-				mRendersImage.get(i).setTextureId(-1);
-				if (getRootView() != null) {
+				final int textureId = mRenders.get(i).getTextureId();
+				mRenders.get(i).setTextureId(-1);
+				if (textureId > -1 && getRootView() != null) {
 					getRootView().queueEvent(new Runnable() {
 
 						@Override
@@ -1643,10 +1552,7 @@ public class GLRectView extends GLView {
 					});
 				}
 			}
-			mRendersImage.clear();
-		}
-		if( mRendersVideo != null ){
-			mRendersVideo.clear();
+			mRenders.clear();
 		}
 	}
 	
@@ -1841,6 +1747,10 @@ public class GLRectView extends GLView {
 	
 	public void setZPosition(int zPosition) {
 		this.zPosition = zPosition;
+	}
+
+	public int getZPosition(){
+		return zPosition;
 	}
 
 	public interface OnHeadClickListener {

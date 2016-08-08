@@ -21,7 +21,7 @@ public class GLCursorView extends GLImageView {
 	}
 
 	@Override
-	public void draw(boolean isLeft) {
+	public void onBeforeDraw(boolean isLeft) {
 		if (!isFixed()){
 			float[] o = new float[3];
 			MojingSDK.getLastHeadEulerAngles(o);
@@ -41,6 +41,6 @@ public class GLCursorView extends GLImageView {
 
 			getMatrixState().setVMatrix(mtx);
 		}
-		super.draw(isLeft);
+		super.onBeforeDraw(isLeft);
 	}
 }
