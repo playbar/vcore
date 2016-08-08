@@ -261,6 +261,7 @@ public class GLGroupView extends GLRectView {
 		
 		super.onSurfaceChanged(width, height);
 	}
+
 	
 	/**
 	 * 改变同级view

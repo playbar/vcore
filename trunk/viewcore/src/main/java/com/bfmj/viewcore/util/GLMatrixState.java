@@ -56,6 +56,9 @@ public class GLMatrixState {
     
     //恢复变换矩阵
     public void popMatrix(){
+        if (stackTop < 0){
+            stackTop = 0;
+        }
     	for(int i=0;i<16;i++)
     	{
     		currMatrix[i]=mStack[stackTop][i];

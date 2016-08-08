@@ -215,7 +215,7 @@ public class GLFocusUtils {
 			if (parent.hasListeter()){
 				return  parent;
 			}
-			parent = view.getParent();
+			parent = parent.getParent();
 		}
 		return null;
 	}

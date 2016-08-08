@@ -146,7 +146,7 @@ public class GLVideoRect extends GLRect {
 		for (int j = 0; j < views.size(); j++) {
 			if (views.get(j) instanceof GLRectView){
 				GLRectView view = (GLRectView) views.get(j);
-				if (view != null) {
+				if (view != null && view.isVisible() && view.isSurfaceCreated()) {
 					draw(view);
 				}
 			}

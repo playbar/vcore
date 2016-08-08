@@ -375,7 +375,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        ArrayList<GLView> allViews = getAllViews();
+        final ArrayList<GLView> allViews = getAllViews();
 
         if (mGroyEnable) {
             MojingSDK.getLastHeadView(headView);
@@ -388,7 +388,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             }
         }
 
-        float[] groyMatrix = getGroyMatrix();
+        final float[] groyMatrix = getGroyMatrix();
 
         int height = mWidth / 2;
         float nearRight = GLScreenParams.getNear() * (float)Math.tan(GLScreenParams.getFOV() / 2);
