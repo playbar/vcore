@@ -968,16 +968,18 @@ public class GLRectView extends GLView {
 		} else if (mBackgroundBitmap != null) {
 			bitmap = mBackgroundBitmap;
 			isRecycle = false;
-		} else if (mBackgroundColor != null){
-			bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
-			Canvas canvas = new Canvas(bitmap);
-			canvas.drawARGB((int)(mBackgroundColor.getA() * 255), (int)(mBackgroundColor.getR() * 255),
-					(int)(mBackgroundColor.getG() * 255), (int)(mBackgroundColor.getB() * 255));
 		}
 
 		if (bitmap != null) {
 			GLTextureUtils.mUseMipMap = getMipMap();
 			textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
+		} else if (mBackgroundColor != null){
+			bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+			Canvas canvas = new Canvas(bitmap);
+			canvas.drawARGB((int)(mBackgroundColor.getA() * 255), (int)(mBackgroundColor.getR() * 255),
+					(int)(mBackgroundColor.getG() * 255), (int)(mBackgroundColor.getB() * 255));
+			GLTextureUtils.mUseMipMap = getMipMap();
+			textureId = GLTextureUtils.initImageTexture(getContext(), bitmap, true);
 		}
 
 		if (textureId > -1) {
