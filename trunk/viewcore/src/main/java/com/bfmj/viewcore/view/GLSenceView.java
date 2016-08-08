@@ -344,7 +344,7 @@ public class GLSenceView extends GLView {
 	}
 
 	@Override
-	public void onAfterDraw() {
+	public void onAfterDraw(boolean isLeft) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -507,7 +507,7 @@ public class GLPanoView extends GLView {
     }
 
     @Override
-    public void onAfterDraw() {}
+    public void onAfterDraw(boolean isLeft) {}
 
     @Override
     public void onSurfaceCreated() {}

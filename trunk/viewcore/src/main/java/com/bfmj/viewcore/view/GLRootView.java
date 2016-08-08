@@ -419,10 +419,10 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                 GLVideoRect.getInstance().drawViews(allViews);
                 GLImageRect.getInstance().drawViews(allViews);
 
-                for (int j = 0; j < mChild.size(); j++) {
-                    GLView view = mChild.get(j);
+                for (int j = 0; j < allViews.size(); j++) {
+                    GLView view = allViews.get(j);
                     if (view != null) {
-                        view.onAfterDraw();
+                        view.onAfterDraw(i == 0 ? true : false);
                     }
                 }
             }

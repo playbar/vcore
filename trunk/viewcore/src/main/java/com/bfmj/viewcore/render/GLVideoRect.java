@@ -162,7 +162,7 @@ public class GLVideoRect extends GLRect {
 				render = view.getRenders().get(i);
 			} catch (Exception e) {}
 
-			if (render != null && render.getType() == GLRenderParams.RENDER_TYPE_IMAGE) {
+			if (render != null && render.getType() == GLRenderParams.RENDER_TYPE_VIDEO) {
 				GLMatrixState state = view.getMatrixState();
 				state.pushMatrix();
 				float[] curMatrix = state.getCurrentMatrix();

@@ -1034,7 +1034,7 @@ public class GLRectView extends GLView {
 	}
 
 	@Override
-	public void onAfterDraw() {
+	public void onAfterDraw(boolean isLeft) {
 		if (!isVisible() || !isSurfaceCreated){
 			return;
 		}
