@@ -83,14 +83,12 @@ public class GLImageRect extends GLRect {
     	mTextureId = textureId;
     }
 
-	public void drawViews(ArrayList<GLView> views){
+	public void drawViews(ArrayList<GLRectView> views){
 		beginDraw();
 		for (int j = 0; j < views.size(); j++) {
-			if (views.get(j) instanceof  GLRectView){
-				GLRectView view = (GLRectView) views.get(j);
-				if (view != null && view.isVisible() && view.isSurfaceCreated()) {
-					draw(view);
-				}
+			GLRectView view = (GLRectView) views.get(j);
+			if (view != null && view.isVisible() && view.isSurfaceCreated()) {
+				draw(view);
 			}
 		}
 		endDraw();

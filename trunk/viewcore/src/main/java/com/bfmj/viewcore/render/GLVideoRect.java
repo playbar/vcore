@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import com.bfmj.viewcore.util.GLMatrixState;
 import com.bfmj.viewcore.util.GLShaderManager;
+import com.bfmj.viewcore.view.GLPlayerView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLView;
 
@@ -141,20 +142,13 @@ public class GLVideoRect extends GLRect {
     	mTextureType = type;
     }
 
-	public void drawViews(ArrayList<GLView> views){
-		beginDraw();
-		for (int j = 0; j < views.size(); j++) {
-			if (views.get(j) instanceof GLRectView){
-				GLRectView view = (GLRectView) views.get(j);
-				if (view != null && view.isVisible() && view.isSurfaceCreated()) {
-					draw(view);
-				}
-			}
+	public void draw(GLPlayerView view){
+		if (view == null){
+			return;
 		}
-		endDraw();
-	}
 
-	private void draw(GLRectView view){
+		beginDraw();
+
 		float d = -view.getDepth();
 		for (int i = 0; i < view.getRenders().size(); i++) {
 			GLRenderParams render = null;
@@ -190,6 +184,8 @@ public class GLVideoRect extends GLRect {
 				state.popMatrix();
 			}
 		}
+
+		endDraw();
 	}
 
 	public void beginDraw(){

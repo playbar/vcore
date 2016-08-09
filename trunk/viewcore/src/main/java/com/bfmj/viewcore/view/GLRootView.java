@@ -401,9 +401,14 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                 } else {
                     GLES20.glViewport(i * mWidth / 2, (mHeight - height) / 2, mWidth / 2, height);
                 }
+
+                // 为了绘制中间的视频,把GLRectView分成两部分
+                ArrayList<GLRectView> imageRectView1 = new ArrayList<>();
+                ArrayList<GLRectView> imageRectView2 = new ArrayList<>();
+                GLPlayerView playerView = null;
                 for (int j = 0; j < allViews.size(); j++) {
                     GLView view = allViews.get(j);
-                    if (view != null) {
+                    if (view != null  && view.isVisible()) {
                         view.getMatrixState().setVMatrix(groyMatrix);
                         Matrix.frustumM(view.getMatrixState().getProjMatrix(), 0, -nearRight, nearRight, -nearRight, nearRight, GLScreenParams.getNear(), GLScreenParams.getFar());
                         //					Matrix.orthoM(view.getMatrixState().getProjMatrix(), 0, -40, 40, -40, 40, GLScreenParams.getNear(), GLScreenParams.getFar());
@@ -413,15 +418,29 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
                         if (!(view instanceof GLRectView)){
                             view.draw();
+                        } else if (view instanceof GLPlayerView){
+                            playerView = (GLPlayerView)view;
+                        } else if (playerView == null){
+                            imageRectView1.add((GLRectView) view);
+                        } else {
+                            imageRectView2.add((GLRectView) view);
                         }
                     }
                 }
-                GLVideoRect.getInstance().drawViews(allViews);
-                GLImageRect.getInstance().drawViews(allViews);
+
+                if (imageRectView1.size() > 0){
+                    GLImageRect.getInstance().drawViews(imageRectView1);
+                }
+                if (playerView != null){
+                    GLVideoRect.getInstance().draw(playerView);
+                }
+                if (imageRectView2.size() > 0){
+                    GLImageRect.getInstance().drawViews(imageRectView2);
+                }
 
                 for (int j = 0; j < allViews.size(); j++) {
                     GLView view = allViews.get(j);
-                    if (view != null) {
+                    if (view != null  && view.isVisible()) {
                         view.onAfterDraw(i == 0 ? true : false);
                     }
                 }
