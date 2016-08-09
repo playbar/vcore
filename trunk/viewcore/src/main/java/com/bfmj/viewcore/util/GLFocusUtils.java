@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 
 import com.baofeng.mojing.MojingSDK;
 import com.bfmj.viewcore.render.GLScreenParams;
+import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLGroupView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLView;
@@ -169,7 +170,7 @@ public class GLFocusUtils {
 				}
 
 				GLRectView v = (GLRectView) views.get(i);
-				if (!v.isVisible()) {
+				if (!v.isVisible() || v instanceof GLCursorView) {
 					continue;
 				}
 
