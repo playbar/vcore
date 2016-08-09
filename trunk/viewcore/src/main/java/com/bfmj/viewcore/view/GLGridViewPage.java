@@ -124,7 +124,6 @@ public class GLGridViewPage extends GLGridView {
 			++mCurIndex;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
 			requestLayout();
-//			showPage();
 		}
 	}
 
@@ -134,7 +133,7 @@ public class GLGridViewPage extends GLGridView {
 			--mCurIndex;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
 			requestLayout();
-//			showPage();
+
 		}
 	}
 
