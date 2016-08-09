@@ -162,42 +162,39 @@ public class GLFocusUtils {
 		mCurosrPosition[0] = (int)(outPos[0] * rate);
 		mCurosrPosition[1] = (int)(outPos[1] * rate);
 
-		if (isFoused) {
+		for (int i = views.size() - 1; i >= 0; i--) {
+			if (!(views.get(i) instanceof GLRectView)) {
+				continue;
+			}
 
-			for (int i = views.size() - 1; i >= 0; i--) {
-				if (!(views.get(i) instanceof GLRectView)) {
-					continue;
+			GLRectView v = (GLRectView) views.get(i);
+			if (!v.isVisible() || v instanceof GLCursorView) {
+				continue;
+			}
+
+			float vx1 = getX(v.getLeft() + v.getX());
+			float vy1 = getY(v.getTop() + v.getY());
+
+			float vx2 = getX(v.getLeft() + v.getX() + v.getWidth());
+			float vy2 = getY(v.getTop() + v.getY() + v.getHeight());
+
+			if (MojingSDK.DirectionalRadiaInRect(v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView, new float[]{vx1, vy1}, new float[]{vx2, vy2}, -v.getDepth(), new float[2])){
+				if (v.hasListeter()){
+					hasFocused = true;
+				} else if (getHasListenerParent(v) != null){
+					v = getHasListenerParent(v);
+					hasFocused = true;
+				} else {
+					hasFocused = false;
 				}
-
-				GLRectView v = (GLRectView) views.get(i);
-				if (!v.isVisible() || v instanceof GLCursorView) {
-					continue;
-				}
-
-				float vx1 = getX(v.getLeft() + v.getX());
-				float vy1 = getY(v.getTop() + v.getY());
-
-				float vx2 = getX(v.getLeft() + v.getX() + v.getWidth());
-				float vy2 = getY(v.getTop() + v.getY() + v.getHeight());
-
-				if (MojingSDK.DirectionalRadiaInRect(v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView, new float[]{vx1, vy1}, new float[]{vx2, vy2}, -v.getDepth(), new float[2])){
-					if (v.hasListeter()){
-						hasFocused = true;
-					} else if (getHasListenerParent(v) != null){
-						v = getHasListenerParent(v);
-						hasFocused = true;
-					} else {
-						hasFocused = false;
+				if (hasFocused && v != mFocusedView && v.isEnable()) {
+					if (mFocusedView != null && !v.isGrandParent(mFocusedView)) {
+						mFocusedView.onFocusChange(TO_UNKNOWN, false);
 					}
-					if (hasFocused && v != mFocusedView && v.isEnable()) {
-						if (mFocusedView != null && !v.isGrandParent(mFocusedView)) {
-							mFocusedView.onFocusChange(TO_UNKNOWN, false);
-						}
-						v.doRequestFocus();
-						mFocusedView = v;
-					}
-					break;
+					v.doRequestFocus();
+					mFocusedView = v;
 				}
+				break;
 			}
 		}
 

@@ -63,8 +63,6 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 
 		rootLayout.addView(rootView);
 		setContentView(rootLayout);
-
-		initLog();
 	}
 
 	public static void log(String msg){
@@ -76,61 +74,6 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 	private void doLog(String msg){
 		Log.d("aaaaaaaaaaaa", msg);
 	}
-
-	private void initLog(){
-		final TextView fps = new TextView(this);
-//		LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-//		lp.setMargins(0, 300, 0, 0);
-//		fps.setLayoutParams(lp);
-		fps.setPadding(0, 400, 0, 0);
-		fps.setTextColor(Color.RED);
-		fps.setTextSize(30);
-
-		getRootLayout().addView(fps);
-
-		new Thread(new Runnable() {
-			long times = 0;
-			int max = 0;
-			int min = 60;
-
-			@Override
-			public void run() {
-				getRootView().getFPS();
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				while (true){
-					final int f = getRootView().getFPS();
-					if (f > 0 && f < 70){
-						times++;
-						if (times > 2) {
-							max = Math.max(f, max);
-							min = Math.min(f, min);
-							BaseViewActivity.this.runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									String msg = "FPS : " + f;
-									if (max > 0){
-										msg +=  " [" + min + "~" + max + "]";
-									}
-									fps.setText(msg);
-								}
-							});
-						}
-					}
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-
-			}
-		}).start();
-	}
-
 
 	/**
 	 * 
