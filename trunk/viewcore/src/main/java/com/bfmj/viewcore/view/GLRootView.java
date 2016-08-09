@@ -357,7 +357,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         int ts = times;
         lastFrame = System.currentTimeMillis();
         times = 0;
-        return (int)(ts * 1000 / time);
+        return time > 0 ? (int)(ts * 1000 / time) : 60;
     }
     //FPS测试 end//////
 
