@@ -109,7 +109,6 @@ public class GLGridViewPage extends GLGridView {
 	@Override
 	public void setAdapter(GLListAdapter adapter) {
 		super.setAdapter( adapter );
-		showPage();
 	}
 
 	@Override
