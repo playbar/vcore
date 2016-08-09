@@ -2,7 +2,6 @@ package com.bfmj.viewcore.view;
 
 import android.content.Context;
 
-import com.baofeng.mojing.input.base.MojingInputConfig;
 import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
@@ -125,7 +124,7 @@ public class GLGridViewPage extends GLGridView {
 			++mCurIndex;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
 			requestLayout();
-			showPage();
+//			showPage();
 		}
 	}
 
@@ -135,7 +134,7 @@ public class GLGridViewPage extends GLGridView {
 			--mCurIndex;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
 			requestLayout();
-			showPage();
+//			showPage();
 		}
 	}
 
@@ -256,6 +255,8 @@ public class GLGridViewPage extends GLGridView {
 	private GLImageView prvBtnImgView = new GLImageView( this.getContext() );
 	private GLImageView nextBtnImgView = new GLImageView(this.getContext());
 	private float mStart = 0.0f;
+	private float mMidPos = 0.0f;
+	private float mOffsetX = 0.0f;
 	private float mStep = 80.0f;
 	private int mCurIndex = 1; //当前分页的位置,从1开始计数
 	private int mCurFocuseIndex = 0;
@@ -304,8 +305,12 @@ public class GLGridViewPage extends GLGridView {
 	}
 
 	//获取当前分页位置,从1开始
-	public int getCurIndexPage(){
+	public int getCurIndexPage() {
 		return mCurIndex;
+	}
+
+	public void setOffsetX(float offsetx ){
+		this.mOffsetX = offsetx;
 	}
 
 
@@ -320,11 +325,13 @@ public class GLGridViewPage extends GLGridView {
 		if( getTotalNum() % getNumOneScreen() != 0 )
 			++mCount;
 
-		float mid = getX() + getMarginLeft() + getWidth() / 2;
+
+		mMidPos = getX() + getMarginLeft() + getWidth() / 2 + mOffsetX;
+
 
 		mShowMaxCount = mCount > MAXSHOW ? MAXSHOW : mCount;
 		if( mCount > 1 ){
-			mStart = mid - (mStep * mShowMaxCount) / 2;
+			mStart = mMidPos - (mStep * mShowMaxCount) / 2;
 			if (mCurIndex < mCount) {
 				nextBtn();
 				if (mCurIndex > 1) {
@@ -336,7 +343,7 @@ public class GLGridViewPage extends GLGridView {
 
 		}
 		else{
-			mStart = mid;
+			mStart = mMidPos;
 		}
 
 		int istart = 1;
@@ -366,9 +373,9 @@ public class GLGridViewPage extends GLGridView {
 			}
 			//textView.setAlignment( GLTextView.ALIGN_CENTER );
 			if( i >= 10 ){
-				textView.setPadding( 10, 10, 0, 0);
+				textView.setPadding(20, 10, 0, 0);
 			}else {
-				textView.setPadding(30, 10, 0, 0 );
+				textView.setPadding(40, 10, 0, 0);
 			}
 			textView.setText("" + i);
 			textView.setTextSize(40);
