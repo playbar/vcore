@@ -44,7 +44,7 @@ public class GLPageManager {
 		page.getView(data);
 		mPageStack.push(page);
 		
-		updateCrurrentView();
+		updateCrurrentView(false);
 	}
 	
 	/**
@@ -65,7 +65,7 @@ public class GLPageManager {
 			view.release();
 		}
 		
-		updateCrurrentView();
+		updateCrurrentView(true);
 	}
 	
 	/**
@@ -82,7 +82,7 @@ public class GLPageManager {
 			mPageStack.pop();
 			GLRectView view = page.getView(null);
 			view.release();
-			updateCrurrentView();
+			updateCrurrentView(true);
 		}
 	}
 
@@ -142,7 +142,7 @@ public class GLPageManager {
 		}
 	}
 	
-	private void updateCrurrentView(){
+	private void updateCrurrentView(boolean isPop){
 		if (mPageStack.size() == 0){
 			return;
 		}
@@ -162,7 +162,7 @@ public class GLPageManager {
 //				}
 				mCurrentView = view;
 
-				if (mPageStack.size() > 1){
+				if (mPageStack.size() > 1 || isPop){
 					onResume();
 				}
 			}
