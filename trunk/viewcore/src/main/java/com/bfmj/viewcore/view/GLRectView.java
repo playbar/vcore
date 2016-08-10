@@ -17,12 +17,9 @@ import com.bfmj.viewcore.animation.GLTranslateAnimation;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
-import com.bfmj.viewcore.render.GLColorRect;
 import com.bfmj.viewcore.render.GLConstant;
-import com.bfmj.viewcore.render.GLImageRect;
 import com.bfmj.viewcore.render.GLRenderParams;
 import com.bfmj.viewcore.render.GLScreenParams;
-import com.bfmj.viewcore.render.GLVideoRect;
 import com.bfmj.viewcore.util.GLFocusUtils;
 import com.bfmj.viewcore.util.GLMatrixState;
 import com.bfmj.viewcore.util.GLTextureUtils;
@@ -32,7 +29,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.opengl.Matrix;
 import android.view.animation.AnimationUtils;
 
@@ -1044,93 +1040,7 @@ public class GLRectView extends GLView {
 	}
 
 	@Override
-	public void draw() {
-//		GLColorRect rectColor = GLColorRect.getInstance();
-//		rectColor.beginDraw();
-//	    for (int i = 0; i < mRendersColor.size(); i++) {
-//	    	GLRenderParams render = null;
-//	    	try {
-//	    		render = mRendersColor.get(i);
-//			} catch (Exception e) {}
-//
-//	    	if (render == null) {
-//				continue;
-//			}
-//
-//	    	state.pushMatrix();
-//	    	Matrix.translateM(curMatrix, 0, 0, 0, d + zPosition * 0.0008f);
-//	    	if (angelX != 0){
-//				Matrix.rotateM(curMatrix, 0, angelX, 1, 0, 0);
-//			}
-//			if (angelY != 0){
-//				Matrix.rotateM(curMatrix, 0, angelY, 0, 1, 0);
-//			}
-//			if (angelZ != 0){
-//				Matrix.rotateM(curMatrix, 0, angelZ, 0, 0, 1);
-//			}
-//
-//	    	if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
-//	    		Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
-//	    	}
-//
-//			GLColor color = render.getColor();
-//			rectColor.setColor(new float[]{color.getR(), color.getG(), color.getB(), color.getA()});
-//			rectColor.setMask(render.getMask());
-//			rectColor.draw(state.getFinalMatrix());
-//
-//			d += 0.0004f;
-//	    	state.popMatrix();
-//
-//		}
-//		rectColor.endDraw();
-
-
-		GLImageRect rectImg = GLImageRect.getInstance();
-//		rectImg.beginDraw();
-
-//		rectImg.endDraw();
-
-//		GLVideoRect rectVideo = GLVideoRect.getInstance();
-//		rectVideo.beginDraw();
-//		for (int i = 0; i < mRendersVideo.size(); i++) {
-//			GLRenderParams render = null;
-//			try {
-//				render = mRendersVideo.get(i);
-//			} catch (Exception e) {}
-//
-//			if (render == null) {
-//				continue;
-//			}
-//
-//			state.pushMatrix();
-//			Matrix.translateM(curMatrix, 0, 0, 0, d + zPosition * 0.0008f);
-//			if (angelX != 0){
-//				Matrix.rotateM(curMatrix, 0, angelX, 1, 0, 0);
-//			}
-//			if (angelY != 0){
-//				Matrix.rotateM(curMatrix, 0, angelY, 0, 1, 0);
-//			}
-//			if (angelZ != 0){
-//				Matrix.rotateM(curMatrix, 0, angelZ, 0, 0, 1);
-//			}
-//
-//			if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
-//				Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
-//			}
-//
-//			rectVideo.setTextureId(render.getTextureId());
-//			rectVideo.setAlpha(render.getAlpha());
-//			rectVideo.setMask(render.getMask());
-//			rectVideo.setTextureType(render.getTextureType());
-//			rectVideo.draw(state.getFinalMatrix());
-//
-//			d += 0.0004f;
-//			state.popMatrix();
-//		}
-//		rectVideo.endDraw();
-        
-
-	}
+	public void draw() {}
 	
 	/**
 	 * @author zhangxin  @Date 2015-3-12 上午10:06:40
@@ -1204,75 +1114,6 @@ public class GLRectView extends GLView {
 	            }        	
 	        }
 		}
-	}
-	
-	
-	private void setTransXYZ(GLRectView animView, GLTranslateAnimation animation, GLTransformation t, boolean isEnd) {
-//		int i=0;
-//		if (animView instanceof GLGroupView) 
-//		{
-//			GLGroupView grpView = (GLGroupView)animation.getAnimView(); 
-//			//子view xy位移
-//			float fx = 0,fy = 0,fz = 0;
-//			if (isEnd) {  //动画结束，设置最终位置				
-////				ArrayList<GLRectView> childViews = grpView.getChildView();
-////				if (childViews != null && childViews.size() > 0) {
-////					for (GLRectView childView : childViews) {
-////						childView.setX(childView.getAnimEndX());
-////						childView.setY(childView.getAnimEndY());
-////						childView.setDepth(childView.getAnimEndZ());
-////						if (i==0) {
-////							Log.d("test", "setTransXYZ "+childView.getId()+" getX():"+ childView.getX()+ "getEndX:"+childView.getAnimEndX());
-////							Log.d("test", "setTransXYZ "+childView.getId()+" getY():"+ childView.getY()+ "getEndY:"+childView.getAnimEndY());
-////							Log.d("test", "setTransXYZ "+childView.getId()+" getZ():"+ childView.getDepth()+ "getEndZ:"+childView.getAnimEndZ());
-////						}
-////						
-////						i++;
-////					}
-////				}
-//				grpView.setX(animation.mEndDx);
-//				grpView.setY(animation.mEndDy);
-//				grpView.setDepth(animation.mEndDz);
-//				
-//				Log.d("test", "tttt22 X:"+grpView.getX()+";Y:"+grpView.getY()+";Z"+grpView.getDepth());
-//			} else {     //动画过程中，设置位移增量
-//				fx = t.getX();
-//				fy = t.getY();
-//				fz = t.getZ();
-//				grpView.setChildXY(fx, fy);
-//				grpView.setDepth(fz);
-//				Log.d("test", "tttt X:"+grpView.getX()+";Y:"+grpView.getY()+";Z"+grpView.getDepth());
-//			}
-//			
-//		} 
-//		else //单个view xy位移 
-//		{
-//			float fx,fy,fz;
-//			if (isEnd) {  //动画结束，设置最终位置
-//				fx = animation.mEndDx;
-//				fy = animation.mEndDy;
-//				fz = animation.mEndDz;
-//			} else {     //动画过程中，设置位移增量
-//				fx = getX() + t.getX();
-//				fy = getY() + t.getY();
-//				fz = getDepth() + t.getZ();
-//			}
-//			
-//			animView.setX(fx);
-//			animView.setY(fy);
-//			animView.setDepth(fz);
-//			Log.d("test", "setX():"+fx);
-//		}
-		
-		
-//		if (animView instanceof GLGroupView && animation.isOnlyChids()) {
-//			float fx,fy,fz;
-//			
-//		} else { //没有child，或 有child整体移动
-//			
-//		}
-		
-		
 	}
 	
 	/**
