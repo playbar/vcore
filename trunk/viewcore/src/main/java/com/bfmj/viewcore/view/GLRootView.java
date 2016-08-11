@@ -1,5 +1,7 @@
 package com.bfmj.viewcore.view;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,8 +9,14 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
+import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.baofeng.mojing.MojingSDK;
@@ -20,13 +28,19 @@ import com.bfmj.viewcore.render.GLImageRect;
 import com.bfmj.viewcore.render.GLScreenParams;
 import com.bfmj.viewcore.render.GLVideoRect;
 import com.bfmj.viewcore.util.GLFocusUtils;
+import com.bfmj.viewcore.util.GLTextureUtils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES10;
 import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.AttributeSet;
+import android.util.Log;
 
 public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Renderer {
     private ArrayList<GLView> mChild = new ArrayList<GLView>();
@@ -61,6 +75,69 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     private float mXangle = 0;
     private boolean isResetGroy = false;
     private boolean mIsDouble = true;
+
+    //////////////
+    public static EGLContext mEglContext;
+    ExportTextureId exprotTex = null;
+
+    public void SetInterfaceTex( ExportTextureId tex ){
+        this.exprotTex = tex;
+    }
+
+    public static ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 10, 200, TimeUnit.MILLISECONDS,
+            new ArrayBlockingQueue<Runnable>(5));
+
+    public static ThreadPoolExecutor GetThreadPool(){
+        return executor;
+    }
+
+    public interface ExportTextureId{
+        void exportId( int texid, int hashcode);
+    }
+
+    public class GenTextureTask implements Runnable {
+        private int mHashCode;
+        private Bitmap mBmp;
+
+        public GenTextureTask(int hashcode, Bitmap bmp ) {
+            this.mHashCode = hashcode;
+            this.mBmp = bmp;
+        }
+
+        @Override
+        public void run() {
+            EGL10 egl = (EGL10) EGLContext.getEGL();
+            EGLDisplay eglDisplay =egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY); // egl.eglGetCurrentDisplay();
+
+            egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, mEglContext);
+
+//            int textureId = createTexture(mBmp);
+            int textureId = GLTextureUtils.initImageTexture(mContext, mBmp, false );
+            if( null != exprotTex ){
+                exprotTex.exportId( textureId, mHashCode );
+            }
+
+            return;
+        }
+    }
+
+    public static int createTexture(Bitmap bitmap) {
+        int[] textures = new int[1];
+        GLES30.glGenTextures(1, textures, 0);
+        int textureId = textures[0];
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureId);
+        GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER,GLES30.GL_NEAREST);
+        GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D,GLES30.GL_TEXTURE_MAG_FILTER,GLES30.GL_LINEAR);
+        GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S,GLES30.GL_CLAMP_TO_EDGE);
+        GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T,GLES30.GL_CLAMP_TO_EDGE);
+        //上面是纹理贴图的取样方式，包括拉伸方式，取临近值和线性值
+        GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, bitmap, 0);//让图片和纹理关联起来，加载到OpenGl空间中
+//        Log.d("OPENGL","bitmap:" + bitmap);
+//            bitmap.recycle();//不需要，可以释放
+        return textureId;
+    }
+
+    //////////
 
     public Queue<GLView> mCreateTextureQueue = new LinkedList<>();
 
@@ -320,6 +397,13 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         GLColorRect.initInstance();
         GLImageRect.initInstance();
         GLVideoRect.initInstance();
+        ///////
+        EGL10 egl = (EGL10)EGLContext.getEGL();
+        int[] attrib_list = {0x3098, 3, EGL10.EGL_NONE };
+        EGLDisplay display = egl.eglGetCurrentDisplay();
+        EGLContext eglContext = egl.eglGetCurrentContext();
+        mEglContext = egl.eglCreateContext(display, config, eglContext, attrib_list);
+        testMultiGenTexture();
     }
 
     @Override
@@ -346,6 +430,28 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         for (GLView view : mChild) {
             view.onSurfaceChanged(width, height);
         }
+
+
+    }
+
+    public void testMultiGenTexture(){
+        InputStream ins = null;
+        try {
+            ins = mContext.getAssets().open("test.jpg");
+            Bitmap bmp = BitmapFactory.decodeStream(ins);
+            GenTextureTask myta = new GenTextureTask(123, bmp);
+            executor.execute(myta);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ins != null) {
+                    ins.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }//end try
     }
 
     //FPS测试 start//////
