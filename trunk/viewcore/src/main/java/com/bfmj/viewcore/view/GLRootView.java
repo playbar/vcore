@@ -29,6 +29,7 @@ import com.bfmj.viewcore.render.GLScreenParams;
 import com.bfmj.viewcore.render.GLVideoRect;
 import com.bfmj.viewcore.util.GLFocusUtils;
 import com.bfmj.viewcore.util.GLTextureUtils;
+import com.bfmj.viewcore.util.GenTextureTask;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -76,49 +77,11 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     private boolean isResetGroy = false;
     private boolean mIsDouble = true;
 
-    //////////////
-    public static EGLContext mEglContext;
-    ExportTextureId exprotTex = null;
-
-    public void SetInterfaceTex( ExportTextureId tex ){
-        this.exprotTex = tex;
-    }
-
     public static ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 10, 200, TimeUnit.MILLISECONDS,
             new ArrayBlockingQueue<Runnable>(5));
 
     public static ThreadPoolExecutor GetThreadPool(){
         return executor;
-    }
-
-    public interface ExportTextureId{
-        void exportId( int texid, int hashcode);
-    }
-
-    public class GenTextureTask implements Runnable {
-        private int mHashCode;
-        private Bitmap mBmp;
-
-        public GenTextureTask(int hashcode, Bitmap bmp ) {
-            this.mHashCode = hashcode;
-            this.mBmp = bmp;
-        }
-
-        @Override
-        public void run() {
-            EGL10 egl = (EGL10) EGLContext.getEGL();
-            EGLDisplay eglDisplay =egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY); // egl.eglGetCurrentDisplay();
-
-            egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, mEglContext);
-
-//            int textureId = createTexture(mBmp);
-            int textureId = GLTextureUtils.initImageTexture(mContext, mBmp, false );
-            if( null != exprotTex ){
-                exprotTex.exportId( textureId, mHashCode );
-            }
-
-            return;
-        }
     }
 
     public static int createTexture(Bitmap bitmap) {
@@ -402,7 +365,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         int[] attrib_list = {0x3098, 3, EGL10.EGL_NONE };
         EGLDisplay display = egl.eglGetCurrentDisplay();
         EGLContext eglContext = egl.eglGetCurrentContext();
-        mEglContext = egl.eglCreateContext(display, config, eglContext, attrib_list);
+        GenTextureTask.mEglContext = egl.eglCreateContext(display, config, eglContext, attrib_list);
         testMultiGenTexture();
     }
 
@@ -439,7 +402,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         try {
             ins = mContext.getAssets().open("test.jpg");
             Bitmap bmp = BitmapFactory.decodeStream(ins);
-            GenTextureTask myta = new GenTextureTask(123, bmp);
+            GenTextureTask myta = new GenTextureTask(mContext, 123, bmp);
             executor.execute(myta);
         } catch (IOException e) {
             e.printStackTrace();

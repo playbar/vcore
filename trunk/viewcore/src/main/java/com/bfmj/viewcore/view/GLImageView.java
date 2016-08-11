@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import com.bfmj.viewcore.render.GLRenderParams;
 import com.bfmj.viewcore.util.GLTextureUtils;
+import com.bfmj.viewcore.util.GenTextureTask;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -22,6 +23,7 @@ public class GLImageView extends GLRectView {
     private Bitmap mBitmap;
     private GLRenderParams mRenderParams;
     private boolean mIsCutting = true;
+	private int textureId = -1;
     
 	public GLImageView(Context context) {
 		super(context);
@@ -84,7 +86,6 @@ public class GLImageView extends GLRectView {
 		}
 		
 		boolean isRecycle = true;
-		int textureId = -1;
 		Bitmap bitmap = null;
 		if (mResId != 0){
 			InputStream is = getContext().getResources().openRawResource(mResId);
@@ -114,23 +115,35 @@ public class GLImageView extends GLRectView {
 	    	}
     		
     		GLTextureUtils.mUseMipMap = getMipMap();
-    		if (mIsCutting) {
-    			textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
-    		} else {
-    			textureId = GLTextureUtils.initImageTexture(getContext(), bitmap, true);
-    		}
+//    		if (mIsCutting) {
+//    			textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
+//    		} else {
+//    			textureId = GLTextureUtils.initImageTexture(getContext(), bitmap, true);
+//    		}
+			textureId = -1;
+			GenTextureTask task = new GenTextureTask(getContext(), this.hashCode(), bitmap);
+			task.SetInterfaceTex(new GenTextureTask.ExportTextureId(){
+
+				@Override
+				public void exportId(int texid, int hashcode) {
+					if (hashcode == GLImageView.this.hashCode()){
+						textureId = texid;
+					}
+					if (textureId > -1){
+						mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+						mRenderParams.setTextureId(textureId);
+						updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
+					}
+
+					if (mRenderParams != null){
+						addRender(mRenderParams);
+					}
+				}
+			});
+
 			
 		}
-		
-		if (textureId > -1){
-			mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-			mRenderParams.setTextureId(textureId);
-			updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
-		}
-		
-		if (mRenderParams != null){
-			addRender(mRenderParams);
-		}
+
 	}
 
 	@Override
