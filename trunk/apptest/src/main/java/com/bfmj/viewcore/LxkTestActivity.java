@@ -1,22 +1,30 @@
 package com.bfmj.viewcore;
 
 import android.annotation.SuppressLint;
+import android.media.MediaPlayer;
 import android.opengl.Matrix;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Surface;
 
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
+import com.bfmj.viewcore.interfaces.IGLPlayerListener;
 import com.bfmj.viewcore.player.GLSystemPlayer;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLImageView;
+import com.bfmj.viewcore.view.GLPanoView;
+import com.bfmj.viewcore.view.GLPlayerView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
 
+import java.io.IOException;
+
 public class LxkTestActivity extends BaseViewActivity {
 	private GLRootView rootView;
+//	MediaPlayer player;
 
 	GLSystemPlayer player;
 
@@ -44,7 +52,8 @@ public class LxkTestActivity extends BaseViewActivity {
 			}
 		};
 
-		GLImageView[] imageViews = new GLImageView[200];
+		GLImageView[] imageViews = new GLImageView[400];
+		Log.d("aaaaaaaaaaaa", "");
 
 //		GLImageView line = new GLImageView(this);
 //		line.setX( 1198);
@@ -57,11 +66,11 @@ public class LxkTestActivity extends BaseViewActivity {
 
 		for (int i = 0; i < imageViews.length; i++) {
 			imageViews[i] = new GLImageView(this);
-			imageViews[i].setX(i * 10);
-			imageViews[i].setY(i * 10);
+			imageViews[i].setX(100);
+			imageViews[i].setY(100);
 			imageViews[i].setLayoutParams(300, 300);
 			imageViews[i].setBackground(R.drawable.a2);
-//			imageViews[i].setDepth(f);
+			imageViews[i].setDepth(4 - (i - 100)*0.005f);
 			imageViews[i].setFocusListener(listener);
 			rootView.addView(imageViews[i]);
 		}
@@ -84,6 +93,8 @@ public class LxkTestActivity extends BaseViewActivity {
 		textView.setText("北京欢迎你");
 		textView.setTextSize(100);
 		rootView.addView(textView);
+
+		initLog();
 
 		long time =  System.currentTimeMillis();
 
@@ -148,9 +159,47 @@ public class LxkTestActivity extends BaseViewActivity {
 
 		//////////
 
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				try {
+//					Thread.sleep(5000);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//
+//				getRootView().queueEvent(new Runnable() {
+//					@Override
+//					public void run() {
+//						GLPanoView videoView = GLPanoView.getSharedPanoView(LxkTestActivity.this);
+//						videoView.reset();
+//						videoView.setRenderType(GLPanoView.RENDER_TYPE_VIDEO);
+//						videoView.setSceneType(GLPanoView.SCENE_TYPE_SPHERE);
+//						videoView.setPlayType(GLPanoView.PLAY_TYPE_3D_LR);
+//						player = new MediaPlayer();
+//						try {
+//							player.setDataSource("/mnt/sdcard/1.mp4");
+//						} catch (IOException e) {
+//							e.printStackTrace();
+//						}
+//						player.setSurface(new Surface(videoView.getSurfaceTexture()));
+//						player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//							@Override
+//							public void onPrepared(MediaPlayer mp) {
+//								mp.start();
+//							}
+//						});
+//						player.prepareAsync();
+//					}
+//				});
+//			}
+//		}).start();
+
+
 //		player = new GLSystemPlayer(this);
-//		player.setVideoPath("/mnt/sdcard/111/1.mp4");
-//		player.setLayoutParams(0, 0, 960, 960);
+//		player.setVideoPath("/mnt/sdcard/1.mp4");
+//		player.setLayoutParams(960, 960);
+//		player.setDepth(4);
 ////		player.set3D(true);
 //		//player.rotate(90);
 //		player.setListener(new IGLPlayerListener() {
@@ -212,6 +261,61 @@ public class LxkTestActivity extends BaseViewActivity {
 //		senceView.rotate(180, 0, 0, 1);
 //		senceView.rotate(180, 0, 1, 0);
 //		rootView.addView(senceView);
+	}
+
+	private void initLog(){
+		final GLTextView fps = new GLTextView(this);
+		fps.setX(900);
+		fps.setY(2200);
+		fps.setLayoutParams(600, 100);
+		fps.setFixed(true);
+		fps.setBackground(new GLColor(0x000000, 0.5f));
+		fps.setTextColor(new GLColor(0xffffff));
+		fps.setTextSize(80);
+
+		getRootView().addView(fps);
+
+		new Thread(new Runnable() {
+			long times = 0;
+			int max = 0;
+			int min = 60;
+
+			@Override
+			public void run() {
+				getRootView().getFPS();
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				while (true){
+					final int f = getRootView().getFPS();
+					if (f > 0 && f < 70){
+						times++;
+						if (times > 2) {
+							max = Math.max(f, max);
+							min = Math.min(f, min);
+							getRootView().queueEvent(new Runnable() {
+								@Override
+								public void run() {
+									String msg = "FPS : " + f;
+									if (max > 0){
+										msg +=  " [" + min + "~" + max + "]";
+									}
+									fps.setText(msg);
+								}
+							});
+						}
+					}
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+
+			}
+		}).start();
 	}
 
 	private static float scaleX = 6.8f * 1.75f;
