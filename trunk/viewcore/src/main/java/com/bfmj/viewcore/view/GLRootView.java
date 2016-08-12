@@ -77,8 +77,8 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     private boolean isResetGroy = false;
     private boolean mIsDouble = true;
 
-    public static ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 10, 200, TimeUnit.MILLISECONDS,
-            new ArrayBlockingQueue<Runnable>(5));
+    public static ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS,
+            new ArrayBlockingQueue<Runnable>(2000));
 
     public static ThreadPoolExecutor GetThreadPool(){
         return executor;
@@ -366,7 +366,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         EGLDisplay display = egl.eglGetCurrentDisplay();
         EGLContext eglContext = egl.eglGetCurrentContext();
         GenTextureTask.mEglContext = egl.eglCreateContext(display, config, eglContext, attrib_list);
-        testMultiGenTexture();
+//        testMultiGenTexture();
     }
 
     @Override
@@ -432,6 +432,9 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     @Override
     public void onDrawFrame(GL10 gl) {
+        EGL10 egl = (EGL10) EGLContext.getEGL();
+        egl.eglMakeCurrent( egl.eglGetCurrentDisplay(), egl.eglGetCurrentSurface(EGL10.EGL_DRAW),
+                egl.eglGetCurrentSurface(EGL10.EGL_DRAW), egl.eglGetCurrentContext());
         times ++;
         if (mChild == null || mChild.size() == 0) {
             return;

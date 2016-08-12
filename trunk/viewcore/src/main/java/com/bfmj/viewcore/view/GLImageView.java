@@ -2,6 +2,9 @@ package com.bfmj.viewcore.view;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.bfmj.viewcore.render.GLRenderParams;
 import com.bfmj.viewcore.util.GLTextureUtils;
 import com.bfmj.viewcore.util.GenTextureTask;
@@ -69,82 +72,89 @@ public class GLImageView extends GLRectView {
 
 	@Override
 	public void createTexture(){
-		if (!isSurfaceCreated()){
-			return;
-		}
-		
-		float width = getInnerWidth();
-		float height = getInnerHeight();
-		
+		Timer timer = new Timer();
+		timer.schedule( task, 4000);
+	}
+
+	public  TimerTask task = new TimerTask() {
+		public void run() {
+			if (!isSurfaceCreated()){
+				return;
+			}
+
+			float width = getInnerWidth();
+			float height = getInnerHeight();
+
 //		if (width <= 0){
 //			return;
 //		}
-		
-		if (mRenderParams != null){
-			removeRender(mRenderParams);
-			mRenderParams = null;
-		}
-		
-		boolean isRecycle = true;
-		Bitmap bitmap = null;
-		if (mResId != 0){
-			InputStream is = getContext().getResources().openRawResource(mResId);
-	        
-	        try {
-	        	bitmap = BitmapFactory.decodeStream(is);
-	        } finally {
-	            try {
-	                is.close();
-	            } catch(IOException e) {
-	                e.printStackTrace();
-	            }
-	        }
-		} else if (mBitmap != null){
-			bitmap = mBitmap;
-			isRecycle = false;
-		}
 
-    	if (bitmap != null){
-			if ( this.getWidth() == 0 || this.getHeight() == 0 ){
-				this.setWidth( bitmap.getWidth());
-				this.setHeight( bitmap.getHeight() );
+			if (mRenderParams != null){
+				removeRender(mRenderParams);
+				mRenderParams = null;
 			}
-    		if (getHeight() == WRAP_CONTENT){
-	    		height = bitmap.getHeight() * width / bitmap.getWidth();
-	    		setHeight(height + getPaddingTop() + getPaddingBottom());
-	    	}
-    		
-    		GLTextureUtils.mUseMipMap = getMipMap();
+
+			boolean isRecycle = true;
+			Bitmap bitmap = null;
+			if (mResId != 0){
+				InputStream is = getContext().getResources().openRawResource(mResId);
+
+				try {
+					bitmap = BitmapFactory.decodeStream(is);
+				} finally {
+					try {
+						is.close();
+					} catch(IOException e) {
+						e.printStackTrace();
+					}
+				}
+			} else if (mBitmap != null){
+				bitmap = mBitmap;
+				isRecycle = false;
+			}
+
+			if (bitmap != null){
+				if ( getWidth() == 0 || getHeight() == 0 ){
+					setWidth( bitmap.getWidth());
+					setHeight( bitmap.getHeight() );
+				}
+				if (getHeight() == WRAP_CONTENT){
+					height = bitmap.getHeight() * width / bitmap.getWidth();
+					setHeight(height + getPaddingTop() + getPaddingBottom());
+				}
+
+				GLTextureUtils.mUseMipMap = getMipMap();
 //    		if (mIsCutting) {
 //    			textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
 //    		} else {
 //    			textureId = GLTextureUtils.initImageTexture(getContext(), bitmap, true);
 //    		}
-			textureId = -1;
-			GenTextureTask task = new GenTextureTask(getContext(), this.hashCode(), bitmap);
-			task.SetInterfaceTex(new GenTextureTask.ExportTextureId(){
+				textureId = -1;
+				GenTextureTask task = new GenTextureTask(getContext(), GLImageView.this.hashCode(), bitmap);
+				task.SetInterfaceTex(new GenTextureTask.ExportTextureId(){
 
-				@Override
-				public void exportId(int texid, int hashcode) {
-					if (hashcode == GLImageView.this.hashCode()){
-						textureId = texid;
-					}
-					if (textureId > -1){
-						mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-						mRenderParams.setTextureId(textureId);
-						updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
-					}
+					@Override
+					public void exportId(int texid, int hashcode) {
+						if (hashcode == GLImageView.this.hashCode()){
+							textureId = texid;
+						}
+						if (textureId > -1){
+							mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+							mRenderParams.setTextureId(textureId);
+							updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
+						}
 
-					if (mRenderParams != null){
-						addRender(mRenderParams);
+						if (mRenderParams != null){
+							addRender(mRenderParams);
+						}
 					}
-				}
-			});
+				});
 
-			
+				GLRootView.GetThreadPool().execute(task);
+			}
+			return;
 		}
-
-	}
+	};
 
 	@Override
 	public void initDraw() {

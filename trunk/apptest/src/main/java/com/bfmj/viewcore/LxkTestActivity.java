@@ -52,7 +52,7 @@ public class LxkTestActivity extends BaseViewActivity {
 			}
 		};
 
-		GLImageView[] imageViews = new GLImageView[400];
+		GLImageView[] imageViews = new GLImageView[2];
 		Log.d("aaaaaaaaaaaa", "");
 
 //		GLImageView line = new GLImageView(this);
@@ -69,7 +69,7 @@ public class LxkTestActivity extends BaseViewActivity {
 			imageViews[i].setX(100);
 			imageViews[i].setY(100);
 			imageViews[i].setLayoutParams(300, 300);
-			imageViews[i].setBackground(R.drawable.a2);
+			imageViews[i].setImage(R.drawable.a2);
 			imageViews[i].setDepth(4 - (i - 100)*0.005f);
 			imageViews[i].setFocusListener(listener);
 			rootView.addView(imageViews[i]);

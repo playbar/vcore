@@ -2,6 +2,7 @@ package com.bfmj.viewcore.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLContext;
@@ -30,6 +31,10 @@ public class GenTextureTask implements Runnable {
 
     @Override
     public void run() {
+        if( mEglContext == null ){
+            return;
+        }
+        Log.e("GetTextureTask", "--->run");
         EGL10 egl = (EGL10) EGLContext.getEGL();
         EGLDisplay eglDisplay =egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY); // egl.eglGetCurrentDisplay();
 
