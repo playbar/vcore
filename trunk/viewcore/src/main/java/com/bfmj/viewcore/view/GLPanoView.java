@@ -74,6 +74,7 @@ public class GLPanoView extends GLView {
     private SurfaceTexture mSurfaceTexture = null;
     private int mResId = -1;
     private Bitmap mBitmap;
+    private boolean mVideoPrepared = false;
 
     private float[] mRotateHeadview = new float[3];
 
@@ -210,6 +211,7 @@ public class GLPanoView extends GLView {
             }
         } else {
             mSurfaceTexture = null;
+            mVideoPrepared = false;
         }
     }
 
@@ -223,6 +225,7 @@ public class GLPanoView extends GLView {
         mSurfaceTexture = null;
         mResId = -1;
         mBitmap = null;
+        mVideoPrepared = false;
     }
 
     /**
@@ -268,6 +271,7 @@ public class GLPanoView extends GLView {
      * @return
      */
     public SurfaceTexture getSurfaceTexture(){
+        mVideoPrepared = true;
         return mSurfaceTexture;
     }
 
@@ -301,6 +305,10 @@ public class GLPanoView extends GLView {
     @Override
     public void onBeforeDraw(boolean isLeft) {
         if (!isVisible() || !isSurfaceCreated || vertices[mSceneType] == null || mTextureId < 0){
+            return;
+        }
+
+        if (mRenderType == RENDER_TYPE_VIDEO && !mVideoPrepared){
             return;
         }
 
@@ -343,8 +351,12 @@ public class GLPanoView extends GLView {
 
         state.pushMatrix();
 
-        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-        GLES20.glEnable(GLES20.GL_BLEND);
+        if (mRenderType == RENDER_TYPE_VIDEO){
+            GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+        } else {
+            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+            GLES20.glEnable(GLES20.GL_BLEND);
+        }
 
         GLES20.glUseProgram(mPrograms[mRenderType]);
 
@@ -379,7 +391,11 @@ public class GLPanoView extends GLView {
         GLES20.glDisableVertexAttribArray(0);
         GLES20.glDisableVertexAttribArray(1);
 
-        GLES20.glDisable(GLES20.GL_BLEND);
+        if (mRenderType == RENDER_TYPE_VIDEO){
+            GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        } else {
+            GLES20.glDisable(GLES20.GL_BLEND);
+        }
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
         state.popMatrix();
