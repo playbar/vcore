@@ -167,17 +167,14 @@ public class GLGridViewPage extends GLGridView {
 							++mCurIndex;
 							setStartIndex((mCurIndex - 1) * getNumOneScreen());
 							requestLayout();
-							showPage();
 						} else if (prvBtnImgView.isFocused()) {
 							--mCurIndex;
 							setStartIndex((mCurIndex - 1) * getNumOneScreen());
 							requestLayout();
-							showPage();
 						} else if (mbIndexFocused) {
 							setStartIndex((mCurFocuseIndex - 1) * getNumOneScreen());
 							mCurIndex = mCurFocuseIndex;
 							requestLayout();
-							showPage();
 						}
 					}
 				});
