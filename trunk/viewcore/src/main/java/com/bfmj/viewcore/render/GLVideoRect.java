@@ -176,6 +176,7 @@ public class GLVideoRect extends GLRect {
 				}
 
 				setTextureId(render.getTextureId());
+				setTextureType(render.getTextureType());
 				setAlpha(render.getAlpha());
 				setMask(render.getMask());
 				draw(state.getFinalMatrix());
