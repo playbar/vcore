@@ -113,6 +113,15 @@ public class GLGridViewPage extends GLGridView {
 
 	@Override
 	public void requestLayout(){
+		mCount = getTotalNum() / getNumOneScreen();
+		if( getTotalNum() % getNumOneScreen() != 0 )
+			++mCount;
+
+		if( mCurIndex > mCount ){
+			mCurIndex = mCount;
+			setStartIndex((mCurIndex - 1) * getNumOneScreen());
+		}
+
 		super.requestLayout();
 		showPage();
 	}
@@ -205,13 +214,7 @@ public class GLGridViewPage extends GLGridView {
 			public void onFocusChange(GLRectView view, boolean focused) {
 				if (focused) {
 					prvBtnImgView.setBackground( mOnFouseColor );
-//					view.setAlpha(0.3f);
-//					--mCurIndex;
-//					setStartIndex((mCurIndex - 1) * getNumOneScreen());
-//					requestLayout();
-//					showPage();
 				} else {
-//					view.setAlpha(1.0f);
 					prvBtnImgView.setBackground(mDefaultColor );
 				}
 			}
@@ -233,13 +236,7 @@ public class GLGridViewPage extends GLGridView {
 			public void onFocusChange(GLRectView view, boolean focused) {
 				if (focused) {
 					nextBtnImgView.setBackground( mOnFouseColor );
-//					view.setAlpha(0.3f);
-//					++mCurIndex;
-//					setStartIndex((mCurIndex -1) * getNumOneScreen());
-//					requestLayout();
-//					showPage();
 				} else {
-//					view.setAlpha(1.0f);
 					nextBtnImgView.setBackground( mDefaultColor );
 				}
 			}
@@ -332,9 +329,7 @@ public class GLGridViewPage extends GLGridView {
 				if (mCurIndex > 1) {
 					prvBtn();
 				}
-			} else if (mCurIndex >= mCount) {
-				mCurIndex = mCount;
-				setStartIndex((mCurIndex - 1) * getNumOneScreen());
+			} else if (mCurIndex == mCount) {
 				prvBtn();
 			}
 
