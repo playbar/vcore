@@ -332,7 +332,9 @@ public class GLGridViewPage extends GLGridView {
 				if (mCurIndex > 1) {
 					prvBtn();
 				}
-			} else if (mCurIndex == mCount) {
+			} else if (mCurIndex >= mCount) {
+				mCurIndex = mCount;
+				setStartIndex((mCurIndex - 1) * getNumOneScreen());
 				prvBtn();
 			}
 
