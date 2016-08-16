@@ -117,7 +117,7 @@ public class GLGridViewPage extends GLGridView {
 		if( getTotalNum() % getNumOneScreen() != 0 )
 			++mCount;
 
-		if( mCurIndex > mCount ){
+		if( mCurIndex > mCount && mCount > 0 ){
 			mCurIndex = mCount;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
 		}
