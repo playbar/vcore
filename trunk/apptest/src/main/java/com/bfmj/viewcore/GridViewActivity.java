@@ -68,6 +68,7 @@ public class GridViewActivity extends BaseViewActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		setMojingType("EWAZ93-XWD8FN-SGEFHN-WH4C9V-W8SX4Q-ACXNQG");
 		super.onCreate(savedInstanceState);
 		
 		rootView = getRootView();

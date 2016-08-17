@@ -29,8 +29,21 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <!-- 魔镜SDK集成参数-->
+        <meta-data
+            android:name="DEVELOPER_MERCHANT_ID"
+            android:value="P3929046052508669" />
+        <meta-data
+            android:name="DEVELOPER_APP_ID"
+            android:value="\03998964081046309" />
+        <meta-data
+            android:name="DEVELOPER_APP_KEY"
+            android:value="81e5499b3cb66bf06c61d2afe3be29b8" />
+        <meta-data
+            android:name="DEVELOPER_CHANNEL_ID"
+            android:value="www.mojing.cn" />
        <activity
-            android:name=".ImageViewActivity"
+            android:name=".GridViewActivity"
             android:screenOrientation="landscape"
             android:label="@string/app_name" >
             <intent-filter>
