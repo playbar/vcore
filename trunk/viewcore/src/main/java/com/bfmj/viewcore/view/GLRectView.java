@@ -79,9 +79,7 @@ public class GLRectView extends GLView {
     private float marginBottom = 0;
     private float scaleX = 1.0f;
     private float scaleY = 1.0f;
-    private float translationX = 0;
-    private float translationY = 0;
-    private float translationZ = 0;
+    private float[] position = new float[3];
     private float angelX = 0;
     private float angelY = 0;
     private float angelZ = 0;
@@ -744,10 +742,19 @@ public class GLRectView extends GLView {
 		setX(getX() + tx);
 		setY(getY() + ty);
 		setDepth(getDepth() + tz);
-		
-		translationX = tx;
-		translationY = ty;
-		translationZ = tz;
+	}
+
+	/**
+	 * 设置空间位置
+	 * @param position 空间位置，放大10倍
+	 */
+	public void setPosition(float[] position){
+		this.position = position;
+		Matrix.translateM(getMatrixState().getCurrentMatrix(), 0, position[0], position[1], getDepth() + position[2]);
+	}
+
+	public float[] getPositon(){
+		return this.position;
 	}
 	
 	/**
@@ -1239,30 +1246,6 @@ public class GLRectView extends GLView {
 			return mKeyListener.onKeyLongPress(this, keycode);
 		}
 		return false;
-	}
-	
-	public void setTranslateX(float tx) {
-		translationX = tx;
-	}
-	
-	public void setTranslateY(float ty) {
-		translationY = ty;
-	}
-	
-	public void setTranslateZ(float tz) {
-		translationZ = tz;
-	}
-	
-	public float getTranslateX() {
-		return translationX;
-	}
-	
-	public float getTranslateY() {
-		return translationY;
-	}
-	
-	public float getTranslateZ() {
-		return translationZ;
 	}
 	
 	public void setOriginal() {

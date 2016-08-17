@@ -174,11 +174,20 @@ public class GLFocusUtils {
 
 			float vx1 = getX(v.getLeft() + v.getX());
 			float vy1 = getY(v.getTop() + v.getY());
-
 			float vx2 = getX(v.getLeft() + v.getX() + v.getWidth());
 			float vy2 = getY(v.getTop() + v.getY() + v.getHeight());
+			float z = -v.getDepth();
 
-			if (MojingSDK.DirectionalRadiaInRect(v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView, new float[]{vx1, vy1}, new float[]{vx2, vy2}, -v.getDepth(), new float[2])){
+			if (v.isCostomPostion()){
+				float[] pos = v.getPositon();
+				vx1 += pos[0];
+				vx2 += pos[0];
+				vy1 += pos[1];
+				vy1 += pos[1];
+				z = pos[2];
+			}
+
+			if (MojingSDK.DirectionalRadiaInRect(v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView, new float[]{vx1, vy1}, new float[]{vx2, vy2}, z, new float[2])){
 				if (v.hasListeter()){
 					hasFocused = true;
 				} else if (getHasListenerParent(v) != null){

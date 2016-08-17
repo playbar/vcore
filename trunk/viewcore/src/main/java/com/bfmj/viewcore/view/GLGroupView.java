@@ -1152,11 +1152,11 @@ public class GLGroupView extends GLRectView {
 			}
 	
 			//Log.d("test2", sx +"===="+ sy +"===="+ cView.getTranslateX() +"===="+ tx +"===="+ cView.getTranslateY() +"===="+ ty +"===="+ cView.getX() +"===="+ cView.getY());
-			cView.setX(cView.getX() + tx - cView.getTranslateX());
-			cView.setY(cView.getY() + ty - cView.getTranslateY());
-			
-			cView.setTranslateX(tx);
-			cView.setTranslateY(ty);
+//			cView.setX(cView.getX() + tx - cView.getTranslateX());
+//			cView.setY(cView.getY() + ty - cView.getTranslateY());
+//
+//			cView.setTranslateX(tx);
+//			cView.setTranslateY(ty);
 		} else { //兼容旧方案
 			float pCenterX = pView.getWidth()/2 + pView.getOriginalX();
 			float pCenterY = pView.getHeight()/2 + pView.getOriginalY();
