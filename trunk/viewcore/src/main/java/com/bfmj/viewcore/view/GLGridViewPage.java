@@ -365,7 +365,7 @@ public class GLGridViewPage extends GLGridView {
 			}
 			//textView.setAlignment( GLTextView.ALIGN_CENTER );
 			if( i >= 10 ){
-				textView.setPadding(20, 10, 0, 0);
+				textView.setPadding(10, 10, 0, 0);
 			}else {
 				textView.setPadding(40, 10, 0, 0);
 			}

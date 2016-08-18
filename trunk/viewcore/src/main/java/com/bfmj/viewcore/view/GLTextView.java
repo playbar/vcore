@@ -2,6 +2,7 @@ package com.bfmj.viewcore.view;
 
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLRenderParams;
+import com.bfmj.viewcore.util.BitmapOp;
 import com.bfmj.viewcore.util.GLFontUtils;
 import com.bfmj.viewcore.util.GLTextureUtils;
 
@@ -221,7 +222,7 @@ public class GLTextView extends GLRectView {
         float lineHeight = mLineHeight == -1 ? 1.0f : (float)mLineHeight / mTextSize / 1.2f;
         
         //绘制字体
-        float textWidth = width - mTextPadding;
+        float textWidth = width;
     	StaticLayout sl = new StaticLayout(mText, p, (int)textWidth, mAlignment, lineHeight, 0.0f, true);
     	
     	float maxWidth = 0;
@@ -255,8 +256,8 @@ public class GLTextView extends GLRectView {
         canvas.drawColor(Color.TRANSPARENT);
         
     	sl.draw(canvas);
-        
-        return bitmap;
+
+		return bitmap;
 	}
 	
 	@Override
