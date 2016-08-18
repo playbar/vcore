@@ -25,7 +25,6 @@ public abstract class GLView implements GLRenderListener {
 	private float mEyeDeviation = GLScreenParams.getEyeDistance();
 	private boolean isFixed = false;
 	private boolean isCostomHeadView;
-	private boolean isCostomPostion;
 	
 	public GLView(Context context){
 		mContext = context;
@@ -209,13 +208,5 @@ public abstract class GLView implements GLRenderListener {
 
 	public void setCostomHeadView(boolean costomHeadView) {
 		isCostomHeadView = costomHeadView;
-	}
-
-	public boolean isCostomPostion() {
-		return isCostomPostion;
-	}
-
-	public void setCostomPostion(boolean costomPostion) {
-		isCostomPostion = costomPostion;
 	}
 }
