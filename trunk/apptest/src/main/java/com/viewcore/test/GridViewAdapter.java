@@ -1,8 +1,7 @@
-package com.bfmj.viewcore;
+package com.viewcore.test;
 
 import android.content.Context;
 
-import com.bfmj.viewcore.R;
 import com.bfmj.viewcore.adapter.GLBaseAdapter;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;

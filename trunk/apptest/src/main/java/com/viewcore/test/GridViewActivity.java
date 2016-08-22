@@ -1,4 +1,4 @@
-package com.bfmj.viewcore;
+package com.viewcore.test;
 
 import android.os.Bundle;
 import android.util.Log;

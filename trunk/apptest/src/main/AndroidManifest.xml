@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bfmj.viewcore"
+    package="com.viewcore.test"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -43,7 +43,7 @@
             android:name="DEVELOPER_CHANNEL_ID"
             android:value="www.mojing.cn" />
        <activity
-            android:name=".GridViewActivity"
+            android:name=".TextViewActivity"
             android:screenOrientation="landscape"
             android:label="@string/app_name" >
             <intent-filter>

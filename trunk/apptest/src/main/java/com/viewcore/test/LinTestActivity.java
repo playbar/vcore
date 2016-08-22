@@ -1,4 +1,4 @@
-package com.bfmj.viewcore;
+package com.viewcore.test;
 
 import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLProcessCircleView;

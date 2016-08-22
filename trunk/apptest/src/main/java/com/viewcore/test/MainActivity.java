@@ -1,4 +1,4 @@
-package com.bfmj.viewcore;
+package com.viewcore.test;
 
 import android.app.Activity;
 import android.content.Intent;
