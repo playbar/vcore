@@ -1,11 +1,10 @@
-apply plugin: 'com.android.model.application'
+apply plugin: 'com.android.model.library'
 
 model {
     android {
         compileSdkVersion 22
         buildToolsVersion '22.0.0'
         defaultConfig {
-            applicationId = 'com.bfmj.viewcore'
             minSdkVersion.apiLevel = 13
             targetSdkVersion.apiLevel = 24
             versionCode 1

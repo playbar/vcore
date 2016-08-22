@@ -1,4 +1,4 @@
-apply plugin: 'com.android.model.library'
+apply plugin: 'com.android.model.application'
 
 model {
 
@@ -6,18 +6,19 @@ model {
         compileSdkVersion 22
         buildToolsVersion '22.0.0'
         defaultConfig {
+            applicationId = 'com.bfmj.test'
             minSdkVersion.apiLevel = 13
             targetSdkVersion.apiLevel = 24
             versionCode 1
             versionName "1.0"
         }
 
-        ndk{
-            platformVersion = 18
-            moduleName = 'viewcore'
-            abiFilters.addAll(['armeabi', 'armeabi-v7a'])
-            ldLibs.addAll(['android', 'log'])
-        }
+//        ndk{
+//            platformVersion = 18
+//            moduleName = 'viewcore'
+//            abiFilters.addAll(['armeabi'])
+//            ldLibs.addAll(['android', 'log'])
+//        }
 
     }
 
