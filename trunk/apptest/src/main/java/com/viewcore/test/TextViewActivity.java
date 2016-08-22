@@ -15,11 +15,13 @@ import com.bfmj.viewcore.util.GLGenTexTask;
 import com.bfmj.viewcore.util.GLGenTexTask.GenTexIdInterface;
 import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLCursorView;
+import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
 
 import java.io.InputStream;
+import java.util.Random;
 
 public class TextViewActivity extends BaseViewActivity {
 
@@ -32,30 +34,30 @@ public class TextViewActivity extends BaseViewActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		setMojingType("42EGCV-WQXG87-WHQHS8-YYYTEF-4SWGST-CRY7SS");
+//		setMojingType("42EGCV-WQXG87-WHQHS8-YYYTEF-4SWGST-CRY7SS");
 		super.onCreate(savedInstanceState);
 
 //		BitmapOp bmtOp = new BitmapOp();
 //		String str = bmtOp.stringFromJNI();
 //		Log.e("TextViewActivity", "onCreate");
 
-		mTask = new GLGenTexTask(GLGenTexTask.class.hashCode());
-		mTask.setGenTexIdInterface( new GenTexIdInterface(){
-			public void ExportTextureId(int mTextureId, int mHashCode){
-				Log.e("TextViewActivity", "mTask");
-				mTask.uninit();
-				mBitmap.recycle();
-			}
-		});
-		mTask.init();
-		assetManager= getAssets();
-		try {
-			InputStream in=assetManager.open("textext.png");
-			mBitmap = BitmapFactory.decodeStream(in);
-			mTask.GenTexId(mBitmap, mBitmap.getWidth(), mBitmap.getHeight());
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+//		mTask = new GLGenTexTask(GLGenTexTask.class.hashCode());
+//		mTask.setGenTexIdInterface( new GenTexIdInterface(){
+//			public void ExportTextureId(int mTextureId, int mHashCode){
+//				Log.e("TextViewActivity", "mTask");
+//				mTask.uninit();
+//				mBitmap.recycle();
+//			}
+//		});
+//		mTask.init();
+//		assetManager= getAssets();
+//		try {
+//			InputStream in=assetManager.open("textext.png");
+//			mBitmap = BitmapFactory.decodeStream(in);
+//			mTask.GenTexId(mBitmap, mBitmap.getWidth(), mBitmap.getHeight());
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
 
 
 		rootView = getRootView();
@@ -63,6 +65,19 @@ public class TextViewActivity extends BaseViewActivity {
 		rootView.onResume();
 		//rootView.setDoubleScreen(false);
 		rootView.setDistortionEnable( true );
+
+		GLImageView[] imageViews = new GLImageView[200];
+		Random random=new Random();
+		for (int i = 0; i < imageViews.length; i++) {
+			imageViews[i] = new GLImageView(this);
+			imageViews[i].setX(random.nextInt(2400));
+			imageViews[i].setY(random.nextInt(2400));
+			imageViews[i].setLayoutParams(300, 300);
+			imageViews[i].setImage(R.drawable.ic_launcher);
+//			imageViews[i].setDepth(4 - (i - 100)*0.005f);
+			rootView.addView(imageViews[i]);
+		}
+
 
 
 		GLTextView textView = new GLTextView(this);

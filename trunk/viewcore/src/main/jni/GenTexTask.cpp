@@ -27,13 +27,14 @@ JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeInit(JNIEn
 
     if( GenTexTask::mThizClass == NULL ){
         GenTexTask::mThizClass = env->FindClass(GENTEXTASKCLASS);
+        GenTexTask::mClassID = env->GetFieldID( GenTexTask::mThizClass, "mClassID", "I");
+        GenTexTask::mExportTextureId = env->GetMethodID( GenTexTask::mThizClass, "ExportTextureId", "(I)V");
     }
-    GenTexTask::mClassID = env->GetFieldID( GenTexTask::mThizClass, "mClassID", "I");
-    GenTexTask::mExportTextureId = env->GetMethodID( GenTexTask::mThizClass, "ExportTextureId", "(I)V");
+
 
     GenTexTask *pTask = new GenTexTask(env, objThiz);
-    GenTexTask *pTmp = (GenTexTask*)env->GetIntField(thiz, GenTexTask::mClassID );
-    env->SetIntField( thiz, GenTexTask::mClassID, (int)pTask);
+    GenTexTask *pTmp = (GenTexTask*)env->GetIntField(objThiz, GenTexTask::mClassID );
+    env->SetIntField( objThiz, GenTexTask::mClassID, (int)pTask);
     if( pTmp != NULL ){
         delete pTmp;
     }
@@ -93,7 +94,7 @@ void GenTexTask::GenTexID( jobject bmp, int width, int height )
     void *pixels = 0;
     AndroidBitmap_getInfo(mEnv, mBitmap, &infocolor);
     AndroidBitmap_lockPixels(mEnv, mBitmap, &pixels);
-    memcpy( mpData, pixels, mWidth * mHeight );
+    memcpy( mpData, pixels, mWidth * mHeight * 4);
     AndroidBitmap_unlockPixels(mEnv, mBitmap);
 
     gThreadPool.AddTask( this );
