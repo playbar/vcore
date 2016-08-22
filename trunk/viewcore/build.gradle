@@ -3,8 +3,8 @@ apply plugin: 'com.android.model.application'
 model {
 
     android {
-        compileSdkVersion 22
-        buildToolsVersion '22.0.0'
+        compileSdkVersion 23
+        buildToolsVersion '23.0.2'
         defaultConfig {
             applicationId = 'com.bfmj.test'
             minSdkVersion.apiLevel = 13
@@ -16,10 +16,11 @@ model {
         ndk{
             platformVersion = 18
             moduleName = 'viewcore'
+            toolchain = 'clang'
             stl         = 'gnustl_static'
             cppFlags.addAll(['-std=c++11', '-Wall', '-fno-rtti', '-fno-exceptions'])
             abiFilters.addAll(['armeabi'])
-            ldLibs.addAll(['android', 'log'])
+            ldLibs.addAll(['android', 'log', 'GLESv3', 'EGL'])
         }
 
         sources {

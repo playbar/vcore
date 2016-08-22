@@ -57,6 +57,7 @@ protected:
 
 public:
     CThreadPool(int threadNum = 10);
+    ~CThreadPool();
     int Create();          /** 创建线程池中的线程 */
     int AddTask(CTask *task);      /** 把任务添加到任务队列中 */
     int StopAll();                 /** 使线程池中的线程退出 */

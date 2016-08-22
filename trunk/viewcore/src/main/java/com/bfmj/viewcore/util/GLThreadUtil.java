@@ -10,10 +10,10 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class GLThreadUtil {
 
-    public native void onDrawFrame(GL10 gl);
+    public static native void onDrawFrame(GL10 gl);
 
-    public native void onSurfaceChanged(GL10 gl, int width, int height);
+    public static native void onSurfaceChanged(GL10 gl, int width, int height);
 
-    public native void onSurfaceCreated(GL10 gl, EGLConfig config);
+    public static native void onSurfaceCreated(GL10 gl, EGLConfig config);
 
 }

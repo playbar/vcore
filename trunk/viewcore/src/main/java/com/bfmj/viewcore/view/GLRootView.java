@@ -29,6 +29,7 @@ import com.bfmj.viewcore.render.GLScreenParams;
 import com.bfmj.viewcore.render.GLVideoRect;
 import com.bfmj.viewcore.util.GLFocusUtils;
 import com.bfmj.viewcore.util.GLTextureUtils;
+import com.bfmj.viewcore.util.GLThreadUtil;
 import com.bfmj.viewcore.util.GenTextureTask;
 
 import android.content.Context;
@@ -331,6 +332,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        GLThreadUtil.onSurfaceCreated(gl, config);
         isSurfaceCreated = true;
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
@@ -371,6 +373,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
+        GLThreadUtil.onSurfaceChanged(gl, width, height);
 //		DisplayMetrics displayMetrics = new DisplayMetrics();
 //		Activity activity = (Activity)mContext;
 //		activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -432,6 +435,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     @Override
     public void onDrawFrame(GL10 gl) {
+        GLThreadUtil.onDrawFrame(gl);
         EGL10 egl = (EGL10) EGLContext.getEGL();
         egl.eglMakeCurrent( egl.eglGetCurrentDisplay(), egl.eglGetCurrentSurface(EGL10.EGL_DRAW),
                 egl.eglGetCurrentSurface(EGL10.EGL_DRAW), egl.eglGetCurrentContext());

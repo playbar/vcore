@@ -26,6 +26,11 @@ CThreadPool::CThreadPool(int threadNum)
 //    Create();
 }
 
+CThreadPool::~CThreadPool()
+{
+    StopAll();
+}
+
 /**
  * 线程回调函数
  */
