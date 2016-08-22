@@ -3,6 +3,7 @@
 //
 
 #include "GenTexTask.h"
+#include "viewcore.h"
 #include "android/bitmap.h"
 
 #define GENTEXTASKCLASS "com/bfmj/viewcore/util/GLGenTexTask"
@@ -10,9 +11,6 @@
 jclass GenTexTask::mThizClass = NULL;
 jfieldID GenTexTask::mClassID = NULL;
 jmethodID GenTexTask::mExportTextureId = NULL;
-
-static JavaVM *gs_jvm=NULL;
-//static jobject gs_object=NULL;
 
 static GenTexTask* getGenTexTask( JNIEnv* env, jobject thiz)
 {
@@ -22,10 +20,10 @@ static GenTexTask* getGenTexTask( JNIEnv* env, jobject thiz)
 
 JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeInit(JNIEnv* env, jobject thiz)
 {
-    env->GetJavaVM(&gs_jvm); //保存到全局变量中JVM
     jobject objThiz=env->NewGlobalRef(thiz); // DeleteGlobalRef
 
     if( GenTexTask::mThizClass == NULL ){
+//        env->GetJavaVM(&gs_jvm); //保存到全局变量中JVM
         GenTexTask::mThizClass = env->FindClass(GENTEXTASKCLASS);
         GenTexTask::mClassID = env->GetFieldID( GenTexTask::mThizClass, "mClassID", "I");
         GenTexTask::mExportTextureId = env->GetMethodID( GenTexTask::mThizClass, "ExportTextureId", "(I)V");
@@ -116,8 +114,7 @@ int GenTexTask::Run()
         gs_jvm->DetachCurrentThread();
     }
 
-
-    LOGI("mytask textureid = %d", textureId );
+//    LOGI("mytask textureid = %d", textureId );
     return 0;
 }
 

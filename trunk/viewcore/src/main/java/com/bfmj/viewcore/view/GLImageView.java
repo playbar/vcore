@@ -138,7 +138,7 @@ public class GLImageView extends GLRectView {
 			final GLGenTexTask mTask = new GLGenTexTask(GLImageView.this.hashCode());
 			mTask.setGenTexIdInterface( new GLGenTexTask.GenTexIdInterface(){
 				public void ExportTextureId(int textureId, int mHashCode){
-					Log.e("GLImageView", "ExportTextureId");
+//					Log.e("GLImageView", "ExportTextureId");
 					if (mHashCode == GLImageView.this.hashCode()){
 						textureId = textureId;
 					}
