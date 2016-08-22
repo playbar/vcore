@@ -34,4 +34,10 @@ public class BitmapOp {
         }
     }
 
+    public native String stringFromJNI();
+
+    static {
+        System.loadLibrary("viewcore");
+    }
+
 }

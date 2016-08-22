@@ -1,31 +1,26 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.model.library'
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
-    }
-}
+model {
 
-android {
-    compileSdkVersion 22
-    buildToolsVersion '22.0.0'
-    defaultConfig {
-        minSdkVersion 17
-        targetSdkVersion 17
-        versionCode 1
-        versionName "1.0"
+    android {
+        compileSdkVersion 22
+        buildToolsVersion '22.0.0'
+        defaultConfig {
+            minSdkVersion.apiLevel = 13
+            targetSdkVersion.apiLevel = 24
+            versionCode 1
+            versionName "1.0"
+        }
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk{
+            platformVersion = 18
+            moduleName = 'viewcore'
+            abiFilters.addAll(['armeabi', 'armeabi-v7a'])
+            ldLibs.addAll(['android', 'log'])
+        }
+
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
-    productFlavors {
-    }
+
 }
 
 dependencies {

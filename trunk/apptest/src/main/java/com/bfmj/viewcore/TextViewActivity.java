@@ -9,6 +9,7 @@ import com.androidquery.AQuery;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
+import com.bfmj.viewcore.util.BitmapOp;
 import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLGridViewPage;
@@ -28,8 +29,12 @@ public class TextViewActivity extends BaseViewActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		
+//		super.onCreate(savedInstanceState);
+
+		BitmapOp bmtOp = new BitmapOp();
+		String str = bmtOp.stringFromJNI();
+		Log.e("TextViewActivity", "onCreate");
+
 		rootView = getRootView();
 
 		rootView.onResume();
