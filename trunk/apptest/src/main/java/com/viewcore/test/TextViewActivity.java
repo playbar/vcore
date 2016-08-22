@@ -66,24 +66,14 @@ public class TextViewActivity extends BaseViewActivity {
 		//rootView.setDoubleScreen(false);
 		rootView.setDistortionEnable( true );
 
-		GLImageView[] imageViews = new GLImageView[200];
-		Random random=new Random();
-		for (int i = 0; i < imageViews.length; i++) {
-			imageViews[i] = new GLImageView(this);
-			imageViews[i].setX(random.nextInt(2400));
-			imageViews[i].setY(random.nextInt(2400));
-			imageViews[i].setLayoutParams(300, 300);
-			imageViews[i].setImage(R.drawable.ic_launcher);
-//			imageViews[i].setDepth(4 - (i - 100)*0.005f);
-			rootView.addView(imageViews[i]);
-		}
+
 
 
 
 		GLTextView textView = new GLTextView(this);
 		textView.setX( 1000);
 		textView.setY( 2000 );
-		textView.setLayoutParams(600, 600 );
+		textView.setLayoutParams(60, 60 );
 		textView.setBackground( new GLColor(1.0f, 1.0f, 1.0f));
 		textView.setTextColor(new GLColor(1.0f, 0.0f, 0.0f));
 		textView.setText("88");
@@ -127,6 +117,22 @@ public class TextViewActivity extends BaseViewActivity {
 		cursorView.setDepth(3);
 		rootView.addView(cursorView);
 
+		addImageViewTest();
+
+	}
+
+	public void addImageViewTest(){
+		GLImageView[] imageViews = new GLImageView[200];
+		Random random=new Random();
+		for (int i = 0; i < imageViews.length; i++) {
+			imageViews[i] = new GLImageView(this);
+			imageViews[i].setX(random.nextInt(2400));
+			imageViews[i].setY(random.nextInt(2400));
+			imageViews[i].setLayoutParams(300, 300);
+			imageViews[i].setImage(R.drawable.ic_launcher);
+//			imageViews[i].setDepth(4 - (i - 100)*0.005f);
+			rootView.addView(imageViews[i]);
+		}
 	}
 
 
@@ -137,6 +143,7 @@ public class TextViewActivity extends BaseViewActivity {
 			case KeyEvent.KEYCODE_MENU:
 				return true;
 			case KeyEvent.KEYCODE_BACK:
+				addImageViewTest();
 				return true;
 			default:
 				break;
