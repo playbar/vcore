@@ -15,23 +15,13 @@
  *
  */
 #include <string.h>
-#include <jni.h>
 #include <inttypes.h>
-#include <android/log.h>
+#include "viewcore.h"
 
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "hell-libs::", __VA_ARGS__))
 
-/* This is a trivial JNI example where we use a native method
- * to return a new VM String. See the corresponding Java source
- * file located at:
- *
- *   app/src/main/java/com/example/hellolibs/MainActivity.java
- */
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_bfmj_viewcore_util_BitmapOp_stringFromJNI(JNIEnv *env, jobject thiz) {
-    // Just for simplicity, we do this right away; correct way would do it in
-    // another thread...
-
+    LOGI( "log" );
     return env->NewStringUTF("Hello from JNI!");
 }
