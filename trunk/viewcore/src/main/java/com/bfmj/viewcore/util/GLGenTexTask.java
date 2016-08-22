@@ -1,6 +1,7 @@
 package com.bfmj.viewcore.util;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 /**
  * Created by mac on 16/8/19.
@@ -20,7 +21,7 @@ public class GLGenTexTask {
     }
 
     public void uninit(){
-        NativeUninit();
+//        NativeUninit();
     }
 
     private native void NativeInit();
@@ -36,6 +37,7 @@ public class GLGenTexTask {
     }
 
     public void ExportTextureId(int textureId ){
+        Log.e("GLGenTexTask", "ExportTextureId");
         if( null != mGenTexInface ){
             mGenTexInface.ExportTextureId(textureId, mHashCode);
         }

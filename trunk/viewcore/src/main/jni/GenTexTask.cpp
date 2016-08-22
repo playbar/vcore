@@ -3,7 +3,6 @@
 //
 
 #include "GenTexTask.h"
-#include "viewcore.h"
 #include "android/bitmap.h"
 
 #define GENTEXTASKCLASS "com/bfmj/viewcore/util/GLGenTexTask"
@@ -20,10 +19,9 @@ static GenTexTask* getGenTexTask( JNIEnv* env, jobject thiz)
 
 JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeInit(JNIEnv* env, jobject thiz)
 {
-    jobject objThiz=env->NewGlobalRef(thiz); // DeleteGlobalRef
+    jobject objThiz= env->NewGlobalRef(thiz); // DeleteGlobalRef
 
     if( GenTexTask::mThizClass == NULL ){
-//        env->GetJavaVM(&gs_jvm); //保存到全局变量中JVM
         GenTexTask::mThizClass = env->FindClass(GENTEXTASKCLASS);
         GenTexTask::mClassID = env->GetFieldID( GenTexTask::mThizClass, "mClassID", "I");
         GenTexTask::mExportTextureId = env->GetMethodID( GenTexTask::mThizClass, "ExportTextureId", "(I)V");
@@ -74,12 +72,12 @@ GenTexTask::~GenTexTask()
     if( mpData != NULL ){
         delete mpData;
     }
-    if( mThiz != NULL ){
-        JNIEnv *env=0;
-        gs_jvm->AttachCurrentThread(&env, NULL);
-        env->DeleteGlobalRef( mThiz );
-//        gs_jvm->DetachCurrentThread();
-    }
+//    if( mThiz != NULL ){
+//        JNIEnv *env=0;
+//        gs_jvm->AttachCurrentThread(&env, NULL);
+//        env->DeleteGlobalRef( mThiz );
+////        gs_jvm->DetachCurrentThread();
+//    }
 }
 
 void GenTexTask::GenTexID( jobject bmp, int width, int height )
@@ -87,13 +85,13 @@ void GenTexTask::GenTexID( jobject bmp, int width, int height )
     mBitmap = bmp;
     mWidth = width;
     mHeight = height;
-    mpData = new unsigned char[mWidth * mHeight * 4];
-    AndroidBitmapInfo infocolor;
-    void *pixels = 0;
-    AndroidBitmap_getInfo(mEnv, mBitmap, &infocolor);
-    AndroidBitmap_lockPixels(mEnv, mBitmap, &pixels);
-    memcpy( mpData, pixels, mWidth * mHeight * 4);
-    AndroidBitmap_unlockPixels(mEnv, mBitmap);
+//    mpData = new unsigned char[mWidth * mHeight * 4];
+//    AndroidBitmapInfo infocolor;
+//    void *pixels = 0;
+//    AndroidBitmap_getInfo(mEnv, mBitmap, &infocolor);
+//    AndroidBitmap_lockPixels(mEnv, mBitmap, &pixels);
+//    memcpy( mpData, pixels, mWidth * mHeight * 4);
+//    AndroidBitmap_unlockPixels(mEnv, mBitmap);
 
     gThreadPool.AddTask( this );
 }
@@ -104,16 +102,19 @@ int GenTexTask::Run()
         printf("error");
     }
 
-    GLuint textureId = CreateTexture2D();
+//    GLuint textureId = CreateTexture2D();
     if( mThiz != NULL ){
         JNIEnv *env=0;
         gs_jvm->AttachCurrentThread(&env, NULL);
-        jclass cls = env->GetObjectClass(mThiz);
-        jmethodID fieldPtr = env->GetMethodID(cls,"ExportTextureId", "(I)V");
-        env->CallVoidMethod( mThiz, fieldPtr, textureId );
+//        jclass cls = env->GetObjectClass(mThiz);
+//        jmethodID fieldPtr = env->GetMethodID(cls,"ExportTextureId", "(I)V");
+//        env->CallVoidMethod( mThiz, fieldPtr, 0 );
+        env->CallVoidMethod( mThiz, GenTexTask::mExportTextureId, 0 );
+        env->DeleteGlobalRef( mThiz );
         gs_jvm->DetachCurrentThread();
     }
 
+    delete this;
 //    LOGI("mytask textureid = %d", textureId );
     return 0;
 }

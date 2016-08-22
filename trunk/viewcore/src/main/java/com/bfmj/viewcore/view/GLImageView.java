@@ -69,6 +69,8 @@ public class GLImageView extends GLRectView {
 		}
 	}
 
+	private  Bitmap mTmpbitmap = null;
+
 	@Override
 	public void createTexture(){
 		if (!isSurfaceCreated()){
@@ -88,12 +90,12 @@ public class GLImageView extends GLRectView {
 		}
 		
 		boolean isRecycle = true;
-		Bitmap bitmap = null;
+//		Bitmap bitmap = null;
 		if (mResId != 0){
 			InputStream is = getContext().getResources().openRawResource(mResId);
 	        
 	        try {
-	        	bitmap = BitmapFactory.decodeStream(is);
+				mTmpbitmap = BitmapFactory.decodeStream(is);
 	        } finally {
 	            try {
 	                is.close();
@@ -102,17 +104,17 @@ public class GLImageView extends GLRectView {
 	            }
 	        }
 		} else if (mBitmap != null){
-			bitmap = mBitmap;
+			mTmpbitmap = mBitmap;
 			isRecycle = false;
 		}
 
-    	if (bitmap != null){
+    	if (mTmpbitmap != null){
 			if ( this.getWidth() == 0 || this.getHeight() == 0 ){
-				this.setWidth( bitmap.getWidth());
-				this.setHeight( bitmap.getHeight() );
+				this.setWidth( mTmpbitmap.getWidth());
+				this.setHeight( mTmpbitmap.getHeight() );
 			}
     		if (getHeight() == WRAP_CONTENT){
-	    		height = bitmap.getHeight() * width / bitmap.getWidth();
+	    		height = mTmpbitmap.getHeight() * width / mTmpbitmap.getWidth();
 	    		setHeight(height + getPaddingTop() + getPaddingBottom());
 	    	}
     		
@@ -140,7 +142,8 @@ public class GLImageView extends GLRectView {
 				public void ExportTextureId(int textureId, int mHashCode){
 //					Log.e("GLImageView", "ExportTextureId");
 					if (mHashCode == GLImageView.this.hashCode()){
-						textureId = textureId;
+						textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, false);
+//						textureId = textureId;
 					}
 					if (textureId > -1){
 						mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
@@ -152,12 +155,13 @@ public class GLImageView extends GLRectView {
 						addRender(mRenderParams);
 					}
 					mTask.uninit();
+					mTmpbitmap = null;
 //					mBitmap.recycle();
 				}
 			});
 			mTask.init();
 			try {
-				mTask.GenTexId(bitmap, bitmap.getWidth(), bitmap.getHeight());
+				mTask.GenTexId(mTmpbitmap, mTmpbitmap.getWidth(), mTmpbitmap.getHeight());
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
