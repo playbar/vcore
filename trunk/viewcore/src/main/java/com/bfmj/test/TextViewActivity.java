@@ -33,6 +33,7 @@ public class TextViewActivity extends BaseViewActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		setMojingType("42EGCV-WQXG87-WHQHS8-YYYTEF-4SWGST-CRY7SS");
 		super.onCreate(savedInstanceState);
 
 //		BitmapOp bmtOp = new BitmapOp();
