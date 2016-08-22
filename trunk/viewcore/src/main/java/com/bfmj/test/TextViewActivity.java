@@ -40,23 +40,23 @@ public class TextViewActivity extends BaseViewActivity {
 //		String str = bmtOp.stringFromJNI();
 //		Log.e("TextViewActivity", "onCreate");
 
-//		mTask = new GLGenTexTask(GLGenTexTask.class.hashCode());
-//		mTask.setGenTexIdInterface( new GenTexIdInterface(){
-//			public void ExportTextureId(int mTextureId, int mHashCode){
-//				Log.e("TextViewActivity", "mTask");
-//				mTask.uninit();
-//				mBitmap.recycle();
-//			}
-//		});
-//		mTask.init();
-//		assetManager= getAssets();
-//		try {
-//			InputStream in=assetManager.open("textext.png");
-//			mBitmap = BitmapFactory.decodeStream(in);
-//			mTask.GenTexId(mBitmap, mBitmap.getWidth(), mBitmap.getHeight());
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//		}
+		mTask = new GLGenTexTask(GLGenTexTask.class.hashCode());
+		mTask.setGenTexIdInterface( new GenTexIdInterface(){
+			public void ExportTextureId(int mTextureId, int mHashCode){
+				Log.e("TextViewActivity", "mTask");
+				mTask.uninit();
+				mBitmap.recycle();
+			}
+		});
+		mTask.init();
+		assetManager= getAssets();
+		try {
+			InputStream in=assetManager.open("textext.png");
+			mBitmap = BitmapFactory.decodeStream(in);
+			mTask.GenTexId(mBitmap, mBitmap.getWidth(), mBitmap.getHeight());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 
 
 		rootView = getRootView();

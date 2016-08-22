@@ -324,7 +324,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-//        GLThreadUtil.onSurfaceCreated(gl, config);
+        GLThreadUtil.onSurfaceCreated(gl, config);
         isSurfaceCreated = true;
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
@@ -360,7 +360,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-//        GLThreadUtil.onSurfaceChanged(gl, width, height);
+        GLThreadUtil.onSurfaceChanged(gl, width, height);
 //		DisplayMetrics displayMetrics = new DisplayMetrics();
 //		Activity activity = (Activity)mContext;
 //		activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -402,7 +402,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     @Override
     public void onDrawFrame(GL10 gl) {
-//        GLThreadUtil.onDrawFrame(gl);
+        GLThreadUtil.onDrawFrame(gl);
         times ++;
         if (mChild == null || mChild.size() == 0) {
             return;
