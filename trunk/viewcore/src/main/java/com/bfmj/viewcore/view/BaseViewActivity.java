@@ -35,6 +35,10 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 	private float mLockedAngle = 0f;
 	private String mMojingType = "F79F2H-Q8ZNXN-2HQN2F-2ZA9YV-QG4H9H-QGAYAE";
 
+	static {
+		System.loadLibrary("viewcore");
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);

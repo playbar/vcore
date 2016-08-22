@@ -45,7 +45,4 @@ public class GLGenTexTask {
         void ExportTextureId(int textureId, int hashCode);
     }
 
-    static {
-        System.loadLibrary("viewcore");
-    }
 }
