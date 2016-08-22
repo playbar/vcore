@@ -20,7 +20,7 @@ model {
             stl         = 'gnustl_static'
             cppFlags.addAll(['-std=c++11', '-Wall', '-fno-rtti', '-fno-exceptions'])
             abiFilters.addAll(['armeabi'])
-            ldLibs.addAll(['android', 'log', 'GLESv3', 'EGL'])
+            ldLibs.addAll(['android', 'log', 'GLESv3', 'EGL', 'jnigraphics'])
         }
 
         sources {

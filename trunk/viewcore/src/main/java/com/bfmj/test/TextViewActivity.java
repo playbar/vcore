@@ -1,5 +1,8 @@
 package com.bfmj.test;
 
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -9,15 +12,23 @@ import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.util.BitmapOp;
+import com.bfmj.viewcore.util.GLGenTexTask;
+import com.bfmj.viewcore.util.GLGenTexTask.GenTexIdInterface;
 import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
 
+import java.io.InputStream;
+
 public class TextViewActivity extends BaseViewActivity {
 
 	private GLRootView rootView;
+	private GLGenTexTask mTask;
+	private Bitmap mBitmap;
+
+	AssetManager assetManager =null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +38,25 @@ public class TextViewActivity extends BaseViewActivity {
 		BitmapOp bmtOp = new BitmapOp();
 		String str = bmtOp.stringFromJNI();
 		Log.e("TextViewActivity", "onCreate");
+
+		mTask = new GLGenTexTask();
+		mTask.setGenTexIdInterface( new GenTexIdInterface(){
+			public void ExportTextureId(int mTextureId, int mHashCode){
+				Log.e("TextViewActivity", "mTask");
+				mTask.uninit();
+				mBitmap.recycle();
+			}
+		});
+		mTask.init();
+		assetManager= getAssets();
+		try {
+			InputStream in=assetManager.open("textext.png");
+			mBitmap = BitmapFactory.decodeStream(in);
+			mTask.GenTexId(mBitmap, mBitmap.getWidth(), mBitmap.getHeight());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 
 		rootView = getRootView();
 

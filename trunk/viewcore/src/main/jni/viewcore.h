@@ -10,4 +10,8 @@
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "hell-libs::", __VA_ARGS__))
 
+JNIEnv* AttachCurrentThreadJNI();
+void DetachCurrentThreadJNI();
+
+
 #endif //TRUNK_VIEWCORE_H

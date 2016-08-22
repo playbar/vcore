@@ -55,7 +55,7 @@ Java_com_bfmj_viewcore_util_GLThreadUtil_onSurfaceCreated(JNIEnv* env, jobject o
     gDisplay = eglGetCurrentDisplay();
     createSharedContext();
     gThreadPool.Create();
-    gThreadPool.AddTask( &taskObj );
+//    gThreadPool.AddTask( &taskObj );
     return;
 }
 
