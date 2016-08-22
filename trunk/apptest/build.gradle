@@ -1,14 +1,26 @@
-apply plugin: 'com.android.model.library'
+apply plugin: 'com.android.model.application'
 
 model {
+
     android {
-        compileSdkVersion 22
-        buildToolsVersion '22.0.0'
+        compileSdkVersion 23
+        buildToolsVersion '23.0.2'
         defaultConfig {
+            applicationId = 'com.bfmj.viewcore'
             minSdkVersion.apiLevel = 13
             targetSdkVersion.apiLevel = 24
             versionCode 1
             versionName "1.0"
+        }
+
+        sources {
+            main {
+                jniLibs {
+                    source {
+                        srcDir "libs"
+                    }
+                }
+            }
         }
 
         buildTypes {
@@ -26,4 +38,3 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':viewcore')
 }
-

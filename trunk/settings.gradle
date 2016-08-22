@@ -1,1 +1,2 @@
 include ':viewcore'
+include ':apptest'

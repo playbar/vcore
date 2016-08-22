@@ -1,12 +1,10 @@
-apply plugin: 'com.android.model.application'
+apply plugin: 'com.android.model.library'
 
 model {
-
     android {
         compileSdkVersion 23
-        buildToolsVersion '23.0.2'
+        buildToolsVersion '23.0.0'
         defaultConfig {
-            applicationId = 'com.bfmj.test'
             minSdkVersion.apiLevel = 13
             targetSdkVersion.apiLevel = 24
             versionCode 1
@@ -21,16 +19,6 @@ model {
             cppFlags.addAll(['-std=c++11', '-Wall', '-fno-rtti', '-fno-exceptions'])
             abiFilters.addAll(['armeabi'])
             ldLibs.addAll(['android', 'log', 'GLESv3', 'EGL', 'jnigraphics'])
-        }
-
-        sources {
-            main {
-                jniLibs {
-                    source {
-                        srcDir "libs"
-                    }
-                }
-            }
         }
 
         buildTypes {

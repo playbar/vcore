@@ -1,39 +1,62 @@
 package com.bfmj.viewcore;
 
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
-import com.androidquery.AQuery;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
-import com.bfmj.viewcore.util.BitmapOp;
+import com.bfmj.viewcore.util.GLGenTexTask;
+import com.bfmj.viewcore.util.GLGenTexTask.GenTexIdInterface;
 import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLCursorView;
-import com.bfmj.viewcore.view.GLGridViewPage;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.InputStream;
 
 public class TextViewActivity extends BaseViewActivity {
 
 	private GLRootView rootView;
+	private GLGenTexTask mTask;
+	private Bitmap mBitmap;
+
+	AssetManager assetManager =null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		setMojingType("42EGCV-WQXG87-WHQHS8-YYYTEF-4SWGST-CRY7SS");
 		super.onCreate(savedInstanceState);
 
-		BitmapOp bmtOp = new BitmapOp();
-		String str = bmtOp.stringFromJNI();
-		Log.e("TextViewActivity", "onCreate");
+//		BitmapOp bmtOp = new BitmapOp();
+//		String str = bmtOp.stringFromJNI();
+//		Log.e("TextViewActivity", "onCreate");
+
+		mTask = new GLGenTexTask(GLGenTexTask.class.hashCode());
+		mTask.setGenTexIdInterface( new GenTexIdInterface(){
+			public void ExportTextureId(int mTextureId, int mHashCode){
+				Log.e("TextViewActivity", "mTask");
+				mTask.uninit();
+				mBitmap.recycle();
+			}
+		});
+		mTask.init();
+		assetManager= getAssets();
+		try {
+			InputStream in=assetManager.open("textext.png");
+			mBitmap = BitmapFactory.decodeStream(in);
+			mTask.GenTexId(mBitmap, mBitmap.getWidth(), mBitmap.getHeight());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 
 		rootView = getRootView();
 
@@ -45,7 +68,7 @@ public class TextViewActivity extends BaseViewActivity {
 		GLTextView textView = new GLTextView(this);
 		textView.setX( 1000);
 		textView.setY( 2000 );
-		textView.setLayoutParams(60, 60 );
+		textView.setLayoutParams(600, 600 );
 		textView.setBackground( new GLColor(1.0f, 1.0f, 1.0f));
 		textView.setTextColor(new GLColor(1.0f, 0.0f, 0.0f));
 		textView.setText("88");
