@@ -67,7 +67,7 @@ public class TextViewActivity extends BaseViewActivity {
 		rootView.setDistortionEnable( true );
 
 
-
+		addShowFPS();
 
 
 		GLTextView textView = new GLTextView(this);
@@ -122,7 +122,7 @@ public class TextViewActivity extends BaseViewActivity {
 	}
 
 	public void addImageViewTest(){
-		GLImageView[] imageViews = new GLImageView[200];
+		GLImageView[] imageViews = new GLImageView[50];
 		Random random=new Random();
 		for (int i = 0; i < imageViews.length; i++) {
 			imageViews[i] = new GLImageView(this);
@@ -183,5 +183,61 @@ public class TextViewActivity extends BaseViewActivity {
 		}
 		return super.onTouchEvent(event);
 	}
+
+	private void addShowFPS(){
+		final GLTextView fps = new GLTextView(this);
+		fps.setX(900);
+		fps.setY(2200);
+		fps.setLayoutParams(600, 100);
+		fps.setFixed(true);
+		fps.setBackground(new GLColor(0x000000, 0.5f));
+		fps.setTextColor(new GLColor(0xffffff));
+		fps.setTextSize(80);
+
+		getRootView().addView(fps);
+
+		new Thread(new Runnable() {
+			long times = 0;
+			int max = 0;
+			int min = 60;
+
+			@Override
+			public void run() {
+				getRootView().getFPS();
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				while (true){
+					final int f = getRootView().getFPS();
+					if (f > 0 && f < 70){
+						times++;
+						if (times > 2) {
+							max = Math.max(f, max);
+							min = Math.min(f, min);
+							getRootView().queueEvent(new Runnable() {
+								@Override
+								public void run() {
+									String msg = "FPS : " + f;
+									if (max > 0){
+										msg +=  " [" + min + "~" + max + "]";
+									}
+									fps.setText(msg);
+								}
+							});
+						}
+					}
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+
+			}
+		}).start();
+	}
+
 	
 }
