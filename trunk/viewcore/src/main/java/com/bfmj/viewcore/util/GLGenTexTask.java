@@ -11,7 +11,8 @@ public class GLGenTexTask {
     public int mTextureId;
     public int mHashCode;
     private GenTexIdInterface mGenTexInface = null;
-    public GLGenTexTask(){
+    public GLGenTexTask(int hashCode){
+        mHashCode =hashCode;
     }
 
     public void init(){
@@ -34,13 +35,13 @@ public class GLGenTexTask {
         mGenTexInface = genInterface;
     }
 
-    public void ExportTextureId(int mTextureId, int mHashCode){
+    public void ExportTextureId(int textureId ){
         if( null != mGenTexInface ){
-            mGenTexInface.ExportTextureId(mTextureId, mHashCode);
+            mGenTexInface.ExportTextureId(textureId, mHashCode);
         }
     }
 
     public interface GenTexIdInterface{
-        void ExportTextureId(int mTextureId, int mHashCode);
+        void ExportTextureId(int textureId, int hashCode);
     }
 }

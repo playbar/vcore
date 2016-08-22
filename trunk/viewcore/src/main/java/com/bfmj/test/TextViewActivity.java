@@ -39,7 +39,7 @@ public class TextViewActivity extends BaseViewActivity {
 		String str = bmtOp.stringFromJNI();
 		Log.e("TextViewActivity", "onCreate");
 
-		mTask = new GLGenTexTask();
+		mTask = new GLGenTexTask(GLGenTexTask.class.hashCode());
 		mTask.setGenTexIdInterface( new GenTexIdInterface(){
 			public void ExportTextureId(int mTextureId, int mHashCode){
 				Log.e("TextViewActivity", "mTask");

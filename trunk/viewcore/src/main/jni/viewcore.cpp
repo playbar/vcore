@@ -34,12 +34,12 @@ void DetachCurrentThreadJNI()
 }
 
 
-jint JNI_OnLoad( JavaVM* vm, void *reserved){
-    gVM = vm;
-
-    jint result = -1;
-    result = JNI_VERSION_1_4;
-    return  result;
-
-}
+//jint JNI_OnLoad( JavaVM* vm, void *reserved){
+//    gVM = vm;
+//
+//    jint result = -1;
+//    result = JNI_VERSION_1_4;
+//    return  result;
+//
+//}
 

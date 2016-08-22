@@ -11,6 +11,9 @@ jclass GenTexTask::mThizClass = NULL;
 jfieldID GenTexTask::mClassID = NULL;
 jmethodID GenTexTask::mExportTextureId = NULL;
 
+static JavaVM *gs_jvm=NULL;
+static jobject gs_object=NULL;
+
 static GenTexTask* getGenTexTask( JNIEnv* env, jobject thiz)
 {
     GenTexTask *p = (GenTexTask*)env->GetIntField(thiz, GenTexTask::mClassID );
@@ -19,11 +22,14 @@ static GenTexTask* getGenTexTask( JNIEnv* env, jobject thiz)
 
 JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeInit(JNIEnv* env, jobject thiz)
 {
+    env->GetJavaVM(&gs_jvm); //保存到全局变量中JVM
+    gs_object=env->NewGlobalRef(thiz); // DeleteGlobalRef
+
     if( GenTexTask::mThizClass == NULL ){
         GenTexTask::mThizClass = env->FindClass(GENTEXTASKCLASS);
     }
     GenTexTask::mClassID = env->GetFieldID( GenTexTask::mThizClass, "mClassID", "I");
-    GenTexTask::mExportTextureId = env->GetMethodID( GenTexTask::mThizClass, "ExportTextureId", "(II)V");
+    GenTexTask::mExportTextureId = env->GetMethodID( GenTexTask::mThizClass, "ExportTextureId", "(I)V");
 
     GenTexTask *pTask = new GenTexTask(env, thiz);
     GenTexTask *pTmp = (GenTexTask*)env->GetIntField(thiz, GenTexTask::mClassID );
@@ -54,19 +60,38 @@ GenTexTask::GenTexTask(JNIEnv* env, jobject thiz)
 {
     mEnv = env;
     mThiz = thiz;
+    mpData = NULL;
 }
 
 GenTexTask::GenTexTask()
 {
     mEnv = NULL;
     mThiz = NULL;
+    mpData = NULL;
+}
+
+GenTexTask::~GenTexTask()
+{
+    if( mpData != NULL ){
+        delete mpData;
+    }
 }
 
 void GenTexTask::GenTexID( jobject bmp, int width, int height )
 {
-    mBitmap = bmp,
+    mBitmap = bmp;
     mWidth = width;
     mHeight = height;
+    mpData = new unsigned char[mWidth * mHeight * 4];
+    AndroidBitmapInfo infocolor;
+    void *pixels;
+//    JNIEnv *env = AttachCurrentThreadJNI();
+    AndroidBitmap_getInfo(mEnv, mBitmap, &infocolor);
+    AndroidBitmap_lockPixels(mEnv, mBitmap, &pixels);
+    memcpy( mpData, pixels, mWidth * mHeight );
+    AndroidBitmap_unlockPixels(mEnv, mBitmap);
+
+
     gThreadPool.AddTask( this );
 }
 
@@ -79,7 +104,12 @@ int GenTexTask::Run()
     GLuint textureId = CreateTexture2D();
 
     if( mThiz != NULL ){
-        mEnv->CallVoidMethod( mThiz, mExportTextureId, textureId );
+        JNIEnv *env=0;
+        gs_jvm->AttachCurrentThread(&env, NULL);
+        jclass cls = env->GetObjectClass(gs_object);
+        jmethodID fieldPtr = env->GetMethodID(cls,"ExportTextureId", "(I)V");
+        env->CallVoidMethod( gs_object, fieldPtr, textureId );
+        gs_jvm->DetachCurrentThread();
     }
 
     LOGI("mytask textureid = %d", textureId );
@@ -135,18 +165,17 @@ GLuint GenTexTask::CreateTexture2D( )
     // Bind the texture object
     glBindTexture ( GL_TEXTURE_2D, textureId );
 
-    AndroidBitmapInfo infocolor;
-    int ret = 0;
-    void *pixels;
-    JNIEnv *env = AttachCurrentThreadJNI();
-    AndroidBitmap_getInfo(env, mBitmap, &infocolor);
-    AndroidBitmap_lockPixels(env, mBitmap, &pixels);
+//    AndroidBitmapInfo infocolor;
+//    void *pixels;
+//    JNIEnv *env = AttachCurrentThreadJNI();
+//    AndroidBitmap_getInfo(env, mBitmap, &infocolor);
+//    AndroidBitmap_lockPixels(env, mBitmap, &pixels);
     // Load the texture
-    glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGB, mWidth, mHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels );
+    glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, mpData );
 
-    AndroidBitmap_unlockPixels(env, mBitmap);
+//    AndroidBitmap_unlockPixels(env, mBitmap);
 
-    DetachCurrentThreadJNI();
+//    DetachCurrentThreadJNI();
 
     // Set the filtering mode
     glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );

@@ -27,6 +27,7 @@ class GenTexTask: public CTask
 public:
     GenTexTask(JNIEnv* env, jobject thiz);
     GenTexTask();
+    ~GenTexTask();
     void GenTexID( jobject bmp, int width, int height );
     int Run();
 
@@ -36,6 +37,7 @@ public:
     int mWidth;
     int mHeight;
     jobject mBitmap;
+    void *mpData;
 
 public:
     static jclass mThizClass;
