@@ -35,27 +35,27 @@ public class TextViewActivity extends BaseViewActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
-		BitmapOp bmtOp = new BitmapOp();
-		String str = bmtOp.stringFromJNI();
-		Log.e("TextViewActivity", "onCreate");
+//		BitmapOp bmtOp = new BitmapOp();
+//		String str = bmtOp.stringFromJNI();
+//		Log.e("TextViewActivity", "onCreate");
 
-		mTask = new GLGenTexTask(GLGenTexTask.class.hashCode());
-		mTask.setGenTexIdInterface( new GenTexIdInterface(){
-			public void ExportTextureId(int mTextureId, int mHashCode){
-				Log.e("TextViewActivity", "mTask");
-				mTask.uninit();
-				mBitmap.recycle();
-			}
-		});
-		mTask.init();
-		assetManager= getAssets();
-		try {
-			InputStream in=assetManager.open("textext.png");
-			mBitmap = BitmapFactory.decodeStream(in);
-			mTask.GenTexId(mBitmap, mBitmap.getWidth(), mBitmap.getHeight());
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+//		mTask = new GLGenTexTask(GLGenTexTask.class.hashCode());
+//		mTask.setGenTexIdInterface( new GenTexIdInterface(){
+//			public void ExportTextureId(int mTextureId, int mHashCode){
+//				Log.e("TextViewActivity", "mTask");
+//				mTask.uninit();
+//				mBitmap.recycle();
+//			}
+//		});
+//		mTask.init();
+//		assetManager= getAssets();
+//		try {
+//			InputStream in=assetManager.open("textext.png");
+//			mBitmap = BitmapFactory.decodeStream(in);
+//			mTask.GenTexId(mBitmap, mBitmap.getWidth(), mBitmap.getHeight());
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
 
 
 		rootView = getRootView();
@@ -68,7 +68,7 @@ public class TextViewActivity extends BaseViewActivity {
 		GLTextView textView = new GLTextView(this);
 		textView.setX( 1000);
 		textView.setY( 2000 );
-		textView.setLayoutParams(60, 60 );
+		textView.setLayoutParams(600, 600 );
 		textView.setBackground( new GLColor(1.0f, 1.0f, 1.0f));
 		textView.setTextColor(new GLColor(1.0f, 0.0f, 0.0f));
 		textView.setText("88");

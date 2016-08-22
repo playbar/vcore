@@ -72,7 +72,7 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 	}
 
 	private void doLog(String msg){
-		Log.d("aaaaaaaaaaaa", msg);
+		Log.d("BaseViewActivity", msg);
 	}
 
 	/**

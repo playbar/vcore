@@ -78,12 +78,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     private boolean isResetGroy = false;
     private boolean mIsDouble = true;
 
-    public static ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS,
-            new ArrayBlockingQueue<Runnable>(2000));
-
-    public static ThreadPoolExecutor GetThreadPool(){
-        return executor;
-    }
 
     public static int createTexture(Bitmap bitmap) {
         int[] textures = new int[1];
@@ -96,8 +90,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T,GLES30.GL_CLAMP_TO_EDGE);
         //上面是纹理贴图的取样方式，包括拉伸方式，取临近值和线性值
         GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, bitmap, 0);//让图片和纹理关联起来，加载到OpenGl空间中
-//        Log.d("OPENGL","bitmap:" + bitmap);
-//            bitmap.recycle();//不需要，可以释放
         return textureId;
     }
 
@@ -332,7 +324,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        GLThreadUtil.onSurfaceCreated(gl, config);
+//        GLThreadUtil.onSurfaceCreated(gl, config);
         isSurfaceCreated = true;
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
@@ -363,17 +355,12 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         GLImageRect.initInstance();
         GLVideoRect.initInstance();
         ///////
-        EGL10 egl = (EGL10)EGLContext.getEGL();
-        int[] attrib_list = {0x3098, 3, EGL10.EGL_NONE };
-        EGLDisplay display = egl.eglGetCurrentDisplay();
-        EGLContext eglContext = egl.eglGetCurrentContext();
-        GenTextureTask.mEglContext = egl.eglCreateContext(display, config, eglContext, attrib_list);
-//        testMultiGenTexture();
+
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        GLThreadUtil.onSurfaceChanged(gl, width, height);
+//        GLThreadUtil.onSurfaceChanged(gl, width, height);
 //		DisplayMetrics displayMetrics = new DisplayMetrics();
 //		Activity activity = (Activity)mContext;
 //		activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -400,26 +387,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     }
 
-    public void testMultiGenTexture(){
-        InputStream ins = null;
-        try {
-            ins = mContext.getAssets().open("test.jpg");
-            Bitmap bmp = BitmapFactory.decodeStream(ins);
-            GenTextureTask myta = new GenTextureTask(mContext, 123, bmp);
-            executor.execute(myta);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ins != null) {
-                    ins.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }//end try
-    }
-
     //FPS测试 start//////
     private long lastFrame = System.currentTimeMillis();
     private int times = 0;
@@ -435,10 +402,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        GLThreadUtil.onDrawFrame(gl);
-        EGL10 egl = (EGL10) EGLContext.getEGL();
-        egl.eglMakeCurrent( egl.eglGetCurrentDisplay(), egl.eglGetCurrentSurface(EGL10.EGL_DRAW),
-                egl.eglGetCurrentSurface(EGL10.EGL_DRAW), egl.eglGetCurrentContext());
+//        GLThreadUtil.onDrawFrame(gl);
         times ++;
         if (mChild == null || mChild.size() == 0) {
             return;
