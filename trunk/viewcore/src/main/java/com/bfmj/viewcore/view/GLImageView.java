@@ -10,6 +10,7 @@ import com.bfmj.viewcore.util.GenTextureTask;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.util.Log;
 
 /**
