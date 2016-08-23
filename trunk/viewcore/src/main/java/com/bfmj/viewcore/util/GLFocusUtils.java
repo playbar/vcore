@@ -62,9 +62,9 @@ public class GLFocusUtils {
 	public static GLRectView getFocusedView(){
 		return mFocusedView;
 	}
-	
+
 	public static void setFousedView(GLRectView view){
-		mFocusedView = view;
+//		mFocusedView = view;
 	}
 
 	public static void getEulerAngles(float[] eulerAngles, int offset) {
@@ -200,8 +200,9 @@ public class GLFocusUtils {
 
 		if (!hasFocused && mFocusedView != null){
 			mFocusedView.onFocusChange(TO_UNKNOWN, false);
-			if (mFocusedView instanceof GLGroupView){
-				((GLGroupView)mFocusedView).lostParentFocus();
+			GLRectView parent = mFocusedView.getParent();
+			if (parent != null && parent instanceof GLGroupView){
+				((GLGroupView)parent).lostParentFocus();
 			}
 			mFocusedView = null;
 		}

@@ -73,52 +73,12 @@ public class GLImageView extends GLRectView {
 
 	@Override
 	public void createTexture(){
+		Log.e("testtime", "createTexture 10 thread = >  " + Thread.currentThread() + "; time => " + System.nanoTime());
 		if (!isSurfaceCreated()){
 			return;
 		}
 		
-		float width = getInnerWidth();
-		float height = getInnerHeight();
-		
-//		if (width <= 0){
-//			return;
-//		}
-		
-		if (mRenderParams != null){
-			removeRender(mRenderParams);
-			mRenderParams = null;
-		}
-		
-		boolean isRecycle = true;
-//		Bitmap bitmap = null;
-		if (mResId != 0){
-			InputStream is = getContext().getResources().openRawResource(mResId);
-	        
-	        try {
-				mTmpbitmap = BitmapFactory.decodeStream(is);
-	        } finally {
-	            try {
-	                is.close();
-	            } catch(IOException e) {
-	                e.printStackTrace();
-	            }
-	        }
-		} else if (mBitmap != null){
-			mTmpbitmap = mBitmap;
-			isRecycle = false;
-		}
 
-    	if (mTmpbitmap != null){
-			if ( this.getWidth() == 0 || this.getHeight() == 0 ){
-				this.setWidth( mTmpbitmap.getWidth());
-				this.setHeight( mTmpbitmap.getHeight() );
-			}
-    		if (getHeight() == WRAP_CONTENT){
-	    		height = mTmpbitmap.getHeight() * width / mTmpbitmap.getWidth();
-	    		setHeight(height + getPaddingTop() + getPaddingBottom());
-	    	}
-    		
-    		GLTextureUtils.mUseMipMap = getMipMap();
 //			textureId = -1;
 //    		if (mIsCutting) {
 //    			textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
@@ -136,16 +96,58 @@ public class GLImageView extends GLRectView {
 //				addRender(mRenderParams);
 //			}
 
-
+			Log.e("testtime", "createTexture 0 thread = >  " + Thread.currentThread() + "; time => " + System.nanoTime());
 			final GLGenTexTask mTask = new GLGenTexTask(GLImageView.this.hashCode());
 			mTask.setGenTexIdInterface( new GLGenTexTask.GenTexIdInterface(){
 				public void ExportTextureId(int textureId, int mHashCode){
+					float width = getInnerWidth();
+					float height = getInnerHeight();
+
+//		if (width <= 0){
+//			return;
+//		}
+
+					if (mRenderParams != null){
+						removeRender(mRenderParams);
+						mRenderParams = null;
+					}
+
+					boolean isRecycle = true;
+//		Bitmap bitmap = null;
+					if (mResId != 0){
+						InputStream is = getContext().getResources().openRawResource(mResId);
+
+						try {
+							mTmpbitmap = BitmapFactory.decodeStream(is);
+						} finally {
+							try {
+								is.close();
+							} catch(IOException e) {
+								e.printStackTrace();
+							}
+						}
+					} else if (mBitmap != null){
+						mTmpbitmap = mBitmap;
+						isRecycle = false;
+					}
+
+					if (mTmpbitmap != null){
+						if ( getWidth() == 0 || getHeight() == 0 ){
+							setWidth( mTmpbitmap.getWidth());
+							setHeight( mTmpbitmap.getHeight() );
+						}
+						if (getHeight() == WRAP_CONTENT){
+							height = mTmpbitmap.getHeight() * width / mTmpbitmap.getWidth();
+							setHeight(height + getPaddingTop() + getPaddingBottom());
+						}
+
+						GLTextureUtils.mUseMipMap = getMipMap();
+
 //					Log.e("GLImageView", "ExportTextureId");
 					if (mHashCode == GLImageView.this.hashCode()){
-//						long startTime = System.nanoTime();
+						Log.e("testtime", "createTexture 4 thread = >  " + Thread.currentThread() + "; time => " + System.nanoTime());
 						textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, false);
-//						long estimatedTime = System.nanoTime() - startTime;
-//						Log.e("GLImageView", "ExportTextureId time=" + estimatedTime);
+						Log.e("testtime", "createTexture 5 thread = >  " + Thread.currentThread() + "; time => " + System.nanoTime());
 //						textureId = textureId;
 					}
 					if (textureId > -1){
@@ -160,17 +162,22 @@ public class GLImageView extends GLRectView {
 					mTask.uninit();
 					mTmpbitmap = null;
 //					mBitmap.recycle();
+
+					}
 				}
 			});
+			Log.e("testtime", "createTexture 1 thread = >  " + Thread.currentThread() + "; time => " + System.nanoTime());
 			mTask.init();
+			Log.e("testtime", "createTexture 2 thread = >  " + Thread.currentThread() + "; time => " + System.nanoTime());
 			try {
-				mTask.GenTexId(mTmpbitmap, mTmpbitmap.getWidth(), mTmpbitmap.getHeight());
+				mTask.GenTexId(mTmpbitmap, 0, 0);
+				Log.e("testtime", "createTexture 3 thread = >  " + Thread.currentThread() + "; time => " + System.nanoTime());
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
 
-			
-		}
+			Log.e("testtime", "createTexture 10 thread = >  " + Thread.currentThread() + "; time => " + System.nanoTime());
+
 
 	}
 
@@ -178,9 +185,22 @@ public class GLImageView extends GLRectView {
 	public void initDraw() {
 		super.initDraw();
 
-		createTexture();
+		if (isVisible()){
+			createTexture();
+		}
 	}
-	
+
+	@Override
+	public void setVisible(boolean isVisible) {
+		if (isVisible){
+			if (mRenderParams == null){
+				createTexture();
+			}
+		}
+
+		super.setVisible(isVisible);
+	}
+
 	/**
 	 * 设置是否裁边
 	 * @author linzanxian  @Date 2015-6-30 下午3:24:24
