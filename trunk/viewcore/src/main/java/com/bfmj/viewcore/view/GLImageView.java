@@ -142,7 +142,10 @@ public class GLImageView extends GLRectView {
 				public void ExportTextureId(int textureId, int mHashCode){
 //					Log.e("GLImageView", "ExportTextureId");
 					if (mHashCode == GLImageView.this.hashCode()){
+//						long startTime = System.nanoTime();
 						textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, false);
+//						long estimatedTime = System.nanoTime() - startTime;
+//						Log.e("GLImageView", "ExportTextureId time=" + estimatedTime);
 //						textureId = textureId;
 					}
 					if (textureId > -1){

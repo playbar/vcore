@@ -12,6 +12,7 @@
 
 extern EGLContext gShareContext;
 extern EGLDisplay gDisplay;
+extern EGLSurface gAuxSurface;
 extern CThreadPool gThreadPool;
 
 

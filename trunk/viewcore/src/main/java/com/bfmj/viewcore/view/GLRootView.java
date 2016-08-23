@@ -330,7 +330,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         GLES20.glDepthFunc(GLES20.GL_LEQUAL);
         GLES20.glEnable(GLES20.GL_DITHER);
-        GLES20.glEnable(GLES10.GL_MULTISAMPLE);
+//        GLES20.glEnable(GLES10.GL_MULTISAMPLE);
 
 //		MojingSDK.EnterMojingWorld(mMojingType);
 //		MojingSDK.SetImageYOffset(0.06f);

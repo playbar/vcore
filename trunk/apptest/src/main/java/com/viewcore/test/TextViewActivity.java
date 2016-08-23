@@ -129,7 +129,7 @@ public class TextViewActivity extends BaseViewActivity {
 			imageViews[i].setX(random.nextInt(2400));
 			imageViews[i].setY(random.nextInt(2400));
 			imageViews[i].setLayoutParams(300, 300);
-			imageViews[i].setImage(R.drawable.ic_launcher);
+			imageViews[i].setImage(R.drawable.calendar);
 //			imageViews[i].setDepth(4 - (i - 100)*0.005f);
 			rootView.addView(imageViews[i]);
 		}

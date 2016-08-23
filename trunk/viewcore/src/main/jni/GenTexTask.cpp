@@ -98,7 +98,7 @@ void GenTexTask::GenTexID( jobject bmp, int width, int height )
 
 int GenTexTask::Run()
 {
-    if( !eglMakeCurrent( gDisplay, NULL, NULL, gShareContext )){
+    if( !eglMakeCurrent( gDisplay, gAuxSurface, gAuxSurface, gShareContext )){
         printf("error");
     }
 

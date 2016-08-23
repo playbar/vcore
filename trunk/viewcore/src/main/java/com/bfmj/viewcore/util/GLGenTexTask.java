@@ -37,7 +37,7 @@ public class GLGenTexTask {
     }
 
     public void ExportTextureId(int textureId ){
-        Log.e("GLGenTexTask", "ExportTextureId");
+//        Log.e("GLGenTexTask", "ExportTextureId");
         if( null != mGenTexInface ){
             mGenTexInface.ExportTextureId(textureId, mHashCode);
         }

@@ -13,6 +13,8 @@
 
 EGLContext gShareContext;
 EGLDisplay gDisplay;
+EGLSurface gAuxSurface;
+
 CThreadPool gThreadPool(1);
 
 
@@ -20,25 +22,36 @@ void createSharedContext(){
     EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 3, EGL_NONE };
     EGLint numConfigs = 0;
     EGLConfig config;
-    int flags = 0;
-    EGLint attribList[] =
-            {
-                    EGL_RED_SIZE,       5,
-                    EGL_GREEN_SIZE,     6,
-                    EGL_BLUE_SIZE,      5,
-                    EGL_ALPHA_SIZE,     8,
-                    EGL_DEPTH_SIZE,     8,
-                    EGL_STENCIL_SIZE,   8,
-                    EGL_SAMPLE_BUFFERS, 1,
-                    EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-                    EGL_NONE
-            };
+
+    const EGLint attribList[] = {
+            EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
+            EGL_BLUE_SIZE, 8,
+            EGL_GREEN_SIZE, 8,
+            EGL_RED_SIZE, 8,
+            EGL_ALPHA_SIZE, 8,
+            EGL_DEPTH_SIZE, 0,
+            EGL_STENCIL_SIZE, 0,
+            EGL_NONE
+    };
+
+    EGLint pbufferAttribs[] = {
+            EGL_WIDTH, 1,
+            EGL_HEIGHT, 1,
+            EGL_TEXTURE_TARGET, EGL_NO_TEXTURE,
+            EGL_TEXTURE_FORMAT, EGL_NO_TEXTURE,
+            EGL_NONE
+    };
 
     // Choose config
     EGLDisplay display = eglGetCurrentDisplay( );
     EGLContext context = eglGetCurrentContext();
     if ( !eglChooseConfig ( display, attribList, &config, 1, &numConfigs ) )
     {
+        return;
+    }
+
+    gAuxSurface = eglCreatePbufferSurface(display, config, pbufferAttribs);
+    if(gAuxSurface == NULL) {
         return;
     }
 
