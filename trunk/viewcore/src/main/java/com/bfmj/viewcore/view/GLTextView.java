@@ -10,16 +10,12 @@ import com.bfmj.viewcore.util.GLTextureUtils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * 
@@ -74,11 +70,7 @@ public class GLTextView extends GLRectView {
 		
 		mText = text;
 
-		if (isVisible()){
-			createTexture();
-		} else {
-			removeRender();
-		}
+		getRootView().mCreateTextureQueue.offer(this);
 	}
 	
 	/**
@@ -101,11 +93,7 @@ public class GLTextView extends GLRectView {
 		mTextColor = color;
 		mTextGLColor = null;
 
-		if (isVisible()){
-			createTexture();
-		} else {
-			removeRender();
-		}
+		getRootView().mCreateTextureQueue.offer(this);
 	}
 	
 	/**
@@ -118,11 +106,7 @@ public class GLTextView extends GLRectView {
 		mTextGLColor = color;
 		mTextColor = Color.WHITE;
 
-		if (isVisible()){
-			createTexture();
-		} else {
-			removeRender();
-		}
+		getRootView().mCreateTextureQueue.offer(this);
 	}
 	
 	/**
@@ -134,11 +118,7 @@ public class GLTextView extends GLRectView {
 	public void setTextSize(int size){
 		mTextSize = size;
 
-		if (isVisible()){
-			createTexture();
-		} else {
-			removeRender();
-		}
+		getRootView().mCreateTextureQueue.offer(this);
 	}
 	
 	/**
@@ -150,11 +130,7 @@ public class GLTextView extends GLRectView {
 	public void setStyle(int style){
 		mStyle = style;
 
-		if (isVisible()){
-			createTexture();
-		} else {
-			removeRender();
-		}
+		getRootView().mCreateTextureQueue.offer(this);
 	}
 	
 	/**
@@ -193,35 +169,32 @@ public class GLTextView extends GLRectView {
 			return;
 		}
 
+		final GLGenTexTask mTask = new GLGenTexTask(GLTextView.this.hashCode());
+		mTask.setGenTexIdInterface( new GLGenTexTask.GenTexIdInterface() {
+			public void ExportTextureId(int textureId, int mHashCode) {
 
 
-		getRootView().queueEvent(new Runnable() {
-			@Override
-			public void run() {
-				final GLGenTexTask mTask = new GLGenTexTask(GLTextView.this.hashCode());
-				mTask.setGenTexIdInterface( new GLGenTexTask.GenTexIdInterface(){
-					public void ExportTextureId(int textureId, int mHashCode){
-						removeRender();
-						mTextBitmap = createBitmap();
-						if (mTextBitmap != null){
-							textureId = GLTextureUtils.initImageTexture(getContext(), mTextBitmap, true);
-						}
+				if (mRenderParams != null) {
+					removeRender(mRenderParams);
+					mRenderParams = null;
+				}
 
-						if (textureId > -1){
-							mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-							mRenderParams.setTextureId(textureId);
-							updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
-						}
+				mTextBitmap = createBitmap();
+				if (mTextBitmap != null) {
+					textureId = GLTextureUtils.initImageTexture(getContext(), mTextBitmap, true);
+				}
 
-						if (mRenderParams != null){
-							addRender(mRenderParams);
-						}
-					}
-				});
+				if (textureId > -1) {
+					mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+					mRenderParams.setTextureId(textureId);
+					updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
+				}
+
+				if (mRenderParams != null) {
+					addRender(mRenderParams);
+				}
 			}
 		});
-		
-
 	}
 	
 	private Bitmap createBitmap(){
@@ -297,13 +270,19 @@ public class GLTextView extends GLRectView {
 	@Override
 	public void initDraw() {
 		super.initDraw();
-		createTexture();
+
+		if(isVisible()){
+			createTexture();
+		}
+
 	}
 
 	@Override
 	public void setVisible(boolean isVisible) {
-		if (mRenderParams == null){
-			createTexture();
+		if (isVisible){
+			if (mRenderParams == null){
+				getRootView().mCreateTextureQueue.offer(this);
+			}
 		}
 		super.setVisible(isVisible);
 	}
