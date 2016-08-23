@@ -12,7 +12,7 @@ model {
         }
 
         ndk{
-            platformVersion = 22
+            platformVersion = 23
             moduleName = 'viewcore'
             toolchain = 'clang'
             stl         = 'gnustl_static'

@@ -4,7 +4,6 @@
 
 #include "ThreadPool.h"
 #include "GLThreadUtilJni.h"
-#include <iostream>
 
 void CTask::SetData(void * data)
 {
@@ -23,7 +22,6 @@ pthread_cond_t CThreadPool::m_pthreadCond = PTHREAD_COND_INITIALIZER;
 CThreadPool::CThreadPool(int threadNum)
 {
     this->m_iThreadNum = threadNum;
-    cout << "I will create " << threadNum << " threads" << endl;
 //    Create();
 }
 
@@ -52,7 +50,6 @@ void* CThreadPool::ThreadFunc(void* threadData)
         if (shutdown)
         {
             pthread_mutex_unlock(&m_pthreadMutex);
-            printf("thread %lu will exit/n", pthread_self());
             pthread_exit(NULL);
         }
 
