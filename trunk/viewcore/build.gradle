@@ -12,13 +12,14 @@ model {
         }
 
         ndk{
-            platformVersion = 18
+            platformVersion = 22
             moduleName = 'viewcore'
             toolchain = 'clang'
             stl         = 'gnustl_static'
             cppFlags.addAll(['-std=c++11', '-Wall', '-fno-rtti', '-fno-exceptions'])
+            CFlags.addAll(['-Wall'])
             abiFilters.addAll(['armeabi'])
-            ldLibs.addAll(['android', 'log', 'GLESv3', 'EGL', 'jnigraphics'])
+            ldLibs.addAll(['android', 'log', 'GLESv3', 'EGL' ])
         }
 
         buildTypes {
