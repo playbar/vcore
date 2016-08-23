@@ -878,7 +878,8 @@ public class GLRectView extends GLView {
 		mBackgroundResId = resId;
 		mBackgroundBitmap = null;
 		mBackgroundColor = null;
-		
+
+		removeRender();
 		initBackground();
 	}
 	
@@ -901,7 +902,8 @@ public class GLRectView extends GLView {
 		mBackgroundBitmap = bitmap;
 		mBackgroundResId = 0;
 		mBackgroundColor = null;
-		
+
+		removeRender();
 		initBackground();
 	}
 	
@@ -926,32 +928,24 @@ public class GLRectView extends GLView {
 				
 		mBackgroundResId = 0;
 		mBackgroundBitmap = null;
-		
+
+		removeRender();
 		initBackground();
 	}
 	
 	private void removeBackground(){
-		if (mBackgroundRender != null){
-			mRenders.remove( mBackgroundRender );
-			mBackgroundRender = null;
-		}
+		removeRender();
 		mBackgroundBitmap = null;
 		mBackgroundResId = 0;
 		mBackgroundColor = null;
 	}
 	
 	private void initBackground(){
-		if (!isSurfaceCreated){
+		if (!isSurfaceCreated || !isVisible()){
 			return;
 		}
 		
-		if (mBackgroundRender != null){
-			if (mBackgroundRender.getTextureId() > -1) {
-				releaseTexture(mBackgroundRender.getTextureId());
-			}
-			mRenders.remove( mBackgroundRender );
-			mBackgroundRender = null;
-		}
+		removeRender();
 
 		boolean isRecycle = true;
 		int textureId = -1;
@@ -1001,6 +995,25 @@ public class GLRectView extends GLView {
 	public void initDraw() {
 		isSurfaceCreated = true;
 		initBackground();
+	}
+
+	@Override
+	public void setVisible(boolean isVisible) {
+		if (mBackgroundRender == null) {
+			initBackground();
+		}
+
+		super.setVisible(isVisible);
+	}
+
+	private void removeRender(){
+		if (mBackgroundRender != null){
+			if (mBackgroundRender.getTextureId() > -1) {
+				releaseTexture(mBackgroundRender.getTextureId());
+			}
+			removeRender(mBackgroundRender);
+			mBackgroundRender = null;
+		}
 	}
 
 	@Override

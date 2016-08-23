@@ -4,17 +4,22 @@ import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLRenderParams;
 import com.bfmj.viewcore.util.BitmapOp;
 import com.bfmj.viewcore.util.GLFontUtils;
+import com.bfmj.viewcore.util.GLGenTexTask;
 import com.bfmj.viewcore.util.GLTextureUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * 
@@ -68,8 +73,12 @@ public class GLTextView extends GLRectView {
 		}
 		
 		mText = text;
-		
-		initText();
+
+		if (isVisible()){
+			createTexture();
+		} else {
+			removeRender();
+		}
 	}
 	
 	/**
@@ -91,8 +100,12 @@ public class GLTextView extends GLRectView {
 	public void setTextColor(int color){
 		mTextColor = color;
 		mTextGLColor = null;
-		
-		initText();
+
+		if (isVisible()){
+			createTexture();
+		} else {
+			removeRender();
+		}
 	}
 	
 	/**
@@ -104,8 +117,12 @@ public class GLTextView extends GLRectView {
 	public void setTextColor(GLColor color){
 		mTextGLColor = color;
 		mTextColor = Color.WHITE;
-		
-		initText();
+
+		if (isVisible()){
+			createTexture();
+		} else {
+			removeRender();
+		}
 	}
 	
 	/**
@@ -116,8 +133,12 @@ public class GLTextView extends GLRectView {
 	 */
 	public void setTextSize(int size){
 		mTextSize = size;
-		
-		initText();
+
+		if (isVisible()){
+			createTexture();
+		} else {
+			removeRender();
+		}
 	}
 	
 	/**
@@ -128,8 +149,12 @@ public class GLTextView extends GLRectView {
 	 */
 	public void setStyle(int style){
 		mStyle = style;
-		
-		initText();
+
+		if (isVisible()){
+			createTexture();
+		} else {
+			removeRender();
+		}
 	}
 	
 	/**
@@ -157,37 +182,46 @@ public class GLTextView extends GLRectView {
 			mAlignment = Alignment.ALIGN_OPPOSITE;
 		}
 	}
-	
-	private void initText(){
-		if (!isSurfaceCreated()){
+
+	@Override
+	public void createTexture(){
+		if (!isSurfaceCreated() || !isVisible()){
 			return;
 		}
 		
 		if (mText == null){
 			return;
 		}
+
+
+
+		getRootView().queueEvent(new Runnable() {
+			@Override
+			public void run() {
+				final GLGenTexTask mTask = new GLGenTexTask(GLTextView.this.hashCode());
+				mTask.setGenTexIdInterface( new GLGenTexTask.GenTexIdInterface(){
+					public void ExportTextureId(int textureId, int mHashCode){
+						removeRender();
+						mTextBitmap = createBitmap();
+						if (mTextBitmap != null){
+							textureId = GLTextureUtils.initImageTexture(getContext(), mTextBitmap, true);
+						}
+
+						if (textureId > -1){
+							mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+							mRenderParams.setTextureId(textureId);
+							updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
+						}
+
+						if (mRenderParams != null){
+							addRender(mRenderParams);
+						}
+					}
+				});
+			}
+		});
 		
-		if (mRenderParams != null){
-			removeRender(mRenderParams);
-			mRenderParams = null;
-		}
-		
-		int textureId = -1;
-		
-		mTextBitmap = createBitmap();
-		if (mTextBitmap != null){
-			textureId = GLTextureUtils.initImageTexture(getContext(), mTextBitmap, true);
-		}
-		
-		if (textureId > -1){
-			mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-			mRenderParams.setTextureId(textureId);
-			updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
-		}
-		
-		if (mRenderParams != null){
-			addRender(mRenderParams);
-		}
+
 	}
 	
 	private Bitmap createBitmap(){
@@ -263,10 +297,27 @@ public class GLTextView extends GLRectView {
 	@Override
 	public void initDraw() {
 		super.initDraw();
-		
-		initText();
+		createTexture();
 	}
-	
+
+	@Override
+	public void setVisible(boolean isVisible) {
+		if (mRenderParams == null){
+			createTexture();
+		}
+		super.setVisible(isVisible);
+	}
+
+	private void removeRender(){
+		if (mRenderParams != null){
+			if (mRenderParams.getTextureId() > -1) {
+				releaseTexture(mRenderParams.getTextureId());
+			}
+			removeRender(mRenderParams);
+			mRenderParams = null;
+		}
+	}
+
 	@Override
 	public void setLayoutParams(float width, float height) {
 		mDefaultWidth = width;
