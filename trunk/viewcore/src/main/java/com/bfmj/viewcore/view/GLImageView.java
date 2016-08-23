@@ -22,11 +22,13 @@ import android.util.Log;
  */
 public class GLImageView extends GLRectView {
 	
-	private int mResId;
-    private Bitmap mBitmap;
+	private int mResId = 0;
+	private int mLastResId = 0;
+    private Bitmap mBitmap = null;
+	private Bitmap mLastBitmap = null;
     private GLRenderParams mRenderParams;
     private boolean mIsCutting = true;
-	private int textureId = -1;
+	private  Bitmap mTmpbitmap = null;
     
 	public GLImageView(Context context) {
 		super(context);
@@ -45,10 +47,9 @@ public class GLImageView extends GLRectView {
 		
 		mResId = resId;
 		mBitmap = null;
+		mLastBitmap = null;
 
-		if (isSurfaceCreated()){
-			getRootView().mCreateTextureQueue.offer(this);
-		}
+		updateTexture();
 	}
 	
 	/**
@@ -64,19 +65,43 @@ public class GLImageView extends GLRectView {
 		
 		mBitmap = bitmap;
 		mResId = 0;
+		mLastResId = 0;
 
-		if (isSurfaceCreated()){
+		updateTexture();
+	}
+
+
+	@Override
+	public void initDraw() {
+		super.initDraw();
+		createTexture();
+	}
+
+	@Override
+	public void setVisible(boolean isVisible) {
+		super.setVisible(isVisible);
+		updateTexture();
+	}
+
+	private void updateTexture(){
+		if (!isSurfaceCreated() || !isVisible()){
+			return;
+		}
+
+		if (mBitmap != mLastBitmap ||
+				mLastResId != mResId){
 			getRootView().mCreateTextureQueue.offer(this);
 		}
 	}
 
-	private  Bitmap mTmpbitmap = null;
-
 	@Override
 	public void createTexture(){
-		if (!isSurfaceCreated()){
+		if (!isSurfaceCreated() || !isVisible()){
 			return;
 		}
+
+		mLastResId = mResId;
+		mLastBitmap = mBitmap;
 
 		final GLGenTexTask mTask = new GLGenTexTask(GLImageView.this.hashCode());
 		mTask.setGenTexIdInterface( new GLGenTexTask.GenTexIdInterface(){
@@ -138,26 +163,6 @@ public class GLImageView extends GLRectView {
 				}
 			}
 		});
-	}
-
-	@Override
-	public void initDraw() {
-		super.initDraw();
-
-		if (isVisible()){
-			createTexture();
-		}
-	}
-
-	@Override
-	public void setVisible(boolean isVisible) {
-		if (isVisible){
-			if (mRenderParams == null){
-				getRootView().mCreateTextureQueue.offer(this);
-			}
-		}
-
-		super.setVisible(isVisible);
 	}
 
 	/**
