@@ -15,6 +15,7 @@ extern "C" {
 
 JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeInit(JNIEnv* env, jobject thiz);
 JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeUninit(JNIEnv* env, jobject thiz);
+JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeQueueEvent(JNIEnv* env, jobject thiz);
 JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeGenTexId(JNIEnv* env,
                 jobject thiz, jobject bmp, jint width, jint height);
 
@@ -28,6 +29,7 @@ public:
     GenTexTask(JNIEnv* env, jobject thiz);
     GenTexTask();
     ~GenTexTask();
+    void QueueEvent();
     void GenTexID( jobject bmp, int width, int height );
     int Run();
 

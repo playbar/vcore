@@ -44,6 +44,13 @@ JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeUninit(JNI
     delete pTmp;
 }
 
+JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeQueueEvent(JNIEnv* env, jobject thiz)
+{
+    GenTexTask *pTmp = getGenTexTask( env, thiz );
+    pTmp->QueueEvent();
+    return;
+}
+
 JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeGenTexId(JNIEnv* env,
             jobject thiz, jobject bmp, jint width, jint height)
 {
@@ -78,6 +85,10 @@ GenTexTask::~GenTexTask()
 //        env->DeleteGlobalRef( mThiz );
 ////        gs_jvm->DetachCurrentThread();
 //    }
+}
+
+void GenTexTask::QueueEvent(){
+    gThreadPool.AddTask( this );
 }
 
 void GenTexTask::GenTexID( jobject bmp, int width, int height )

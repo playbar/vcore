@@ -14,26 +14,29 @@ public class GLGenTexTask {
     private GenTexIdInterface mGenTexInface = null;
     public GLGenTexTask(int hashCode){
         mHashCode =hashCode;
-    }
-
-    public void init(){
         NativeInit();
     }
 
-    public void uninit(){
-//        NativeUninit();
-    }
+//    public void init(){
+//        NativeInit();
+//    }
+//
+//    public void uninit(){
+////        NativeUninit();
+//    }
 
     private native void NativeInit();
     private native void NativeUninit();
+    private native void NativeQueueEvent();
     private native void NativeGenTexId(Bitmap bmp, int widht, int height);
 
-    public void GenTexId(Bitmap bmp, int width, int height ){
-        NativeGenTexId(bmp, width, height);
-    }
+//    public void GenTexId(Bitmap bmp, int width, int height ){
+//        NativeGenTexId(bmp, width, height);
+//    }
 
     public void setGenTexIdInterface( GenTexIdInterface genInterface ){
         mGenTexInface = genInterface;
+        NativeQueueEvent();
     }
 
     public void ExportTextureId(int textureId ){
