@@ -21,6 +21,7 @@ import com.bfmj.viewcore.render.GLConstant;
 import com.bfmj.viewcore.render.GLRenderParams;
 import com.bfmj.viewcore.render.GLScreenParams;
 import com.bfmj.viewcore.util.GLFocusUtils;
+import com.bfmj.viewcore.util.GLGenTexTask;
 import com.bfmj.viewcore.util.GLMatrixState;
 import com.bfmj.viewcore.util.GLTextureUtils;
 import com.bfmj.viewcore.animation.GLAlphaAnimation;
@@ -944,51 +945,55 @@ public class GLRectView extends GLView {
 		if (!isSurfaceCreated || !isVisible()){
 			return;
 		}
-		
-		removeRender();
 
-		boolean isRecycle = true;
-		int textureId = -1;
-		Bitmap bitmap = null;
-		if (mBackgroundResId != 0) {
-			InputStream is = getContext().getResources().openRawResource(mBackgroundResId);
+		final GLGenTexTask mTask = new GLGenTexTask(GLRectView.this.hashCode());
+		mTask.setGenTexIdInterface( new GLGenTexTask.GenTexIdInterface(){
+			public void ExportTextureId(int textureId, int mHashCode){
+				removeRender();
 
-			try {
-				bitmap = BitmapFactory.decodeStream(is);
-			} finally {
-				try {
-					is.close();
-				} catch (IOException e) {
-					e.printStackTrace();
+				boolean isRecycle = true;
+				Bitmap bitmap = null;
+				if (mBackgroundResId != 0) {
+					InputStream is = getContext().getResources().openRawResource(mBackgroundResId);
+
+					try {
+						bitmap = BitmapFactory.decodeStream(is);
+					} finally {
+						try {
+							is.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				} else if (mBackgroundBitmap != null) {
+					bitmap = mBackgroundBitmap;
+					isRecycle = false;
+				}
+
+				if (bitmap != null) {
+					GLTextureUtils.mUseMipMap = getMipMap();
+					textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
+				} else if (mBackgroundColor != null){
+					bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+					Canvas canvas = new Canvas(bitmap);
+					canvas.drawARGB((int)(mBackgroundColor.getA() * 255), (int)(mBackgroundColor.getR() * 255),
+							(int)(mBackgroundColor.getG() * 255), (int)(mBackgroundColor.getB() * 255));
+					GLTextureUtils.mUseMipMap = getMipMap();
+					textureId = GLTextureUtils.initImageTexture(getContext(), bitmap, true);
+				}
+
+				if (textureId > -1) {
+					mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+					mBackgroundRender.setTextureId(textureId);
+					updateRenderSize(mBackgroundRender, width, height);
+				}
+
+				if (mBackgroundRender != null){
+					mBackgroundRender.setMask(getMask());
+					mRenders.add(0, mBackgroundRender );
 				}
 			}
-		} else if (mBackgroundBitmap != null) {
-			bitmap = mBackgroundBitmap;
-			isRecycle = false;
-		}
-
-		if (bitmap != null) {
-			GLTextureUtils.mUseMipMap = getMipMap();
-			textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
-		} else if (mBackgroundColor != null){
-			bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
-			Canvas canvas = new Canvas(bitmap);
-			canvas.drawARGB((int)(mBackgroundColor.getA() * 255), (int)(mBackgroundColor.getR() * 255),
-					(int)(mBackgroundColor.getG() * 255), (int)(mBackgroundColor.getB() * 255));
-			GLTextureUtils.mUseMipMap = getMipMap();
-			textureId = GLTextureUtils.initImageTexture(getContext(), bitmap, true);
-		}
-
-		if (textureId > -1) {
-			mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-			mBackgroundRender.setTextureId(textureId);
-			updateRenderSize(mBackgroundRender, width, height);
-		}
-		
-		if (mBackgroundRender != null){
-			mBackgroundRender.setMask(getMask());
-			mRenders.add(0, mBackgroundRender );
-		}
+		});
 	}
 
 	@Override
@@ -999,11 +1004,11 @@ public class GLRectView extends GLView {
 
 	@Override
 	public void setVisible(boolean isVisible) {
+		super.setVisible(isVisible);
+
 		if (mBackgroundRender == null) {
 			initBackground();
 		}
-
-		super.setVisible(isVisible);
 	}
 
 	private void removeRender(){
