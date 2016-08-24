@@ -122,7 +122,7 @@ public class TextViewActivity extends BaseViewActivity {
 	}
 
 	public void addImageViewTest(){
-		GLImageView[] imageViews = new GLImageView[50];
+		GLImageView[] imageViews = new GLImageView[10];
 		Random random=new Random();
 		for (int i = 0; i < imageViews.length; i++) {
 			imageViews[i] = new GLImageView(this);
@@ -138,18 +138,18 @@ public class TextViewActivity extends BaseViewActivity {
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		Log.e("onKeyUp", "onKeyUpn code =" + keyCode);
-		switch (keyCode) {
-			case KeyEvent.KEYCODE_MENU:
-				return true;
-			case KeyEvent.KEYCODE_BACK:
-				addImageViewTest();
-				return true;
-			default:
-				break;
-		}
-		return false;
-		//return super.onKeyUp(keyCode, event);
+//		Log.e("onKeyUp", "onKeyUpn code =" + keyCode);
+//		switch (keyCode) {
+//			case KeyEvent.KEYCODE_MENU:
+//				return true;
+//			case KeyEvent.KEYCODE_BACK:
+//				addImageViewTest();
+//				return true;
+//			default:
+//				break;
+//		}
+//		return false;
+		return super.onKeyUp(keyCode, event);
 	}
 
 	@Override

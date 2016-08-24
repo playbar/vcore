@@ -21,6 +21,7 @@ pthread_cond_t CThreadPool::m_pthreadCond = PTHREAD_COND_INITIALIZER;
  */
 CThreadPool::CThreadPool(int threadNum)
 {
+    mbCreate = false;
     this->m_iThreadNum = threadNum;
 //    Create();
 }
@@ -91,6 +92,10 @@ int CThreadPool::AddTask(CTask *task)
  */
 int CThreadPool::Create()
 {
+    if( mbCreate ){
+        return 0;
+    }
+    mbCreate = true;
     pthread_id = (pthread_t*)malloc(sizeof(pthread_t) * m_iThreadNum);
     for(int i = 0; i < m_iThreadNum; i++)
     {

@@ -11,11 +11,18 @@
 #include "GenTexTask.h"
 
 
-EGLContext gShareContext;
-EGLDisplay gDisplay;
-EGLSurface gAuxSurface;
+EGLContext gShareContext = 0;
+EGLDisplay gDisplay = 0;
+EGLSurface gAuxSurface = 0;
 
 CThreadPool gThreadPool(1);
+
+void destroySharedContext(){
+    if( gShareContext == 0 ){
+        eglDestroySurface( gDisplay, gAuxSurface);
+        eglDestroyContext( gDisplay, gShareContext);
+    }
+}
 
 
 void createSharedContext(){
@@ -60,15 +67,14 @@ void createSharedContext(){
 
 }
 
-GenTexTask taskObj;
 
 JNIEXPORT void JNICALL
 Java_com_bfmj_viewcore_util_GLThreadUtil_onSurfaceCreated(JNIEnv* env, jobject obj)
 {
     gDisplay = eglGetCurrentDisplay();
+    destroySharedContext();
     createSharedContext();
     gThreadPool.Create();
-//    gThreadPool.AddTask( &taskObj );
     return;
 }
 
