@@ -23,7 +23,7 @@ CThreadPool::CThreadPool(int threadNum)
 {
     mbCreate = false;
     this->m_iThreadNum = threadNum;
-//    Create();
+    Create();
 }
 
 CThreadPool::~CThreadPool()
@@ -36,7 +36,7 @@ CThreadPool::~CThreadPool()
  */
 void* CThreadPool::ThreadFunc(void* threadData)
 {
-    pthread_t tid = pthread_self();
+//    pthread_t tid = pthread_self();
 //    if( !eglMakeCurrent( gDisplay, NULL, NULL, gShareContext )){
 //        printf("error");
 //    }

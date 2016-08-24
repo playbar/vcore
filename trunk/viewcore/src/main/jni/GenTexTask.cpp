@@ -31,9 +31,9 @@ JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeInit(JNIEn
     GenTexTask *pTask = new GenTexTask(env, objThiz);
     GenTexTask *pTmp = (GenTexTask*)env->GetIntField(objThiz, GenTexTask::mClassID );
     env->SetIntField( objThiz, GenTexTask::mClassID, (int)pTask);
-    if( pTmp != NULL ){
-        delete pTmp;
-    }
+//    if( pTmp != NULL ){
+//        delete pTmp;
+//    }
     return;
 }
 

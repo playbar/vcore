@@ -18,7 +18,7 @@ EGLSurface gAuxSurface = 0;
 CThreadPool gThreadPool(1);
 
 void destroySharedContext(){
-    if( gShareContext == 0 ){
+    if( gShareContext != 0 ){
         eglDestroySurface( gDisplay, gAuxSurface);
         eglDestroyContext( gDisplay, gShareContext);
     }
@@ -74,7 +74,7 @@ Java_com_bfmj_viewcore_util_GLThreadUtil_onSurfaceCreated(JNIEnv* env, jobject o
     gDisplay = eglGetCurrentDisplay();
     destroySharedContext();
     createSharedContext();
-    gThreadPool.Create();
+//    gThreadPool.Create();
     return;
 }
 
