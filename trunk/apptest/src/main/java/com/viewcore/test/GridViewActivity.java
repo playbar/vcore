@@ -69,7 +69,9 @@ public class GridViewActivity extends BaseViewActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		Log.d("test time", "time 1 = > " + System.currentTimeMillis());
-		setMojingType("42EGCV-WQXG87-WHQHS8-YYYTEF-4SWGST-CRY7SS");
+//		setMojingType("42EGCV-WQXG87-WHQHS8-YYYTEF-4SWGST-CRY7SS");
+		// 3288 key
+		setMojingType("WNE8QN-QVCCZN-XXF8W3-9Q2YDH-AQZRA2-XVDZ9Q");
 		super.onCreate(savedInstanceState);
 		Log.d("test time", "time 2 = > " + System.currentTimeMillis());
 		rootView = getRootView();
