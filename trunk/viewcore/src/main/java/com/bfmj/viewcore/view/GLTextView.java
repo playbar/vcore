@@ -1,6 +1,7 @@
 package com.bfmj.viewcore.view;
 
 import com.bfmj.viewcore.render.GLColor;
+import com.bfmj.viewcore.render.GLImageRect;
 import com.bfmj.viewcore.render.GLRenderParams;
 import com.bfmj.viewcore.util.BitmapOp;
 import com.bfmj.viewcore.util.GLFontUtils;
@@ -16,6 +17,7 @@ import android.graphics.Typeface;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
 
 /**
  * 
@@ -169,16 +171,15 @@ public class GLTextView extends GLRectView {
 			return;
 		}
 
-		final GLGenTexTask mTask = new GLGenTexTask(GLTextView.this.hashCode());
-		mTask.setGenTexIdInterface( new GLGenTexTask.GenTexIdInterface() {
-			public void ExportTextureId(int textureId, int mHashCode) {
-
-
+		GLGenTexTask.QueueEvent( new GLGenTexTask(){
+			@Override
+			public void ExportTextureId() {
+//				Log.e("GLGenTexTask", "ExportTextureId");
 				if (mRenderParams != null) {
 					removeRender(mRenderParams);
 					mRenderParams = null;
 				}
-
+				int textureId = -1;
 				mTextBitmap = createBitmap();
 				if (mTextBitmap != null) {
 					textureId = GLTextureUtils.initImageTexture(getContext(), mTextBitmap, true);
@@ -195,6 +196,33 @@ public class GLTextView extends GLRectView {
 				}
 			}
 		});
+
+//		final GLGenTexTask mTask = new GLGenTexTask(GLTextView.this.hashCode());
+//		mTask.setGenTexIdInterface( new GLGenTexTask.GenTexIdInterface() {
+//			public void ExportTextureId(int textureId, int mHashCode) {
+//
+//
+//				if (mRenderParams != null) {
+//					removeRender(mRenderParams);
+//					mRenderParams = null;
+//				}
+//
+//				mTextBitmap = createBitmap();
+//				if (mTextBitmap != null) {
+//					textureId = GLTextureUtils.initImageTexture(getContext(), mTextBitmap, true);
+//				}
+//
+//				if (textureId > -1) {
+//					mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+//					mRenderParams.setTextureId(textureId);
+//					updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
+//				}
+//
+//				if (mRenderParams != null) {
+//					addRender(mRenderParams);
+//				}
+//			}
+//		});
 	}
 	
 	private Bitmap createBitmap(){

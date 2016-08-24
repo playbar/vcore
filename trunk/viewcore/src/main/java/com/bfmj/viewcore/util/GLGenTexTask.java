@@ -9,11 +9,9 @@ import android.util.Log;
 public abstract class GLGenTexTask {
 
     private int mClassID=0;
-    public int mTextureId;
-    public int mHashCode;
-    private GenTexIdInterface mGenTexInface = null;
-    public GLGenTexTask(int hashCode){
-        mHashCode =hashCode;
+//    public int mTextureId;
+//    private GenTexIdInterface mGenTexInface = null;
+    public GLGenTexTask(){
         NativeInit();
     }
 
@@ -27,12 +25,12 @@ public abstract class GLGenTexTask {
     private native void NativeGenTexId(Bitmap bmp, int widht, int height);
 
 
-    public void setGenTexIdInterface( GenTexIdInterface genInterface ){
-        mGenTexInface = genInterface;
-        NativeQueueEvent();
-    }
+//    public void setGenTexIdInterface( GenTexIdInterface genInterface ){
+//        mGenTexInface = genInterface;
+//        NativeQueueEvent();
+//    }
 
-    abstract public void ExportTextureId(int textureId );
+    public abstract void ExportTextureId( );
 //    {
 ////        Log.e("GLGenTexTask", "ExportTextureId");
 //        if( null != mGenTexInface ){
@@ -40,8 +38,8 @@ public abstract class GLGenTexTask {
 //        }
 //    }
 
-    public interface GenTexIdInterface{
-        void ExportTextureId(int textureId, int hashCode);
-    }
+//    public interface GenTexIdInterface{
+//        void ExportTextureId(int textureId, int hashCode);
+//    }
 
 }

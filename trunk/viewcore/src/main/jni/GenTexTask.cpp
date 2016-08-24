@@ -24,7 +24,7 @@ JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeInit(JNIEn
     if( GenTexTask::mThizClass == NULL ){
         GenTexTask::mThizClass = env->FindClass(GENTEXTASKCLASS);
         GenTexTask::mClassID = env->GetFieldID( GenTexTask::mThizClass, "mClassID", "I");
-        GenTexTask::mExportTextureId = env->GetMethodID( GenTexTask::mThizClass, "ExportTextureId", "(I)V");
+        GenTexTask::mExportTextureId = env->GetMethodID( GenTexTask::mThizClass, "ExportTextureId", "()V");
     }
 
 

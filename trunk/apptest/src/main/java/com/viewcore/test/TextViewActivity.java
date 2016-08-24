@@ -12,7 +12,7 @@ import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.util.GLGenTexTask;
-import com.bfmj.viewcore.util.GLGenTexTask.GenTexIdInterface;
+//import com.bfmj.viewcore.util.GLGenTexTask.GenTexIdInterface;
 import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLImageView;

@@ -53,7 +53,6 @@ void* CThreadPool::ThreadFunc(void* threadData)
             pthread_exit(NULL);
         }
 
-//        printf("tid %lu run/n", tid);
         vector<CTask*>::iterator iter = m_vecTaskList.begin();
 
         /**
@@ -69,7 +68,6 @@ void* CThreadPool::ThreadFunc(void* threadData)
         pthread_mutex_unlock(&m_pthreadMutex);
 
         task->Run(); /** 执行任务 */
-//        printf("tid:%lu idle/n", tid);
     }
     return (void*)0;
 }

@@ -103,9 +103,60 @@ public class GLImageView extends GLRectView {
 		mLastResId = mResId;
 		mLastBitmap = mBitmap;
 
-		GLGenTexTask.QueueEvent( new GLGenTexTask(GLImageView.this.hashCode()){
-			public void ExportTextureId(int textureId ){
-				Log.e("GLImageView", "ExportTextureId");
+		GLGenTexTask.QueueEvent( new GLGenTexTask(){
+			public void ExportTextureId( ){
+//				Log.e("GLImageView", "ExportTextureId");
+				float width = getInnerWidth();
+				float height = getInnerHeight();
+
+				if (mRenderParams != null){
+					removeRender(mRenderParams);
+					mRenderParams = null;
+				}
+
+				boolean isRecycle = true;
+
+				if (mResId != 0){
+					InputStream is = getContext().getResources().openRawResource(mResId);
+
+					try {
+						mTmpbitmap = BitmapFactory.decodeStream(is);
+					} finally {
+						try {
+							is.close();
+						} catch(IOException e) {
+							e.printStackTrace();
+						}
+					}
+				} else if (mBitmap != null){
+					mTmpbitmap = mBitmap;
+					isRecycle = false;
+				}
+
+				if (mTmpbitmap != null) {
+					if (getWidth() == 0 || getHeight() == 0) {
+						setWidth(mTmpbitmap.getWidth());
+						setHeight(mTmpbitmap.getHeight());
+					}
+					if (getHeight() == WRAP_CONTENT) {
+						height = mTmpbitmap.getHeight() * width / mTmpbitmap.getWidth();
+						setHeight(height + getPaddingTop() + getPaddingBottom());
+					}
+
+					GLTextureUtils.mUseMipMap = getMipMap();
+
+					int textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, false);
+					if (textureId > -1) {
+						mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+						mRenderParams.setTextureId(textureId);
+						updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
+					}
+
+					if (mRenderParams != null) {
+						addRender(mRenderParams);
+					}
+					mTmpbitmap = null;
+				}
 			}
 		});
 

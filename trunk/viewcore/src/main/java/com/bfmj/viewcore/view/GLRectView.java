@@ -946,9 +946,8 @@ public class GLRectView extends GLView {
 			return;
 		}
 
-		final GLGenTexTask mTask = new GLGenTexTask(GLRectView.this.hashCode());
-		mTask.setGenTexIdInterface( new GLGenTexTask.GenTexIdInterface(){
-			public void ExportTextureId(int textureId, int mHashCode){
+		GLGenTexTask.QueueEvent( new GLGenTexTask(){
+			public void ExportTextureId(){
 				removeRender();
 
 				boolean isRecycle = true;
@@ -969,7 +968,7 @@ public class GLRectView extends GLView {
 					bitmap = mBackgroundBitmap;
 					isRecycle = false;
 				}
-
+				int textureId = -1;
 				if (bitmap != null) {
 					GLTextureUtils.mUseMipMap = getMipMap();
 					textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
