@@ -174,7 +174,6 @@ public class GLTextView extends GLRectView {
 		GLGenTexTask.QueueEvent( new GLGenTexTask(){
 			@Override
 			public void ExportTextureId() {
-//				Log.e("GLGenTexTask", "ExportTextureId");
 				if (mRenderParams != null) {
 					removeRender(mRenderParams);
 					mRenderParams = null;
@@ -196,33 +195,6 @@ public class GLTextView extends GLRectView {
 				}
 			}
 		});
-
-//		final GLGenTexTask mTask = new GLGenTexTask(GLTextView.this.hashCode());
-//		mTask.setGenTexIdInterface( new GLGenTexTask.GenTexIdInterface() {
-//			public void ExportTextureId(int textureId, int mHashCode) {
-//
-//
-//				if (mRenderParams != null) {
-//					removeRender(mRenderParams);
-//					mRenderParams = null;
-//				}
-//
-//				mTextBitmap = createBitmap();
-//				if (mTextBitmap != null) {
-//					textureId = GLTextureUtils.initImageTexture(getContext(), mTextBitmap, true);
-//				}
-//
-//				if (textureId > -1) {
-//					mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-//					mRenderParams.setTextureId(textureId);
-//					updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
-//				}
-//
-//				if (mRenderParams != null) {
-//					addRender(mRenderParams);
-//				}
-//			}
-//		});
 	}
 	
 	private Bitmap createBitmap(){
@@ -354,5 +326,11 @@ public class GLTextView extends GLRectView {
 	
 	public String getTag() {
 		return mTag;
+	}
+
+	@Override
+	public void release() {
+		super.release();
+		mRenderParams = null;
 	}
 }

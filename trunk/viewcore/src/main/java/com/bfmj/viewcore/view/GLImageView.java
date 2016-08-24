@@ -28,7 +28,6 @@ public class GLImageView extends GLRectView {
 	private Bitmap mLastBitmap = null;
     private GLRenderParams mRenderParams;
     private boolean mIsCutting = true;
-	private  Bitmap mTmpbitmap = null;
     
 	public GLImageView(Context context) {
 		super(context);
@@ -114,12 +113,12 @@ public class GLImageView extends GLRectView {
 				}
 
 				boolean isRecycle = true;
-
+				Bitmap bitmap = null;
 				if (mResId != 0){
 					InputStream is = getContext().getResources().openRawResource(mResId);
 
 					try {
-						mTmpbitmap = BitmapFactory.decodeStream(is);
+						bitmap = BitmapFactory.decodeStream(is);
 					} finally {
 						try {
 							is.close();
@@ -128,24 +127,27 @@ public class GLImageView extends GLRectView {
 						}
 					}
 				} else if (mBitmap != null){
-					mTmpbitmap = mBitmap;
+					bitmap = mBitmap;
 					isRecycle = false;
 				}
 
-				if (mTmpbitmap != null) {
+				if (bitmap != null) {
 					if (getWidth() == 0 || getHeight() == 0) {
-						setWidth(mTmpbitmap.getWidth());
-						setHeight(mTmpbitmap.getHeight());
+						setWidth(bitmap.getWidth());
+						setHeight(bitmap.getHeight());
 					}
 					if (getHeight() == WRAP_CONTENT) {
-						height = mTmpbitmap.getHeight() * width / mTmpbitmap.getWidth();
+						height = bitmap.getHeight() * width / bitmap.getWidth();
 						setHeight(height + getPaddingTop() + getPaddingBottom());
 					}
 
 					GLTextureUtils.mUseMipMap = getMipMap();
-
-
-					int textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, false);
+					int textureId = -1;
+					if (mIsCutting) {
+						textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
+					} else {
+						textureId = GLTextureUtils.initImageTexture(getContext(), bitmap, true);
+					}
 					if (textureId > -1) {
 						mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
 						mRenderParams.setTextureId(textureId);
@@ -155,71 +157,10 @@ public class GLImageView extends GLRectView {
 					if (mRenderParams != null) {
 						addRender(mRenderParams);
 					}
-					mTmpbitmap = null;
+					bitmap = null;
 				}
 			}
 		});
-
-//		final GLGenTexTask mTask = new GLGenTexTask(GLImageView.this.hashCode());
-//		mTask.setGenTexIdInterface( new GLGenTexTask.GenTexIdInterface(){
-//			public void ExportTextureId(int textureId, int mHashCode){
-//				float width = getInnerWidth();
-//				float height = getInnerHeight();
-//
-//				if (mRenderParams != null){
-//					removeRender(mRenderParams);
-//					mRenderParams = null;
-//				}
-//
-//				boolean isRecycle = true;
-//
-//				if (mResId != 0){
-//					InputStream is = getContext().getResources().openRawResource(mResId);
-//
-//					try {
-//						mTmpbitmap = BitmapFactory.decodeStream(is);
-//					} finally {
-//						try {
-//							is.close();
-//						} catch(IOException e) {
-//							e.printStackTrace();
-//						}
-//					}
-//				} else if (mBitmap != null){
-//					mTmpbitmap = mBitmap;
-//					isRecycle = false;
-//				}
-//
-//				if (mTmpbitmap != null) {
-//					if (getWidth() == 0 || getHeight() == 0) {
-//						setWidth(mTmpbitmap.getWidth());
-//						setHeight(mTmpbitmap.getHeight());
-//					}
-//					if (getHeight() == WRAP_CONTENT) {
-//						height = mTmpbitmap.getHeight() * width / mTmpbitmap.getWidth();
-//						setHeight(height + getPaddingTop() + getPaddingBottom());
-//					}
-//
-//					GLTextureUtils.mUseMipMap = getMipMap();
-//
-////					Log.e("GLImageView", "ExportTextureId");
-//					if (mHashCode == GLImageView.this.hashCode()) {
-//						textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, false);
-////						textureId = textureId;
-//					}
-//					if (textureId > -1) {
-//						mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-//						mRenderParams.setTextureId(textureId);
-//						updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
-//					}
-//
-//					if (mRenderParams != null) {
-//						addRender(mRenderParams);
-//					}
-//					mTmpbitmap = null;
-//				}
-//			}
-//		});
 	}
 
 	/**
@@ -230,5 +171,12 @@ public class GLImageView extends GLRectView {
 	 */
 	public void setCutting(boolean cutting) {
 		mIsCutting = cutting;
+	}
+
+	@Override
+	public void release() {
+		super.release();
+		mLastResId = 0;
+		mLastBitmap = null;
 	}
 }

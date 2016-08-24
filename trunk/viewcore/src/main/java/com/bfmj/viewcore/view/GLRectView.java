@@ -1405,6 +1405,7 @@ public class GLRectView extends GLView {
 				}
 			}
 			mRenders.clear();
+			mBackgroundRender = null;
 		}
 	}
 	
