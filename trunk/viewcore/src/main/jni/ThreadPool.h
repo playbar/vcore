@@ -47,7 +47,6 @@ private:
 
     static pthread_mutex_t m_pthreadMutex;    /** 线程同步锁 */
     static pthread_cond_t m_pthreadCond;      /** 线程同步的条件变量 */
-    bool mbCreate;
 
 protected:
     static void* ThreadFunc(void * threadData); /** 新线程的线程回调函数 */
