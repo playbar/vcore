@@ -940,11 +940,20 @@ public class GLRectView extends GLView {
 		mBackgroundResId = 0;
 		mBackgroundColor = null;
 	}
+
+	private boolean isNeedUpdateUI(){
+		if (mBackgroundBitmap != null ||
+				mBackgroundResId != 0 || mBackgroundColor != null){
+			return true;
+		}
+		return false;
+	}
 	
 	private void initBackground(){
-		if (!isSurfaceCreated || !isVisible()){
+		if (!isSurfaceCreated || !isVisible() || !isNeedUpdateUI()){
 			return;
 		}
+
 
 		GLGenTexTask.QueueEvent( new GLGenTexTask(){
 			public void ExportTextureId(){

@@ -106,6 +106,10 @@ public class GLImageView extends GLRectView {
 		GLGenTexTask.QueueEvent( new GLGenTexTask(){
 			public void ExportTextureId( ){
 //				Log.e("GLImageView", "ExportTextureId");
+				if (mHashCode != GLImageView.this.hashCode()){
+					return;
+				}
+
 				float width = getInnerWidth();
 				float height = getInnerHeight();
 
@@ -144,6 +148,7 @@ public class GLImageView extends GLRectView {
 					}
 
 					GLTextureUtils.mUseMipMap = getMipMap();
+
 
 					int textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, false);
 					if (textureId > -1) {
