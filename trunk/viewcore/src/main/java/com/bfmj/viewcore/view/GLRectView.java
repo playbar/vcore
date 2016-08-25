@@ -118,9 +118,9 @@ public class GLRectView extends GLView {
     private  ArrayList<GLAnimation> mAnimations = new ArrayList<GLAnimation>();
     private GLViewFocusListener mFocusListener;
 
-//	public static ThreadPoolExecutor mExecutor = new ThreadPoolExecutor(10, 10, 200, TimeUnit.MILLISECONDS,
-//			new ArrayBlockingQueue<Runnable>(10000),
-//			new ThreadPoolExecutor.DiscardOldestPolicy());
+	public static ThreadPoolExecutor mExecutor = new ThreadPoolExecutor(10, 10, 200, TimeUnit.MILLISECONDS,
+			new ArrayBlockingQueue<Runnable>(10000),
+			new ThreadPoolExecutor.DiscardOldestPolicy());
 
 
 	public GLRectView(Context context) {
@@ -949,14 +949,14 @@ public class GLRectView extends GLView {
 		mBackgroundColor = null;
 	}
 
-	Bitmap mBitmap = null;
+	private Bitmap mBitmap = null;
 	private void initBackground(){
 		if (!isSurfaceCreated || !isVisible()){
 			return;
 		}
 
-//		mExecutor.execute(new Runnable() {
-//			public void run() {
+		mExecutor.execute(new Runnable() {
+			public void run() {
 
 				removeRender();
 
@@ -995,7 +995,11 @@ public class GLRectView extends GLView {
 				GLGenTexTask.QueueEvent( new GLGenTexTask() {
 					public void ExportTextureId() {
 						int textureId = -1;
-						textureId = GLTextureUtils.initImageTexture(getContext(), mBitmap, true);
+						textureId = GLTextureUtils.initImageTexture(getContext(), mBitmap, false);
+						if( mBitmap != null) {
+							mBitmap.recycle();
+							mBitmap = null;
+						}
 						if (textureId > -1) {
 							mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
 							mBackgroundRender.setTextureId(textureId);
@@ -1009,8 +1013,8 @@ public class GLRectView extends GLView {
 					}
 				});
 
-//			}
-//		});
+			}
+		});
 
 //		GLGenTexTask.QueueEvent( new GLGenTexTask(){
 //			public void ExportTextureId(){
