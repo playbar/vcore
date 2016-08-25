@@ -6,29 +6,20 @@ import com.baofeng.mojing.MojingSDK;
 import com.baofeng.mojing.input.base.MojingKeyCode;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
-import android.widget.TextView;
 
-public class BaseViewActivity extends Activity implements SensorEventListener {
+public class BaseViewActivity extends Activity {
 	private static BaseViewActivity instance;
 	private RelativeLayout rootLayout;
 	private GLRootView rootView;
 	private GLPageManager mPageManager;
-	private SensorManager mSensorManager;
-	private float mLight = 0;
 	private boolean isGroyEnable = true;
 	private boolean isDistortionEnable = true;
 	private boolean isLockViewAngle = false;
@@ -46,8 +37,7 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 		super.onCreate(savedInstanceState);
 		Log.e("test time", "BaseViewActivity time 1 => " + System.currentTimeMillis());
 		instance = this;
-		
-		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
 		Log.e("test time", "BaseViewActivity time 2 => " + System.currentTimeMillis());
 		MojingSDK.Init(this);
 		Log.e("test time", "BaseViewActivity time 3 => " + System.currentTimeMillis());
@@ -114,9 +104,6 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 	
 	@Override
 	protected void onResume() {
-		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT), 
-            SensorManager.SENSOR_DELAY_GAME);
-		
 		if (rootView != null){
 			rootView.startTracker();
 		}
@@ -129,8 +116,6 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 
 	@Override
 	protected void onPause() {
-		mSensorManager.unregisterListener(this);
-		
 		if (rootView != null){
 			rootView.stopTracker();
 		}
@@ -205,25 +190,6 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
         
         return dpi;
     }
-
-	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-	}
-
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-		float[] values = event.values; 
-        int sensorType = Sensor.TYPE_LIGHT; 
-        if (sensorType == Sensor.TYPE_LIGHT) {         	
-        	if (mLight >= 2.0 &&  values[0] < 2.0){
-        		if (rootView != null){
-        			rootView.initHeadView();
-        		}
-        	}
-        	
-        	mLight = values[0];
-        }
-	}
 
 	public boolean isGroyEnable() {
 		return isGroyEnable;
