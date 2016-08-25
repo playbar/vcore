@@ -5,31 +5,35 @@ import java.io.InputStream;
 import com.bfmj.viewcore.render.GLRenderParams;
 import com.bfmj.viewcore.util.GLGenTexTask;
 import com.bfmj.viewcore.util.GLTextureUtils;
+import com.bfmj.viewcore.util.GenTextureTask;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.util.Log;
 
 /**
- * 
+ *
  * ClassName: GLImageView <br/>
- * @author lixianke    
- * @date: 2015-3-9 下午1:51:44 <br/>  
+ * @author lixianke
+ * @date: 2015-3-9 下午1:51:44 <br/>
  * description:
  */
 public class GLImageView extends GLRectView {
-	
+
 	private int mResId = 0;
 	private int mLastResId = 0;
-    private Bitmap mBitmap = null;
+	private Bitmap mBitmap = null;
 	private Bitmap mLastBitmap = null;
-    private GLRenderParams mRenderParams;
-    private boolean mIsCutting = true;
-    
+	private GLRenderParams mRenderParams;
+	private boolean mIsCutting = true;
+	private  Bitmap mTmpbitmap = null;
+
 	public GLImageView(Context context) {
 		super(context);
 	}
-	
+
 	/**
 	 * 设置图片
 	 * @author lixianke  @Date 2015-3-11 下午5:06:59
@@ -40,14 +44,14 @@ public class GLImageView extends GLRectView {
 		if (mResId == resId){
 			return;
 		}
-		
+
 		mResId = resId;
 		mBitmap = null;
 		mLastBitmap = null;
 
 		updateTexture();
 	}
-	
+
 	/**
 	 * 设置图片
 	 * @author lixianke  @Date 2015-3-11 下午5:07:28
@@ -58,7 +62,7 @@ public class GLImageView extends GLRectView {
 		if (mBitmap == bitmap){
 			return;
 		}
-		
+
 		mBitmap = bitmap;
 		mResId = 0;
 		mLastResId = 0;
@@ -99,23 +103,24 @@ public class GLImageView extends GLRectView {
 		mLastResId = mResId;
 		mLastBitmap = mBitmap;
 
+		if (mRenderParams != null){
+			removeRender(mRenderParams);
+			mRenderParams = null;
+		}
+
 		GLGenTexTask.QueueEvent( new GLGenTexTask(){
 			public void ExportTextureId( ){
+//				Log.e("GLImageView", "ExportTextureId");
 				float width = getInnerWidth();
 				float height = getInnerHeight();
 
-				if (mRenderParams != null){
-					removeRender(mRenderParams);
-					mRenderParams = null;
-				}
-
 				boolean isRecycle = true;
-				Bitmap bitmap = null;
+
 				if (mResId != 0){
 					InputStream is = getContext().getResources().openRawResource(mResId);
 
 					try {
-						bitmap = BitmapFactory.decodeStream(is);
+						mTmpbitmap = BitmapFactory.decodeStream(is);
 					} finally {
 						try {
 							is.close();
@@ -124,27 +129,23 @@ public class GLImageView extends GLRectView {
 						}
 					}
 				} else if (mBitmap != null){
-					bitmap = mBitmap;
+					mTmpbitmap = mBitmap;
 					isRecycle = false;
 				}
 
-				if (bitmap != null) {
+				if (mTmpbitmap != null) {
 					if (getWidth() == 0 || getHeight() == 0) {
-						setWidth(bitmap.getWidth());
-						setHeight(bitmap.getHeight());
+						setWidth(mTmpbitmap.getWidth());
+						setHeight(mTmpbitmap.getHeight());
 					}
 					if (getHeight() == WRAP_CONTENT) {
-						height = bitmap.getHeight() * width / bitmap.getWidth();
+						height = mTmpbitmap.getHeight() * width / mTmpbitmap.getWidth();
 						setHeight(height + getPaddingTop() + getPaddingBottom());
 					}
 
 					GLTextureUtils.mUseMipMap = getMipMap();
-					int textureId = -1;
-					if (mIsCutting) {
-						textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
-					} else {
-						textureId = GLTextureUtils.initImageTexture(getContext(), bitmap, true);
-					}
+
+					int textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, isRecycle);
 					if (textureId > -1) {
 						mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
 						mRenderParams.setTextureId(textureId);
@@ -154,16 +155,79 @@ public class GLImageView extends GLRectView {
 					if (mRenderParams != null) {
 						addRender(mRenderParams);
 					}
-					bitmap = null;
+					if( isRecycle ) {
+						mTmpbitmap = null;
+					}
 				}
 			}
 		});
+
+//		final GLGenTexTask mTask = new GLGenTexTask(GLImageView.this.hashCode());
+//		mTask.setGenTexIdInterface( new GLGenTexTask.GenTexIdInterface(){
+//			public void ExportTextureId(int textureId, int mHashCode){
+//				float width = getInnerWidth();
+//				float height = getInnerHeight();
+//
+//				if (mRenderParams != null){
+//					removeRender(mRenderParams);
+//					mRenderParams = null;
+//				}
+//
+//				boolean isRecycle = true;
+//
+//				if (mResId != 0){
+//					InputStream is = getContext().getResources().openRawResource(mResId);
+//
+//					try {
+//						mTmpbitmap = BitmapFactory.decodeStream(is);
+//					} finally {
+//						try {
+//							is.close();
+//						} catch(IOException e) {
+//							e.printStackTrace();
+//						}
+//					}
+//				} else if (mBitmap != null){
+//					mTmpbitmap = mBitmap;
+//					isRecycle = false;
+//				}
+//
+//				if (mTmpbitmap != null) {
+//					if (getWidth() == 0 || getHeight() == 0) {
+//						setWidth(mTmpbitmap.getWidth());
+//						setHeight(mTmpbitmap.getHeight());
+//					}
+//					if (getHeight() == WRAP_CONTENT) {
+//						height = mTmpbitmap.getHeight() * width / mTmpbitmap.getWidth();
+//						setHeight(height + getPaddingTop() + getPaddingBottom());
+//					}
+//
+//					GLTextureUtils.mUseMipMap = getMipMap();
+//
+////					Log.e("GLImageView", "ExportTextureId");
+//					if (mHashCode == GLImageView.this.hashCode()) {
+//						textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, false);
+////						textureId = textureId;
+//					}
+//					if (textureId > -1) {
+//						mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+//						mRenderParams.setTextureId(textureId);
+//						updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
+//					}
+//
+//					if (mRenderParams != null) {
+//						addRender(mRenderParams);
+//					}
+//					mTmpbitmap = null;
+//				}
+//			}
+//		});
 	}
 
 	/**
 	 * 设置是否裁边
 	 * @author linzanxian  @Date 2015-6-30 下午3:24:24
-	 * @param cutting 是否裁边  
+	 * @param cutting 是否裁边
 	 * @return void
 	 */
 	public void setCutting(boolean cutting) {

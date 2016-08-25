@@ -404,14 +404,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     @Override
     public void onDrawFrame(GL10 gl) {
         GLThreadUtil.onDrawFrame(gl);
-        EGL10 egl = (EGL10)EGLContext.getEGL();
-        EGLDisplay display = egl.eglGetCurrentDisplay();
-        EGLContext eglContext = egl.eglGetCurrentContext();
-        EGLSurface eglSurface = egl.eglGetCurrentSurface( EGL10.EGL_DRAW);
-        if( !egl.eglMakeCurrent( display, eglSurface, eglSurface, eglContext )){
-            Log.e("onDrawFrame", "make currnet error");
-        }
-
 
         times ++;
         if (mChild == null || mChild.size() == 0) {

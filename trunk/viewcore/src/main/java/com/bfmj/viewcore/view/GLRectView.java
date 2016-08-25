@@ -959,10 +959,10 @@ public class GLRectView extends GLView {
 			return;
 		}
 
+		removeRender();
+
 		GLThreadPool.getThreadPool().execute(new Runnable() {
 			public void run() {
-
-				removeRender();
 
 				boolean isRecycle = true;
 				Bitmap bitmap = null;
@@ -986,18 +986,17 @@ public class GLRectView extends GLView {
 				if (bitmap != null) {
 					GLTextureUtils.mUseMipMap = getMipMap();
 					mBitmap = GLTextureUtils.handleBitmap(bitmap, isRecycle);
-//					textureId = GLTextureUtils.initImageTexture(getContext(), mBitmap, true);
 				} else if (mBackgroundColor != null){
 					mBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
 					Canvas canvas = new Canvas(mBitmap);
 					canvas.drawARGB((int)(mBackgroundColor.getA() * 255), (int)(mBackgroundColor.getR() * 255),
 							(int)(mBackgroundColor.getG() * 255), (int)(mBackgroundColor.getB() * 255));
 					GLTextureUtils.mUseMipMap = getMipMap();
-//					textureId = GLTextureUtils.initImageTexture(getContext(), mBitmap, true);
 				}
 
 				GLGenTexTask.QueueEvent( new GLGenTexTask() {
 					public void ExportTextureId() {
+
 						int textureId = -1;
 						textureId = GLTextureUtils.initImageTexture(getContext(), mBitmap, false);
 						if( mBitmap != null) {

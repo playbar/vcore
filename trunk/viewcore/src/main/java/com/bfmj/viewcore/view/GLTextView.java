@@ -162,6 +162,7 @@ public class GLTextView extends GLRectView {
 		}
 	}
 
+	Bitmap bmpTemp = null;
 	@Override
 	public void createTexture(){
 		if (!isSurfaceCreated() || !isVisible()){
@@ -172,26 +173,24 @@ public class GLTextView extends GLRectView {
 			return;
 		}
 
-//		GLGenTexTask.QueueEvent( new GLGenTexTask() {
-//			public void ExportTextureId() {
-//				Log.e("GLTextView", "ExportTextureId");
-//			}
-//		});
+		if (mRenderParams != null) {
+			removeRender(mRenderParams);
+			mRenderParams = null;
+		}
 
 		GLThreadPool.getThreadPool().execute(new Runnable() {
 			public void run() {
 
-				final Bitmap bmpTemp = createBitmap();
+				bmpTemp = createBitmap();
 				GLGenTexTask.QueueEvent(new GLGenTexTask() {
 					public void ExportTextureId() {
-						if (mRenderParams != null) {
-							removeRender(mRenderParams);
-							mRenderParams = null;
-						}
+
 						int textureId = -1;
 
 						if (bmpTemp != null) {
-							textureId = GLTextureUtils.initImageTexture(getContext(), bmpTemp, true);
+							textureId = GLTextureUtils.initImageTexture(getContext(), bmpTemp, false);
+							bmpTemp.recycle();
+							bmpTemp = null;
 						}
 
 						if (textureId > -1) {

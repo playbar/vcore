@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class GLThreadPool {
 
-    private static ThreadPoolExecutor mExecutor = new ThreadPoolExecutor(10, 10, 200,
+    private static ThreadPoolExecutor mExecutor = new ThreadPoolExecutor(1, 1, 200,
             TimeUnit.MILLISECONDS,
             new ArrayBlockingQueue<Runnable>(10000),
             new ThreadPoolExecutor.DiscardOldestPolicy());
