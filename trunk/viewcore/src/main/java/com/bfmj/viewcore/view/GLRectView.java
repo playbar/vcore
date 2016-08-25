@@ -28,6 +28,7 @@ import com.bfmj.viewcore.util.GLGenTexTask;
 import com.bfmj.viewcore.util.GLMatrixState;
 import com.bfmj.viewcore.util.GLTextureUtils;
 import com.bfmj.viewcore.animation.GLAlphaAnimation;
+import com.bfmj.viewcore.util.GLThreadPool;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -117,11 +118,6 @@ public class GLRectView extends GLView {
     //动画实例
     private  ArrayList<GLAnimation> mAnimations = new ArrayList<GLAnimation>();
     private GLViewFocusListener mFocusListener;
-
-	public static ThreadPoolExecutor mExecutor = new ThreadPoolExecutor(10, 10, 200, TimeUnit.MILLISECONDS,
-			new ArrayBlockingQueue<Runnable>(10000),
-			new ThreadPoolExecutor.DiscardOldestPolicy());
-
 
 	public GLRectView(Context context) {
 		super(context);
@@ -963,7 +959,7 @@ public class GLRectView extends GLView {
 			return;
 		}
 
-		mExecutor.execute(new Runnable() {
+		GLThreadPool.getThreadPool().execute(new Runnable() {
 			public void run() {
 
 				removeRender();

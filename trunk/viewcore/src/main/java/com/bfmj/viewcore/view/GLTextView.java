@@ -7,6 +7,7 @@ import com.bfmj.viewcore.util.BitmapOp;
 import com.bfmj.viewcore.util.GLFontUtils;
 import com.bfmj.viewcore.util.GLGenTexTask;
 import com.bfmj.viewcore.util.GLTextureUtils;
+import com.bfmj.viewcore.util.GLThreadPool;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -177,28 +178,33 @@ public class GLTextView extends GLRectView {
 //			}
 //		});
 
-		final Bitmap bmpTemp = createBitmap();
-		GLGenTexTask.QueueEvent( new GLGenTexTask(){
-			public void ExportTextureId() {
-				if (mRenderParams != null) {
-					removeRender(mRenderParams);
-					mRenderParams = null;
-				}
-				int textureId = -1;
+		GLThreadPool.getThreadPool().execute(new Runnable() {
+			public void run() {
 
-				if (bmpTemp != null) {
-					textureId = GLTextureUtils.initImageTexture(getContext(), bmpTemp, true );
-				}
+				final Bitmap bmpTemp = createBitmap();
+				GLGenTexTask.QueueEvent(new GLGenTexTask() {
+					public void ExportTextureId() {
+						if (mRenderParams != null) {
+							removeRender(mRenderParams);
+							mRenderParams = null;
+						}
+						int textureId = -1;
 
-				if (textureId > -1) {
-					mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-					mRenderParams.setTextureId(textureId);
-					updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
-				}
+						if (bmpTemp != null) {
+							textureId = GLTextureUtils.initImageTexture(getContext(), bmpTemp, true);
+						}
 
-				if (mRenderParams != null) {
-					addRender(mRenderParams);
-				}
+						if (textureId > -1) {
+							mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+							mRenderParams.setTextureId(textureId);
+							updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
+						}
+
+						if (mRenderParams != null) {
+							addRender(mRenderParams);
+						}
+					}
+				});
 			}
 		});
 	}
