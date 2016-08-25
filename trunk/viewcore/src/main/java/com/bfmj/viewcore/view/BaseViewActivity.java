@@ -41,15 +41,16 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.e("test time", "BaseViewActivity time 0 => " + System.currentTimeMillis());
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-
+		Log.e("test time", "BaseViewActivity time 1 => " + System.currentTimeMillis());
 		instance = this;
 		
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		
+		Log.e("test time", "BaseViewActivity time 2 => " + System.currentTimeMillis());
 		MojingSDK.Init(this);
-		
+		Log.e("test time", "BaseViewActivity time 3 => " + System.currentTimeMillis());
 		rootView = new GLRootView(this);
 		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		
@@ -67,6 +68,7 @@ public class BaseViewActivity extends Activity implements SensorEventListener {
 
 		rootLayout.addView(rootView);
 		setContentView(rootLayout);
+		Log.e("test time", "BaseViewActivity time 4 => " + System.currentTimeMillis());
 	}
 
 	public static void log(String msg){
