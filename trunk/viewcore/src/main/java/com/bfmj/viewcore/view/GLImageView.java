@@ -5,13 +5,10 @@ import java.io.InputStream;
 import com.bfmj.viewcore.render.GLRenderParams;
 import com.bfmj.viewcore.util.GLGenTexTask;
 import com.bfmj.viewcore.util.GLTextureUtils;
-import com.bfmj.viewcore.util.GenTextureTask;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.util.Log;
 
 /**
  * 

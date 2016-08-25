@@ -72,7 +72,7 @@ public class GLTextView extends GLRectView {
 		
 		mText = text;
 
-		getRootView().mCreateTextureQueue.offer(this);
+		updateTexture();
 	}
 	
 	/**
@@ -95,7 +95,7 @@ public class GLTextView extends GLRectView {
 		mTextColor = color;
 		mTextGLColor = null;
 
-		getRootView().mCreateTextureQueue.offer(this);
+		updateTexture();
 	}
 	
 	/**
@@ -108,7 +108,7 @@ public class GLTextView extends GLRectView {
 		mTextGLColor = color;
 		mTextColor = Color.WHITE;
 
-		getRootView().mCreateTextureQueue.offer(this);
+		updateTexture();
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public class GLTextView extends GLRectView {
 	public void setTextSize(int size){
 		mTextSize = size;
 
-		getRootView().mCreateTextureQueue.offer(this);
+		updateTexture();
 	}
 	
 	/**
@@ -132,7 +132,7 @@ public class GLTextView extends GLRectView {
 	public void setStyle(int style){
 		mStyle = style;
 
-		getRootView().mCreateTextureQueue.offer(this);
+		updateTexture();
 	}
 	
 	/**
@@ -279,12 +279,18 @@ public class GLTextView extends GLRectView {
 
 	@Override
 	public void setVisible(boolean isVisible) {
-		if (isVisible){
-			if (mRenderParams == null){
-				getRootView().mCreateTextureQueue.offer(this);
-			}
+		if (mRenderParams == null){
+			updateTexture();
 		}
 		super.setVisible(isVisible);
+	}
+
+	private void updateTexture(){
+		if (!isSurfaceCreated() || !isVisible()){
+			return;
+		}
+
+		getRootView().mCreateTextureQueue.offer(this);
 	}
 
 	private void removeRender(){
