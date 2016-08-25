@@ -44,6 +44,7 @@ private:
     static  bool shutdown;                    /** 线程退出标志 */
     int     m_iThreadNum;                     /** 线程池中启动的线程数 */
     pthread_t   *pthread_id;
+    bool mbCreate;
 
     static pthread_mutex_t m_pthreadMutex;    /** 线程同步锁 */
     static pthread_cond_t m_pthreadCond;      /** 线程同步的条件变量 */

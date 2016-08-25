@@ -74,7 +74,7 @@ Java_com_bfmj_viewcore_util_GLThreadUtil_onSurfaceCreated(JNIEnv* env, jobject o
     gDisplay = eglGetCurrentDisplay();
     destroySharedContext();
     createSharedContext();
-//    gThreadPool.Create();
+    gThreadPool.Create();
     return;
 }
 

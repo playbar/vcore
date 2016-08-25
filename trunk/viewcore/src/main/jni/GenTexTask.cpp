@@ -106,9 +106,9 @@ void GenTexTask::GenTexID( jobject bmp, int width, int height )
 
 int GenTexTask::Run()
 {
-    if( !eglMakeCurrent( gDisplay, gAuxSurface, gAuxSurface, gShareContext )){
-        printf("error");
-    }
+//    if( !eglMakeCurrent( gDisplay, gAuxSurface, gAuxSurface, gShareContext )){
+//        LOGI("make current error");
+//    }
 
 //    GLuint textureId = CreateTexture2D();
     if( mThiz != NULL ){

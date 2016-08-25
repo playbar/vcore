@@ -21,8 +21,9 @@ pthread_cond_t CThreadPool::m_pthreadCond = PTHREAD_COND_INITIALIZER;
  */
 CThreadPool::CThreadPool(int threadNum)
 {
+    mbCreate = false;
     this->m_iThreadNum = threadNum;
-    Create();
+//    Create();
 }
 
 CThreadPool::~CThreadPool()
@@ -35,10 +36,11 @@ CThreadPool::~CThreadPool()
  */
 void* CThreadPool::ThreadFunc(void* threadData)
 {
-//    pthread_t tid = pthread_self();
-//    if( !eglMakeCurrent( gDisplay, NULL, NULL, gShareContext )){
-//        printf("error");
-//    }
+
+    if( !eglMakeCurrent( gDisplay, gAuxSurface, gAuxSurface, gShareContext )){
+        LOGI("make current error");
+    }
+
     while (1)
     {
         pthread_mutex_lock(&m_pthreadMutex);
@@ -89,6 +91,10 @@ int CThreadPool::AddTask(CTask *task)
  */
 int CThreadPool::Create()
 {
+    if( mbCreate ){
+        return 0;
+    }
+    mbCreate = true;
     pthread_id = (pthread_t*)malloc(sizeof(pthread_t) * m_iThreadNum);
     for(int i = 0; i < m_iThreadNum; i++)
     {
