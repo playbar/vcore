@@ -949,9 +949,17 @@ public class GLRectView extends GLView {
 		mBackgroundColor = null;
 	}
 
+	private boolean isNeedUpdateUI(){
+		if (mBackgroundBitmap != null ||
+				mBackgroundResId != 0 || mBackgroundColor != null){
+			return true;
+		}
+		return false;
+	}
+	
 	private Bitmap mBitmap = null;
 	private void initBackground(){
-		if (!isSurfaceCreated || !isVisible()){
+		if (!isSurfaceCreated || !isVisible() || !isNeedUpdateUI()){
 			return;
 		}
 
@@ -1453,19 +1461,22 @@ public class GLRectView extends GLView {
 		if( mRenders != null ){
 			int ilen = mRenders.size();
 			for( int i = 0; i < ilen; ++i ){
-				final int textureId = mRenders.get(i).getTextureId();
-				mRenders.get(i).setTextureId(-1);
-				if (textureId > -1 && getRootView() != null) {
-					getRootView().queueEvent(new Runnable() {
+				if (mRenders.get(i) != null){
+					final int textureId = mRenders.get(i).getTextureId();
+					mRenders.get(i).setTextureId(-1);
+					if (textureId > -1 && getRootView() != null) {
+						getRootView().queueEvent(new Runnable() {
 
-						@Override
-						public void run() {
-							GLTextureUtils.releaseTexture(textureId);
-						}
-					});
+							@Override
+							public void run() {
+								GLTextureUtils.releaseTexture(textureId);
+							}
+						});
+					}
 				}
 			}
 			mRenders.clear();
+			mBackgroundRender = null;
 		}
 	}
 	
