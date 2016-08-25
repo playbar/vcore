@@ -19,7 +19,7 @@ static GenTexTask* getGenTexTask( JNIEnv* env, jobject thiz)
 
 JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeInit(JNIEnv* env, jobject thiz)
 {
-    jobject objThiz= env->NewGlobalRef(thiz); // DeleteGlobalRef
+    jobject objThiz= env->NewGlobalRef(thiz); //need DeleteGlobalRef
 
     if( GenTexTask::mThizClass == NULL ){
         GenTexTask::mThizClass = env->FindClass(GENTEXTASKCLASS);
@@ -31,9 +31,6 @@ JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeInit(JNIEn
     GenTexTask *pTask = new GenTexTask(env, objThiz);
     GenTexTask *pTmp = (GenTexTask*)env->GetIntField(objThiz, GenTexTask::mClassID );
     env->SetIntField( objThiz, GenTexTask::mClassID, (int)pTask);
-//    if( pTmp != NULL ){
-//        delete pTmp;
-//    }
     return;
 }
 
