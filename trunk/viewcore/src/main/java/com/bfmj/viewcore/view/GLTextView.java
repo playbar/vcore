@@ -47,7 +47,7 @@ public class GLTextView extends GLRectView {
 	private float mDefaultWidth = 0;
 	private float mDefaultHeight = 0;
 	
-	private Bitmap mTextBitmap;
+//	private Bitmap mTextBitmap;
 	private float mTextPadding = 8;
 	private String mTag = "";
 
@@ -171,17 +171,23 @@ public class GLTextView extends GLRectView {
 			return;
 		}
 
+//		GLGenTexTask.QueueEvent( new GLGenTexTask() {
+//			public void ExportTextureId() {
+//				Log.e("GLTextView", "ExportTextureId");
+//			}
+//		});
+
+		final Bitmap bmpTemp = createBitmap();
 		GLGenTexTask.QueueEvent( new GLGenTexTask(){
-			@Override
 			public void ExportTextureId() {
 				if (mRenderParams != null) {
 					removeRender(mRenderParams);
 					mRenderParams = null;
 				}
 				int textureId = -1;
-				mTextBitmap = createBitmap();
-				if (mTextBitmap != null) {
-					textureId = GLTextureUtils.initImageTexture(getContext(), mTextBitmap, true);
+
+				if (bmpTemp != null) {
+					textureId = GLTextureUtils.initImageTexture(getContext(), bmpTemp, true );
 				}
 
 				if (textureId > -1) {

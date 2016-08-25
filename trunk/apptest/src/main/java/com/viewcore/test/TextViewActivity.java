@@ -116,6 +116,14 @@ public class TextViewActivity extends BaseViewActivity {
 		cursorView.setDepth(3);
 		rootView.addView(cursorView);
 
+		GLRectView rectView = new GLRectView(this);
+		rectView.setBackground( new GLColor(1.0f, 0.0f, 0.0f));
+		rectView.setX( 1000);
+		rectView.setY( 1000);
+		rectView.setLayoutParams( 200, 200 );
+		rootView.addView( rectView );
+
+
 		addImageViewTest();
 
 	}
@@ -138,17 +146,17 @@ public class TextViewActivity extends BaseViewActivity {
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 //		Log.e("onKeyUp", "onKeyUpn code =" + keyCode);
-//		switch (keyCode) {
-//			case KeyEvent.KEYCODE_MENU:
-//				return true;
-//			case KeyEvent.KEYCODE_BACK:
-//				addImageViewTest();
-//				return true;
-//			default:
-//				break;
-//		}
-//		return false;
-		return super.onKeyUp(keyCode, event);
+		switch (keyCode) {
+			case KeyEvent.KEYCODE_MENU:
+				return true;
+			case KeyEvent.KEYCODE_BACK:
+				addImageViewTest();
+				return true;
+			default:
+				break;
+		}
+		return false;
+//		return super.onKeyUp(keyCode, event);
 	}
 
 	@Override

@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import com.baofeng.mojing.MojingSDK;
 import com.baofeng.mojing.input.base.MojingKeyCode;
@@ -114,7 +117,12 @@ public class GLRectView extends GLView {
     //动画实例
     private  ArrayList<GLAnimation> mAnimations = new ArrayList<GLAnimation>();
     private GLViewFocusListener mFocusListener;
-    
+
+//	public static ThreadPoolExecutor mExecutor = new ThreadPoolExecutor(10, 10, 200, TimeUnit.MILLISECONDS,
+//			new ArrayBlockingQueue<Runnable>(10000),
+//			new ThreadPoolExecutor.DiscardOldestPolicy());
+
+
 	public GLRectView(Context context) {
 		super(context);
 		mContext = context;
@@ -941,22 +949,15 @@ public class GLRectView extends GLView {
 		mBackgroundColor = null;
 	}
 
-	private boolean isNeedUpdateUI(){
-		if (mBackgroundBitmap != null ||
-				mBackgroundResId != 0 || mBackgroundColor != null){
-			return true;
-		}
-		return false;
-	}
-	
+	Bitmap mBitmap = null;
 	private void initBackground(){
-		if (!isSurfaceCreated || !isVisible() || !isNeedUpdateUI()){
+		if (!isSurfaceCreated || !isVisible()){
 			return;
 		}
 
+//		mExecutor.execute(new Runnable() {
+//			public void run() {
 
-		GLGenTexTask.QueueEvent( new GLGenTexTask(){
-			public void ExportTextureId(){
 				removeRender();
 
 				boolean isRecycle = true;
@@ -977,31 +978,87 @@ public class GLRectView extends GLView {
 					bitmap = mBackgroundBitmap;
 					isRecycle = false;
 				}
-				int textureId = -1;
+
 				if (bitmap != null) {
 					GLTextureUtils.mUseMipMap = getMipMap();
-					textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
+					mBitmap = GLTextureUtils.handleBitmap(bitmap, isRecycle);
+//					textureId = GLTextureUtils.initImageTexture(getContext(), mBitmap, true);
 				} else if (mBackgroundColor != null){
-					bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
-					Canvas canvas = new Canvas(bitmap);
+					mBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+					Canvas canvas = new Canvas(mBitmap);
 					canvas.drawARGB((int)(mBackgroundColor.getA() * 255), (int)(mBackgroundColor.getR() * 255),
 							(int)(mBackgroundColor.getG() * 255), (int)(mBackgroundColor.getB() * 255));
 					GLTextureUtils.mUseMipMap = getMipMap();
-					textureId = GLTextureUtils.initImageTexture(getContext(), bitmap, true);
+//					textureId = GLTextureUtils.initImageTexture(getContext(), mBitmap, true);
 				}
 
-				if (textureId > -1) {
-					mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-					mBackgroundRender.setTextureId(textureId);
-					updateRenderSize(mBackgroundRender, width, height);
-				}
+				GLGenTexTask.QueueEvent( new GLGenTexTask() {
+					public void ExportTextureId() {
+						int textureId = -1;
+						textureId = GLTextureUtils.initImageTexture(getContext(), mBitmap, true);
+						if (textureId > -1) {
+							mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+							mBackgroundRender.setTextureId(textureId);
+							updateRenderSize(mBackgroundRender, width, height);
+						}
 
-				if (mBackgroundRender != null){
-					mBackgroundRender.setMask(getMask());
-					mRenders.add(0, mBackgroundRender );
-				}
-			}
-		});
+						if (mBackgroundRender != null) {
+							mBackgroundRender.setMask(getMask());
+							mRenders.add(0, mBackgroundRender);
+						}
+					}
+				});
+
+//			}
+//		});
+
+//		GLGenTexTask.QueueEvent( new GLGenTexTask(){
+//			public void ExportTextureId(){
+//				removeRender();
+//
+//				boolean isRecycle = true;
+//				Bitmap bitmap = null;
+//				if (mBackgroundResId != 0) {
+//					InputStream is = getContext().getResources().openRawResource(mBackgroundResId);
+//
+//					try {
+//						bitmap = BitmapFactory.decodeStream(is);
+//					} finally {
+//						try {
+//							is.close();
+//						} catch (IOException e) {
+//							e.printStackTrace();
+//						}
+//					}
+//				} else if (mBackgroundBitmap != null) {
+//					bitmap = mBackgroundBitmap;
+//					isRecycle = false;
+//				}
+//				int textureId = -1;
+//				if (bitmap != null) {
+//					GLTextureUtils.mUseMipMap = getMipMap();
+//					textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
+//				} else if (mBackgroundColor != null){
+//					bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+//					Canvas canvas = new Canvas(bitmap);
+//					canvas.drawARGB((int)(mBackgroundColor.getA() * 255), (int)(mBackgroundColor.getR() * 255),
+//							(int)(mBackgroundColor.getG() * 255), (int)(mBackgroundColor.getB() * 255));
+//					GLTextureUtils.mUseMipMap = getMipMap();
+//					textureId = GLTextureUtils.initImageTexture(getContext(), bitmap, true);
+//				}
+//
+//				if (textureId > -1) {
+//					mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+//					mBackgroundRender.setTextureId(textureId);
+//					updateRenderSize(mBackgroundRender, width, height);
+//				}
+//
+//				if (mBackgroundRender != null){
+//					mBackgroundRender.setMask(getMask());
+//					mRenders.add(0, mBackgroundRender );
+//				}
+//			}
+//		});
 	}
 
 	@Override
@@ -1392,22 +1449,19 @@ public class GLRectView extends GLView {
 		if( mRenders != null ){
 			int ilen = mRenders.size();
 			for( int i = 0; i < ilen; ++i ){
-				if (mRenders.get(i) != null){
-					final int textureId = mRenders.get(i).getTextureId();
-					mRenders.get(i).setTextureId(-1);
-					if (textureId > -1 && getRootView() != null) {
-						getRootView().queueEvent(new Runnable() {
+				final int textureId = mRenders.get(i).getTextureId();
+				mRenders.get(i).setTextureId(-1);
+				if (textureId > -1 && getRootView() != null) {
+					getRootView().queueEvent(new Runnable() {
 
-							@Override
-							public void run() {
-								GLTextureUtils.releaseTexture(textureId);
-							}
-						});
-					}
+						@Override
+						public void run() {
+							GLTextureUtils.releaseTexture(textureId);
+						}
+					});
 				}
 			}
 			mRenders.clear();
-			mBackgroundRender = null;
 		}
 	}
 	

@@ -16,6 +16,7 @@ import android.graphics.Bitmap.Config;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 import com.bfmj.viewcore.view.BaseViewActivity;
 
@@ -54,6 +55,7 @@ public class GLTextureUtils {
 	}
 	
 	public static int initImageTexture(Context context, Bitmap bm, boolean isRecycle) {
+//		Log.e("GLTextureUtils", "initImageTexture begin");
 		if (bm == null) {
 			return -1;
 		}
@@ -61,12 +63,7 @@ public class GLTextureUtils {
 		//生成纹理ID
 		int[] textures = new int[1];
 		
-		GLES20.glGenTextures
-		(
-			1,          //产生的纹理id的数量
-			textures,   //纹理id的数组
-			0           //偏移量
-		); 
+		GLES20.glGenTextures(1, textures, 0);
 		
 		if (mUseMipMap) {
 			GLES20.glEnable(GLES20.GL_TEXTURE_2D);
@@ -76,13 +73,7 @@ public class GLTextureUtils {
 			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,GLES20.GL_CLAMP_TO_EDGE);
 			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);
 	        //实际加载纹理       
-	        GLUtils.texImage2D
-	        (
-	        		GLES20.GL_TEXTURE_2D,   //纹理类型，在OpenGL ES中必须为GL10.GL_TEXTURE_2D
-	        		0, 					  //纹理的层次，0表示基本图像层，可以理解为直接贴图
-	        		bm, 			  //纹理图像
-	        		0					  //纹理边框尺寸
-	        );
+			GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bm, 0);
 	        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D); 
 		} else {
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
@@ -91,19 +82,14 @@ public class GLTextureUtils {
 			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,GLES20.GL_CLAMP_TO_EDGE);
 			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);
 	        //实际加载纹理       
-	        GLUtils.texImage2D
-	        (
-	        		GLES20.GL_TEXTURE_2D,   //纹理类型，在OpenGL ES中必须为GL10.GL_TEXTURE_2D
-	        		0, 					  //纹理的层次，0表示基本图像层，可以理解为直接贴图
-	        		bm, 			  //纹理图像
-	        		0					  //纹理边框尺寸
-	        );
+	        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bm, 0);
 		}
         
         if (isRecycle){
 	        bm.recycle(); 		  //纹理加载成功后释放图片
 		}
-		BaseViewActivity.log(System.currentTimeMillis() + "-create : " + textures[0] + " " + Thread.currentThread());
+//		BaseViewActivity.log(System.currentTimeMillis() + "-create : " + textures[0] + " " + Thread.currentThread());
+//		Log.e("GLTextureUtils", "initImageTexture end");
         return textures[0];
 	}
 	
