@@ -15,6 +15,7 @@ bool CThreadPool::shutdown = false;
 
 pthread_mutex_t CThreadPool::m_pthreadMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t CThreadPool::m_pthreadCond = PTHREAD_COND_INITIALIZER;
+bool CThreadPool::mbNeedMakeCurrent = true;
 
 /**
  * 线程池管理类构造函数
@@ -22,7 +23,7 @@ pthread_cond_t CThreadPool::m_pthreadCond = PTHREAD_COND_INITIALIZER;
 CThreadPool::CThreadPool(int threadNum)
 {
     mbCreate = false;
-    this->m_iThreadNum = threadNum;
+    m_iThreadNum = threadNum;
 //    Create();
 }
 
@@ -37,12 +38,14 @@ CThreadPool::~CThreadPool()
 void* CThreadPool::ThreadFunc(void* threadData)
 {
 
-    if( !eglMakeCurrent( gDisplay, gAuxSurface, gAuxSurface, gShareContext )){
-        LOGI("make current error");
-    }
-
     while (1)
     {
+        if( mbNeedMakeCurrent ){
+            if( !eglMakeCurrent( gDisplay, gAuxSurface, gAuxSurface, gShareContext )){
+                LOGI("make current error");
+            }
+            mbNeedMakeCurrent = false;
+        }
         pthread_mutex_lock(&m_pthreadMutex);
         while (m_vecTaskList.size() == 0 && !shutdown)
         {
@@ -92,6 +95,7 @@ int CThreadPool::AddTask(CTask *task)
 int CThreadPool::Create()
 {
     if( mbCreate ){
+        mbNeedMakeCurrent = true;
         return 0;
     }
     mbCreate = true;

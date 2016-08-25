@@ -51,6 +51,7 @@ private:
 
 protected:
     static void* ThreadFunc(void * threadData); /** 新线程的线程回调函数 */
+    static bool mbNeedMakeCurrent;
     static int MoveToIdle(pthread_t tid);       /** 线程执行结束后，把自己放入到空闲线程中 */
     static int MoveToBusy(pthread_t tid);       /** 移入到忙碌线程中去 */
 
