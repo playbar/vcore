@@ -16,6 +16,7 @@ public abstract class GLGenTexTask {
     }
 
     public static void QueueEvent( GLGenTexTask task){
+//        Log.e("GLGenTexTask", "QueueEvent");
         task.NativeQueueEvent();
     }
 

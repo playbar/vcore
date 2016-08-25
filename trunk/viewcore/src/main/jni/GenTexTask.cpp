@@ -11,6 +11,8 @@ jclass GenTexTask::mThizClass = NULL;
 jfieldID GenTexTask::mClassID = NULL;
 jmethodID GenTexTask::mExportTextureId = NULL;
 
+//GenTexTask gTexTask[4];
+
 static GenTexTask* getGenTexTask( JNIEnv* env, jobject thiz)
 {
     GenTexTask *p = (GenTexTask*)env->GetIntField(thiz, GenTexTask::mClassID );
@@ -19,7 +21,7 @@ static GenTexTask* getGenTexTask( JNIEnv* env, jobject thiz)
 
 JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeInit(JNIEnv* env, jobject thiz)
 {
-    jobject objThiz= env->NewGlobalRef(thiz); //need DeleteGlobalRef
+    jobject objThiz = env->NewGlobalRef(thiz); //need DeleteGlobalRef
 
     if( GenTexTask::mThizClass == NULL ){
         GenTexTask::mThizClass = env->FindClass(GENTEXTASKCLASS);
@@ -27,10 +29,17 @@ JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeInit(JNIEn
         GenTexTask::mExportTextureId = env->GetMethodID( GenTexTask::mThizClass, "ExportTextureId", "()V");
     }
 
-
     GenTexTask *pTask = new GenTexTask(env, objThiz);
-    GenTexTask *pTmp = (GenTexTask*)env->GetIntField(objThiz, GenTexTask::mClassID );
-    env->SetIntField( objThiz, GenTexTask::mClassID, (int)pTask);
+//    static int index = 0;
+//    if( index >= 10 ){
+//        index = 0;
+//    }
+//    GenTexTask *pTask = &gTexTask[index];
+//    ++index;
+//    pTask->SetJObject( objThiz );
+    gThreadPool.AddTask( pTask );
+//    GenTexTask *pTmp = (GenTexTask*)env->GetIntField(objThiz, GenTexTask::mClassID );
+//    env->SetIntField( objThiz, GenTexTask::mClassID, (int)pTask);
     return;
 }
 
@@ -43,8 +52,8 @@ JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeUninit(JNI
 
 JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeQueueEvent(JNIEnv* env, jobject thiz)
 {
-    GenTexTask *pTmp = getGenTexTask( env, thiz );
-    pTmp->QueueEvent();
+//    GenTexTask *pTmp = getGenTexTask( env, thiz );
+//    pTmp->QueueEvent();
     return;
 }
 
@@ -59,23 +68,16 @@ JNIEXPORT void JNICALL Java_com_bfmj_viewcore_util_GLGenTexTask_NativeGenTexId(J
 
 GenTexTask::GenTexTask(JNIEnv* env, jobject thiz)
 {
-    mEnv = env;
     mThiz = thiz;
-    mpData = NULL;
 }
 
 GenTexTask::GenTexTask()
 {
-    mEnv = NULL;
     mThiz = NULL;
-    mpData = NULL;
 }
 
 GenTexTask::~GenTexTask()
 {
-    if( mpData != NULL ){
-        delete mpData;
-    }
 //    if( mThiz != NULL ){
 //        JNIEnv *env=0;
 //        gs_jvm->AttachCurrentThread(&env, NULL);
@@ -84,15 +86,17 @@ GenTexTask::~GenTexTask()
 //    }
 }
 
+void GenTexTask::SetJObject( jobject thiz)
+{
+    mThiz = thiz;
+}
+
 void GenTexTask::QueueEvent(){
     gThreadPool.AddTask( this );
 }
 
 void GenTexTask::GenTexID( jobject bmp, int width, int height )
 {
-    mBitmap = bmp;
-    mWidth = width;
-    mHeight = height;
 //    mpData = new unsigned char[mWidth * mHeight * 4];
 //    AndroidBitmapInfo infocolor;
 //    void *pixels = 0;
@@ -110,20 +114,25 @@ int GenTexTask::Run()
 //        LOGI("make current error");
 //    }
 
+//    LOGE("Run");
+
+//    pthread_t seft = pthread_self();
+//    char chId[32] = {0};
+//    sprintf( chId, "task thread id=%u", seft );
+//    LOGE( chId );
+
 //    GLuint textureId = CreateTexture2D();
     if( mThiz != NULL ){
         JNIEnv *env=0;
         gs_jvm->AttachCurrentThread(&env, NULL);
 //        jclass cls = env->GetObjectClass(mThiz);
-//        jmethodID fieldPtr = env->GetMethodID(cls,"ExportTextureId", "(I)V");
+//        jmethodID fieldPtr = env->GetMethodID(cls,"ExportTextureId", "()V");
 //        env->CallVoidMethod( mThiz, fieldPtr, 0 );
         env->CallVoidMethod( mThiz, GenTexTask::mExportTextureId, 0 );
         env->DeleteGlobalRef( mThiz );
         gs_jvm->DetachCurrentThread();
     }
 
-    delete this;
-//    LOGI("mytask textureid = %d", textureId );
     return 0;
 }
 
@@ -134,13 +143,12 @@ GLuint GenTexTask::CreateSimpleTexture2D( )
     GLuint textureId =0;
 
     // 2x2 Image, 3 bytes per pixel (R, G, B)
-    GLubyte pixels[4 * 3] =
-            {
-                    255,   0,   0, // Red
-                    0, 255,   0, // Green
-                    0,   0, 255, // Blue
-                    255, 255,   0  // Yellow
-            };
+    GLubyte pixels[4 * 3] = {
+        255,   0,   0, // Red
+        0, 255,   0, // Green
+        0,   0, 255, // Blue
+        255, 255,   0  // Yellow
+    };
 
     // Use tightly packed data
     glPixelStorei ( GL_UNPACK_ALIGNMENT, 1 );
@@ -176,7 +184,7 @@ GLuint GenTexTask::CreateTexture2D( )
     // Bind the texture object
     glBindTexture ( GL_TEXTURE_2D, textureId );
 
-    glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, mpData );
+    glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGBA, 800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL );
 
     // Set the filtering mode
     glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );

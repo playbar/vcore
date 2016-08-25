@@ -29,6 +29,7 @@ public:
     GenTexTask(JNIEnv* env, jobject thiz);
     GenTexTask();
     ~GenTexTask();
+    void SetJObject( jobject thiz);
     void QueueEvent();
     void GenTexID( jobject bmp, int width, int height );
     int Run();
@@ -36,10 +37,6 @@ public:
 public:
     GLuint CreateSimpleTexture2D( );
     GLuint CreateTexture2D( );
-    int mWidth;
-    int mHeight;
-    jobject mBitmap;
-    void *mpData;
 
 public:
     static jclass mThizClass;
@@ -47,7 +44,6 @@ public:
     static jmethodID mExportTextureId;
 
 private:
-    JNIEnv* mEnv;
     jobject mThiz;
 
 };

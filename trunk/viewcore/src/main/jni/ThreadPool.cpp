@@ -73,6 +73,7 @@ void* CThreadPool::ThreadFunc(void* threadData)
         pthread_mutex_unlock(&m_pthreadMutex);
 
         task->Run(); /** 执行任务 */
+        delete task;
     }
     return (void*)0;
 }
