@@ -173,20 +173,19 @@ public class GLTextView extends GLRectView {
 			return;
 		}
 
+		if (mRenderParams != null) {
+			removeRender(mRenderParams);
+			mRenderParams = null;
+		}
+
 		GLThreadPool.getThreadPool().execute(new Runnable() {
 			public void run() {
 
 				bmpTemp = createBitmap();
+				GLGenTexTask.QueueEvent(new GLGenTexTask() {
+					public void ExportTextureId() {
 
-				getRootView().queueEvent(new Runnable() {
-					@Override
-					public void run() {
 						int textureId = -1;
-
-						if (mRenderParams != null) {
-							removeRender(mRenderParams);
-							mRenderParams = null;
-						}
 
 						if (bmpTemp != null) {
 							textureId = GLTextureUtils.initImageTexture(getContext(), bmpTemp, false);
@@ -205,29 +204,6 @@ public class GLTextView extends GLRectView {
 						}
 					}
 				});
-
-//				GLGenTexTask.QueueEvent(new GLGenTexTask() {
-//					public void ExportTextureId() {
-//
-//						int textureId = -1;
-//
-//						if (bmpTemp != null) {
-//							textureId = GLTextureUtils.initImageTexture(getContext(), bmpTemp, false);
-//							bmpTemp.recycle();
-//							bmpTemp = null;
-//						}
-//
-//						if (textureId > -1) {
-//							mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-//							mRenderParams.setTextureId(textureId);
-//							updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
-//						}
-//
-//						if (mRenderParams != null) {
-//							addRender(mRenderParams);
-//						}
-//					}
-//				});
 			}
 		});
 	}
@@ -324,7 +300,8 @@ public class GLTextView extends GLRectView {
 		if (!isSurfaceCreated() || !isVisible()){
 			return;
 		}
-		createTexture();
+
+		getRootView().mCreateTextureQueue.offer(this);
 	}
 
 	private void removeRender(){
