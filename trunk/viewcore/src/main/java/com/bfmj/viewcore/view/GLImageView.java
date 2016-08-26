@@ -90,7 +90,7 @@ public class GLImageView extends GLRectView {
 
 		if (mBitmap != mLastBitmap ||
 				mLastResId != mResId){
-			getRootView().mCreateTextureQueue.offer(this);
+			createTexture();
 		}
 	}
 
