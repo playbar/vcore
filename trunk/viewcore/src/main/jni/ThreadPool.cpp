@@ -40,12 +40,6 @@ void* CThreadPool::ThreadFunc(void* threadData)
 
     while (1)
     {
-        if( mbNeedMakeCurrent ){
-            if( !eglMakeCurrent( gDisplay, gAuxSurface, gAuxSurface, gShareContext )){
-                LOGI("make current error");
-            }
-            mbNeedMakeCurrent = false;
-        }
         pthread_mutex_lock(&m_pthreadMutex);
         while (m_vecTaskList.size() == 0 && !shutdown)
         {
@@ -71,6 +65,13 @@ void* CThreadPool::ThreadFunc(void* threadData)
         }
 
         pthread_mutex_unlock(&m_pthreadMutex);
+
+        if( mbNeedMakeCurrent ){
+            if( !eglMakeCurrent( gDisplay, gAuxSurface, gAuxSurface, gShareContext )){
+                LOGI("make current error");
+            }
+            mbNeedMakeCurrent = false;
+        }
 
         task->Run(); /** 执行任务 */
         delete task;
