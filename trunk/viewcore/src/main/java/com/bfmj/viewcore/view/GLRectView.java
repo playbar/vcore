@@ -859,12 +859,11 @@ public class GLRectView extends GLView {
 	}
 
 	protected void removeRender(GLRenderParams render) {
-		mRenders.remove( render );
-
 		if (render.getType() == GLRenderParams.RENDER_TYPE_IMAGE){
 			int textureId = render.getTextureId();
 			releaseTexture(textureId);
 		}
+		mRenders.remove( render );
 	}
 
 	public List<GLRenderParams> getRenders(){

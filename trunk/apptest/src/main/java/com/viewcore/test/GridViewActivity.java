@@ -125,7 +125,7 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setOnItemClickListener( clickListener );
 		gridView.setWidth(1134);
 		gridView.setHeight(800);
-		gridView.setTotalCount( 24 );
+		gridView.setTotalCount( 6 );
 		gridView.setAdapter( adapter );
 		//gridView.rotate(90.0f, 1.0f, 0.0f, 0.0f );
 		rootView.addView(gridView);

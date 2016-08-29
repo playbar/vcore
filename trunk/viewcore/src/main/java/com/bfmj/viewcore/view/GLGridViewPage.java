@@ -112,7 +112,7 @@ public class GLGridViewPage extends GLGridView {
 
 	@Override
 	public void setAdapter(GLListAdapter adapter) {
-		if( mTotalCount == 0 && adapter != null ){
+		if( adapter != null && mTotalCount < adapter.getCount() ){
 			mTotalCount = adapter.getCount();
 		}
 		super.setAdapter( adapter );
@@ -120,6 +120,9 @@ public class GLGridViewPage extends GLGridView {
 
 	@Override
 	public void requestLayout(){
+		if(  mTotalCount < getTotalNum() ){
+			mTotalCount = getTotalNum();
+		}
 		mCount = getTotalNum() / getNumOneScreen();
 		if( getTotalNum() % getNumOneScreen() != 0 )
 			++mCount;
@@ -191,8 +194,8 @@ public class GLGridViewPage extends GLGridView {
 	@Override
 	public boolean onKeyUp(int keycode){
 		if( nextBtnImgView.isFocused() || prvBtnImgView.isFocused() || mbIndexFocused ) {
-//			if (keycode == MojingKeyCode.KEYCODE_ENTER) {
-			if (keycode == 96) {
+			if (keycode == MojingKeyCode.KEYCODE_ENTER) {
+//			if (keycode == 96) {
 				getRootView().queueEvent(new Runnable() {
 					@Override
 					public void run() {
@@ -348,6 +351,10 @@ public class GLGridViewPage extends GLGridView {
 		if( getTotalNum() % getNumOneScreen() != 0 )
 			++mCount;
 
+		int totalPageCount = mTotalCount / getNumOneScreen();
+		if( mTotalCount % getNumOneScreen() != 0 )
+			++totalPageCount;
+
 
 		mMidPos = getX() + getMarginLeft() + getWidth() / 2 + mOffsetX;
 
@@ -356,7 +363,7 @@ public class GLGridViewPage extends GLGridView {
 		if( mCount > 1 ){
 			mStart = mMidPos - (mStep * mShowMaxCount) / 2;
 
-			if( getTotalNum() < mTotalCount ){
+			if( mCurIndex < totalPageCount) {
 				showNextBtn();
 			}
 			if (mCurIndex > 1 && mCurIndex <= mCount) {
