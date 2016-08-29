@@ -13,7 +13,7 @@ import com.bfmj.viewcore.view.GLView;
 
 import android.annotation.SuppressLint;
 import android.opengl.GLES11Ext;
-import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.opengl.Matrix;
 
 /**
@@ -120,7 +120,7 @@ public class GLVideoRect extends GLRect {
     }
     
     private void init(){
-		GLES20.glGenBuffers( 6, mvbo, 0 );
+		GLES30.glGenBuffers( 6, mvbo, 0 );
 		vboVertexNew = mvbo[0];
 		vboTextureNew = mvbo[1];
 		vboTextureLeftNew = mvbo[2];
@@ -190,22 +190,22 @@ public class GLVideoRect extends GLRect {
 	}
 
 	public void beginDraw(){
-		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
-		GLES20.glUseProgram(mProgram);
-		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+		GLES30.glDisable(GLES30.GL_DEPTH_TEST);
+		GLES30.glUseProgram(mProgram);
+		GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
 
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexNew);
-		GLES20.glEnableVertexAttribArray(0);
-		GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, 0);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboVertexNew);
+		GLES30.glEnableVertexAttribArray(0);
+		GLES30.glVertexAttribPointer(mPositionHandle, 2, GLES30.GL_FLOAT, false, 0, 0);
 
-		GLES20.glEnableVertexAttribArray(1);
+		GLES30.glEnableVertexAttribArray(1);
 	}
 
 	public void endDraw(){
-		GLES20.glDisableVertexAttribArray(0);
-		GLES20.glDisableVertexAttribArray(1);
-		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-		GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
+		GLES30.glDisableVertexAttribArray(0);
+		GLES30.glDisableVertexAttribArray(1);
+		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+		GLES30.glBindBuffer( GLES30.GL_ARRAY_BUFFER, 0 );
 	}
     
     @SuppressLint("InlinedApi")
@@ -214,8 +214,8 @@ public class GLVideoRect extends GLRect {
     		return;
     	}
 
-        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureId);
-        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mtx, 0);
+        GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureId);
+        GLES30.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mtx, 0);
 
 		int buffer = vboTextureNew;
 
@@ -234,32 +234,32 @@ public class GLVideoRect extends GLRect {
 				break;
 		}
 
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffer);
-		GLES20.glVertexAttribPointer(mTextureCoordHandle, 2, GLES20.GL_FLOAT, false, 0, 0);
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 2);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, buffer);
+		GLES30.glVertexAttribPointer(mTextureCoordHandle, 2, GLES30.GL_FLOAT, false, 0, 0);
+        GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, vertices.length / 2);
 		return;
 	}
     
     private void createProgram(){
-		int vertexShader    = GLShaderManager.loadShader(GLES20.GL_VERTEX_SHADER, GLShaderManager.VERTEX_VIDEO);
-        int fragmentShader  = GLShaderManager.loadShader(GLES20.GL_FRAGMENT_SHADER, GLShaderManager.FRAGMENT_VIDEO);
+		int vertexShader    = GLShaderManager.loadShader(GLES30.GL_VERTEX_SHADER, GLShaderManager.VERTEX_VIDEO);
+        int fragmentShader  = GLShaderManager.loadShader(GLES30.GL_FRAGMENT_SHADER, GLShaderManager.FRAGMENT_VIDEO);
 
-        mProgram = GLES20.glCreateProgram();             // create empty OpenGL ES Program
-        GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
-        GLES20.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
-        GLES20.glLinkProgram(mProgram);                  // creates OpenGL ES program executables
-        muMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
-        mTextureCoordHandle = GLES20.glGetAttribLocation(mProgram, "inputTextureCoordinate");
-        mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
+        mProgram = GLES30.glCreateProgram();             // create empty OpenGL ES Program
+        GLES30.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
+        GLES30.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
+        GLES30.glLinkProgram(mProgram);                  // creates OpenGL ES program executables
+        muMVPMatrixHandle = GLES30.glGetUniformLocation(mProgram, "uMVPMatrix");
+        mTextureCoordHandle = GLES30.glGetAttribLocation(mProgram, "inputTextureCoordinate");
+        mPositionHandle = GLES30.glGetAttribLocation(mProgram, "vPosition");
 	}
     
     private void vertexVBO() {
 		
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexNew);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboVertexNew);
 		// 传送顶点位置数据
-		GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT,
+		GLES30.glVertexAttribPointer(mPositionHandle, 2, GLES30.GL_FLOAT,
 				false, 0, 0);
-		GLES20.glEnableVertexAttribArray(0);
+		GLES30.glEnableVertexAttribArray(0);
 	}
     
     private void textureVBO() {
@@ -280,11 +280,11 @@ public class GLVideoRect extends GLRect {
 				break;
 		}
 		
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffer);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, buffer);
 		// 传送顶点位置数据
-		GLES20.glVertexAttribPointer(mTextureCoordHandle, 2, GLES20.GL_FLOAT,
+		GLES30.glVertexAttribPointer(mTextureCoordHandle, 2, GLES30.GL_FLOAT,
 				false, 0, 0);
-		GLES20.glEnableVertexAttribArray(1);
+		GLES30.glEnableVertexAttribArray(1);
 		
 	}
     
@@ -296,9 +296,9 @@ public class GLVideoRect extends GLRect {
         vertexBuffer.put(vertices);
         vertexBuffer.position(0);
        
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexNew);
-		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verLen, vertexBuffer,
-				GLES20.GL_STATIC_DRAW);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboVertexNew);
+		GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, verLen, vertexBuffer,
+				GLES30.GL_STATIC_DRAW);
 	}
 	
 	private void initTextureBuffer(){
@@ -311,9 +311,9 @@ public class GLVideoRect extends GLRect {
 		textureVerticesBuffer.put(texCoor);
 		textureVerticesBuffer.position(0);
 		
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTextureNew);
-		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
-				GLES20.GL_STATIC_DRAW);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboTextureNew);
+		GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
+				GLES30.GL_STATIC_DRAW);
 		
 		// left
 		texCoor = texture_left;
@@ -325,9 +325,9 @@ public class GLVideoRect extends GLRect {
 		textureVerticesBuffer.put(texCoor);
 		textureVerticesBuffer.position(0);
 		
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTextureLeftNew);
-		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
-				GLES20.GL_STATIC_DRAW);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboTextureLeftNew);
+		GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
+				GLES30.GL_STATIC_DRAW);
 		
 		// right
 		texCoor = texture_right;
@@ -339,9 +339,9 @@ public class GLVideoRect extends GLRect {
 		textureVerticesBuffer.put(texCoor);
 		textureVerticesBuffer.position(0);
 		
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTextureRightNew);
-		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
-				GLES20.GL_STATIC_DRAW);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboTextureRightNew);
+		GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
+				GLES30.GL_STATIC_DRAW);
 
 		// right
 		texCoor = texture_top;
@@ -353,9 +353,9 @@ public class GLVideoRect extends GLRect {
 		textureVerticesBuffer.put(texCoor);
 		textureVerticesBuffer.position(0);
 
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTextureTopNew);
-		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
-				GLES20.GL_STATIC_DRAW);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboTextureTopNew);
+		GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
+				GLES30.GL_STATIC_DRAW);
 
 		// right
 		texCoor = texture_bottom;
@@ -367,12 +367,12 @@ public class GLVideoRect extends GLRect {
 		textureVerticesBuffer.put(texCoor);
 		textureVerticesBuffer.position(0);
 
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTextureBottomNew);
-		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
-				GLES20.GL_STATIC_DRAW);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboTextureBottomNew);
+		GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
+				GLES30.GL_STATIC_DRAW);
 	}
 	
 	public void release(){
-		GLES20.glDeleteBuffers(4, new int[]{vboVertexNew, vboTextureNew, vboTextureLeftNew, vboTextureRightNew, vboTextureTopNew, vboTextureBottomNew}, 0);
+		GLES30.glDeleteBuffers(4, new int[]{vboVertexNew, vboTextureNew, vboTextureLeftNew, vboTextureRightNew, vboTextureTopNew, vboTextureBottomNew}, 0);
 	}
 }

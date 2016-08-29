@@ -6,7 +6,7 @@ import java.nio.IntBuffer;
 import com.baofeng.mojing.EyeTextureParameter;
 import com.baofeng.mojing.MojingSDK;
 
-import android.opengl.GLES20;
+import android.opengl.GLES30;
 
 public class Distortion {	
 	private int[] mTextureIds = {0, 0};
@@ -36,22 +36,22 @@ public class Distortion {
 	}
 	
 	public void beforeDraw(int eye){
-		GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, this.framebufferId);
+		GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, this.framebufferId);
 		EyeTextureParameter textureParameter = MojingSDK.GetEyeTextureParameter(eye + 1);
 		this.mTextureIds[eye] = textureParameter.m_EyeTexID;
-		GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, this.mTextureIds[eye], 0);
-		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
-    	GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, this.mTextureIds[eye], 0);
+		GLES30.glClear(GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
+    	GLES30.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     	mTextureWidth = textureParameter.m_Width;
     	mTextureHeight = textureParameter.m_Height;
-    	GLES20.glViewport(0, 0, mTextureWidth, mTextureHeight);
+    	GLES30.glViewport(0, 0, mTextureWidth, mTextureHeight);
 	}
 	
 	public void afterDraw() {
-		GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, 0, 0);
-		GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+		GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, 0, 0);
+		GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
 		
-		if (GLES20.glIsTexture(this.mTextureIds[0]) && GLES20.glIsTexture(this.mTextureIds[1])){
+		if (GLES30.glIsTexture(this.mTextureIds[0]) && GLES30.glIsTexture(this.mTextureIds[1])){
 			MojingSDK.DrawTexture(this.mTextureIds[0], this.mTextureIds[1]);
 		} else {
 			this.framebufferId = generateFrameBufferObject();
@@ -60,7 +60,7 @@ public class Distortion {
 	
 	private static int generateFrameBufferObject() {
 		IntBuffer framebuffer = IntBuffer.allocate(1);
-		GLES20.glGenFramebuffers(1, framebuffer); 
+		GLES30.glGenFramebuffers(1, framebuffer); 
 		
 		return framebuffer.get(0);
 	}

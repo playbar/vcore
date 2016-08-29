@@ -13,7 +13,7 @@ import com.bfmj.viewcore.util.GLMatrixState;
 import com.bfmj.viewcore.util.GLShaderManager;
 
 import android.content.Context;
-import android.opengl.GLES20;
+import android.opengl.GLES30;
 
 /**
  * 
@@ -48,7 +48,7 @@ public class GLPointView extends GLView {
 	@Override
 	public void initDraw() {
 		if (points != null){
-			GLES20.glGenBuffers( 3, mvbo, 0 );
+			GLES30.glGenBuffers( 3, mvbo, 0 );
 			vboVertexNew = mvbo[0];
 			vboSizeNew = mvbo[1];
 			vboColorNew = mvbo[2];
@@ -131,68 +131,68 @@ public class GLPointView extends GLView {
 
 		getEyeMatrix(state.getVMatrix(), isLeft);
 
-		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_SRC_COLOR);
-		GLES20.glEnable(GLES20.GL_BLEND);
+		GLES30.glBlendFunc(GLES30.GL_SRC_ALPHA, GLES30.GL_SRC_COLOR);
+		GLES30.glEnable(GLES30.GL_BLEND);
 
-		GLES20.glUseProgram(mProgram);
+		GLES30.glUseProgram(mProgram);
 
-		GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, getMatrixState().getFinalMatrix(), 0);
+		GLES30.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, getMatrixState().getFinalMatrix(), 0);
 
 		vertexVBO();
 		sizeVBO();
 		colorVBO();
-		GLES20.glDrawArrays(GLES20.GL_POINTS, 0, points.size());
+		GLES30.glDrawArrays(GLES30.GL_POINTS, 0, points.size());
 
-		GLES20.glDisableVertexAttribArray(0);
-		GLES20.glDisableVertexAttribArray(1);
-		GLES20.glDisableVertexAttribArray(2);
+		GLES30.glDisableVertexAttribArray(0);
+		GLES30.glDisableVertexAttribArray(1);
+		GLES30.glDisableVertexAttribArray(2);
 
-		GLES20.glDisable(GLES20.GL_BLEND);
-		GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, 0 );
+		GLES30.glDisable(GLES30.GL_BLEND);
+		GLES30.glBindBuffer( GLES30.GL_ARRAY_BUFFER, 0 );
 
 		state.popMatrix();
 	}
 	
 	private void createProgram(){
-		int vertexShader    = GLShaderManager.loadShader(GLES20.GL_VERTEX_SHADER, GLShaderManager.VERTEX_POINT);
-        int fragmentShader  = GLShaderManager.loadShader(GLES20.GL_FRAGMENT_SHADER, GLShaderManager.FRAGMENT_POINT);
+		int vertexShader    = GLShaderManager.loadShader(GLES30.GL_VERTEX_SHADER, GLShaderManager.VERTEX_POINT);
+        int fragmentShader  = GLShaderManager.loadShader(GLES30.GL_FRAGMENT_SHADER, GLShaderManager.FRAGMENT_POINT);
 
-        mProgram = GLES20.glCreateProgram();       // create empty OpenGL ES Program
-        GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
-        GLES20.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
-        GLES20.glLinkProgram(mProgram);                  // creates OpenGL ES program executables        
-        muMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
-        maPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
-        maSizeHandle = GLES20.glGetAttribLocation(mProgram, "aSize");
-        maColorHandle = GLES20.glGetAttribLocation(mProgram, "aColor");
+        mProgram = GLES30.glCreateProgram();       // create empty OpenGL ES Program
+        GLES30.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
+        GLES30.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
+        GLES30.glLinkProgram(mProgram);                  // creates OpenGL ES program executables        
+        muMVPMatrixHandle = GLES30.glGetUniformLocation(mProgram, "uMVPMatrix");
+        maPositionHandle = GLES30.glGetAttribLocation(mProgram, "aPosition");
+        maSizeHandle = GLES30.glGetAttribLocation(mProgram, "aSize");
+        maColorHandle = GLES30.glGetAttribLocation(mProgram, "aColor");
 	}
 	
     private void vertexVBO(){
 		
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexNew);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboVertexNew);
 		// 传送顶点位置数据
-		GLES20.glVertexAttribPointer(maPositionHandle, 3, GLES20.GL_FLOAT,
+		GLES30.glVertexAttribPointer(maPositionHandle, 3, GLES30.GL_FLOAT,
 				false, 0, 0);
-		GLES20.glEnableVertexAttribArray(0);
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+		GLES30.glEnableVertexAttribArray(0);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, 0);
 	}
     
     private void sizeVBO(){
 		
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboSizeNew);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboSizeNew);
 		// 传送顶点位置数据
-		GLES20.glVertexAttribPointer(maSizeHandle, 1, GLES20.GL_FLOAT,
+		GLES30.glVertexAttribPointer(maSizeHandle, 1, GLES30.GL_FLOAT,
 				false, 0, 0);
-		GLES20.glEnableVertexAttribArray(1);
+		GLES30.glEnableVertexAttribArray(1);
 	}
     
     private void colorVBO(){
 		
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboColorNew);
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboColorNew);
 		// 传送顶点位置数据
-		GLES20.glVertexAttribPointer(maColorHandle, 4, GLES20.GL_FLOAT,
+		GLES30.glVertexAttribPointer(maColorHandle, 4, GLES30.GL_FLOAT,
 				false, 0, 0);
-		GLES20.glEnableVertexAttribArray(2);
+		GLES30.glEnableVertexAttribArray(2);
 	}
     
     private void initVertex(){
@@ -224,9 +224,9 @@ public class GLPointView extends GLView {
         vertexBuffer.put(vertices);
         vertexBuffer.position(0);
        
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexNew);
-		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verLen, vertexBuffer,
-				GLES20.GL_STATIC_DRAW);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboVertexNew);
+		GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, verLen, vertexBuffer,
+				GLES30.GL_STATIC_DRAW);
 		
 		int sizeLen = sizes.length*4;
         ByteBuffer sbb = ByteBuffer.allocateDirect(sizeLen);
@@ -235,9 +235,9 @@ public class GLPointView extends GLView {
         sizeBuffer.put(sizes);
         sizeBuffer.position(0);
        
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboSizeNew);
-		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, sizeLen, sizeBuffer,
-				GLES20.GL_STATIC_DRAW);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboSizeNew);
+		GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, sizeLen, sizeBuffer,
+				GLES30.GL_STATIC_DRAW);
 		
 		int colorLen = colors.length*4;
         ByteBuffer cbb = ByteBuffer.allocateDirect(colorLen);
@@ -246,9 +246,9 @@ public class GLPointView extends GLView {
         colorBuffer.put(colors);
         colorBuffer.position(0);
        
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboColorNew);
-		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, colorLen, colorBuffer,
-				GLES20.GL_STATIC_DRAW);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboColorNew);
+		GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, colorLen, colorBuffer,
+				GLES30.GL_STATIC_DRAW);
 		
 		if (mProgram == -1){
 			createProgram();
@@ -289,9 +289,9 @@ public class GLPointView extends GLView {
         colorBuffer.put(colors);
         colorBuffer.position(0);
        
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboColorNew);
-		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, colorLen, colorBuffer,
-				GLES20.GL_STATIC_DRAW);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboColorNew);
+		GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, colorLen, colorBuffer,
+				GLES30.GL_STATIC_DRAW);
 	}
 
 	@Override

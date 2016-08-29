@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
 import android.opengl.GLES11Ext;
-import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.opengl.Matrix;
 
 import com.baofeng.mojing.MojingSDK;
@@ -95,9 +95,9 @@ public class GLPanoView extends GLView {
 
     public static void finish(){
         if (instance != null){
-            GLES20.glDeleteBuffers(instance.vboVertexBufferIds.length, instance.vboVertexBufferIds, 0);
+            GLES30.glDeleteBuffers(instance.vboVertexBufferIds.length, instance.vboVertexBufferIds, 0);
             for (int i = 0; i < instance.vboTexCoorBufferIds.length; i++){
-                GLES20.glDeleteBuffers(instance.vboTexCoorBufferIds[i].length, instance.vboTexCoorBufferIds[i], 0);
+                GLES30.glDeleteBuffers(instance.vboTexCoorBufferIds[i].length, instance.vboTexCoorBufferIds[i], 0);
             }
             instance = null;
         }
@@ -352,22 +352,22 @@ public class GLPanoView extends GLView {
         state.pushMatrix();
 
         if (mRenderType == RENDER_TYPE_VIDEO){
-            GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+            GLES30.glDisable(GLES30.GL_DEPTH_TEST);
         } else {
-            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-            GLES20.glEnable(GLES20.GL_BLEND);
+            GLES30.glBlendFunc(GLES30.GL_SRC_ALPHA, GLES30.GL_ONE_MINUS_SRC_ALPHA);
+            GLES30.glEnable(GLES30.GL_BLEND);
         }
 
-        GLES20.glUseProgram(mPrograms[mRenderType]);
+        GLES30.glUseProgram(mPrograms[mRenderType]);
 
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
 
-        GLES20.glBindTexture(mRenderType == RENDER_TYPE_VIDEO ? GLES11Ext.GL_TEXTURE_EXTERNAL_OES :
-                GLES20.GL_TEXTURE_2D, mTextureId);
+        GLES30.glBindTexture(mRenderType == RENDER_TYPE_VIDEO ? GLES11Ext.GL_TEXTURE_EXTERNAL_OES :
+                GLES30.GL_TEXTURE_2D, mTextureId);
 
-        GLES20.glUniformMatrix4fv(muMVPMatrixHandles[mRenderType], 1, false, getMatrixState().getFinalMatrix(), 0);
-        GLES20.glUniform1f(muAlphaHandles[mRenderType], getAlpha());
-        GLES20.glUniform1f(muMaskHandles[mRenderType], getMask());
+        GLES30.glUniformMatrix4fv(muMVPMatrixHandles[mRenderType], 1, false, getMatrixState().getFinalMatrix(), 0);
+        GLES30.glUniform1f(muAlphaHandles[mRenderType], getAlpha());
+        GLES30.glUniform1f(muMaskHandles[mRenderType], getMask());
 
         vertexVBO();
 
@@ -386,17 +386,17 @@ public class GLPanoView extends GLView {
             }
         }
         textureVBO(uvType);
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices[mSceneType].length / 3);
+        GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, vertices[mSceneType].length / 3);
 
-        GLES20.glDisableVertexAttribArray(0);
-        GLES20.glDisableVertexAttribArray(1);
+        GLES30.glDisableVertexAttribArray(0);
+        GLES30.glDisableVertexAttribArray(1);
 
         if (mRenderType == RENDER_TYPE_VIDEO){
-            GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+            GLES30.glEnable(GLES30.GL_DEPTH_TEST);
         } else {
-            GLES20.glDisable(GLES20.GL_BLEND);
+            GLES30.glDisable(GLES30.GL_BLEND);
         }
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, 0);
 
         state.popMatrix();
 
@@ -409,37 +409,37 @@ public class GLPanoView extends GLView {
     private void createProgram(){
         String[] fs = new String[]{GLShaderManager.FRAGMENT_SENCE_IMAGE, GLShaderManager.FRAGMENT_SENCE_VIDEO};
         for (int i = 0; i < RENDER_TYPE_COUNT; i++){
-            int vertexShader    = GLShaderManager.loadShader(GLES20.GL_VERTEX_SHADER, GLShaderManager.VERTEX_SENCE);
-            int fragmentShader  = GLShaderManager.loadShader(GLES20.GL_FRAGMENT_SHADER, fs[i]);
+            int vertexShader    = GLShaderManager.loadShader(GLES30.GL_VERTEX_SHADER, GLShaderManager.VERTEX_SENCE);
+            int fragmentShader  = GLShaderManager.loadShader(GLES30.GL_FRAGMENT_SHADER, fs[i]);
 
-            mPrograms[i] = GLES20.glCreateProgram();       // create empty OpenGL ES Program
-            GLES20.glAttachShader(mPrograms[i], vertexShader);   // add the vertex shader to program
-            GLES20.glAttachShader(mPrograms[i], fragmentShader); // add the fragment shader to program
-            GLES20.glLinkProgram(mPrograms[i]);                  // creates OpenGL ES program executables
-            muMVPMatrixHandles[i] = GLES20.glGetUniformLocation(mPrograms[i], "uMVPMatrix");
-            muAlphaHandles[i] = GLES20.glGetUniformLocation(mPrograms[i], "uAlpha");
-            muMaskHandles[i] = GLES20.glGetUniformLocation(mPrograms[i], "uMask");
-            mTextureCoordHandles[i] = GLES20.glGetAttribLocation(mPrograms[i], "inputTextureCoordinate");
-            mPositionHandles[i] = GLES20.glGetAttribLocation(mPrograms[i], "aPosition");
+            mPrograms[i] = GLES30.glCreateProgram();       // create empty OpenGL ES Program
+            GLES30.glAttachShader(mPrograms[i], vertexShader);   // add the vertex shader to program
+            GLES30.glAttachShader(mPrograms[i], fragmentShader); // add the fragment shader to program
+            GLES30.glLinkProgram(mPrograms[i]);                  // creates OpenGL ES program executables
+            muMVPMatrixHandles[i] = GLES30.glGetUniformLocation(mPrograms[i], "uMVPMatrix");
+            muAlphaHandles[i] = GLES30.glGetUniformLocation(mPrograms[i], "uAlpha");
+            muMaskHandles[i] = GLES30.glGetUniformLocation(mPrograms[i], "uMask");
+            mTextureCoordHandles[i] = GLES30.glGetAttribLocation(mPrograms[i], "inputTextureCoordinate");
+            mPositionHandles[i] = GLES30.glGetAttribLocation(mPrograms[i], "aPosition");
         }
     }
 
     private void vertexVBO() {
 
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexBufferIds[mSceneType]);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboVertexBufferIds[mSceneType]);
         // 传送顶点位置数据
-        GLES20.glVertexAttribPointer(mPositionHandles[mRenderType], 3, GLES20.GL_FLOAT,
+        GLES30.glVertexAttribPointer(mPositionHandles[mRenderType], 3, GLES30.GL_FLOAT,
                 false, 0, 0);
-        GLES20.glEnableVertexAttribArray(0);
+        GLES30.glEnableVertexAttribArray(0);
     }
 
     private void textureVBO(int uvType) {
 
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTexCoorBufferIds[mSceneType][uvType]);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboTexCoorBufferIds[mSceneType][uvType]);
         // 传送顶点位置数据
-        GLES20.glVertexAttribPointer(mTextureCoordHandles[mRenderType], 2, GLES20.GL_FLOAT,
+        GLES30.glVertexAttribPointer(mTextureCoordHandles[mRenderType], 2, GLES30.GL_FLOAT,
                 false, 0, 0);
-        GLES20.glEnableVertexAttribArray(1);
+        GLES30.glEnableVertexAttribArray(1);
 
     }
 
@@ -456,12 +456,12 @@ public class GLPanoView extends GLView {
 
                 if (vboVertexBufferIds[i] < 1){
                     IntBuffer buffers = IntBuffer.allocate(1);
-                    GLES20.glGenBuffers(1,buffers);
+                    GLES30.glGenBuffers(1,buffers);
                     vboVertexBufferIds[i] = buffers.get(0);
                 }
-                GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboVertexBufferIds[i]);
-                GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verLen, vertexBuffer,
-                        GLES20.GL_STATIC_DRAW);
+                GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboVertexBufferIds[i]);
+                GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, verLen, vertexBuffer,
+                        GLES30.GL_STATIC_DRAW);
             }
         }
 
@@ -480,12 +480,12 @@ public class GLPanoView extends GLView {
 
                     if (vboTexCoorBufferIds[i][j] < 1){
                         IntBuffer buffers = IntBuffer.allocate(1);
-                        GLES20.glGenBuffers(1,buffers);
+                        GLES30.glGenBuffers(1,buffers);
                         vboTexCoorBufferIds[i][j] = buffers.get(0);
                     }
-                    GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboTexCoorBufferIds[i][j]);
-                    GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
-                            GLES20.GL_STATIC_DRAW);
+                    GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboTexCoorBufferIds[i][j]);
+                    GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
+                            GLES30.GL_STATIC_DRAW);
                 }
             }
         }

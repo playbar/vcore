@@ -14,7 +14,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Bitmap.Config;
 import android.opengl.GLES11Ext;
-import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.opengl.GLUtils;
 import android.util.Log;
 
@@ -62,27 +62,27 @@ public class GLTextureUtils {
 		
 		//生成纹理ID
 		int[] textures = new int[1];
-		
-		GLES20.glGenTextures(1, textures, 0);
+
+		GLES30.glGenTextures(1, textures, 0);
 		
 		if (mUseMipMap) {
-			GLES20.glEnable(GLES20.GL_TEXTURE_2D);
-			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
-			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,GLES20.GL_LINEAR_MIPMAP_LINEAR);
-			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,GLES20.GL_TEXTURE_MAG_FILTER,GLES20.GL_LINEAR_MIPMAP_LINEAR);
-			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,GLES20.GL_CLAMP_TO_EDGE);
-			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);
+			GLES30.glEnable(GLES30.GL_TEXTURE_2D);
+			GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textures[0]);
+			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER,GLES30.GL_LINEAR_MIPMAP_LINEAR);
+			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D,GLES30.GL_TEXTURE_MAG_FILTER,GLES30.GL_LINEAR_MIPMAP_LINEAR);
+			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S,GLES30.GL_CLAMP_TO_EDGE);
+			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T,GLES30.GL_CLAMP_TO_EDGE);
 	        //实际加载纹理       
-			GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bm, 0);
-	        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D); 
+			GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, bm, 0);
+			GLES30.glGenerateMipmap(GLES30.GL_TEXTURE_2D);
 		} else {
-			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
-			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,GLES20.GL_LINEAR);
-			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,GLES20.GL_TEXTURE_MAG_FILTER,GLES20.GL_LINEAR);
-			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,GLES20.GL_CLAMP_TO_EDGE);
-			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);
+			GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textures[0]);
+			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER,GLES30.GL_LINEAR);
+			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D,GLES30.GL_TEXTURE_MAG_FILTER,GLES30.GL_LINEAR);
+			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S,GLES30.GL_CLAMP_TO_EDGE);
+			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T,GLES30.GL_CLAMP_TO_EDGE);
 	        //实际加载纹理       
-	        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bm, 0);
+	        GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, bm, 0);
 		}
         
         if (isRecycle){
@@ -98,7 +98,7 @@ public class GLTextureUtils {
 			return;
 		}
 		BaseViewActivity.log(System.currentTimeMillis() + "-release : " + textureId + " " + Thread.currentThread());
-		GLES20.glDeleteTextures(1, new int[]{textureId}, 0);
+		GLES30.glDeleteTextures(1, new int[]{textureId}, 0);
 	}
 	
 	/**
@@ -111,15 +111,15 @@ public class GLTextureUtils {
 	public static int createVideoTextureID(){
 		int[] texture = new int[1];
 
-		GLES20.glGenTextures(1, texture, 0);
-		GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, texture[0]);
-		GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
-				GL10.GL_TEXTURE_MIN_FILTER,GL10.GL_LINEAR);        
-		GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+		GLES30.glGenTextures(1, texture, 0);
+		GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, texture[0]);
+		GLES30.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+				GL10.GL_TEXTURE_MIN_FILTER,GL10.GL_LINEAR);
+		GLES30.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
 				GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-		GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+		GLES30.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
 				GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
-		GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+		GLES30.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
 				GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
 
 		return texture[0];
