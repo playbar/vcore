@@ -173,21 +173,43 @@ public class GLGridViewPage extends GLGridView {
 		return super.onKeyDown(keycode);
 	}
 
+	interface PageChangeListener{
+		void onPageChange();
+	}
+
+	PageChangeListener mPrvPageChange = null;
+	PageChangeListener mNextPageChange = null;
+
+	public void setPrvPageChange(PageChangeListener pagechange){
+		mPrvPageChange = pagechange;
+	}
+
+	public void setNextPageChange(PageChangeListener pagechanger){
+		mNextPageChange = pagechanger;
+	}
+
 	@Override
 	public boolean onKeyUp(int keycode){
 		if( nextBtnImgView.isFocused() || prvBtnImgView.isFocused() || mbIndexFocused ) {
-			if (keycode == MojingKeyCode.KEYCODE_ENTER) {
+//			if (keycode == MojingKeyCode.KEYCODE_ENTER) {
+			if (keycode == 96) {
 				getRootView().queueEvent(new Runnable() {
 					@Override
 					public void run() {
 						if (nextBtnImgView.isFocused()) {
-							++mCurIndex;
-							setStartIndex((mCurIndex - 1) * getNumOneScreen());
-							requestLayout();
+							if( mNextPageChange != null ){
+								mNextPageChange.onPageChange();
+							}
+//							++mCurIndex;
+//							setStartIndex((mCurIndex - 1) * getNumOneScreen());
+//							requestLayout();
 						} else if (prvBtnImgView.isFocused()) {
-							--mCurIndex;
-							setStartIndex((mCurIndex - 1) * getNumOneScreen());
-							requestLayout();
+							if( mPrvPageChange != null ){
+								mPrvPageChange.onPageChange();
+							}
+//							--mCurIndex;
+//							setStartIndex((mCurIndex - 1) * getNumOneScreen());
+//							requestLayout();
 						} else if (mbIndexFocused) {
 							setStartIndex((mCurFocuseIndex - 1) * getNumOneScreen());
 							mCurIndex = mCurFocuseIndex;
@@ -209,7 +231,7 @@ public class GLGridViewPage extends GLGridView {
 	}
 
 
-	private void prvBtn(){
+	private void showPrvBtn(){
 
 		prvBtnImgView.setX(mStart - mStep - 20 );
 		prvBtnImgView.setY(getY() + getHeight() + mBtnSpace);
@@ -231,7 +253,7 @@ public class GLGridViewPage extends GLGridView {
 		return;
 	}
 
-	private void nextBtn(){
+	private void showNextBtn(){
 
 		nextBtnImgView.setX(mStart + mShowMaxCount * mStep + 20);
 		nextBtnImgView.setY(getY() + getHeight() + mBtnSpace);
@@ -333,24 +355,13 @@ public class GLGridViewPage extends GLGridView {
 		mShowMaxCount = mCount > MAXSHOW ? MAXSHOW : mCount;
 		if( mCount > 1 ){
 			mStart = mMidPos - (mStep * mShowMaxCount) / 2;
-			if( getTotalNum() < mTotalCount){
-				nextBtn();
-				if (mCurIndex > 1) {
-					prvBtn();
-				}
+
+			if( getTotalNum() < mTotalCount ){
+				showNextBtn();
 			}
-			else{
-				prvBtn();
+			if (mCurIndex > 1 && mCurIndex <= mCount) {
+				showPrvBtn();
 			}
-//			if (mCurIndex < mCount) {
-//				nextBtn();
-//				if (mCurIndex > 1) {
-//					prvBtn();
-//				}
-//			}
-//			else if (mCurIndex == mCount) {
-//				prvBtn();
-//			}
 
 		}
 		else{
