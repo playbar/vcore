@@ -885,7 +885,7 @@ public class GLRectView extends GLView {
 		mBackgroundBitmap = null;
 		mBackgroundColor = null;
 
-		removeRender();
+//		removeRender();
 		initBackground();
 	}
 
@@ -909,7 +909,7 @@ public class GLRectView extends GLView {
 		mBackgroundResId = 0;
 		mBackgroundColor = null;
 
-		removeRender();
+//		removeRender();
 		initBackground();
 	}
 
@@ -935,7 +935,7 @@ public class GLRectView extends GLView {
 		mBackgroundResId = 0;
 		mBackgroundBitmap = null;
 
-		removeRender();
+//		removeRender();
 		initBackground();
 	}
 
@@ -964,7 +964,10 @@ public class GLRectView extends GLView {
 
 				textureId = GLTextureUtils.initImageTexture(getContext(), bmp, true);
 				if (textureId > 0) {
-					removeRender();
+					if( mBackgroundRender != null) {
+						removeRender(mBackgroundRender);
+						mBackgroundColor = null;
+					}
 					mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
 					mBackgroundRender.setTextureId(textureId);
 					updateRenderSize(mBackgroundRender, width, height);
@@ -1042,10 +1045,6 @@ public class GLRectView extends GLView {
 
 	private void removeRender(){
 		if (mBackgroundRender != null){
-//			if (mBackgroundRender.getTextureId() > 0 ) {
-//				releaseTexture(mBackgroundRender.getTextureId());
-//			}
-			Log.e("GLRectView", "rel Texid=" + mBackgroundRender.getTextureId() );
 			removeRender(mBackgroundRender);
 			mBackgroundRender = null;
 		}

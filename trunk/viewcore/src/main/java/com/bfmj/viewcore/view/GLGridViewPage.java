@@ -176,7 +176,7 @@ public class GLGridViewPage extends GLGridView {
 		return super.onKeyDown(keycode);
 	}
 
-	interface PageChangeListener{
+	public interface PageChangeListener{
 		void onPageChange();
 	}
 
