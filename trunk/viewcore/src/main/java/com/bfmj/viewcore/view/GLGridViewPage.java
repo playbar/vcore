@@ -147,7 +147,7 @@ public class GLGridViewPage extends GLGridView {
 
 	public void previousPage(){
 		mbIndexFocused = false;
-		if( mCurIndex > 0 ){
+		if( mCurIndex > 1 ){
 			--mCurIndex;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
 			requestLayout();
@@ -235,7 +235,7 @@ public class GLGridViewPage extends GLGridView {
 
 
 	private void showPrvBtn(){
-
+		prvBtnImgView = new GLImageView( this.getContext() );
 		prvBtnImgView.setX(mStart - mStep - 20 );
 		prvBtnImgView.setY(getY() + getHeight() + mBtnSpace);
 		prvBtnImgView.setLayoutParams(60, 60);
@@ -258,6 +258,7 @@ public class GLGridViewPage extends GLGridView {
 
 	private void showNextBtn(){
 
+		nextBtnImgView = new GLImageView(this.getContext());
 		nextBtnImgView.setX(mStart + mShowMaxCount * mStep + 20);
 		nextBtnImgView.setY(getY() + getHeight() + mBtnSpace);
 		nextBtnImgView.setLayoutParams(60, 60);
@@ -277,8 +278,8 @@ public class GLGridViewPage extends GLGridView {
 		addView(nextBtnImgView);
 	}
 
-	private GLImageView prvBtnImgView = new GLImageView( this.getContext() );
-	private GLImageView nextBtnImgView = new GLImageView(this.getContext());
+	private GLImageView prvBtnImgView = null;//new GLImageView( this.getContext() );
+	private GLImageView nextBtnImgView = null;// new GLImageView(this.getContext());
 	private float mStart = 0.0f;
 	private float mMidPos = 0.0f;
 	private float mOffsetX = 0.0f;
