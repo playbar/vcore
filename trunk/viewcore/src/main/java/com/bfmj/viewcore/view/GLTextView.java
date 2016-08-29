@@ -347,6 +347,7 @@ public class GLTextView extends GLRectView {
 	@Override
 	public void release() {
 		super.release();
+		mText = "";
 		mRenderParams = null;
 	}
 }
