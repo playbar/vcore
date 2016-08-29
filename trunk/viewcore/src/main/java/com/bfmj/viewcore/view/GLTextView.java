@@ -67,10 +67,6 @@ public class GLTextView extends GLRectView {
 			text = "";
 		}
 
-		if (text.equals(mText)){
-			return;
-		}
-		
 		mText = text;
 
 		updateTexture();
@@ -347,7 +343,6 @@ public class GLTextView extends GLRectView {
 	@Override
 	public void release() {
 		super.release();
-		mText = "";
 		mRenderParams = null;
 	}
 }
