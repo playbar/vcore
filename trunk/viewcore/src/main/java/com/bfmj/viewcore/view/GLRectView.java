@@ -23,6 +23,7 @@ import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLConstant;
 import com.bfmj.viewcore.render.GLRenderParams;
 import com.bfmj.viewcore.render.GLScreenParams;
+import com.bfmj.viewcore.util.BitmapOp;
 import com.bfmj.viewcore.util.GLFocusUtils;
 import com.bfmj.viewcore.util.GLGenTexTask;
 import com.bfmj.viewcore.util.GLMatrixState;
@@ -35,22 +36,23 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.opengl.Matrix;
+import android.util.Log;
 import android.view.animation.AnimationUtils;
 
 /**
- * 
+ *
  * ClassName: GLRectView <br/>
- * @author lixianke    
- * @date: 2015-3-9 下午1:52:42 <br/>  
+ * @author lixianke
+ * @date: 2015-3-9 下午1:52:42 <br/>
  * description:
  */
 public class GLRectView extends GLView {
 	private boolean mbNeedUpdate = false;
 	public static final int MATCH_PARENT = -1;
 	public static final int WRAP_CONTENT = -2;
-	
+
 	private static float depthScale = 1.0f;
-	
+
 	private Context mContext;
 	private List<GLRenderParams> mRenders = new ArrayList<GLRenderParams>();
 
@@ -62,97 +64,97 @@ public class GLRectView extends GLView {
 	private boolean isSelected = false;
 	private boolean isEnable = true;
 	private GLOnKeyListener mKeyListener;
-	
+
 	private boolean isSurfaceCreated = false;
-	
+
 	private float left = 0;
 	private float top = 0;
-    private float x = 0;
-    private float y = 0;
-    private float width = 0;
-    private float height = 0;
-    private float depth = GLScreenParams.getDefualtDepth();
-    private float centerX = 0;
-    private float centerY = 0;
-    private float paddingLeft = 0;
-    private float paddingRight = 0;
-    private float paddingTop = 0;
-    private float paddingBottom = 0;
-    private float marginLeft = 0;
-    private float marginRight = 0;
-    private float marginTop = 0;
-    private float marginBottom = 0;
-    private float scaleX = 1.0f;
-    private float scaleY = 1.0f;
-    private float[] position = new float[3];
-    private float angelX = 0;
-    private float angelY = 0;
-    private float angelZ = 0;
-    private int zIndex = 0;
-    private int zPosition = 0;
-    private float animEndX=0;
-    private float animEndY=0;
-    private float animEndZ=0;
-    private float originalX = 0; //原始坐标X
-    private float originalY = 0; //原始坐标Y
-    private boolean isSetOriginal = false;
-    private float mLookAngle = 0;
-    private float mLookTranslateZ = 0;
-    
-    private GLConstant.GLAlign mAlign;
-    private float mRotateAngle = 0;
-    
-    private int mBackgroundResId;
-    private Bitmap mBackgroundBitmap;
-    private GLColor mBackgroundColor;
-    private GLRenderParams mBackgroundRender;
-    private boolean mUseMipMap = false;
-    
-    private int mHeadStayTime = 1500;
-    private int mHeadClickTime = 2500;
-    private OnHeadClickListener mHeadClickListener;
-    private Timer mHeadClickTimer;
-    private boolean isHeadClicking = false;
-    private boolean isHeadClickStart = false;
+	private float x = 0;
+	private float y = 0;
+	private float width = 0;
+	private float height = 0;
+	private float depth = GLScreenParams.getDefualtDepth();
+	private float centerX = 0;
+	private float centerY = 0;
+	private float paddingLeft = 0;
+	private float paddingRight = 0;
+	private float paddingTop = 0;
+	private float paddingBottom = 0;
+	private float marginLeft = 0;
+	private float marginRight = 0;
+	private float marginTop = 0;
+	private float marginBottom = 0;
+	private float scaleX = 1.0f;
+	private float scaleY = 1.0f;
+	private float[] position = new float[3];
+	private float angelX = 0;
+	private float angelY = 0;
+	private float angelZ = 0;
+	private int zIndex = 0;
+	private int zPosition = 0;
+	private float animEndX=0;
+	private float animEndY=0;
+	private float animEndZ=0;
+	private float originalX = 0; //原始坐标X
+	private float originalY = 0; //原始坐标Y
+	private boolean isSetOriginal = false;
+	private float mLookAngle = 0;
+	private float mLookTranslateZ = 0;
 
-    //动画实例
-    private  ArrayList<GLAnimation> mAnimations = new ArrayList<GLAnimation>();
-    private GLViewFocusListener mFocusListener;
+	private GLConstant.GLAlign mAlign;
+	private float mRotateAngle = 0;
+
+	private int mBackgroundResId;
+	private Bitmap mBackgroundBitmap;
+	private GLColor mBackgroundColor;
+	private GLRenderParams mBackgroundRender;
+	private boolean mUseMipMap = false;
+
+	private int mHeadStayTime = 1500;
+	private int mHeadClickTime = 2500;
+	private OnHeadClickListener mHeadClickListener;
+	private Timer mHeadClickTimer;
+	private boolean isHeadClicking = false;
+	private boolean isHeadClickStart = false;
+
+	//动画实例
+	private  ArrayList<GLAnimation> mAnimations = new ArrayList<GLAnimation>();
+	private GLViewFocusListener mFocusListener;
 
 	public GLRectView(Context context) {
 		super(context);
 		mContext = context;
 	}
-	
+
 	@Override
 	protected Context getContext() {
 		return mContext;
 	}
-	
+
 	/**
 	 * 获取View是否能够响应焦点
 	 * @author lixianke  @Date 2015-6-23 下午1:31:23
-	 * @param 
+	 * @param
 	 * @return 是否能够响应焦点
 	 */
 	public boolean isFocusable(){
 		return isFocusable;
 	}
-	
+
 	/**
 	 * 设置View是否能够响应焦点
 	 * @author lixianke  @Date 2015-6-23 下午1:32:53
-	 * @param focusable 是否能够响应焦点 
+	 * @param focusable 是否能够响应焦点
 	 * @return
 	 */
 	public void setFocusable(boolean focusable) {
 		if (focusable && getParent() != null){
 			getParent().setFocusable(true);
 		}
-		
+
 		isFocusable = focusable;
 	}
-	
+
 	/**
 	 * 获取View当前是否拥有焦点
 	 * @author lixianke  @Date 2015-6-23 下午1:33:35
@@ -162,7 +164,7 @@ public class GLRectView extends GLView {
 	public boolean isFocused(){
 		return isFocused;
 	}
-	
+
 	/**
 	 * 设置View当前是否拥有焦点
 	 * @author lixianke  @Date 2015-6-23 下午1:34:14
@@ -172,7 +174,7 @@ public class GLRectView extends GLView {
 	public void setFocused(boolean focused){
 		isFocused = focused;
 	}
-	
+
 	/**
 	 * 设置按键事件的监听器
 	 * @author lixianke  @Date 2015-6-23 下午1:35:06
@@ -180,36 +182,36 @@ public class GLRectView extends GLView {
 	 * @return
 	 */
 	public void setOnKeyListener(GLOnKeyListener listener){
-		
+
 		mKeyListener = listener;
-		
-		if (listener != null){			
+
+		if (listener != null){
 			setFocusable(true);
 		} else if (mFocusListener == null) {
 			setFocusable(false);
 		}
 	}
-	
+
 	/**
 	 * 设置ID
 	 * @author lixianke  @Date 2015-6-23 下午1:35:56
-	 * @param id ID 
+	 * @param id ID
 	 * @return
 	 */
 	public void setId(String id){
 		mId = id;
 	}
-	
+
 	/**
 	 * 获取ID
 	 * @author lixianke  @Date 2015-6-23 下午1:36:30
-	 * @param 
+	 * @param
 	 * @return ID串
 	 */
 	public String getId(){
 		return mId;
 	}
-	
+
 	/**
 	 * 获取surfaceCreated回调是否已完成
 	 * @author lixianke  @Date 2015-6-23 下午1:37:00
@@ -219,17 +221,17 @@ public class GLRectView extends GLView {
 	public boolean isSurfaceCreated() {
 		return isSurfaceCreated;
 	}
-	
+
 	/**
 	 * 设置父View
 	 * @author lixianke  @Date 2015-6-23 下午1:37:50
-	 * @param parent 父View（GLGroupView） 
+	 * @param parent 父View（GLGroupView）
 	 * @return
 	 */
 	public void setParent(GLGroupView parent) {
 		mParent = parent;
 	}
-	
+
 	/**
 	 * 获取父View
 	 * @author lixianke  @Date 2015-6-23 下午1:38:27
@@ -239,18 +241,18 @@ public class GLRectView extends GLView {
 	public GLGroupView getParent(){
 		return mParent;
 	}
-	
+
 	/**
 	 * 根据ID查找子View
 	 * @author lixianke  @Date 2015-6-23 下午1:39:35
-	 * @param id 需查找的View的ID 
+	 * @param id 需查找的View的ID
 	 * @return 查找结果（GLRectView或null）
 	 */
 	public GLRectView findViewById(String id){
 		if (id.isEmpty() || !(this instanceof GLGroupView)){
 			return null;
 		}
-		
+
 		ArrayList<GLRectView> childs = ((GLGroupView)this).getView();
 		for (GLRectView view : childs) {
 			if (view.getId().equals(id)){
@@ -262,21 +264,21 @@ public class GLRectView extends GLView {
 				}
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * 判断是否为当前View的子View
 	 * @author lixianke  @Date 2015-6-23 下午1:41:00
-	 * @param v 要进行判断的View 
+	 * @param v 要进行判断的View
 	 * @return 判断结果
 	 */
 	public boolean isGrandChild(GLRectView v){
 		if (v == null || !(this instanceof GLGroupView)){
 			return false;
 		}
-		
+
 		ArrayList<GLRectView> childs = ((GLGroupView)this).getView();
 		for (GLRectView view : childs) {
 			if (view == v){
@@ -288,10 +290,10 @@ public class GLRectView extends GLView {
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * 递归判断是否为父级View
 	 * @author lixianke  @Date 2015-6-23 下午1:42:20
@@ -302,19 +304,19 @@ public class GLRectView extends GLView {
 		if (v == null || !(getParent() instanceof GLGroupView)){
 			return false;
 		}
-		
+
 		GLRectView view = getParent();
-		
+
 		while (view != null) {
 			if (view == v){
 				return true;
 			}
 			view = view.getParent();
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * 获取X坐标
 	 * @author lixianke  @Date 2015-6-23 下午1:45:25
@@ -324,50 +326,50 @@ public class GLRectView extends GLView {
 	public float getX(){
 		return x;
 	}
-	
+
 	/**
 	 * 设置X坐标
 	 * @author lixianke  @Date 2015-6-23 下午1:46:00
-	 * @param x X坐标  
+	 * @param x X坐标
 	 * @return
 	 */
 	public void setX(float x){
 		this.x = x;
 		mbNeedUpdate = true;
 	}
-	
+
 	/**
 	 * 获取Y坐标
 	 * @author lixianke  @Date 2015-6-23 下午1:46:34
-	 * @param  
+	 * @param
 	 * @return Y坐标
 	 */
 	public float getY(){
 		return y;
 	}
-	
+
 	/**
 	 * 设置Y坐标
 	 * @author lixianke  @Date 2015-6-23 下午1:47:02
-	 * @param y  Y坐标  
+	 * @param y  Y坐标
 	 * @return
 	 */
 	public void setY(float y){
 		this.y = y;
 		mbNeedUpdate = true;
 	}
-	
+
 	/**
 	 * 获取宽度
 	 * @author lixianke  @Date 2015-6-23 下午1:47:58
-	 * @param 
+	 * @param
 	 * @return 宽度
 	 */
 	public float getWidth(){
 		updateRect();
 		return width;
 	}
-	
+
 	/**
 	 * 获取内容宽度（不包含padding的宽度）
 	 * @author lixianke  @Date 2015-6-23 下午1:48:23
@@ -377,18 +379,18 @@ public class GLRectView extends GLView {
 	float getInnerWidth(){
 		return width - paddingLeft - paddingRight;
 	}
-	
+
 	/**
 	 * 设置宽度
 	 * @author lixianke  @Date 2015-6-23 下午1:49:10
-	 * @param width 宽度 
+	 * @param width 宽度
 	 * @return
 	 */
 	public void setWidth(float width){
 		this.width = width;
 		mbNeedUpdate = true;
 	}
-	
+
 	/**
 	 * 获取高度
 	 * @author lixianke  @Date 2015-6-23 下午1:50:11
@@ -399,7 +401,7 @@ public class GLRectView extends GLView {
 		updateRect();
 		return height;
 	}
-	
+
 	/**
 	 * 获取内容高度（不包含padding的高度）
 	 * @author lixianke  @Date 2015-6-23 下午1:52:32
@@ -409,22 +411,22 @@ public class GLRectView extends GLView {
 	float getInnerHeight(){
 		return height - paddingTop - paddingBottom;
 	}
-	
+
 	/**
 	 * 设置高度
 	 * @author lixianke  @Date 2015-6-23 下午1:53:17
-	 * @param height 高度 
+	 * @param height 高度
 	 * @return
 	 */
 	public void setHeight(float height){
 		this.height = height;
 		mbNeedUpdate = true;
 	}
-	
+
 	/**
 	 * 设置到父View的左边距
 	 * @author lixianke  @Date 2015-6-23 下午1:53:51
-	 * @param left 左边距 
+	 * @param left 左边距
 	 * @return
 	 */
 	protected void setLeft(float left) {
@@ -432,17 +434,17 @@ public class GLRectView extends GLView {
 		mbNeedUpdate = true;
 		//updateRect();
 	}
-	
+
 	/**
 	 * 获取左边距
 	 * @author lixianke  @Date 2015-6-23 下午1:54:50
-	 * @param 
+	 * @param
 	 * @return 左边距
 	 */
 	public float getLeft(){
 		return this.left;
 	}
-	
+
 	/**
 	 * 设置到父View的上边距
 	 * @author lixianke  @Date 2015-6-23 下午1:55:39
@@ -453,17 +455,17 @@ public class GLRectView extends GLView {
 		this.top = top;
 		mbNeedUpdate = true;
 	}
-	
+
 	/**
 	 * 获取上边距
 	 * @author lixianke  @Date 2015-6-23 下午1:56:21
-	 * @param  
+	 * @param
 	 * @return 上边距
 	 */
 	public float getTop(){
 		return this.top;
 	}
-	
+
 	/**
 	 * 设置位置及大小
 	 * @author lixianke  @Date 2015-6-23 下午1:56:44
@@ -476,14 +478,14 @@ public class GLRectView extends GLView {
 		this.height = height;
 		mbNeedUpdate = true;
 	}
-	
+
 	/**
 	 * 设置内边距
 	 * @author lixianke  @Date 2015-6-23 下午2:00:10
 	 * @param left 内左边距
 	 * @param top 内上边距
 	 * @param right 内右边距
-	 * @param bottom 内下边距 
+	 * @param bottom 内下边距
 	 * @return
 	 */
 	public void setPadding(float left, float top, float right, float bottom){
@@ -493,7 +495,7 @@ public class GLRectView extends GLView {
 		paddingBottom = bottom;
 		mbNeedUpdate = true;
 	}
-	
+
 	/**
 	 * 获取内左边距
 	 * @author lixianke  @Date 2015-6-23 下午2:01:51
@@ -503,7 +505,7 @@ public class GLRectView extends GLView {
 	public float getPaddingLeft(){
 		return paddingLeft;
 	}
-	
+
 	/**
 	 * 获取内上边距
 	 * @author lixianke  @Date 2015-6-23 下午2:01:51
@@ -513,7 +515,7 @@ public class GLRectView extends GLView {
 	public float getPaddingTop(){
 		return paddingTop;
 	}
-	
+
 	/**
 	 * 获取内右边距
 	 * @author lixianke  @Date 2015-6-23 下午2:01:51
@@ -523,7 +525,7 @@ public class GLRectView extends GLView {
 	public float getPaddingRight(){
 		return paddingRight;
 	}
-	
+
 	/**
 	 * 获取内下边距
 	 * @author lixianke  @Date 2015-6-23 下午2:01:51
@@ -533,14 +535,14 @@ public class GLRectView extends GLView {
 	public float getPaddingBottom(){
 		return paddingBottom;
 	}
-	
+
 	/**
 	 * 设置外边距
 	 * @author lixianke  @Date 2015-6-23 下午2:00:10
 	 * @param left 外左边距
 	 * @param top 外上边距
 	 * @param right 外右边距
-	 * @param bottom 外下边距 
+	 * @param bottom 外下边距
 	 * @return
 	 */
 	public void setMargin(float left, float top, float right, float bottom){
@@ -550,7 +552,7 @@ public class GLRectView extends GLView {
 		marginBottom = bottom;
 		mbNeedUpdate = true;
 	}
-	
+
 	/**
 	 * 获取外左边距
 	 * @author lixianke  @Date 2015-6-23 下午2:01:51
@@ -560,7 +562,7 @@ public class GLRectView extends GLView {
 	public float getMarginLeft(){
 		return marginLeft;
 	}
-	
+
 	/**
 	 * 获取外上边距
 	 * @author lixianke  @Date 2015-6-23 下午2:01:51
@@ -570,7 +572,7 @@ public class GLRectView extends GLView {
 	public float getMarginTop(){
 		return marginTop;
 	}
-	
+
 	/**
 	 * 获取外右边距
 	 * @author lixianke  @Date 2015-6-23 下午2:01:51
@@ -580,7 +582,7 @@ public class GLRectView extends GLView {
 	public float getMarginRight(){
 		return marginRight;
 	}
-	
+
 	/**
 	 * 获取外下边距
 	 * @author lixianke  @Date 2015-6-23 下午2:01:51
@@ -590,7 +592,7 @@ public class GLRectView extends GLView {
 	public float getMarginBottom(){
 		return marginBottom;
 	}
-	
+
 	/**
 	 * 设置对齐方式
 	 * @author lixianke  @Date 2015-6-23 下午2:05:36
@@ -600,17 +602,17 @@ public class GLRectView extends GLView {
 	public void setAlign(GLConstant.GLAlign align){
 		mAlign = align;
 	}
-	
+
 	/**
 	 * 获取对齐方式
 	 * @author lixianke  @Date 2015-6-23 下午2:06:48
-	 * @param 
+	 * @param
 	 * @return 对齐方式（GLConstant.GLAlign枚举值）
 	 */
 	public GLConstant.GLAlign getAlign(){
 		return mAlign;
 	}
-	
+
 	private void updateRect(){
 		if( mbNeedUpdate ){
 			updateSize();
@@ -618,22 +620,22 @@ public class GLRectView extends GLView {
 			mbNeedUpdate = false;
 		}
 	}
-	
+
 	private void updateCenterPosition(){
 		float screenWidth = GLScreenParams.getScreenWidth();
 		float screenHeight = GLScreenParams.getScreenHeight();
 		float xDpi = GLScreenParams.getXDpi();
 		float yDpi = GLScreenParams.getYDpi();
-		
+
 		float nx = (left + x) / xDpi;
-    	float ny = (top + y) / yDpi;
-    	float nw = width / xDpi;
-    	float nh = height / yDpi;
-    	
-    	centerX = screenWidth * (nx + nw / 2) - screenWidth / 2;
-    	centerY = -(screenHeight * (ny + nh / 2) - screenHeight / 2);
-    }
-	
+		float ny = (top + y) / yDpi;
+		float nw = width / xDpi;
+		float nh = height / yDpi;
+
+		centerX = screenWidth * (nx + nw / 2) - screenWidth / 2;
+		centerY = -(screenHeight * (ny + nh / 2) - screenHeight / 2);
+	}
+
 	private void updateSize(){
 		if (width == MATCH_PARENT || width == WRAP_CONTENT){
 			if (mParent != null){
@@ -642,7 +644,7 @@ public class GLRectView extends GLView {
 				width = GLScreenParams.getXDpi() - left - x;
 			}
 		}
-		
+
 		if (height == MATCH_PARENT){
 			if (mParent != null){
 				height = mParent.getInnerHeight();
@@ -650,15 +652,15 @@ public class GLRectView extends GLView {
 				height = GLScreenParams.getYDpi() - top - y;
 			}
 		}
-		
+
 		if (height == WRAP_CONTENT){
 			return;
 		}
-		
+
 		if (!isSurfaceCreated){
 			return;
 		}
-		
+
 		for (GLRenderParams render : mRenders){
 			if (render != mBackgroundRender){
 				updateRenderSize(render, getInnerWidth(), getInnerHeight());
@@ -668,30 +670,30 @@ public class GLRectView extends GLView {
 		}
 		return;
 	}
-	
+
 	protected void updateRenderSize(GLRenderParams render, float width, float height){
 		float xDpi = GLScreenParams.getXDpi();
 		float yDpi = GLScreenParams.getYDpi();
 		float screenWidth = GLScreenParams.getScreenWidth();
 		float screenHeight = GLScreenParams.getScreenHeight();
-		
+
 		if (render == null) {
 			return;
 		}
 		render.setScaleX(screenWidth * width / xDpi);
 		render.setScaleY(screenHeight * height / yDpi);
 	}
-	
+
 	/**
 	 * 进行缩放，X轴和Y轴以相同比例缩放
 	 * @author lixianke  @Date 2015-6-23 下午2:11:09
-	 * @param scale 缩放比例 
+	 * @param scale 缩放比例
 	 * @return
 	 */
 	public void scale(float scale){
 		scale(scale, scale);
-    }
-	
+	}
+
 	/**
 	 * 进行缩放
 	 * @author lixianke  @Date 2015-6-23 下午2:12:05
@@ -699,14 +701,14 @@ public class GLRectView extends GLView {
 	 * @param sy Y轴的缩放比例
 	 * @return
 	 */
-	public void scale(float sx, float sy){   	
-    	float[] mtx = getMatrixState().getScaleMatrix();
-    	System.arraycopy(GLMatrixState.getInitMatrix(), 0, mtx, 0, 16);
-    	Matrix.scaleM(mtx, 0, sx, sy, 0);
-    	scaleX = sx;
-    	scaleY = sy;
+	public void scale(float sx, float sy){
+		float[] mtx = getMatrixState().getScaleMatrix();
+		System.arraycopy(GLMatrixState.getInitMatrix(), 0, mtx, 0, 16);
+		Matrix.scaleM(mtx, 0, sx, sy, 0);
+		scaleX = sx;
+		scaleY = sy;
 	}
-	
+
 	/**
 	 * 获取X轴的缩放比例
 	 * @author lixianke  @Date 2015-6-23 下午2:13:02
@@ -716,17 +718,17 @@ public class GLRectView extends GLView {
 	public float getScaleX(){
 		return scaleX;
 	}
-	
+
 	/**
 	 * 获取Y轴的缩放比例
 	 * @author lixianke  @Date 2015-6-23 下午2:13:32
-	 * @param 
+	 * @param
 	 * @return Y轴的缩放比例
 	 */
 	public float getScaleY(){
 		return scaleY;
 	}
-	
+
 	/**
 	 * 进行平移
 	 * @author lixianke  @Date 2015-6-23 下午2:15:59
@@ -740,10 +742,10 @@ public class GLRectView extends GLView {
 //		float screenHeight = GLScreenParams.getScreenHeight();
 //		float xDpi = GLScreenParams.getXDpi();
 //		float yDpi = GLScreenParams.getYDpi();
-//		
-//		Matrix.translateM(getMatrixState().getTranslationMatrix(), 0, screenWidth * tx / xDpi, 
+//
+//		Matrix.translateM(getMatrixState().getTranslationMatrix(), 0, screenWidth * tx / xDpi,
 //				-screenHeight * ty / yDpi, tz);
-		
+
 		setX(getX() + tx);
 		setY(getY() + ty);
 		setDepth(getDepth() + tz);
@@ -761,7 +763,7 @@ public class GLRectView extends GLView {
 	public float[] getPositon(){
 		return this.position;
 	}
-	
+
 	/**
 	 * 进行旋转， 每次只能按一个轴旋转
 	 * @author lixianke  @Date 2015-6-23 下午2:17:34
@@ -793,17 +795,17 @@ public class GLRectView extends GLView {
 	public float getAngelZ(){
 		return angelZ;
 	}
-	
+
 	/**
 	 * 获取深度，即View到视点的距离
 	 * @author lixianke  @Date 2015-6-23 下午2:20:09
-	 * @param  
+	 * @param
 	 * @return 深度
 	 */
 	public float getDepth() {
 		return depth;
 	}
-	
+
 	/**
 	 * 设置深度，即View到视点的距离
 	 * @author lixianke  @Date 2015-6-23 下午2:21:05
@@ -813,19 +815,19 @@ public class GLRectView extends GLView {
 	public void setDepth(float depth) {
 		this.depth = depth;
 	}
-	
+
 	public void setZIndex(int index){
 		zIndex = index;
 	}
-	
+
 	public int getZIndex(){
 		return zIndex;
 	}
-	
+
 	@Override
 	public void setAlpha(float alpha){
 		super.setAlpha(alpha);
-		
+
 		if (mBackgroundColor != null){
 			mBackgroundColor.setA(alpha);
 		}
@@ -835,7 +837,7 @@ public class GLRectView extends GLView {
 			mRenders.get(i).setAlpha(alpha);
 		}
 	}
-	
+
 	@Override
 	public void setMask(float mask) {
 		super.setMask(mask);
@@ -855,7 +857,7 @@ public class GLRectView extends GLView {
 			render.setMask(getMask());
 		}
 	}
-	
+
 	protected void removeRender(GLRenderParams render) {
 		mRenders.remove( render );
 
@@ -868,7 +870,7 @@ public class GLRectView extends GLView {
 	public List<GLRenderParams> getRenders(){
 		return mRenders;
 	}
-	
+
 	/**
 	 * 设置背景
 	 * @author lixianke  @Date 2015-6-23 下午2:22:01
@@ -879,7 +881,7 @@ public class GLRectView extends GLView {
 		if (mBackgroundResId == resId){
 			return;
 		}
-		
+
 		mBackgroundResId = resId;
 		mBackgroundBitmap = null;
 		mBackgroundColor = null;
@@ -887,11 +889,11 @@ public class GLRectView extends GLView {
 		removeRender();
 		initBackground();
 	}
-	
+
 	/**
 	 * 设置背景
 	 * @author lixianke  @Date 2015-6-23 下午2:25:12
-	 * @param bitmap 
+	 * @param bitmap
 	 * @return
 	 */
 	public void setBackground(Bitmap bitmap){
@@ -899,11 +901,11 @@ public class GLRectView extends GLView {
 			removeBackground();
 			return;
 		}
-		
+
 		if (mBackgroundBitmap == bitmap){
 			return;
 		}
-		
+
 		mBackgroundBitmap = bitmap;
 		mBackgroundResId = 0;
 		mBackgroundColor = null;
@@ -911,7 +913,7 @@ public class GLRectView extends GLView {
 		removeRender();
 		initBackground();
 	}
-	
+
 	/**
 	 * 设置背景颜色
 	 * @author lixianke  @Date 2015-6-23 下午2:25:45
@@ -923,21 +925,21 @@ public class GLRectView extends GLView {
 			removeBackground();
 			return;
 		}
-		
+
 		if (mBackgroundColor == color){
 			return;
 		}
-		
+
 		mBackgroundColor = color;
 		mBackgroundColor.setA(color.getA() * getAlpha());
-				
+
 		mBackgroundResId = 0;
 		mBackgroundBitmap = null;
 
 		removeRender();
 		initBackground();
 	}
-	
+
 	private void removeBackground(){
 		removeRender();
 		mBackgroundBitmap = null;
@@ -952,14 +954,38 @@ public class GLRectView extends GLView {
 		}
 		return false;
 	}
-	
-	private Bitmap mBitmap = null;
+
+	private void getTexture(Bitmap bitmap)
+	{
+		final Bitmap bmp = bitmap;
+		GLGenTexTask.QueueEvent( new GLGenTexTask() {
+			public void ExportTextureId() {
+
+				int textureId = 0;
+
+				textureId = GLTextureUtils.initImageTexture(getContext(), bmp, true);
+				if (textureId > 0) {
+					removeRender();
+					mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+					mBackgroundRender.setTextureId(textureId);
+					updateRenderSize(mBackgroundRender, width, height);
+				}
+
+				if (mBackgroundRender != null){
+					mBackgroundRender.setMask(getMask());
+					mRenders.add(0, mBackgroundRender );
+				}
+
+			}
+		});
+		return;
+	}
+
+	private static int index = 1;
 	private void initBackground(){
 		if (!isSurfaceCreated || !isVisible() || !isNeedUpdateUI()){
 			return;
 		}
-
-		removeRender();
 
 		GLThreadPool.getThreadPool().execute(new Runnable() {
 			public void run() {
@@ -982,90 +1008,22 @@ public class GLRectView extends GLView {
 					bitmap = mBackgroundBitmap;
 					isRecycle = false;
 				}
-
 				if (bitmap != null) {
 					GLTextureUtils.mUseMipMap = getMipMap();
-					mBitmap = GLTextureUtils.handleBitmap(bitmap, isRecycle);
+					Bitmap bmp = GLTextureUtils.handleBitmap(bitmap, isRecycle);
+					getTexture( bmp);
 				} else if (mBackgroundColor != null){
-					mBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
-					Canvas canvas = new Canvas(mBitmap);
+					Bitmap bmp = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
+					Canvas canvas = new Canvas(bmp);
 					canvas.drawARGB((int)(mBackgroundColor.getA() * 255), (int)(mBackgroundColor.getR() * 255),
 							(int)(mBackgroundColor.getG() * 255), (int)(mBackgroundColor.getB() * 255));
 					GLTextureUtils.mUseMipMap = getMipMap();
+					getTexture( bmp);
 				}
-
-				GLGenTexTask.QueueEvent( new GLGenTexTask() {
-					public void ExportTextureId() {
-
-						int textureId = -1;
-						textureId = GLTextureUtils.initImageTexture(getContext(), mBitmap, false);
-						if( mBitmap != null) {
-							mBitmap.recycle();
-							mBitmap = null;
-						}
-						if (textureId > -1) {
-							mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-							mBackgroundRender.setTextureId(textureId);
-							updateRenderSize(mBackgroundRender, width, height);
-						}
-
-						if (mBackgroundRender != null) {
-							mBackgroundRender.setMask(getMask());
-							mRenders.add(0, mBackgroundRender);
-						}
-					}
-				});
 
 			}
 		});
 
-//		GLGenTexTask.QueueEvent( new GLGenTexTask(){
-//			public void ExportTextureId(){
-//				removeRender();
-//
-//				boolean isRecycle = true;
-//				Bitmap bitmap = null;
-//				if (mBackgroundResId != 0) {
-//					InputStream is = getContext().getResources().openRawResource(mBackgroundResId);
-//
-//					try {
-//						bitmap = BitmapFactory.decodeStream(is);
-//					} finally {
-//						try {
-//							is.close();
-//						} catch (IOException e) {
-//							e.printStackTrace();
-//						}
-//					}
-//				} else if (mBackgroundBitmap != null) {
-//					bitmap = mBackgroundBitmap;
-//					isRecycle = false;
-//				}
-//				int textureId = -1;
-//				if (bitmap != null) {
-//					GLTextureUtils.mUseMipMap = getMipMap();
-//					textureId = GLTextureUtils.initImageTexture(getContext(), GLTextureUtils.handleBitmap(bitmap, isRecycle), true);
-//				} else if (mBackgroundColor != null){
-//					bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
-//					Canvas canvas = new Canvas(bitmap);
-//					canvas.drawARGB((int)(mBackgroundColor.getA() * 255), (int)(mBackgroundColor.getR() * 255),
-//							(int)(mBackgroundColor.getG() * 255), (int)(mBackgroundColor.getB() * 255));
-//					GLTextureUtils.mUseMipMap = getMipMap();
-//					textureId = GLTextureUtils.initImageTexture(getContext(), bitmap, true);
-//				}
-//
-//				if (textureId > -1) {
-//					mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-//					mBackgroundRender.setTextureId(textureId);
-//					updateRenderSize(mBackgroundRender, width, height);
-//				}
-//
-//				if (mBackgroundRender != null){
-//					mBackgroundRender.setMask(getMask());
-//					mRenders.add(0, mBackgroundRender );
-//				}
-//			}
-//		});
 	}
 
 	@Override
@@ -1085,9 +1043,10 @@ public class GLRectView extends GLView {
 
 	private void removeRender(){
 		if (mBackgroundRender != null){
-			if (mBackgroundRender.getTextureId() > -1) {
-				releaseTexture(mBackgroundRender.getTextureId());
-			}
+//			if (mBackgroundRender.getTextureId() > 0 ) {
+//				releaseTexture(mBackgroundRender.getTextureId());
+//			}
+			Log.e("GLRectView", "rel Texid=" + mBackgroundRender.getTextureId() );
 			removeRender(mBackgroundRender);
 			mBackgroundRender = null;
 		}
@@ -1138,7 +1097,7 @@ public class GLRectView extends GLView {
 
 	@Override
 	public void draw() {}
-	
+
 	/**
 	 * @author zhangxin  @Date 2015-3-12 上午10:06:40
 	 * description: 每帧渲染时调用动画类的getTransformation取出变换矩阵
@@ -1151,68 +1110,68 @@ public class GLRectView extends GLView {
 		for (int i=0; i<mAnimations.size(); i++) {
 			GLAnimation animation = mAnimations.get(i);
 			if (animation == null) continue;
-			
+
 			boolean isStart = animation.isStart();
-			boolean isEnd = animation.isEnd();			
+			boolean isEnd = animation.isEnd();
 			GLTransformation t = animation.getGlTransformation();
 			if (t == null) {
 				animation.setStart(false);
 				mAnimations.remove(animation);
 				continue;
 			}
-			
-	        if (isStart) 
-	        {
-	        	if (!isEnd) {
-	        		boolean retIsEnd = animation.getTransformation(AnimationUtils.currentAnimationTimeMillis(), t);
-	        		animation.setEnd(retIsEnd);	  
-	        		
-	        		GLRectView animView = animation.getAnimView();  
-	        		
-	        		if (animation instanceof GLTranslateAnimation)
-	        		{	
-	        			//只有子view xy位移
-	        			if (animation.isOnlyChids() && animView instanceof GLGroupView) 
-	        			{
-	        				GLGroupView grpView = (GLGroupView)animation.getAnimView(); 
-	        				grpView.setChildXY(t.getX(), t.getY());
-	        			} 
-	        			else //全部view xy位移 
-	        			{
-	        				animView.setX(getX() + t.getX());
-	        				animView.setY(getY() + t.getY());
-	        			}
-	        			
-	        			float currdep = getDepth() + t.getZ();
-	        			if (currdep > animView.getParent().getDepth()) 
-	        			{
-	        				currdep = animView.getParent().getDepth();
-	        			}
-	        			animView.setDepth(currdep);
-	        			
-	        		} 
-	        		else if (animation instanceof GLScaleAnimation)
-	        		{
-	        			
-	        			animView.scale(t.getX(), t.getY());
-	        		}
-	        		else if (animation instanceof GLRotateAnimation)
-	        		{
-	        			//Log.d("test", "getDegree:"+t.getDegree() +";getX:" + t.getX());
-	        			animView.rotate(t.getDegree(), t.getX(), t.getY(), t.getZ());
-	        		}
-	        		else if (animation instanceof GLAlphaAnimation)
-	        		{
-	        			animView.setAlpha(t.getAlpha());
-	        		}
-	        		
-	            } else {
-	            	mAnimations.remove(animation);
-	            }        	
-	        }
+
+			if (isStart)
+			{
+				if (!isEnd) {
+					boolean retIsEnd = animation.getTransformation(AnimationUtils.currentAnimationTimeMillis(), t);
+					animation.setEnd(retIsEnd);
+
+					GLRectView animView = animation.getAnimView();
+
+					if (animation instanceof GLTranslateAnimation)
+					{
+						//只有子view xy位移
+						if (animation.isOnlyChids() && animView instanceof GLGroupView)
+						{
+							GLGroupView grpView = (GLGroupView)animation.getAnimView();
+							grpView.setChildXY(t.getX(), t.getY());
+						}
+						else //全部view xy位移
+						{
+							animView.setX(getX() + t.getX());
+							animView.setY(getY() + t.getY());
+						}
+
+						float currdep = getDepth() + t.getZ();
+						if (currdep > animView.getParent().getDepth())
+						{
+							currdep = animView.getParent().getDepth();
+						}
+						animView.setDepth(currdep);
+
+					}
+					else if (animation instanceof GLScaleAnimation)
+					{
+
+						animView.scale(t.getX(), t.getY());
+					}
+					else if (animation instanceof GLRotateAnimation)
+					{
+						//Log.d("test", "getDegree:"+t.getDegree() +";getX:" + t.getX());
+						animView.rotate(t.getDegree(), t.getX(), t.getY(), t.getZ());
+					}
+					else if (animation instanceof GLAlphaAnimation)
+					{
+						animView.setAlpha(t.getAlpha());
+					}
+
+				} else {
+					mAnimations.remove(animation);
+				}
+			}
 		}
 	}
-	
+
 	/**
 	 * 开始动画
 	 * @author lixianke  @Date 2015-6-23 下午2:26:28
@@ -1227,7 +1186,7 @@ public class GLRectView extends GLView {
 			mAnimations.add(animation);
 		}
 	}
-	
+
 	/**
 	 * 设置焦点改变事件
 	 * @author lixianke  @Date 2015-3-16 上午11:00:28
@@ -1237,34 +1196,34 @@ public class GLRectView extends GLView {
 	public void setFocusListener(GLViewFocusListener listener){
 		mFocusListener = listener;
 
-		if (listener != null){			
+		if (listener != null){
 			setFocusable(true);
 		} else if (mKeyListener == null) {
 			setFocusable(false);
 		}
 	}
-	
+
 	public boolean hasListeter(){
 		return mFocusListener != null || mKeyListener != null;
 	}
-	
+
 	/**
 	 * 强制设置焦点
 	 * @author lixianke  @Date 2015-3-27 上午10:16:09
-	 * @param  
+	 * @param
 	 * @return
 	 */
 	public void requestFocus(){
 		if (GLFocusUtils.isOpenHeadControl){
 			return;
 		}
-		
+
 		doRequestFocus();
 	}
-	
+
 	public void doRequestFocus(){
 		GLGroupView parent = getParent();
-		
+
 		if (parent != null){
 			if (!parent.isFocused()){
 				parent.doRequestFocus();
@@ -1272,10 +1231,10 @@ public class GLRectView extends GLView {
 			if (parent.getFocusedChild() != this){
 				parent.onFocusChild();
 			}
-			
+
 			parent.setFocusedChild(this);
 		}
-		
+
 		isFocusable = true;
 		onFocusChange(GLFocusUtils.TO_UNKNOWN, true);
 	}
@@ -1288,24 +1247,24 @@ public class GLRectView extends GLView {
 	@Override
 	public void onSurfaceChanged(int width, int height) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void onFocusChange(int direction, boolean isFocused) {
 		if (isFocused() == isFocused){
 			return;
 		}
-		
+
 		this.isFocused = isFocused;
 		onHeadFocusChange(isFocused);
-		
+
 		if (mFocusListener != null){
 			mFocusListener.onFocusChange(this, isFocused);
 		}
 	}
-	
+
 	public void onHeadFocusChange(boolean isFocused) {
-		
+
 		if (isFocused) {
 			if (mHeadClickListener != null && !isHeadClicking) {
 				startHeadClick();
@@ -1337,35 +1296,35 @@ public class GLRectView extends GLView {
 		}
 		return false;
 	}
-	
+
 	public void setOriginal() {
 		isSetOriginal = true;
 		originalX = getX();
 		originalY = getY();
 	}
-	
+
 	public boolean isSetOriginal() {
 		return isSetOriginal;
 	}
-	
+
 	public float getOriginalX() {
 		return originalX;
 	}
-	
+
 	public float getOriginalY() {
 		return originalY;
 	}
-	
+
 	/**
 	 * 获取是否为被选中状态
 	 * @author lixianke  @Date 2015-6-23 下午2:28:15
-	 * @param 
+	 * @param
 	 * @return 否为被选中状态
 	 */
 	public boolean isSelected() {
 		return isSelected;
 	}
-	
+
 	/**
 	 * 设置选中状态
 	 * @author lixianke  @Date 2015-6-23 下午2:28:53
@@ -1379,7 +1338,7 @@ public class GLRectView extends GLView {
 	/**
 	 * 获取是否可用
 	 * @author lixianke  @Date 2015-6-23 下午2:29:30
-	 * @param 
+	 * @param
 	 * @return 是否可用
 	 */
 	public boolean isEnable() {
@@ -1395,22 +1354,22 @@ public class GLRectView extends GLView {
 	public void setEnable(boolean isEnable) {
 		this.isEnable = isEnable;
 	}
-	
+
 	/**
 	 * 获取中心点的X坐标
 	 * @author lixianke  @Date 2015-6-23 下午2:31:23
-	 * @param  
+	 * @param
 	 * @return X坐标
 	 */
 	public float getCenterX() {
 		updateRect();
 		return centerX;
 	}
-	
+
 	/**
 	 * 获取中心点的Y坐标
 	 * @author lixianke  @Date 2015-6-23 下午2:32:04
-	 * @param 
+	 * @param
 	 * @return Y坐标
 	 */
 	public float getCenterY() {
@@ -1474,7 +1433,7 @@ public class GLRectView extends GLView {
 			mBackgroundRender = null;
 		}
 	}
-	
+
 	/**
 	 * 获取View与默认位置的夹角
 	 * @author lixianke  @Date 2015-6-23 下午2:32:51 
@@ -1484,7 +1443,7 @@ public class GLRectView extends GLView {
 	public float getLookAngle() {
 		return mLookAngle;
 	}
-	
+
 	/**
 	 * 设置View与默认位置的夹角
 	 * @author lixianke  @Date 2015-6-23 下午2:32:51
@@ -1502,7 +1461,7 @@ public class GLRectView extends GLView {
 	public void setLookTranslateZ(float mLookTranslateZ) {
 		this.mLookTranslateZ = mLookTranslateZ;
 	}
-	
+
 	/**
 	 * 是否使用mipmap模式
 	 * @author linzanxian  @Date 2015-7-16 下午5:04:15
@@ -1512,7 +1471,7 @@ public class GLRectView extends GLView {
 	public void setMipMap(boolean mipMap) {
 		mUseMipMap = mipMap;
 	}
-	
+
 	/**
 	 * 获取是否使用mipmap
 	 * @author linzanxian  @Date 2015-7-16 下午5:06:59
@@ -1522,29 +1481,29 @@ public class GLRectView extends GLView {
 	public boolean getMipMap() {
 		return mUseMipMap;
 	}
-	
+
 	/**
 	 * 开启头控停留定时器
 	 * @author lixianke  @Date 2015-9-1 上午11:08:52
-	 * @param  
+	 * @param
 	 * @return
 	 */
 	private void startHeadClick(){
 		stopHeadClick();
 		isHeadClicking = true;
-		
+
 		final int timeSpan = 20;
-		
+
 		mHeadClickTimer = new Timer();
 		mHeadClickTimer.schedule(new TimerTask() {
 			private int timeTotal = 0;
-			
-			
+
+
 			@Override
 			public void run() {
 				timeTotal += timeSpan;
-				
-				if (!isSurfaceCreated || !isFocused || mHeadClickListener == null || !isHeadClicking 
+
+				if (!isSurfaceCreated || !isFocused || mHeadClickListener == null || !isHeadClicking
 						|| !GLFocusUtils.isOpenHeadControl || getRootView() == null) {
 					if (isHeadClickStart) {
 						mHeadClickListener.onHeadClickCancel(GLRectView.this);
@@ -1552,12 +1511,12 @@ public class GLRectView extends GLView {
 					stopHeadClick();
 					return;
 				}
-				
+
 				if (timeTotal > mHeadStayTime + mHeadClickTime) {
 					timeTotal = 0;
 					stopHeadClick();
 					getRootView().queueEvent(new Runnable() {
-						
+
 						@Override
 						public void run() {
 							if (mHeadClickListener != null) {
@@ -1572,7 +1531,7 @@ public class GLRectView extends GLView {
 				} if (timeTotal > mHeadStayTime && !isHeadClickStart) {
 					isHeadClickStart = true;
 					getRootView().queueEvent(new Runnable() {
-						
+
 						@Override
 						public void run() {
 							if (mHeadClickListener != null) {
@@ -1584,11 +1543,11 @@ public class GLRectView extends GLView {
 			}
 		}, timeSpan, timeSpan);
 	}
-	
+
 	/**
 	 * 关闭头控停留定时器
 	 * @author lixianke  @Date 2015-9-1 上午11:09:47
-	 * @param 
+	 * @param
 	 * @return
 	 */
 	private void stopHeadClick(){
@@ -1599,17 +1558,17 @@ public class GLRectView extends GLView {
 			mHeadClickTimer = null;
 		}
 	}
-	
+
 	/**
 	 * 获取头控停留触发点击的时间间隔
 	 * @author lixianke  @Date 2015-9-1 上午11:10:33
-	 * @param 
+	 * @param
 	 * @return 时间
 	 */
 	public int getHeadStayTime() {
 		return mHeadStayTime;
 	}
-	
+
 	/**
 	 * 设置头控停留触发点击的时间间隔
 	 * @author lixianke  @Date 2015-9-1 上午11:10:33
@@ -1619,7 +1578,7 @@ public class GLRectView extends GLView {
 	public void setHeadStayTime(int headStayTime) {
 		this.mHeadStayTime = headStayTime;
 	}
-	
+
 	/**
 	 * 获取头控点击的时间
 	 * @author lixianke  @Date 2015-9-1 上午11:10:33
@@ -1629,7 +1588,7 @@ public class GLRectView extends GLView {
 	public int getHeadClickTime() {
 		return mHeadClickTime;
 	}
-	
+
 	/**
 	 * 设置头控点击的时间
 	 * @author lixianke  @Date 2015-9-1 上午11:10:33
@@ -1639,7 +1598,7 @@ public class GLRectView extends GLView {
 	public void setHeadClickTime(int headClickTime) {
 		this.mHeadClickTime = headClickTime;
 	}
-	
+
 	/**
 	 * 设置头控点击事件的监听器
 	 * @author lixianke  @Date 2015-9-1 上午11:13:34
@@ -1649,7 +1608,7 @@ public class GLRectView extends GLView {
 	public void setOnHeadClickListener(OnHeadClickListener listener){
 		this.mHeadClickListener = listener;
 	}
-	
+
 	/**
 	 * 设置头控点击事件的监听器
 	 * @author lixianke  @Date 2015-9-1 上午11:13:34
@@ -1663,7 +1622,7 @@ public class GLRectView extends GLView {
 		this.mHeadClickTime = headClickTime;
 		this.mHeadClickListener = listener;
 	}
-	
+
 	public void setZPosition(int zPosition) {
 		this.zPosition = zPosition;
 	}

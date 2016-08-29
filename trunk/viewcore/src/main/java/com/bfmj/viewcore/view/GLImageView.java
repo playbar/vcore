@@ -103,11 +103,6 @@ public class GLImageView extends GLRectView {
 		mLastResId = mResId;
 		mLastBitmap = mBitmap;
 
-		if (mRenderParams != null){
-			removeRender(mRenderParams);
-			mRenderParams = null;
-		}
-
 		GLGenTexTask.QueueEvent( new GLGenTexTask(){
 			public void ExportTextureId( ){
 //				Log.e("GLImageView", "ExportTextureId");
@@ -147,6 +142,10 @@ public class GLImageView extends GLRectView {
 
 					int textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, isRecycle);
 					if (textureId > -1) {
+						if (mRenderParams != null){
+							removeRender(mRenderParams);
+							mRenderParams = null;
+						}
 						mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
 						mRenderParams.setTextureId(textureId);
 						updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());

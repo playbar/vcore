@@ -7,6 +7,7 @@ import com.baofeng.mojing.EyeTextureParameter;
 import com.baofeng.mojing.MojingSDK;
 
 import android.opengl.GLES30;
+import android.util.Log;
 
 public class Distortion {	
 	private int[] mTextureIds = {0, 0};
@@ -50,12 +51,13 @@ public class Distortion {
 	public void afterDraw() {
 		GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, 0, 0);
 		GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
-		
+//		Log.e("Distortion","afterDraw begin");
 		if (GLES30.glIsTexture(this.mTextureIds[0]) && GLES30.glIsTexture(this.mTextureIds[1])){
 			MojingSDK.DrawTexture(this.mTextureIds[0], this.mTextureIds[1]);
 		} else {
 			this.framebufferId = generateFrameBufferObject();
 		}
+//		Log.e("Distortion","afterDraw end");
 	}
 	
 	private static int generateFrameBufferObject() {

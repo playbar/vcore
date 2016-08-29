@@ -106,8 +106,15 @@ public class GLGridViewPage extends GLGridView {
 		return super.getGLAdapter();
 	}
 
+	public void setTotalCount(int count){
+		mTotalCount = count;
+	}
+
 	@Override
 	public void setAdapter(GLListAdapter adapter) {
+		if( mTotalCount == 0 && adapter != null ){
+			mTotalCount = adapter.getCount();
+		}
 		super.setAdapter( adapter );
 	}
 
@@ -256,6 +263,7 @@ public class GLGridViewPage extends GLGridView {
 	private int mCount = 0;  // 分页的个数, 从1开始计数
 	private int mShowMaxCount = 0;
 	private boolean mbIndexFocused = false;
+	private int mTotalCount = 0; // 最大的内容个数
 
 	private final static int MAXSHOW = 7;
 	private float mBtnSpace = 20; // 底部按钮也GridView之间的距离
@@ -325,14 +333,24 @@ public class GLGridViewPage extends GLGridView {
 		mShowMaxCount = mCount > MAXSHOW ? MAXSHOW : mCount;
 		if( mCount > 1 ){
 			mStart = mMidPos - (mStep * mShowMaxCount) / 2;
-			if (mCurIndex < mCount) {
+			if( getTotalNum() < mTotalCount){
 				nextBtn();
 				if (mCurIndex > 1) {
 					prvBtn();
 				}
-			} else if (mCurIndex == mCount) {
+			}
+			else{
 				prvBtn();
 			}
+//			if (mCurIndex < mCount) {
+//				nextBtn();
+//				if (mCurIndex > 1) {
+//					prvBtn();
+//				}
+//			}
+//			else if (mCurIndex == mCount) {
+//				prvBtn();
+//			}
 
 		}
 		else{

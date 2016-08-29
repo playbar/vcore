@@ -60,6 +60,8 @@ public class TextViewActivity extends BaseViewActivity {
 
 
 		rootView = getRootView();
+//		rootView.setMultiThread( true );
+//		rootView.setTimeWarp( true );
 
 		rootView.onResume();
 		//rootView.setDoubleScreen(false);
@@ -122,7 +124,6 @@ public class TextViewActivity extends BaseViewActivity {
 		rectView.setY( 1000);
 		rectView.setLayoutParams( 200, 200 );
 		rootView.addView( rectView );
-
 
 		addImageViewTest();
 

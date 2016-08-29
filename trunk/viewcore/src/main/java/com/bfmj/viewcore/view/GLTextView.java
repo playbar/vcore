@@ -173,11 +173,6 @@ public class GLTextView extends GLRectView {
 			return;
 		}
 
-		if (mRenderParams != null) {
-			removeRender(mRenderParams);
-			mRenderParams = null;
-		}
-
 		GLThreadPool.getThreadPool().execute(new Runnable() {
 			public void run() {
 
@@ -194,6 +189,10 @@ public class GLTextView extends GLRectView {
 						}
 
 						if (textureId > -1) {
+							if (mRenderParams != null) {
+								removeRender(mRenderParams);
+								mRenderParams = null;
+							}
 							mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
 							mRenderParams.setTextureId(textureId);
 							updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
