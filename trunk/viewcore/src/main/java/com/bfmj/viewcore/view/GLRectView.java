@@ -859,7 +859,7 @@ public class GLRectView extends GLView {
 	}
 
 	protected void removeRender(GLRenderParams render) {
-		if (render.getType() == GLRenderParams.RENDER_TYPE_IMAGE){
+		if (render != null && render.getType() == GLRenderParams.RENDER_TYPE_IMAGE){
 			int textureId = render.getTextureId();
 			releaseTexture(textureId);
 		}
@@ -966,7 +966,7 @@ public class GLRectView extends GLView {
 				if (textureId > 0) {
 					if( mBackgroundRender != null) {
 						removeRender(mBackgroundRender);
-						mBackgroundColor = null;
+						mBackgroundRender = null;
 					}
 					mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
 					mBackgroundRender.setTextureId(textureId);
