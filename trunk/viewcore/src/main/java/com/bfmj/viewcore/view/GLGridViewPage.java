@@ -238,7 +238,6 @@ public class GLGridViewPage extends GLGridView {
 
 
 	private void showPrvBtn(){
-		prvBtnImgView = new GLImageView( this.getContext() );
 		prvBtnImgView.setX(mStart - mStep - 20 );
 		prvBtnImgView.setY(getY() + getHeight() + mBtnSpace);
 		prvBtnImgView.setLayoutParams(60, 60);
@@ -261,7 +260,6 @@ public class GLGridViewPage extends GLGridView {
 
 	private void showNextBtn(){
 
-		nextBtnImgView = new GLImageView(this.getContext());
 		nextBtnImgView.setX(mStart + mShowMaxCount * mStep + 20);
 		nextBtnImgView.setY(getY() + getHeight() + mBtnSpace);
 		nextBtnImgView.setLayoutParams(60, 60);
@@ -347,6 +345,8 @@ public class GLGridViewPage extends GLGridView {
 	//创建分页
 	public void showPage(){
 
+		nextBtnImgView = new GLImageView(this.getContext());
+		prvBtnImgView = new GLImageView( this.getContext() );
 		if ( ! mbNumListVisible ){
 			return;
 		}
