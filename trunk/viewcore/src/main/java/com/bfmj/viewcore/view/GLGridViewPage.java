@@ -193,6 +193,9 @@ public class GLGridViewPage extends GLGridView {
 
 	@Override
 	public boolean onKeyUp(int keycode){
+		if( nextBtnImgView == null || prvBtnImgView == null ){
+			return false;
+		}
 		if( nextBtnImgView.isFocused() || prvBtnImgView.isFocused() || mbIndexFocused ) {
 			if (keycode == MojingKeyCode.KEYCODE_ENTER) {
 //			if (keycode == 96) {
