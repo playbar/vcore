@@ -1,5 +1,6 @@
 package com.bfmj.viewcore.util;
 
+import java.security.acl.Group;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
@@ -188,9 +189,17 @@ public class GLFocusUtils {
 					hasFocused = false;
 				}
 				if (hasFocused && v != mFocusedView && v.isEnable()) {
-					if (mFocusedView != null && !v.isGrandParent(mFocusedView)) {
-						mFocusedView.onFocusChange(TO_UNKNOWN, false);
+					if (mFocusedView != null) {
+						if (mFocusedView.isGrandParent(v)){ //  if v is mFocusedView's parent, first let v' child lost focus
+							GLRectView child = ((GLGroupView)v).getFocusedChild();
+							if (child != null){
+								child.onFocusChange(TO_UNKNOWN, false);
+							}
+						} else if (!v.isGrandParent(mFocusedView)){ //  if mFocusedView is not v's parent
+							mFocusedView.onFocusChange(TO_UNKNOWN, false);
+						}
 					}
+
 					v.doRequestFocus();
 					mFocusedView = v;
 				}

@@ -1226,10 +1226,10 @@ public class GLRectView extends GLView {
 			if (!parent.isFocused()){
 				parent.doRequestFocus();
 			}
-			if (parent.getFocusedChild() != this){
-				parent.onFocusChild();
+			GLRectView child = parent.getFocusedChild();
+			if (child != null && child != this){
+				child.onFocusChange(GLFocusUtils.TO_UNKNOWN, false);
 			}
-
 			parent.setFocusedChild(this);
 		}
 
@@ -1253,10 +1253,15 @@ public class GLRectView extends GLView {
 			return;
 		}
 
+		if (isFocused && getParent() != null){
+			getParent().onFocusChange(direction, true);
+		}
+
 		this.isFocused = isFocused;
 		onHeadFocusChange(isFocused);
 
 		if (mFocusListener != null){
+			Log.d("focus", "on focus = > " + isFocused + " === " + this.hashCode());
 			mFocusListener.onFocusChange(this, isFocused);
 		}
 	}

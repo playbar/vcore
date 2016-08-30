@@ -1007,7 +1007,7 @@ public class GLGroupView extends GLRectView {
 		return childViews;
 	}
 
-	private GLRectView getFocusedView(){
+	public GLRectView getFocusedView(){
 		for (int i = 0; i < mChildView.size(); i++) {
 			GLRectView view = mChildView.get(i);
 			if (view.isVisible() && view.isFocused()){
@@ -1086,9 +1086,12 @@ public class GLGroupView extends GLRectView {
 			mGlFocusUtils.setFousedView(null);
 		}
 	}
-	
+
 	@Override
 	public void onFocusChange(int direction, boolean isFocused) {
+		if (isFocused() == isFocused){
+			return;
+		}
 		
 		if (!isFocused && getFocusedView() != null){
 			getFocusedView().onFocusChange(direction, false);
