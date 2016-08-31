@@ -114,30 +114,30 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         setEGLContextClientVersion(3);
         //setMultiThread(true);
         //多重采样，抗锯齿
-//		setEGLConfigChooser(new EGLConfigChooser() {  
-//			@Override
-//			public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
-//				int[] attrList = new int[] { //  
-//		            EGL10.EGL_SURFACE_TYPE, EGL10.EGL_WINDOW_BIT, //  
-//		            EGL10.EGL_RED_SIZE, 8, //  
-//		            EGL10.EGL_GREEN_SIZE, 8, //  
-//		            EGL10.EGL_BLUE_SIZE, 8, //  
-//		            EGL10.EGL_ALPHA_SIZE, 8, 
-//		            EGL10.EGL_DEPTH_SIZE, 16, //  
-//		            EGL10.EGL_SAMPLE_BUFFERS, 1,  
-//		            EGL10.EGL_SAMPLES, 4,  
-//		            EGL10.EGL_NONE //  
-//			    };  
-//				
-//				int[] numConfig = new int[1];
-//				egl.eglChooseConfig(display, attrList, null, 0, numConfig);
-//		        int configSize = numConfig[0];
-//		        EGLConfig[] mEGLConfigs = new EGLConfig[configSize];
-//		        egl.eglChooseConfig(display, attrList, mEGLConfigs, configSize, numConfig);
-//		        
-//		        return mEGLConfigs[0];
-//			}
-//		});
+		setEGLConfigChooser(new EGLConfigChooser() {
+			@Override
+			public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
+				int[] attrList = new int[] { //
+		            EGL10.EGL_SURFACE_TYPE, EGL10.EGL_WINDOW_BIT, //
+		            EGL10.EGL_RED_SIZE, 8, //
+		            EGL10.EGL_GREEN_SIZE, 8, //
+		            EGL10.EGL_BLUE_SIZE, 8, //
+		            EGL10.EGL_ALPHA_SIZE, 8,
+		            EGL10.EGL_DEPTH_SIZE, 16, //
+		            EGL10.EGL_SAMPLE_BUFFERS, 1,
+		            EGL10.EGL_SAMPLES, 4,
+		            EGL10.EGL_NONE //
+			    };
+
+				int[] numConfig = new int[1];
+				egl.eglChooseConfig(display, attrList, null, 0, numConfig);
+		        int configSize = numConfig[0];
+		        EGLConfig[] mEGLConfigs = new EGLConfig[configSize];
+		        egl.eglChooseConfig(display, attrList, mEGLConfigs, configSize, numConfig);
+
+		        return mEGLConfigs[0];
+			}
+		});
 
         setRenderer(this);
         setRenderMode(MojingSurfaceView.RENDERMODE_CONTINUOUSLY);

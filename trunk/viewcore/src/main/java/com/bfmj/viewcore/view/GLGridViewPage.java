@@ -238,7 +238,7 @@ public class GLGridViewPage extends GLGridView {
 
 
 	private void showPrvBtn(){
-		prvBtnImgView.setX(mStart - mStep - 20 );
+		prvBtnImgView.setX(mStart - 100 );
 		prvBtnImgView.setY(getY() + getHeight() + mBtnSpace);
 		prvBtnImgView.setLayoutParams(60, 60);
 		prvBtnImgView.setImage(mFlipLeftID );
@@ -366,14 +366,6 @@ public class GLGridViewPage extends GLGridView {
 		mShowMaxCount = mCount > MAXSHOW ? MAXSHOW : mCount;
 		if( mCount > 1 ){
 			mStart = mMidPos - (mStep * mShowMaxCount) / 2;
-
-			if( mCurIndex < totalPageCount) {
-				showNextBtn();
-			}
-			if (mCurIndex > 1 && mCurIndex <= mCount) {
-				showPrvBtn();
-			}
-
 		}
 		else{
 			mStart = mMidPos;
@@ -391,12 +383,22 @@ public class GLGridViewPage extends GLGridView {
 
 		}
 
+//		istart += 88887;
+//		iend += 88887;
 		for( int i = istart; i <= iend; ++i ) {
+			int width = 60;
+			mStep = 80.0f;
+			String strText = "" + i;
+			if( strText.length() > 2) {
+				width = 60 + (strText.length() - 2) * 25;
+				mStep += (strText.length() - 2) * 25;
 
+			}
 			GLTextView textView = new GLTextView(this.getContext());
 			textView.setX(mStart + (i - istart) * mStep);
 			textView.setY(getY() + getHeight() + mBtnSpace);
-			textView.setLayoutParams(60, 60);
+
+			textView.setLayoutParams(width, 60);
 			textView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
 			textView.setTextPadding( 0 );
 			if( mCurIndex == i ){
@@ -410,7 +412,7 @@ public class GLGridViewPage extends GLGridView {
 			}else {
 				textView.setPadding(40, 10, 0, 0);
 			}
-			textView.setText("" + i);
+			textView.setText(strText);
 			textView.setTextSize(40);
 			final int index = i;
 			textView.setFocusListener(new GLViewFocusListener() {
@@ -434,6 +436,14 @@ public class GLGridViewPage extends GLGridView {
 			});
 			addView(textView);
 		}
+		if( mCurIndex < totalPageCount) {
+			showNextBtn();
+		}
+		if (mCurIndex > 1 && mCurIndex <= mCount)
+		{
+			showPrvBtn();
+		}
+
 		return;
 	}
 
