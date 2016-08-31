@@ -36,8 +36,9 @@ import com.bfmj.viewcore.util.GenTextureTask;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.opengl.EGL14;
 import android.opengl.GLES10;
-import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
@@ -328,10 +329,10 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         GLThreadUtil.onSurfaceCreated(gl, config);
         isSurfaceCreated = true;
 
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-        GLES20.glDepthFunc(GLES20.GL_LEQUAL);
-        GLES20.glEnable(GLES20.GL_DITHER);
-//        GLES20.glEnable(GLES10.GL_MULTISAMPLE);
+        GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+        GLES30.glDepthFunc(GLES30.GL_LEQUAL);
+        GLES30.glEnable(GLES30.GL_DITHER);
+//        GLES30.glEnable(GLES10.GL_MULTISAMPLE);
 
 //		MojingSDK.EnterMojingWorld(mMojingType);
 //		MojingSDK.SetImageYOffset(0.06f);
@@ -415,7 +416,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             v.createTexture();
         }
 
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+        GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
 
         final ArrayList<GLView> allViews = getAllViews();
 
@@ -441,7 +442,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                 if (mDistortion != null) {
                     mDistortion.beforeDraw(i);
                 } else {
-                    GLES20.glViewport(i * mWidth / 2, (mHeight - height) / 2, mWidth / 2, height);
+                    GLES30.glViewport(i * mWidth / 2, (mHeight - height) / 2, mWidth / 2, height);
                 }
 
                 // 为了绘制中间的视频,把GLRectView分成两部分
@@ -492,7 +493,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                 mDistortion.afterDraw();
             }
         } else { //单屏
-            GLES20.glViewport(0, 0, mWidth, mHeight);
+            GLES30.glViewport(0, 0, mWidth, mHeight);
             float ratio = (float) mHeight / mWidth;
             for (int j = 0; j < allViews.size(); j++) {
                 GLView view = allViews.get(j);

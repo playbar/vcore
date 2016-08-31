@@ -1,6 +1,7 @@
 package com.bfmj.viewcore.util;
 
-import android.opengl.GLES20;
+import android.opengl.GLES30;
+import android.util.Log;
 
 /**
  * 
@@ -137,9 +138,14 @@ public class GLShaderManager {
         "}";
 	
 	public static int loadShader(int type, String shaderCode){
-        int shader = GLES20.glCreateShader(type);
-        GLES20.glShaderSource(shader, shaderCode);
-        GLES20.glCompileShader(shader);
+        int shader = GLES30.glCreateShader(type);
+        GLES30.glShaderSource(shader, shaderCode);
+        GLES30.glCompileShader(shader);
+		int status[] = new int[1];
+		GLES30.glGetShaderiv( shader, GLES30.GL_COMPILE_STATUS, status, 0 );
+		if( status[0] != GLES30.GL_TRUE ){
+			Log.e("GLImageRect", " " + GLES30.glGetShaderInfoLog(shader));
+		}
         return shader;
     }
 }

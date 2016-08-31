@@ -61,7 +61,7 @@ public class TestVertexLoadActivity extends BaseViewActivity {
                     @Override
                     public void run() {
                         try {
-                            player.setDataSource("/mnt/sdcard/1.mp4");
+                            player.setDataSource("/sdcard/test.mp4");
                             player.setSurface(new Surface(panoView.getSurfaceTexture()));
 
                             player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
