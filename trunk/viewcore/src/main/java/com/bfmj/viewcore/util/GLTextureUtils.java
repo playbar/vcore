@@ -18,6 +18,7 @@ import android.opengl.GLES30;
 import android.opengl.GLUtils;
 import android.util.Log;
 
+import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.view.BaseViewActivity;
 
 /**
@@ -128,32 +129,60 @@ public class GLTextureUtils {
 	/**
 	 * 图片边框处理为透明
 	 * @author lixianke  @Date 2015-3-27 下午2:38:43
-	 * @param bm 原图bitmap对象
-	 * @param isRecycle 原图是否回收
-	 * @return 新创建的bitmp对象
+	 * @param bm
+	 * @param width
+	 * @param height
 	 */
-	public static Bitmap handleBitmap(Bitmap bm, boolean isRecycle){
-		int width = bm.getWidth();
-		int height = bm.getHeight();
-		
-        Paint p = new Paint();
-        Rect rect = new Rect(2, 2, width - 2, height - 2);
-    	
-    	Bitmap bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+	public static Bitmap handleBitmap(Bitmap bm, float width, float height){
+		int border = 1;
+		int bWidth = bm.getWidth();
+		int bHeight = bm.getHeight();
+		int w = (int)width / 2;
+		int h = (int)height / 2;
+		if (w < 16){
+			w = 16;
+		}
+		if (h < 16){
+			h = 16;
+		}
+
+    	Bitmap bitmap = Bitmap.createBitmap(w, h, Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(Color.TRANSPARENT);
         
         try {
-        	canvas.drawBitmap(bm, rect, rect, p);
+			Paint p = new Paint();
+			Rect oRect = new Rect(0, 0, bWidth, bHeight);
+			Rect dRect = new Rect(border, border, w - border, h - border);
+        	canvas.drawBitmap(bm, oRect, dRect, p);
 		} catch (Exception e) {
 			return null;
 		}
-        
-        
-        if (isRecycle){
-        	bm.recycle();
-        }
-        
+
         return bitmap;
+	}
+
+	public static Bitmap handleColor(GLColor color, float width, float height){
+		int border = 1;
+		int w = (int)width / 8;
+		int h = (int)height / 8;
+		if (w < 16){
+			w = 16;
+		}
+		if (h < 16){
+			h = 16;
+		}
+
+		Bitmap bmp = Bitmap.createBitmap(w , h, Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bmp);
+		canvas.drawColor(Color.TRANSPARENT);
+
+		Paint p = new Paint();
+		p.setStyle(Paint.Style.FILL);
+		p.setARGB((int)(color.getA() * 255), (int)(color.getR() * 255),
+				(int)(color.getG() * 255), (int)(color.getB() * 255));
+		canvas.drawRect(border, border, w - border, h - border, p);
+
+		return bmp;
 	}
 }

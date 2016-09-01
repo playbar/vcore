@@ -994,6 +994,8 @@ public class GLRectView extends GLView {
 
 				boolean isRecycle = true;
 				Bitmap bitmap = null;
+				float width = getWidth();
+				float height = getHeight();
 				if (mBackgroundResId != 0) {
 					InputStream is = getContext().getResources().openRawResource(mBackgroundResId);
 
@@ -1012,14 +1014,12 @@ public class GLRectView extends GLView {
 				}
 				if (bitmap != null) {
 					GLTextureUtils.mUseMipMap = getMipMap();
-					Bitmap bmp = GLTextureUtils.handleBitmap(bitmap, isRecycle);
-					getTexture( bmp);
+					if (width > 100 || height > 100) {
+						bitmap = GLTextureUtils.handleBitmap(bitmap, width, height);
+					}
+					getTexture( bitmap);
 				} else if (mBackgroundColor != null){
-					Bitmap bmp = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
-					Canvas canvas = new Canvas(bmp);
-					canvas.drawARGB((int)(mBackgroundColor.getA() * 255), (int)(mBackgroundColor.getR() * 255),
-							(int)(mBackgroundColor.getG() * 255), (int)(mBackgroundColor.getB() * 255));
-					GLTextureUtils.mUseMipMap = getMipMap();
+					Bitmap bmp = GLTextureUtils.handleColor(mBackgroundColor, width, height);
 					getTexture( bmp);
 				}
 
