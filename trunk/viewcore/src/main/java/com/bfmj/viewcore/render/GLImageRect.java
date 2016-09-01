@@ -102,7 +102,7 @@ public class GLImageRect extends GLRect {
 				render = view.getRenders().get(i);
 			} catch (Exception e) {}
 
-			if (render != null && render.getType() == GLRenderParams.RENDER_TYPE_IMAGE){
+			if (render != null && render.getType() == GLRenderParams.RENDER_TYPE_IMAGE && render.getTextureId() > 0){
 				GLMatrixState state = view.getMatrixState();
 				state.pushMatrix();
 				float[] curMatrix = state.getCurrentMatrix();

@@ -190,7 +190,12 @@ public abstract class GLView implements GLRenderListener {
 	public void createTexture(){}
 	
 	protected void releaseTexture(final int textureId) {
-		GLTextureUtils.releaseTexture(textureId);
+		getRootView().queueEvent(new Runnable() {
+			@Override
+			public void run() {
+				GLTextureUtils.releaseTexture(textureId);
+			}
+		});
 	}
 
 

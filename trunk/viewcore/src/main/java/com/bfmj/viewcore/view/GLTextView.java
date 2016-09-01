@@ -184,18 +184,15 @@ public class GLTextView extends GLRectView {
 							bmpTemp = null;
 						}
 
-						if (textureId > -1) {
-							if (mRenderParams != null) {
-								removeRender(mRenderParams);
-								mRenderParams = null;
+						if (textureId > 0) {
+							if (mRenderParams == null){
+								mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+								addRender(mRenderParams);
+							} else if (mRenderParams.getTextureId() > 0){
+								releaseTexture(mRenderParams.getTextureId());
 							}
-							mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
 							mRenderParams.setTextureId(textureId);
 							updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
-						}
-
-						if (mRenderParams != null) {
-							addRender(mRenderParams);
 						}
 					}
 				});

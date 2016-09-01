@@ -964,20 +964,15 @@ public class GLRectView extends GLView {
 
 				textureId = GLTextureUtils.initImageTexture(getContext(), bmp, true);
 				if (textureId > 0) {
-					if( mBackgroundRender != null) {
-						removeRender(mBackgroundRender);
-						mBackgroundRender = null;
+					if (mBackgroundRender == null){
+						mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+						mRenders.add(0, mBackgroundRender);
+					} else if (mBackgroundRender.getTextureId() > 0){
+						releaseTexture(mBackgroundRender.getTextureId());
 					}
-					mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
 					mBackgroundRender.setTextureId(textureId);
 					updateRenderSize(mBackgroundRender, width, height);
 				}
-
-				if (mBackgroundRender != null){
-					mBackgroundRender.setMask(getMask());
-					mRenders.add(0, mBackgroundRender );
-				}
-
 			}
 		});
 		return;
@@ -1433,8 +1428,8 @@ public class GLRectView extends GLView {
 				}
 			}
 			mRenders.clear();
-			mBackgroundRender = null;
 		}
+		mBackgroundRender = null;
 	}
 
 	/**

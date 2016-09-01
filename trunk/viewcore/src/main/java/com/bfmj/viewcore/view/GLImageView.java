@@ -145,19 +145,17 @@ public class GLImageView extends GLRectView {
 						mTmpbitmap = GLTextureUtils.handleBitmap(mTmpbitmap, width, height);
 					}
 					textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, true);
-					if (textureId > -1) {
-						if (mRenderParams != null){
-							removeRender(mRenderParams);
-							mRenderParams = null;
+					if (textureId > 0) {
+						if (mRenderParams == null){
+							mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+							addRender(mRenderParams);
+						} else if (mRenderParams.getTextureId() > 0){
+							releaseTexture(mRenderParams.getTextureId());
 						}
-						mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
 						mRenderParams.setTextureId(textureId);
 						updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
 					}
 
-					if (mRenderParams != null) {
-						addRender(mRenderParams);
-					}
 					if( isRecycle ) {
 						mTmpbitmap = null;
 					}
@@ -242,5 +240,6 @@ public class GLImageView extends GLRectView {
 		super.release();
 		mLastResId = 0;
 		mLastBitmap = null;
+		mRenderParams = null;
 	}
 }
