@@ -661,11 +661,13 @@ public class GLRectView extends GLView {
 			return;
 		}
 
-		for (GLRenderParams render : mRenders){
-			if (render != mBackgroundRender){
-				updateRenderSize(render, getInnerWidth(), getInnerHeight());
-			} else {
-				updateRenderSize(render, width, height);
+		synchronized (this){
+			for (GLRenderParams render : mRenders){
+				if (render != mBackgroundRender){
+					updateRenderSize(render, getInnerWidth(), getInnerHeight());
+				} else {
+					updateRenderSize(render, width, height);
+				}
 			}
 		}
 		return;
