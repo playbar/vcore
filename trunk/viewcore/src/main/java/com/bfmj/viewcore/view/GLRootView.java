@@ -1,23 +1,16 @@
 package com.bfmj.viewcore.view;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
-import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.baofeng.mojing.MojingSDK;
@@ -29,16 +22,10 @@ import com.bfmj.viewcore.render.GLImageRect;
 import com.bfmj.viewcore.render.GLScreenParams;
 import com.bfmj.viewcore.render.GLVideoRect;
 import com.bfmj.viewcore.util.GLFocusUtils;
-import com.bfmj.viewcore.util.GLTextureUtils;
 import com.bfmj.viewcore.util.GLThreadUtil;
-import com.bfmj.viewcore.util.GenTextureTask;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.opengl.EGL14;
-import android.opengl.GLES10;
-import android.opengl.GLES30;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
@@ -113,31 +100,31 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         mContext = context;
         setEGLContextClientVersion(3);
         //setMultiThread(true);
-        //多重采样，抗锯齿
-		setEGLConfigChooser(new EGLConfigChooser() {
-			@Override
-			public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
-				int[] attrList = new int[] { //
-		            EGL10.EGL_SURFACE_TYPE, EGL10.EGL_WINDOW_BIT, //
-		            EGL10.EGL_RED_SIZE, 8, //
-		            EGL10.EGL_GREEN_SIZE, 8, //
-		            EGL10.EGL_BLUE_SIZE, 8, //
-		            EGL10.EGL_ALPHA_SIZE, 8,
-		            EGL10.EGL_DEPTH_SIZE, 16, //
-		            EGL10.EGL_SAMPLE_BUFFERS, 1,
-		            EGL10.EGL_SAMPLES, 4,
-		            EGL10.EGL_NONE //
-			    };
-
-				int[] numConfig = new int[1];
-				egl.eglChooseConfig(display, attrList, null, 0, numConfig);
-		        int configSize = numConfig[0];
-		        EGLConfig[] mEGLConfigs = new EGLConfig[configSize];
-		        egl.eglChooseConfig(display, attrList, mEGLConfigs, configSize, numConfig);
-
-		        return mEGLConfigs[0];
-			}
-		});
+//        //多重采样，抗锯齿
+//		setEGLConfigChooser(new EGLConfigChooser() {
+//			@Override
+//			public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
+//				int[] attrList = new int[] { //
+//		            EGL10.EGL_SURFACE_TYPE, EGL10.EGL_WINDOW_BIT, //
+//		            EGL10.EGL_RED_SIZE, 8, //
+//		            EGL10.EGL_GREEN_SIZE, 8, //
+//		            EGL10.EGL_BLUE_SIZE, 8, //
+//		            EGL10.EGL_ALPHA_SIZE, 8,
+//		            EGL10.EGL_DEPTH_SIZE, 16, //
+//		            EGL10.EGL_SAMPLE_BUFFERS, 1,
+//		            EGL10.EGL_SAMPLES, 4,
+//		            EGL10.EGL_NONE //
+//			    };
+//
+//				int[] numConfig = new int[1];
+//				egl.eglChooseConfig(display, attrList, null, 0, numConfig);
+//		        int configSize = numConfig[0];
+//		        EGLConfig[] mEGLConfigs = new EGLConfig[configSize];
+//		        egl.eglChooseConfig(display, attrList, mEGLConfigs, configSize, numConfig);
+//
+//		        return mEGLConfigs[0];
+//			}
+//		});
 
         setRenderer(this);
         setRenderMode(MojingSurfaceView.RENDERMODE_CONTINUOUSLY);
@@ -340,7 +327,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 //        setFov();
 
         startTracker();
-        resetScreenDirection(true);
 
 //		changeRenderMode(RENDERMODE_CONTINUOUSLY);
 
@@ -549,12 +535,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                     Matrix.rotateM(matrix, 0, -xAngle, 0, 1, 0);
                 } else {
                     System.arraycopy(headView, 0, matrix, 0, 16);
-
-                    if (isReverseScreen) {
-                        Matrix.rotateM(matrix, 0, mResetXAngle, 0, 1, 0);
-                    } else if (isReverseEnter) {
-                        Matrix.rotateM(matrix, 0, mResetXAngle - mLastXangle, 0, 1, 0);
-                    }
                 }
             } else {
                 Matrix.setLookAtM(matrix, 0, 0, 0, 0, 0, 0, -4, 0, 1, 0);
@@ -595,47 +575,11 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     public void initHeadView() {
         if (mGroyEnable) {
             if (isSurfaceCreated) {
-                MojingSDK.ResetTracker();
-                resetScreenDirection(false);
+                MojingSDK.ResetSensorOrientation();
             }
         } else {
             Matrix.setLookAtM(headView, 0, 0, 0, 0, 0, 0, -4, 0, 1, 0);
         }
-    }
-
-    private void resetScreenDirection(final boolean isFirst) {
-        if (!mGroyEnable) {
-            return;
-        }
-
-        new Timer().schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                float[] out = new float[3];
-                float[] matrix = new float[16];
-                MojingSDK.getLastHeadView(matrix);
-                GLFocusUtils.getEulerAngles(matrix, out, 0);
-                double zAngle = Math.toDegrees(out[2]);
-                if (mIsDouble) {
-                    if (Math.abs(zAngle) > 90.0) {
-                        mResetXAngle = (float) Math.toDegrees(out[0]);
-                        isReverseScreen = true;
-                        mLastXangle = 0;
-                    } else {
-                        isReverseScreen = false;
-                        mLastXangle = 180;
-                    }
-                    if (isFirst && isReverseScreen){
-                        isReverseEnter = true;
-                    }
-                } else {
-                    mResetXAngle = (float) Math.toDegrees(out[0]) + mLastXangle;
-                    mLastXangle = 0;
-                }
-                isResetGroy = true;
-            }
-        }, 300);
     }
 
     public void addView(GLView view) {
