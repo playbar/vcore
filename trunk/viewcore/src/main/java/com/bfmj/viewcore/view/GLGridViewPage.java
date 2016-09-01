@@ -364,12 +364,6 @@ public class GLGridViewPage extends GLGridView {
 
 
 		mShowMaxCount = mCount > MAXSHOW ? MAXSHOW : mCount;
-		if( mCount > 1 ){
-			mStart = mMidPos - (mStep * mShowMaxCount) / 2;
-		}
-		else{
-			mStart = mMidPos;
-		}
 
 		int istart = 1;
 		int iend = mCount;
@@ -383,17 +377,25 @@ public class GLGridViewPage extends GLGridView {
 
 		}
 
-//		istart += 10;
-//		iend += 10;
-		for( int i = istart; i <= iend; ++i ) {
-			int width = 60;
-			mStep = 80.0f;
-			String strText = "" + i;
-			if( strText.length() > 2) {
-				width = 60 + (strText.length() - 2) * 25;
-				mStep += (strText.length() - 2) * 25;
+//		istart +=95;
+//		iend += 95;
 
-			}
+		int width = 60;
+		mStep = 80.0f;
+		String strText = "" + iend;
+		if( strText.length() > 2) {
+			width = 60 + (strText.length() - 2) * 25;
+			mStep += (strText.length() - 2) * 25;
+
+		}
+		if( mCount > 1 ){
+			mStart = mMidPos - (mStep * mShowMaxCount) / 2;
+		}
+		else{
+			mStart = mMidPos;
+		}
+		for( int i = istart; i <= iend; ++i ) {
+
 			GLTextView textView = new GLTextView(this.getContext());
 			textView.setX(mStart + (i - istart) * mStep);
 			textView.setY(getY() + getHeight() + mBtnSpace);
@@ -407,7 +409,8 @@ public class GLGridViewPage extends GLGridView {
 				textView.setBackground(mDefaultColor);
 			}
 			textView.setAlignment( GLTextView.ALIGN_CENTER );
-			textView.setText(strText);
+			textView.setPadding(0, 10, 0, 0);
+			textView.setText(""+i);
 			textView.setTextSize(40);
 			final int index = i;
 			textView.setFocusListener(new GLViewFocusListener() {
