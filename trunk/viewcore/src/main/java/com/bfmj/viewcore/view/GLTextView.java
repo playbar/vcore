@@ -216,11 +216,7 @@ public class GLTextView extends GLRectView {
 		height = (int)(height / scale);
 		
         TextPaint p = new TextPaint();
-        //字体设置  
-        String fontType = "宋体";
-        //Typeface typeface = Typeface.create(fontType, mStyle);
-        //消除锯齿  
-        p.setAntiAlias(true); 
+        p.setAntiAlias(true);
         //字体颜色
         if (mTextGLColor != null){
         	p.setARGB((int)(mTextGLColor.getA() * 255), (int)(mTextGLColor.getR() * 255), 
@@ -233,7 +229,6 @@ public class GLTextView extends GLRectView {
         p.setTextSize(28);
         
         float lineHeight = mLineHeight == -1 ? 1.0f : (float)mLineHeight / mTextSize / 1.2f;
-        
         //绘制字体
         float textWidth = width;
     	StaticLayout sl = new StaticLayout(mText, p, (int)textWidth, mAlignment, lineHeight, 0.0f, true);
