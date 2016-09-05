@@ -740,6 +740,10 @@ public class GLRectView extends GLView {
 	 * @param tz Z轴的平移距离（空间单位）
 	 * @return
 	 */
+	private float mIncrementDepth = 0.0f;
+	public float getmIncrementDepth(){
+		return  mIncrementDepth;
+	}
 	public void translate(float tx, float ty, float tz) {
 //		float screenWidth = GLScreenParams.getScreenWidth();
 //		float screenHeight = GLScreenParams.getScreenHeight();
@@ -749,6 +753,7 @@ public class GLRectView extends GLView {
 //		Matrix.translateM(getMatrixState().getTranslationMatrix(), 0, screenWidth * tx / xDpi,
 //				-screenHeight * ty / yDpi, tz);
 
+		mIncrementDepth = tz;
 		setX(getX() + tx);
 		setY(getY() + ty);
 		setDepth(getDepth() + tz);

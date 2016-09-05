@@ -32,7 +32,7 @@ public class ChannelLeftItemView extends GLLinearView {
         GLImageView glImageView = new GLImageView(mContext);
         glImageView.setWidth(80f);
         glImageView.setHeight(80f);
-        glImageView.setMargin(270f,0,0,0);
+//        glImageView.setMargin(270f,0,0,0);
         glImageView.setId("leftIcon");
         glImageView.setImage(R.drawable.calendar);
 
