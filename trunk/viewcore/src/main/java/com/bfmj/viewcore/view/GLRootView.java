@@ -316,9 +316,9 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         GLThreadUtil.onSurfaceCreated(gl, config);
         isSurfaceCreated = true;
 
-        GLES30.glEnable(GLES30.GL_DEPTH_TEST);
-        GLES30.glDepthFunc(GLES30.GL_LEQUAL);
-        GLES30.glEnable(GLES30.GL_DITHER);
+//        GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+//        GLES30.glDepthFunc(GLES30.GL_LEQUAL);
+//        GLES30.glEnable(GLES30.GL_DITHER);
 //        GLES30.glEnable(GLES10.GL_MULTISAMPLE);
 
 //		MojingSDK.EnterMojingWorld(mMojingType);
@@ -688,7 +688,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                     } else if (lhs.getDepth() < rhs.getDepth()) {
                         return 1;
                     } else if (lhs.getDepth() > rhs.getDepth()) {
-                        return -1;
+                        return 1;
                     }
                     return 0;
                 }

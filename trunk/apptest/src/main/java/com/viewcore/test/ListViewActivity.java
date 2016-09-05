@@ -122,6 +122,7 @@ public class ListViewActivity extends BaseViewActivity {
 		adapter = new ListViewAdapter(listData, ListViewActivity.this);
 		listView.setAdapter(adapter);
 		listView.rotate(-30, 0, 1, 0);
+
 //		listView.setFocusListener( new GLViewFocusListener(){
 //			@Override
 //			public void onFocusChange( GLRectView view, boolean bfocused ){

@@ -850,41 +850,23 @@ public class GLGroupView extends GLRectView {
 				translateArray = rotateTranslate(this, childView);
 				float tx = childView.getX();
 				float ty = childView.getY();
-				float tz = childView.getDepth();
 				childView.rotate(angle, rx, ry, rz);
 
 				if( angle > 0 ) {
-
 					float radian = (float) (Math.PI / 180 * (-angle));
 					float cosv = (float) Math.cos(radian);
-//					float sinv = (float) Math.sin(radian);
-//					float depth = ( (childView.getWidth() + childView.getX()) / (this.getWidth() + this.getX()) );
-//					depth = (1-depth) * sinv;
-//
-//					float ttx = translateArray[0] * cosv - translateArray[2] * sinv;
-//					float tty = translateArray[1];
-//					float ttz = translateArray[2] * cosv + translateArray[0] * sinv;
-//					childView.translate(translateArray[0] * (1 - cosv), 0, sinv +depth);
-					childView.translate(translateArray[0] * (1 - cosv), 0, 0);
+					float sinv = (float) Math.sin(radian);
+					float depth = GLScreenParams.getScreenWidth() / 2400 * translateArray[0] * sinv;
+
+					childView.translate(translateArray[0]*(1-cosv), 0, depth);
 				}else{
 					float radian = (float) (Math.PI / 180 * (-angle));
 					float cosv = (float) Math.cos(radian);
-//					float sinv = (float) Math.sin(radian);
-//					float depth = ( (childView.getWidth() + childView.getX()) / (this.getWidth() + this.getX()) );
-//					depth = (1-depth) * sinv;
-//
-//					float ttx = translateArray[0] * cosv - translateArray[2] * sinv;
-//					float tty = translateArray[1];// translateArray[1] * cosv + translateArray[0] * sinv;
-//					float ttz = translateArray[2] * cosv + translateArray[0] * sinv;
-//					childView.translate(-translateArray[0] * (1 - cosv), 0, -0.1f);
-					childView.translate(translateArray[0] * (1 - cosv), 0, 0);
+					float sinv = (float) Math.sin(radian);
+					float depth = GLScreenParams.getScreenWidth() / 2400 * translateArray[0] * sinv;
+					childView.translate(translateArray[0] * (1 - cosv), 0, depth);
 				}
 
-//				childView.translate(-ttx, -tty, 0);
-//				rotateCorrect(this, childView, angle, rx, ry, rz);
-//				
-//				childView.rotate(angle, rx, ry, rz);
-				
 			}
 		}
 		
@@ -904,7 +886,7 @@ public class GLGroupView extends GLRectView {
 		float translateZ = parentView.getDepth() - currentView.getDepth();
 		
 		
-//		currentView.translate(translateX, translateY, translateZ );
+//		currentView.translate(translateX, 0, translateZ);
 		
 		Float[] translateArray = new Float[3];
 		translateArray[0] = translateX;
