@@ -64,10 +64,10 @@ public class ListViewActivity extends BaseViewActivity {
 		listView = new GLListView(ListViewActivity.this, GLListView.VERTICAL);
 		listView.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
 
-//		listView.setMargin(50, 50, 40,40);
-		listView.setX( 580);
+//		listView.setMargin(400, 50, 40,40);
+		listView.setX(580);
 		listView.setY(500);
-		listView.setLayoutParams(800, 1000);
+		listView.setLayoutParams(350, 1000);
 		listView.setItemSpacing(20);
 
 		listView.setOnKeyListener(new GLOnKeyListener() {
@@ -113,7 +113,7 @@ public class ListViewActivity extends BaseViewActivity {
 			}
 		};
 
-		for(index =0;  index < 3; index++){
+		for(index =0;  index < 1; index++){
 			listData.add(icon[index]);
 		}
 
@@ -121,7 +121,7 @@ public class ListViewActivity extends BaseViewActivity {
 		//listView.setOpenHeadControl( false );
 		adapter = new ListViewAdapter(listData, ListViewActivity.this);
 		listView.setAdapter(adapter);
-		listView.rotate(-30, 0, 1, 0);
+		listView.rotate(30, 0, 1, 0);
 
 //		listView.setFocusListener( new GLViewFocusListener(){
 //			@Override
@@ -132,11 +132,17 @@ public class ListViewActivity extends BaseViewActivity {
 
 		rootView.addView(listView);
 
+//		ChannelLeftItemView linearView = new ChannelLeftItemView( this);
+//		linearView.setX( 580 );
+//		linearView.setY( 500);
+////		linearView.rotate(30, 0, 1, 0);
+//		rootView.addView( linearView );
+
 		GLImageView lineH = new GLImageView(this);
 		lineH.setX(0);
 		lineH.setY(500);
 		lineH.setLayoutParams( 960, 2 );
-		lineH.setBackground( new GLColor( 1, 1, 1));
+		lineH.setBackground( new GLColor( 1, 0.5f, 0));
 		rootView.addView(lineH);
 
 		GLImageView line = new GLImageView(this);

@@ -850,7 +850,6 @@ public class GLGroupView extends GLRectView {
 				translateArray = rotateTranslate(this, childView);
 				float tx = childView.getX();
 				float ty = childView.getY();
-				childView.rotate(angle, rx, ry, rz);
 
 				if( angle > 0 ) {
 					float radian = (float) (Math.PI / 180 * (-angle));
@@ -867,6 +866,7 @@ public class GLGroupView extends GLRectView {
 					childView.translate(translateArray[0] * (1 - cosv), 0, depth);
 				}
 
+				childView.rotate(angle, rx, ry, rz);
 			}
 		}
 		
@@ -880,8 +880,10 @@ public class GLGroupView extends GLRectView {
 		float parentCenterY = parentView.getHeight()/2;
 		float currentCenterX = currentView.getWidth()/2;
 		float currentCenterY = currentView.getHeight()/2;
+		float parentX = parentView.getX();
+		float curentX = currentView.getX();
 		
-		float translateX = parentCenterX - currentCenterX;
+		float translateX = parentCenterX - currentCenterX - (curentX -parentX);
 		float translateY = parentCenterY - currentCenterY;
 		float translateZ = parentView.getDepth() - currentView.getDepth();
 		

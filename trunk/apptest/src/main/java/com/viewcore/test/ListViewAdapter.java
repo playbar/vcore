@@ -7,6 +7,7 @@ import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.view.GLGroupView;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLRectView;
+import com.bfmj.viewcore.view.GLTextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -75,16 +76,16 @@ public class ListViewAdapter extends GLBaseAdapter {
 	public GLRectView getGLView(int position, GLRectView convertView,
 			GLGroupView parent) {
 		// TODO Auto-generated method stub
-		
-		TestRelativeLayout grv = (TestRelativeLayout)convertView;
+
+		ChannelLeftItemView grv = (ChannelLeftItemView)convertView;
 		
 		if(grv == null){
-			grv = new TestRelativeLayout(context);			
+			grv = new ChannelLeftItemView(context);
 		}
 
-		final GLImageView image = (GLImageView)grv.getView("timage");
-		image.setWidth( 200 );
-		image.setHeight( 200 );
+		final GLImageView image = (GLImageView)grv.getView("leftIcon");
+//		image.setWidth( 200 );
+//		image.setHeight( 200 );
 		image.setImage(list.get(position));
 		image.setFocusListener(new GLViewFocusListener() {
 			@Override
@@ -92,7 +93,14 @@ public class ListViewAdapter extends GLBaseAdapter {
 				Log.e("ListViewAdapter", "focuseed is " + focused );
 			}
 		});
-		return image;
+
+		final GLTextView text = (GLTextView)grv.getView("leftText");
+		text.setText("111");
+//		image.setWidth( 200 );
+//		image.setHeight( 200 );
+
+
+		return grv;
 
 //		grv.setFocusListener(new GLViewFocusListener() {
 //			@Override
