@@ -55,7 +55,7 @@ public class GridViewActivity extends BaseViewActivity {
 
 	public List<Map<String, Object>> getData(){
 		//cion和iconName的长度是相同的，这里任选其一都可以
-		for(index=0; index < 12; ++index){
+		for(index=0; index < 1; ++index){
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("image", icon[index]);
 			map.put("text", iconName[index]);
@@ -101,16 +101,15 @@ public class GridViewActivity extends BaseViewActivity {
 			}
 		};
 
-		gridView = new GLGridViewPage( this, 2, 1 );
+		gridView = new GLGridViewPage( this, 3, 3 );
 		gridView.setX(500);
 		gridView.setY(500);
 		gridView.setLayoutParams(40, 40);
 		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
 		gridView.setHorizontalSpacing( 20.0f);
 		gridView.setVerticalSpacing( 20.0f);
-		gridView.setMargin(10, 10, 10, 10 );
-		gridView.setPadding( 10, 10, 10, 10);
-		gridView.setMargin( 10, 10, 10, 10 );
+//		gridView.setPadding( 10, 10, 10, 10);
+//		gridView.setMargin( 10, 10, 10, 10 );
 //		gridView.setNumDefaultColor( new GLColor(1.0f, 0.0f, 1.0f ));
 		gridView.setNumOnFouseColor( new GLColor(1.0f, 0.0f, 1.0f ));
 		gridView.setFlipLeftIcon(R.drawable.flip_leftarrow);
@@ -123,18 +122,19 @@ public class GridViewActivity extends BaseViewActivity {
 		adapter = new GridViewAdapter(listData, this);
 		gridView.setOnItemSelectedListener( listener );
 		gridView.setOnItemClickListener( clickListener );
-		gridView.setWidth(1134);
-		gridView.setHeight(800);
-		gridView.setTotalCount( 6 );
+		gridView.setWidth(1000);
+		gridView.setHeight(1000);
+//		gridView.setTotalCount( 6 );
 		gridView.setAdapter( adapter );
 		//gridView.rotate(90.0f, 1.0f, 0.0f, 0.0f );
+		gridView.rotate(-30, 0, 1, 0);
 		rootView.addView(gridView);
 
 		GLImageView lineH = new GLImageView(this);
 		lineH.setX(0);
 		lineH.setY(500);
 		lineH.setLayoutParams( 960, 2 );
-		lineH.setBackground( new GLColor( 1, 1, 1));
+		lineH.setBackground( new GLColor( 0, 0, 1));
 		rootView.addView(lineH);
 
 		GLImageView line = new GLImageView(this);

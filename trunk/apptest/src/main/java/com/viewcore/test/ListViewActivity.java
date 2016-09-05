@@ -8,11 +8,11 @@ import org.json.JSONException;
 
 import com.androidquery.callback.AjaxStatus;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
-import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLAdapterView;
 import com.bfmj.viewcore.view.GLCursorView;
+import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLListView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
@@ -31,7 +31,7 @@ public class ListViewActivity extends BaseViewActivity {
 	private int index = 0;
 	private GLRootView rootView;
 	private ListViewAdapter adapter;
-	private List<String> listData = new ArrayList<String>();
+	private List<Integer> listData = new ArrayList<Integer>();
 
 	// 图片封装为一个数组
 	private int[] icon = {
@@ -64,10 +64,10 @@ public class ListViewActivity extends BaseViewActivity {
 		listView = new GLListView(ListViewActivity.this, GLListView.VERTICAL);
 		listView.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
 
-		listView.setMargin(50, 50, 40,40);
-		listView.setX( 280);
-		listView.setY(400);
-		listView.setLayoutParams(1000, 500);
+//		listView.setMargin(50, 50, 40,40);
+		listView.setX( 580);
+		listView.setY(500);
+		listView.setLayoutParams(1000, 800);
 		listView.setItemSpacing(20);
 
 		listView.setOnKeyListener(new GLOnKeyListener() {
@@ -113,14 +113,15 @@ public class ListViewActivity extends BaseViewActivity {
 			}
 		};
 
-		for(index =0;  index < 2; index++){
-			listData.add(iconName[index]);
+		for(index =0;  index < 3; index++){
+			listData.add(icon[index]);
 		}
 
 		listView.setOnItemSelectedListener( onItemSelectedListener );
 		//listView.setOpenHeadControl( false );
 		adapter = new ListViewAdapter(listData, ListViewActivity.this);
 		listView.setAdapter(adapter);
+		listView.rotate(-45, 0, 1, 0);
 //		listView.setFocusListener( new GLViewFocusListener(){
 //			@Override
 //			public void onFocusChange( GLRectView view, boolean bfocused ){
@@ -130,10 +131,20 @@ public class ListViewActivity extends BaseViewActivity {
 
 		rootView.addView(listView);
 
+		GLImageView lineH = new GLImageView(this);
+		lineH.setX(0);
+		lineH.setY(500);
+		lineH.setLayoutParams( 960, 2 );
+		lineH.setBackground( new GLColor( 1, 1, 1));
+		rootView.addView(lineH);
 
-		
-		
-		
+		GLImageView line = new GLImageView(this);
+		line.setX(580);
+		line.setY( 0);
+		line.setLayoutParams(2, 960);
+		line.setBackground(new GLColor(0, 1, 0));
+		rootView.addView(line);
+
 		GLCursorView imageView = new GLCursorView(this);
 		imageView.setWidth(10);
 		imageView.setHeight(10);
@@ -156,7 +167,7 @@ public class ListViewActivity extends BaseViewActivity {
 			
 			for(int i=0;i<jsonArray.length();i++){
 				String imageUrl = jsonArray.getJSONObject(i).getString("logourl");
-				listData.add(imageUrl);
+				listData.add(i);
 			}
 			
 			ListViewAdapter adapter = new ListViewAdapter(listData, ListViewActivity.this);

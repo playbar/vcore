@@ -17,14 +17,13 @@ import android.util.Log;
 
 public class ListViewAdapter extends GLBaseAdapter {
 
-	private List<String> list;
+	private List<Integer> list;
 	private Context context;
-//	private AQuery mAq;
 	private DisplayImageOptions options;        // DisplayImageOptions是用于设置图片显示的类
 	private ImageLoader imageLoader = ImageLoader.getInstance();  
 //	private ImageView iv;
 	
-	public ListViewAdapter(List<String> listData, Context c) {
+	public ListViewAdapter(List<Integer> listData, Context c) {
 		context = c;
 		list = listData;
 //		mAq = aq;
@@ -86,7 +85,7 @@ public class ListViewAdapter extends GLBaseAdapter {
 		final GLImageView image = (GLImageView)grv.getView("timage");
 		image.setWidth( 200 );
 		image.setHeight( 200 );
-		image.setImage(R.drawable.a1);
+		image.setImage(list.get(position));
 		image.setFocusListener(new GLViewFocusListener() {
 			@Override
 			public void onFocusChange(GLRectView view, boolean focused) {
