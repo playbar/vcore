@@ -143,8 +143,9 @@ public class GLImageView extends GLRectView {
 					int textureId = -1;
 					if (mIsCutting && (width > 100 || height > 100) ) {
 						mTmpbitmap = GLTextureUtils.handleBitmap(mTmpbitmap, width, height);
+						isRecycle = true;
 					}
-					textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, true);
+					textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, isRecycle);
 					if (textureId > 0) {
 						if (mRenderParams == null){
 							mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);

@@ -661,8 +661,9 @@ public class GLRectView extends GLView {
 			return;
 		}
 
-		synchronized (this){
-			for (GLRenderParams render : mRenders){
+		for (int i = 0; i < mRenders.size(); i++){
+			GLRenderParams render = mRenders.get(i);
+			if (render != null){
 				if (render != mBackgroundRender){
 					updateRenderSize(render, getInnerWidth(), getInnerHeight());
 				} else {
