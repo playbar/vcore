@@ -67,7 +67,7 @@ public class ListViewActivity extends BaseViewActivity {
 //		listView.setMargin(50, 50, 40,40);
 		listView.setX( 580);
 		listView.setY(500);
-		listView.setLayoutParams(1000, 800);
+		listView.setLayoutParams(800, 1000);
 		listView.setItemSpacing(20);
 
 		listView.setOnKeyListener(new GLOnKeyListener() {
@@ -121,7 +121,7 @@ public class ListViewActivity extends BaseViewActivity {
 		//listView.setOpenHeadControl( false );
 		adapter = new ListViewAdapter(listData, ListViewActivity.this);
 		listView.setAdapter(adapter);
-		listView.rotate(-45, 0, 1, 0);
+		listView.rotate(-30, 0, 1, 0);
 //		listView.setFocusListener( new GLViewFocusListener(){
 //			@Override
 //			public void onFocusChange( GLRectView view, boolean bfocused ){
