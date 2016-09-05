@@ -26,6 +26,7 @@ public abstract class GLPlayerView extends GLRectView {
 	
 	private SurfaceTexture mSurfaceTexture;
 	private GLRenderParams mRenderParams;
+	private int mTextureId;
 	private float mVideoWidth = 0;
 	private float mVideoHeight = 0;
 	private String mPath;
@@ -60,7 +61,9 @@ public abstract class GLPlayerView extends GLRectView {
 //		 if (mSurfaceTexture != null){
 //			 mSurfaceTexture.setOnFrameAvailableListener(this);
 //		 }
-		 
+		 if (mRenderParams != null && mTextureId > 0){
+			 mRenderParams.setTextureId(mTextureId);
+		 }
 		 startRender();
 	 }
 	 
@@ -389,14 +392,14 @@ public abstract class GLPlayerView extends GLRectView {
 		if (mRenderParams != null){
 			removeRender(mRenderParams);
 		}
-		
-		int textureId = GLTextureUtils.createVideoTextureID();
+
+		mTextureId = GLTextureUtils.createVideoTextureID();
 		
 		mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_VIDEO);
-		mRenderParams.setTextureId(textureId);
+		mRenderParams.setTextureId(mTextureId);
 		updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
 		
-		mSurfaceTexture = new SurfaceTexture(textureId);
+		mSurfaceTexture = new SurfaceTexture(mTextureId);
 //		mSurfaceTexture.setOnFrameAvailableListener(this);
 		
 		addRender(mRenderParams);
