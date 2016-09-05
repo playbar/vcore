@@ -858,11 +858,13 @@ public class GLGroupView extends GLRectView {
 					float radian = (float) (Math.PI / 180 * (-angle));
 					float cosv = (float) Math.cos(radian);
 					float sinv = (float) Math.sin(radian);
+					float depth = ( (childView.getWidth() + childView.getX()) / (this.getWidth() + this.getX()) );
+					depth = (1-depth) * sinv;
 
 					float ttx = translateArray[0] * cosv - translateArray[2] * sinv;
-					float tty = translateArray[1];// translateArray[1] * cosv + translateArray[0] * sinv;
+					float tty = translateArray[1];
 					float ttz = translateArray[2] * cosv + translateArray[0] * sinv;
-					childView.translate(translateArray[0] * (1 - cosv), 0, sinv);
+					childView.translate(translateArray[0] * (1 - cosv), 0, sinv +depth);
 				}else{
 					float radian = (float) (Math.PI / 180 * (-angle));
 					float cosv = (float) Math.cos(radian);

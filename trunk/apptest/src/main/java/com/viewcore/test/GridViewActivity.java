@@ -127,7 +127,7 @@ public class GridViewActivity extends BaseViewActivity {
 //		gridView.setTotalCount( 6 );
 		gridView.setAdapter( adapter );
 		//gridView.rotate(90.0f, 1.0f, 0.0f, 0.0f );
-		gridView.rotate(-30, 0, 1, 0);
+		gridView.rotate(45, 0, 1, 0);
 		rootView.addView(gridView);
 
 		GLImageView lineH = new GLImageView(this);
