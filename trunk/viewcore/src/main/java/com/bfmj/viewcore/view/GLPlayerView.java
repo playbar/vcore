@@ -467,6 +467,5 @@ public abstract class GLPlayerView extends GLRectView {
 		if (mRenderParams != null){
 			mRenderParams.setTextureId(0);
 		}
-		super.release();
 	}
 }
