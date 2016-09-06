@@ -97,7 +97,7 @@ public class ListViewActivity extends BaseViewActivity {
 			public void onItemSelected(GLAdapterView<?> glparent,
 									   GLView glview, int position, long id) {
 				Log.e("ListViewActivity", "OnItemSelectedListener.onItemSelected");
-				AnimUtils.startScaleAndTranslate(((ChannelLeftItemView)glview),true);
+				AnimUtils.startScaleAndTranslate(((ChannelRightItemView)glview),true);
 				//glview.setAlpha( 0.3f );
 			}
 
@@ -105,7 +105,7 @@ public class ListViewActivity extends BaseViewActivity {
 			public void onNothingSelected(GLAdapterView<?> glparent,
 										  GLView glview, int position, long id) {
 				Log.e("ListViewActivity", "OnItemSelectedListener.onNothingSelected");
-				AnimUtils.startScaleAndTranslate(((ChannelLeftItemView)glview),false);
+				AnimUtils.startScaleAndTranslate(((ChannelRightItemView)glview),false);
 				//glview.setAlpha( 1.0f );
 			}
 
@@ -122,7 +122,7 @@ public class ListViewActivity extends BaseViewActivity {
 		listView.setOnItemSelectedListener( onItemSelectedListener );
 		//listView.setOpenHeadControl( false );
 		adapter = new ListViewAdapter(listData, ListViewActivity.this);
-		listView.rotate(45, 0, 1, 0);
+		listView.rotate(-45, 0, 1, 0);
 		listView.setAdapter(adapter);
 
 

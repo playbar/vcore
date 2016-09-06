@@ -508,7 +508,8 @@ public class GLGroupView extends GLRectView {
 								childView.setX(view.getX() + (view.getWidth() - view.getPaddingRight() - childView.getWidth() - childView.getMarginRight()));
 								childView.setY(view.getY() + (view.getHeight() - view.getPaddingBottom() - childView.getHeight() - childView.getMarginBottom()));
 							}
-							
+
+							childView.translateX( childView.getmIncrementX());
 							//resetChildView(childView);
 						}
 					}
@@ -524,6 +525,7 @@ public class GLGroupView extends GLRectView {
 						if (childView != null) {
 							childView.setX(view.getX() + view.getPaddingLeft() + childView.getMarginLeft());
 							childView.setY(view.getY() + view.getPaddingTop() + childView.getMarginTop());
+							childView.translateX( childView.getmIncrementX());
 						}
 						
 						//resetChildView(childView);
@@ -540,6 +542,7 @@ public class GLGroupView extends GLRectView {
 						if (childView != null) {
 							childView.setX(childView.getX() + view.getX() - listView.mX);
 							childView.setY(childView.getY() + view.getY() - listView.mY);
+							childView.translateX( childView.getmIncrementX());
 						}
 						
 						//resetChildView(childView);
@@ -556,6 +559,7 @@ public class GLGroupView extends GLRectView {
 						if (childView != null) {
 							childView.setX(childView.getX() + view.getX() - gridView.mX);
 							childView.setY(childView.getY() + view.getY() - gridView.mY);
+							childView.translateX( childView.getmIncrementX());
 						}
 						
 						//resetChildView(childView);

@@ -77,15 +77,13 @@ public class ListViewAdapter extends GLBaseAdapter {
 			GLGroupView parent) {
 		// TODO Auto-generated method stub
 
-		ChannelLeftItemView grv = (ChannelLeftItemView)convertView;
+		ChannelRightItemView grv = (ChannelRightItemView)convertView;
 		
 		if(grv == null){
-			grv = new ChannelLeftItemView(context);
+			grv = new ChannelRightItemView(context);
 		}
 
 		final GLImageView image = (GLImageView)grv.getView("leftIcon");
-//		image.setWidth( 200 );
-//		image.setHeight( 200 );
 		image.setImage(list.get(position));
 		image.setFocusListener(new GLViewFocusListener() {
 			@Override
@@ -94,7 +92,14 @@ public class ListViewAdapter extends GLBaseAdapter {
 			}
 		});
 
-		final GLTextView text = (GLTextView)grv.getView("leftText");
+		GLTextView title = (GLTextView)grv.getView("title");
+		if( title != null) {
+			title.setText("test");
+		}
+		GLTextView subtitle = (GLTextView)grv.getView("subtitle");
+		if( subtitle != null) {
+			subtitle.setText("testtest");
+		}
 //		text.setText("111");
 //		image.setWidth( 200 );
 //		image.setHeight( 200 );
