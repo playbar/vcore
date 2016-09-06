@@ -163,7 +163,7 @@ public class GLTextureUtils {
 	}
 
 	public static Bitmap handleColor(GLColor color, float width, float height){
-		int border = 0;
+		int border = 1;
 		int w = (int)width / 8;
 		int h = (int)height / 8;
 		if (w < 16){

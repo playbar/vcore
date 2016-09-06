@@ -27,7 +27,7 @@ public class GLImageView extends GLRectView {
 	private Bitmap mBitmap = null;
 	private Bitmap mLastBitmap = null;
 	private GLRenderParams mRenderParams;
-	private boolean mIsCutting = false;
+	private boolean mIsCutting = true;
 	private  Bitmap mTmpbitmap = null;
 
 	public GLImageView(Context context) {

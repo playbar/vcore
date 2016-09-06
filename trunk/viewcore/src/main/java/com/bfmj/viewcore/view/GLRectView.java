@@ -1017,9 +1017,9 @@ public class GLRectView extends GLView {
 				}
 				if (bitmap != null) {
 					GLTextureUtils.mUseMipMap = getMipMap();
-//					if (width > 100 || height > 100) {
-//						bitmap = GLTextureUtils.handleBitmap(bitmap, width, height);
-//					}
+					if (width > 100 || height > 100) {
+						bitmap = GLTextureUtils.handleBitmap(bitmap, width, height);
+					}
 					getTexture( bitmap);
 				} else if (mBackgroundColor != null){
 					Bitmap bmp = GLTextureUtils.handleColor(mBackgroundColor, width, height);
