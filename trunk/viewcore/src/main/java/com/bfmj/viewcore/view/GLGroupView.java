@@ -440,15 +440,14 @@ public class GLGroupView extends GLRectView {
 								childView.setX(view.getX() + (view.getWidth() - view.getPaddingLeft() - view.getPaddingRight() - childView.getWidth())/2 + view.getPaddingLeft());
 								childView.setY(maxY + childView.getMarginTop());
 							} else if(childView.getAlign().equals(GLConstant.GLAlign.CENTER_VERTICAL)) {
-								float rotatex = ((getWidth() / 2 - childView.getWidth() / 2) - ((maxX + childView.getMarginLeft()) - view.getX())) * (1-mCosV);
-								childView.setX(maxX + childView.getMarginLeft() + rotatex);
+								childView.setX(maxX + childView.getMarginLeft());
 								childView.setY(view.getY() + (view.getHeight() - view.getPaddingTop() - view.getPaddingBottom() - childView.getHeight())/2 + view.getPaddingTop());
 							}
 						}
 						
 						if (linearView.getOrientation().equals(GLConstant.GLOrientation.HORIZONTAL)) {
 							if (i == 0) {
-								maxX = childView.getX() + childView.getWidth()*mCosV + childView.getMarginRight();
+								maxX = childView.getX() + childView.getWidth() + childView.getMarginRight();
 							} else {
 								if (maxX < (childView.getX() + childView.getWidth() + childView.getMarginRight())) {
 									maxX = childView.getX() + childView.getWidth() + childView.getMarginRight();
@@ -463,6 +462,7 @@ public class GLGroupView extends GLRectView {
 								}
 							}
 						}
+						childView.translateX( childView.getmIncrementX());
 					}
 				}
 			} else if(view instanceof GLRelativeView) {
@@ -680,9 +680,8 @@ public class GLGroupView extends GLRectView {
 			
 			for (int i = 0; i < size; i++) {
 				GLRectView view = this.mChildView.get(i);
-				float translateX = getWidth() / 2 - view.getWidth() / 2 - (view.getX() - getX());
-				float depth1 = GLScreenParams.getScreenWidth() / 2400 * translateX * mSinV;
 				view.setDepth(view.getDepth() + changeDepth );
+//				view.translate(0, 0, view.getmIncrementDepth());
 			}
 		}
 		
@@ -855,8 +854,10 @@ public class GLGroupView extends GLRectView {
 //		translateArray = rotateTranslate(this.getParent(), this);
 		if (childViews != null && childViews.size() > 0) {
 			for (GLRectView childView : childViews) {
-//				translateArray = rotateTranslate(this, childView);
-//
+				translateArray = rotateTranslate(this, childView);
+				float depth = GLScreenParams.getScreenWidth() / 2400 * translateArray[0] * sinv;
+				childView.translate(translateArray[0]*(1-cosv), 0, depth);
+
 //				if( angle > 0 ) {
 //					float depth = GLScreenParams.getScreenWidth() / 2400 * translateArray[0] * sinv;
 //					childView.translate(translateArray[0]*(1-cosv), 0, depth);

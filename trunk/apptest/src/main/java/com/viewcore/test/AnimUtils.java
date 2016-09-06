@@ -27,12 +27,12 @@ public class AnimUtils {
 
     public static void startTranslate(final GLRectView view , boolean focuse){
         if(focuse) {
-            GLAnimation animation1 = new GLTranslateAnimation(0, 0, 0.2f);
+            GLAnimation animation1 = new GLTranslateAnimation(0, 0, -0.5f);
             animation1.setAnimView(view);
             animation1.setDuration(300);
             view.startAnimation(animation1);
         } else {
-            GLAnimation animation1 = new GLTranslateAnimation(0, 0, -0.2f);
+            GLAnimation animation1 = new GLTranslateAnimation(0, 0, 0.5f);
             animation1.setAnimView(view);
             animation1.setDuration(300);
             view.startAnimation(animation1);

@@ -208,28 +208,28 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 			if(view == null)
 				continue;
 
-			view.rotate( mAngle, 0, 1, 0);
+
 			mX += view.getMarginLeft();
 			if(this.mOrderType == this.HORIZONTAL){
 				view.setX(mX);
 				view.setY(GLListView.this.getY() + getMarginTop());
 				mX += view.getWidth() + this.mItemSpacing;
 			} else{
-				float rotatex = (getWidth() / 2 - view.getWidth() / 2 + getMarginLeft()) * (1-mCosV);
-				view.setX(GLListView.this.getX() + getMarginLeft() + rotatex);
+				view.setX(GLListView.this.getX() + getMarginLeft());
 				view.setY(getY() + getMarginTop() + (view.getHeight() + this.mItemSpacing)*j);
 				//view.setY(view.getMarginTop() + (view.getHeight() + this.mItemSpacing + view.getMarginTop() + view.getMarginBottom())*j);
 			}
+			view.rotate( mAngle, 0, 1, 0);
 			mDefaultDepth = view.getDepth();
 
 
-			float translateX = (this.getWidth() / 2 - view.getWidth() / 2) - (view.getX() - this.getX());
-			float depth = GLScreenParams.getScreenWidth() / 2400 * translateX * mSinV;
-			view.setDepth( this.getDepth() + depth );
+//			float translateX = (this.getWidth() / 2 - view.getWidth() / 2) - (view.getX() - this.getX());
+//			float depth = GLScreenParams.getScreenWidth() / 2400 * translateX * mSinV;
+//			view.setDepth( this.getDepth() + depth );
 
-//			if( view.getDepth() > this.getDepth() ){
-//				view.setDepth( this.getDepth() );
-//			}
+			if( view.getDepth() > this.getDepth() ){
+				view.setDepth( this.getDepth() );
+			}
 
 			//views[j] = view;
 			this.addView( view );
