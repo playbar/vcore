@@ -65,9 +65,9 @@ public class ListViewActivity extends BaseViewActivity {
 		listView.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
 
 //		listView.setMargin(400, 50, 40,40);
-		listView.setX(580);
-		listView.setY(500);
-		listView.setLayoutParams(350, 1000);
+		listView.setX(1000);
+		listView.setY(1000);
+		listView.setLayoutParams(350, 400);
 		listView.setItemSpacing(20);
 
 		listView.setOnKeyListener(new GLOnKeyListener() {
@@ -97,6 +97,7 @@ public class ListViewActivity extends BaseViewActivity {
 			public void onItemSelected(GLAdapterView<?> glparent,
 									   GLView glview, int position, long id) {
 				Log.e("ListViewActivity", "OnItemSelectedListener.onItemSelected");
+				AnimUtils.startScaleAndTranslate(((ChannelLeftItemView)glview),true);
 				//glview.setAlpha( 0.3f );
 			}
 
@@ -104,6 +105,7 @@ public class ListViewActivity extends BaseViewActivity {
 			public void onNothingSelected(GLAdapterView<?> glparent,
 										  GLView glview, int position, long id) {
 				Log.e("ListViewActivity", "OnItemSelectedListener.onNothingSelected");
+				AnimUtils.startScaleAndTranslate(((ChannelLeftItemView)glview),false);
 				//glview.setAlpha( 1.0f );
 			}
 
@@ -121,7 +123,7 @@ public class ListViewActivity extends BaseViewActivity {
 		//listView.setOpenHeadControl( false );
 		adapter = new ListViewAdapter(listData, ListViewActivity.this);
 		listView.setAdapter(adapter);
-		listView.rotate(30, 0, 1, 0);
+		listView.rotate(45, 0, 1, 0);
 
 //		listView.setFocusListener( new GLViewFocusListener(){
 //			@Override
@@ -140,15 +142,15 @@ public class ListViewActivity extends BaseViewActivity {
 
 		GLImageView lineH = new GLImageView(this);
 		lineH.setX(0);
-		lineH.setY(500);
-		lineH.setLayoutParams( 960, 2 );
+		lineH.setY(1000);
+		lineH.setLayoutParams( 1960, 2 );
 		lineH.setBackground( new GLColor( 1, 0.5f, 0));
 		rootView.addView(lineH);
 
 		GLImageView line = new GLImageView(this);
-		line.setX(580);
+		line.setX(1000);
 		line.setY( 0);
-		line.setLayoutParams(2, 960);
+		line.setLayoutParams(2, 1960);
 		line.setBackground(new GLColor(0, 1, 0));
 		rootView.addView(line);
 
@@ -160,8 +162,8 @@ public class ListViewActivity extends BaseViewActivity {
 		imageView.setX( 1195);
 		imageView.setY( 1195);
 		imageView.setLayoutParams( 10, 10);
-		
 		rootView.addView(imageView);
+
 //		rootView.addView(listView);		
 		//aq.ajax(Url, JSONArray.class, this, "jsonCallBack");
 		

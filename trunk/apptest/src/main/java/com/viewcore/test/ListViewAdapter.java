@@ -95,7 +95,7 @@ public class ListViewAdapter extends GLBaseAdapter {
 		});
 
 		final GLTextView text = (GLTextView)grv.getView("leftText");
-		text.setText("111");
+//		text.setText("111");
 //		image.setWidth( 200 );
 //		image.setHeight( 200 );
 

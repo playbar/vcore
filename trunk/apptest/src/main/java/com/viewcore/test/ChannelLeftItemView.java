@@ -32,19 +32,19 @@ public class ChannelLeftItemView extends GLLinearView {
         GLImageView glImageView = new GLImageView(mContext);
         glImageView.setWidth(80f);
         glImageView.setHeight(80f);
-//        glImageView.setMargin(270f,0,0,0);
+//        glImageView.setMargin(80f,0,0,0);
         glImageView.setId("leftIcon");
         glImageView.setImage(R.drawable.calendar);
 
         GLTextView glTextView = new GLTextView(mContext);
 
         glTextView.setWidth(98f);
-        glTextView.setHeight(35f);
-        glTextView.setTextSize(32);
-        glTextView.setTextColor(new GLColor(0xff00ff));
+        glTextView.setHeight(60f);
+        glTextView.setTextSize(48);
+        glTextView.setTextColor(new GLColor(0xFFFFFF));
         glTextView.setId("leftText");
         glTextView.setText("test");
-        glTextView.setMargin(30f,0,0,0);
+//        glTextView.setMargin(30f,0,0,0);
 //        glTextView.setVisible( false);
 
         this.addViewCenterVertical(glImageView);
