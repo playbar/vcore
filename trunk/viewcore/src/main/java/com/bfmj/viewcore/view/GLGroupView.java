@@ -25,6 +25,9 @@ public class GLGroupView extends GLRectView {
 	protected static float NOXY = -10000; //默认参数
 	private boolean isAutomaticFocus = false;
 	private boolean isInitDraw = false;
+	protected float mCosV = 0.0f;
+	protected float mSinV = 0.0f;
+	protected float mAngle = 0.0f;
 	
 	public GLGroupView(Context context) {
 		super(context);
@@ -437,14 +440,15 @@ public class GLGroupView extends GLRectView {
 								childView.setX(view.getX() + (view.getWidth() - view.getPaddingLeft() - view.getPaddingRight() - childView.getWidth())/2 + view.getPaddingLeft());
 								childView.setY(maxY + childView.getMarginTop());
 							} else if(childView.getAlign().equals(GLConstant.GLAlign.CENTER_VERTICAL)) {
-								childView.setX(maxX + childView.getMarginLeft());
+								float rotatex = ((getWidth() / 2 - childView.getWidth() / 2) - ((maxX + childView.getMarginLeft()) - view.getX())) * (1-mCosV);
+								childView.setX(maxX + childView.getMarginLeft() + rotatex);
 								childView.setY(view.getY() + (view.getHeight() - view.getPaddingTop() - view.getPaddingBottom() - childView.getHeight())/2 + view.getPaddingTop());
 							}
 						}
 						
 						if (linearView.getOrientation().equals(GLConstant.GLOrientation.HORIZONTAL)) {
 							if (i == 0) {
-								maxX = childView.getX() + childView.getWidth() + childView.getMarginRight();
+								maxX = childView.getX() + childView.getWidth()*mCosV + childView.getMarginRight();
 							} else {
 								if (maxX < (childView.getX() + childView.getWidth() + childView.getMarginRight())) {
 									maxX = childView.getX() + childView.getWidth() + childView.getMarginRight();
@@ -676,8 +680,9 @@ public class GLGroupView extends GLRectView {
 			
 			for (int i = 0; i < size; i++) {
 				GLRectView view = this.mChildView.get(i);
-
-				view.setDepth(view.getDepth() + changeDepth);
+				float translateX = getWidth() / 2 - view.getWidth() / 2 - (view.getX() - getX());
+				float depth1 = GLScreenParams.getScreenWidth() / 2400 * translateX * mSinV;
+				view.setDepth(view.getDepth() + changeDepth );
 			}
 		}
 		
@@ -844,32 +849,28 @@ public class GLGroupView extends GLRectView {
 		ArrayList<GLRectView> childViews = getChildViews(this);
 
 		Float[] translateArray = null;
+		float radian = (float) (Math.PI / 180 * (-angle));
+		float cosv = (float) Math.cos(radian);
+		float sinv = (float) Math.sin(radian);
 //		translateArray = rotateTranslate(this.getParent(), this);
 		if (childViews != null && childViews.size() > 0) {
 			for (GLRectView childView : childViews) {
-				translateArray = rotateTranslate(this, childView);
-				float tx = childView.getX();
-				float ty = childView.getY();
-
-				if( angle > 0 ) {
-					float radian = (float) (Math.PI / 180 * (-angle));
-					float cosv = (float) Math.cos(radian);
-					float sinv = (float) Math.sin(radian);
-					float depth = GLScreenParams.getScreenWidth() / 2400 * translateArray[0] * sinv;
-
-					childView.translate(translateArray[0]*(1-cosv), 0, depth);
-				}else{
-					float radian = (float) (Math.PI / 180 * (-angle));
-					float cosv = (float) Math.cos(radian);
-					float sinv = (float) Math.sin(radian);
-					float depth = GLScreenParams.getScreenWidth() / 2400 * translateArray[0] * sinv;
-					childView.translate(translateArray[0] * (1 - cosv), 0, depth);
-				}
+//				translateArray = rotateTranslate(this, childView);
+//
+//				if( angle > 0 ) {
+//					float depth = GLScreenParams.getScreenWidth() / 2400 * translateArray[0] * sinv;
+//					childView.translate(translateArray[0]*(1-cosv), 0, depth);
+//				}else{
+//					float depth = GLScreenParams.getScreenWidth() / 2400 * translateArray[0] * sinv;
+//					childView.translate(translateArray[0]*(1-cosv), 0, depth);
+//				}
 
 				childView.rotate(angle, rx, ry, rz);
 			}
 		}
-		
+		mCosV = cosv;
+		mSinV = sinv;
+		mAngle = angle;
 		super.rotate(angle, rx, ry, rz);
 	}
 	

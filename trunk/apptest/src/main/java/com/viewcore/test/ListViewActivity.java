@@ -122,8 +122,10 @@ public class ListViewActivity extends BaseViewActivity {
 		listView.setOnItemSelectedListener( onItemSelectedListener );
 		//listView.setOpenHeadControl( false );
 		adapter = new ListViewAdapter(listData, ListViewActivity.this);
-		listView.setAdapter(adapter);
 		listView.rotate(45, 0, 1, 0);
+		listView.setAdapter(adapter);
+
+
 
 //		listView.setFocusListener( new GLViewFocusListener(){
 //			@Override

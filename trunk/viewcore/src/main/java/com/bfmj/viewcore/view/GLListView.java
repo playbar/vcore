@@ -8,6 +8,7 @@ import com.bfmj.viewcore.animation.GLAnimation;
 import com.bfmj.viewcore.animation.GLTranslateAnimation;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
+import com.bfmj.viewcore.render.GLScreenParams;
 import com.bfmj.viewcore.util.GLFocusUtils;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 
@@ -207,40 +208,28 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 			if(view == null)
 				continue;
 
+			view.rotate( mAngle, 0, 1, 0);
 			mX += view.getMarginLeft();
 			if(this.mOrderType == this.HORIZONTAL){
 				view.setX(mX);
 				view.setY(GLListView.this.getY() + getMarginTop());
 				mX += view.getWidth() + this.mItemSpacing;
 			} else{
-				view.setX(GLListView.this.getX() + getMarginLeft());
+				float rotatex = (getWidth() / 2 - view.getWidth() / 2 + getMarginLeft()) * (1-mCosV);
+				view.setX(GLListView.this.getX() + getMarginLeft() + rotatex);
 				view.setY(getY() + getMarginTop() + (view.getHeight() + this.mItemSpacing)*j);
 				//view.setY(view.getMarginTop() + (view.getHeight() + this.mItemSpacing + view.getMarginTop() + view.getMarginBottom())*j);
 			}
 			mDefaultDepth = view.getDepth();
 
-//			final int position = j;
-//			view.setFocusListener(new GLViewFocusListener() {
-//
-//				@Override
-//				public void onFocusChange(GLRectView view, boolean focused) {
-//					// TODO Auto-generated method stub
-//					if( mOnItemSelectedListener == null ){
-//						return;
-//					}
-//					if( focused ){
-//						mOnItemSelectedListener.onItemSelected( null, view, position, position);
-//					}else{
-//						mOnItemSelectedListener.onNothingSelected( null, view, position, position);
-//					}
-//
-//
-//				}
-//			});
 
-			if( view.getDepth() > this.getDepth() ){
-				view.setDepth( this.getDepth() );
-			}
+			float translateX = (this.getWidth() / 2 - view.getWidth() / 2) - (view.getX() - this.getX());
+			float depth = GLScreenParams.getScreenWidth() / 2400 * translateX * mSinV;
+			view.setDepth( this.getDepth() + depth );
+
+//			if( view.getDepth() > this.getDepth() ){
+//				view.setDepth( this.getDepth() );
+//			}
 
 			//views[j] = view;
 			this.addView( view );
