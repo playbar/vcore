@@ -10,6 +10,7 @@ public class GLScreenParams {
 	private static float yDpi = 2400;
 	private static float defualtDepth = 4.0f;
 	private static float eyeDistance = 0.06f;
+	private static float scaleRate;
 
 	public static float getFOV(){
 		return FOV;
@@ -74,5 +75,9 @@ public class GLScreenParams {
 
 	public static void setEyeDistance(float eyeDistance) {
 		GLScreenParams.eyeDistance = eyeDistance;
+	}
+
+	public static float getScaleRate() {
+		return xDpi / 1024f;
 	}
 }

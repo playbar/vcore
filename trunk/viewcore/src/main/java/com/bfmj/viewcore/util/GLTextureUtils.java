@@ -19,6 +19,7 @@ import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.bfmj.viewcore.render.GLColor;
+import com.bfmj.viewcore.render.GLScreenParams;
 import com.bfmj.viewcore.view.BaseViewActivity;
 
 /**
@@ -137,13 +138,13 @@ public class GLTextureUtils {
 		int border = 1;
 		int bWidth = bm.getWidth();
 		int bHeight = bm.getHeight();
-		int w = (int)width / 2;
-		int h = (int)height / 2;
-		if (w < 16){
-			w = 16;
+		int w = (int)(width / GLScreenParams.getScaleRate());
+		int h = (int)(height / GLScreenParams.getScaleRate());
+		if (w < 32){
+			w = 32;
 		}
-		if (h < 16){
-			h = 16;
+		if (h < 32){
+			h = 32;
 		}
 
     	Bitmap bitmap = Bitmap.createBitmap(w, h, Config.ARGB_8888);
@@ -164,13 +165,13 @@ public class GLTextureUtils {
 
 	public static Bitmap handleColor(GLColor color, float width, float height){
 		int border = 1;
-		int w = (int)width / 8;
-		int h = (int)height / 8;
-		if (w < 16){
-			w = 16;
+		int w = (int)(width / GLScreenParams.getScaleRate());
+		int h = (int)(height / GLScreenParams.getScaleRate());
+		if (w < 32){
+			w = 32;
 		}
-		if (h < 16){
-			h = 16;
+		if (h < 32){
+			h = 32;
 		}
 
 		Bitmap bmp = Bitmap.createBitmap(w , h, Bitmap.Config.ARGB_8888);

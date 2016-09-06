@@ -3,6 +3,7 @@ package com.bfmj.viewcore.view;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLImageRect;
 import com.bfmj.viewcore.render.GLRenderParams;
+import com.bfmj.viewcore.render.GLScreenParams;
 import com.bfmj.viewcore.util.BitmapOp;
 import com.bfmj.viewcore.util.GLFontUtils;
 import com.bfmj.viewcore.util.GLGenTexTask;
@@ -201,8 +202,8 @@ public class GLTextView extends GLRectView {
 	}
 	
 	private Bitmap createBitmap(){
-		int width = (int)getInnerWidth();
-		int height = (int)getInnerHeight();
+		int width = (int)(getInnerWidth() / GLScreenParams.getScaleRate());
+		int height = (int)(getInnerHeight() / GLScreenParams.getScaleRate());
 		
 		if (width <= 0){
 			return null;
@@ -223,7 +224,7 @@ public class GLTextView extends GLRectView {
         }
         
         p.setTypeface(GLFontUtils.getInstance(getContext()).getFontTypeface());
-        p.setTextSize(28);
+        p.setTextSize(28 / GLScreenParams.getScaleRate());
         
         float lineHeight = mLineHeight == -1 ? 1.0f : (float)mLineHeight / mTextSize / 1.2f;
         //绘制字体

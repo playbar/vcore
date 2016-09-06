@@ -141,7 +141,7 @@ public class GLImageView extends GLRectView {
 					GLTextureUtils.mUseMipMap = getMipMap();
 
 					int textureId = -1;
-					if (mIsCutting && (width > 100 || height > 100) ) {
+					if (mIsCutting && (width > 128 || height > 128) ) {
 						mTmpbitmap = GLTextureUtils.handleBitmap(mTmpbitmap, width, height);
 						isRecycle = true;
 					}
