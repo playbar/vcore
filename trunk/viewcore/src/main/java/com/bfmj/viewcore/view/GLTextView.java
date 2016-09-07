@@ -1,13 +1,8 @@
 package com.bfmj.viewcore.view;
 
 import com.bfmj.viewcore.render.GLColor;
-import com.bfmj.viewcore.render.GLImageRect;
-import com.bfmj.viewcore.render.GLRenderParams;
 import com.bfmj.viewcore.render.GLScreenParams;
-import com.bfmj.viewcore.util.BitmapOp;
 import com.bfmj.viewcore.util.GLFontUtils;
-import com.bfmj.viewcore.util.GLGenTexTask;
-import com.bfmj.viewcore.util.GLTextureUtils;
 import com.bfmj.viewcore.util.GLThreadPool;
 
 import android.content.Context;
@@ -19,7 +14,6 @@ import android.graphics.Typeface;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.util.Log;
 
 /**
  * 
@@ -36,8 +30,7 @@ public class GLTextView extends GLRectView {
 	public static final int BOLD = Typeface.BOLD;
 	public static final int ITALIC = Typeface.ITALIC;
 	public static final int BOLD_ITALIC = Typeface.BOLD_ITALIC;
-	
-	private GLRenderParams mRenderParams;
+
 	private String mText = "";
 	private int mTextColor = Color.WHITE;
 	private GLColor mTextGLColor = null;
@@ -159,7 +152,6 @@ public class GLTextView extends GLRectView {
 		}
 	}
 
-	Bitmap bmpTemp = null;
 	@Override
 	public void createTexture(){
 		if (!isSurfaceCreated() || !isVisible()){
@@ -173,30 +165,8 @@ public class GLTextView extends GLRectView {
 		GLThreadPool.getThreadPool().execute(new Runnable() {
 			public void run() {
 
-				bmpTemp = createBitmap();
-				GLGenTexTask.QueueEvent(new GLGenTexTask() {
-					public void ExportTextureId() {
-
-						int textureId = -1;
-
-						if (bmpTemp != null) {
-							textureId = GLTextureUtils.initImageTexture(getContext(), bmpTemp, false);
-							bmpTemp.recycle();
-							bmpTemp = null;
-						}
-
-						if (textureId > 0) {
-							if (mRenderParams == null){
-								mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
-								addRender(mRenderParams);
-							} else if (mRenderParams.getTextureId() > 0){
-								releaseTexture(mRenderParams.getTextureId());
-							}
-							mRenderParams.setTextureId(textureId);
-							updateRenderSize(mRenderParams, getInnerWidth(), getInnerHeight());
-						}
-					}
-				});
+				mFrontBitmap = createBitmap();
+				GLTextView.super.createTexture();
 			}
 		});
 	}
@@ -269,37 +239,6 @@ public class GLTextView extends GLRectView {
 	@Override
 	public void initDraw() {
 		super.initDraw();
-
-		if(isVisible()){
-			createTexture();
-		}
-
-	}
-
-	@Override
-	public void setVisible(boolean isVisible) {
-		if (mRenderParams == null){
-			updateTexture();
-		}
-		super.setVisible(isVisible);
-	}
-
-	private void updateTexture(){
-		if (!isSurfaceCreated() || !isVisible()){
-			return;
-		}
-
-		getRootView().mCreateTextureQueue.offer(this);
-	}
-
-	private void removeRender(){
-		if (mRenderParams != null){
-			if (mRenderParams.getTextureId() > -1) {
-				releaseTexture(mRenderParams.getTextureId());
-			}
-			removeRender(mRenderParams);
-			mRenderParams = null;
-		}
 	}
 
 	@Override
@@ -336,6 +275,5 @@ public class GLTextView extends GLRectView {
 	@Override
 	public void release() {
 		super.release();
-		mRenderParams = null;
 	}
 }

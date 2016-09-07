@@ -35,6 +35,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.opengl.Matrix;
 import android.util.Log;
 import android.view.animation.AnimationUtils;
@@ -104,11 +106,17 @@ public class GLRectView extends GLView {
 	private GLConstant.GLAlign mAlign;
 	private float mRotateAngle = 0;
 
+	// back render
 	private int mBackgroundResId;
 	private Bitmap mBackgroundBitmap;
 	private GLColor mBackgroundColor;
 	private GLRenderParams mBackgroundRender;
 	private boolean mUseMipMap = false;
+
+	// front render
+	protected int mFrontResId = 0;
+	protected Bitmap mFrontBitmap = null;
+	protected boolean mIsCutting = true;
 
 	private int mHeadStayTime = 1500;
 	private int mHeadClickTime = 2500;
@@ -996,64 +1004,31 @@ public class GLRectView extends GLView {
 		return;
 	}
 
-	private static int index = 1;
 	private void initBackground(){
 		if (!isSurfaceCreated || !isVisible() || !isNeedUpdateUI()){
 			return;
 		}
-
-		GLThreadPool.getThreadPool().execute(new Runnable() {
-			public void run() {
-
-				boolean isRecycle = true;
-				Bitmap bitmap = null;
-				float width = getWidth();
-				float height = getHeight();
-				if (mBackgroundResId != 0) {
-					InputStream is = getContext().getResources().openRawResource(mBackgroundResId);
-
-					try {
-						bitmap = BitmapFactory.decodeStream(is);
-					} finally {
-						try {
-							is.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				} else if (mBackgroundBitmap != null) {
-					bitmap = mBackgroundBitmap;
-					isRecycle = false;
-				}
-				if (bitmap != null) {
-					GLTextureUtils.mUseMipMap = getMipMap();
-					if (width > 128 || height > 128) {
-						bitmap = GLTextureUtils.handleBitmap(bitmap, width, height);
-					}
-					getTexture( bitmap);
-				} else if (mBackgroundColor != null){
-					Bitmap bmp = GLTextureUtils.handleColor(mBackgroundColor, width, height);
-					getTexture( bmp);
-				}
-
-			}
-		});
-
+		createTexture();
 	}
 
 	@Override
 	public void initDraw() {
 		isSurfaceCreated = true;
-		initBackground();
+		createTexture();
 	}
 
 	@Override
 	public void setVisible(boolean isVisible) {
 		super.setVisible(isVisible);
+		updateTexture();
+	}
 
-		if (mBackgroundRender == null) {
-			initBackground();
+	protected void updateTexture(){
+		if (!isSurfaceCreated() || !isVisible()){
+			return;
 		}
+
+		getRootView().mCreateTextureQueue.offer(this);
 	}
 
 	private void removeRender(){
@@ -1651,5 +1626,81 @@ public class GLRectView extends GLView {
 		boolean onHeadClickStart(GLRectView view);
 		boolean onHeadClickEnd(GLRectView view);
 		boolean onHeadClickCancel(GLRectView view);
+	}
+
+	@Override
+	public void createTexture(){
+		if (!isSurfaceCreated() || !isVisible()){
+			return;
+		}
+
+		GLThreadPool.getThreadPool().execute(new Runnable() {
+			public void run() {
+				Bitmap bBitmap = null;
+				Bitmap fBitmap = null;
+				float width = getWidth();
+				float height = getHeight();
+				float innerWidth = getInnerWidth();
+				float innerHeight = getInnerHeight();
+
+				if (mBackgroundResId != 0) {
+					bBitmap = createBitmap(mBackgroundResId);
+				} else if (mBackgroundBitmap != null) {
+					bBitmap = GLTextureUtils.handleBitmap(mBackgroundBitmap, width, height);
+				} else if (mBackgroundColor != null){
+					bBitmap = GLTextureUtils.handleColor(mBackgroundColor, width, height);
+				}
+
+				if (mFrontResId != 0){
+					fBitmap = createBitmap(mFrontResId);
+				} else if (mFrontBitmap != null){
+					fBitmap = GLTextureUtils.handleBitmap(mFrontBitmap, innerWidth, innerHeight);
+				}
+
+				if (bBitmap != null && fBitmap != null){
+					getTexture(mergeBitmap(bBitmap, fBitmap));
+				} else if (bBitmap != null){
+					getTexture(bBitmap);
+				} else if (fBitmap != null){
+					getTexture(fBitmap);
+				}
+			}
+		});
+	}
+
+	private Bitmap createBitmap(int resId){
+		Bitmap bm = null;
+		if (resId != 0){
+			InputStream is = getContext().getResources().openRawResource(mFrontResId);
+
+			try {
+				bm = BitmapFactory.decodeStream(is);
+			} finally {
+				try {
+					is.close();
+				} catch(IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return bm;
+	}
+
+	private Bitmap mergeBitmap(Bitmap bbm, Bitmap fbm){
+		int width = (int) getWidth();
+		int height = (int) getHeight();
+
+		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bitmap);
+
+		Rect oRect = new Rect(0, 0, bbm.getWidth(), bbm.getHeight());
+		Rect dRect = new Rect(0, 0, width, height);
+		canvas.drawBitmap(bbm, oRect, dRect, new Paint());
+
+		oRect = new Rect(0, 0, fbm.getWidth(), fbm.getHeight());
+		dRect = new Rect((int)getPaddingLeft(), (int)getPaddingTop(), (int)(width - getPaddingRight()), (int)(height - getPaddingBottom()));
+		canvas.drawBitmap(fbm, oRect, dRect, new Paint());
+
+		return bitmap;
 	}
 }
