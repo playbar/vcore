@@ -106,7 +106,7 @@ public class GLImageRect extends GLRect {
 				GLMatrixState state = view.getMatrixState();
 				state.pushMatrix();
 				float[] curMatrix = state.getCurrentMatrix();
-				Matrix.translateM(curMatrix, 0, 0, 0, d + view.getZPosition() * 0.0008f);
+				Matrix.translateM(curMatrix, 0, 0, 0, d + view.getZPosition() * 0.0001f);
 				if (view.getAngelX() != 0){
 					Matrix.rotateM(curMatrix, 0, view.getAngelX(), 1, 0, 0);
 				}

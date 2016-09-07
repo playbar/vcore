@@ -64,10 +64,10 @@ public class ListViewActivity extends BaseViewActivity {
 		listView = new GLListView(ListViewActivity.this, GLListView.VERTICAL);
 		listView.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
 
-//		listView.setMargin(400, 50, 40,40);
+		listView.setMargin(0, 200, 40,40);
 		listView.setX(1000);
 		listView.setY(1000);
-		listView.setLayoutParams(350, 400);
+		listView.setLayoutParams(350, 1000);
 		listView.setItemSpacing(20);
 
 		listView.setOnKeyListener(new GLOnKeyListener() {
@@ -115,14 +115,14 @@ public class ListViewActivity extends BaseViewActivity {
 			}
 		};
 
-		for(index =0;  index < 1; index++){
+		for(index =0;  index < 3; index++){
 			listData.add(icon[index]);
 		}
 
 		listView.setOnItemSelectedListener( onItemSelectedListener );
 		//listView.setOpenHeadControl( false );
 		adapter = new ListViewAdapter(listData, ListViewActivity.this);
-		listView.rotate(-45, 0, 1, 0);
+//		listView.rotate(-45, 0, 1, 0);
 		listView.setAdapter(adapter);
 
 
