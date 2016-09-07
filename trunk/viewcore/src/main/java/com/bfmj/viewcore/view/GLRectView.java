@@ -1671,7 +1671,7 @@ public class GLRectView extends GLView {
 	private Bitmap createBitmap(int resId){
 		Bitmap bm = null;
 		if (resId != 0){
-			InputStream is = getContext().getResources().openRawResource(mFrontResId);
+			InputStream is = getContext().getResources().openRawResource(resId);
 
 			try {
 				bm = BitmapFactory.decodeStream(is);
