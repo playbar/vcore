@@ -1,0 +1,39 @@
+apply plugin: 'com.android.model.library'
+
+model {
+    android {
+        compileSdkVersion 23
+        buildToolsVersion '23.0.0'
+        defaultConfig {
+            minSdkVersion.apiLevel = 13
+            targetSdkVersion.apiLevel = 24
+            versionCode 1
+            versionName "1.0"
+        }
+
+        ndk{
+            platformVersion = 23
+            moduleName = 'viewcore'
+            toolchain = 'clang'
+            stl         = 'gnustl_static'
+            cppFlags.addAll(['-std=c++11', '-Wall', '-fno-rtti', '-fno-exceptions'])
+            CFlags.addAll(['-Wall'])
+            abiFilters.addAll(['armeabi'])
+            ldLibs.addAll(['android', 'log', 'GLESv3', 'EGL' ])
+        }
+
+        buildTypes {
+            release {
+                minifyEnabled false
+                proguardFiles.add(file('proguard-android.txt'))
+            }
+        }
+
+    }
+
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/MoJingSDK.jar')
+}
