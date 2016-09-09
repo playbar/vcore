@@ -1030,7 +1030,7 @@ public class GLGroupView extends GLRectView {
 	public GLRectView getFocusedView(){
 		for (int i = 0; i < mChildView.size(); i++) {
 			GLRectView view = mChildView.get(i);
-			if (view.isVisible() && view.isFocused()){
+			if (view.isFocused()){
 				return view;
 			}
 		}
@@ -1042,7 +1042,7 @@ public class GLGroupView extends GLRectView {
 		
 		GLRectView view = getFocusedView();
 		boolean flag = false;
-		if (view != null){
+		if (view != null && view.isVisible()){
 			flag = view.onKeyDown(keycode);		
 		}
 
@@ -1076,7 +1076,7 @@ public class GLGroupView extends GLRectView {
 	public boolean onKeyUp(int keycode) {
 		GLRectView view = getFocusedView();
 		boolean flag = false;
-		if (view != null){
+		if (view != null && view.isVisible()){
 			flag = view.onKeyUp(keycode);
 		}
 		return flag ? true : super.onKeyUp(keycode);

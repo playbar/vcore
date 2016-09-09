@@ -207,18 +207,20 @@ public class GLFocusUtils {
 			}
 		}
 
-		if (!hasFocused && mFocusedView != null){
+		if (!hasFocused){
 			lostAllViewFocus();
 		}
 	}
 
 	public static void lostAllViewFocus(){
-		mFocusedView.onFocusChange(TO_UNKNOWN, false);
-		GLRectView parent = mFocusedView.getParent();
-		if (parent != null && parent instanceof GLGroupView){
-			((GLGroupView)parent).lostParentFocus();
+		if (mFocusedView != null){
+			mFocusedView.onFocusChange(TO_UNKNOWN, false);
+			GLRectView parent = mFocusedView.getParent();
+			if (parent != null && parent instanceof GLGroupView){
+				((GLGroupView)parent).lostParentFocus();
+			}
+			mFocusedView = null;
 		}
-		mFocusedView = null;
 	}
 
 	private static GLGroupView getHasListenerParent(GLRectView view){
