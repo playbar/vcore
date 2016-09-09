@@ -3,6 +3,7 @@ package com.bfmj.viewcore.view;
 import java.util.Stack;
 
 import com.bfmj.viewcore.util.GLExtraData;
+import com.bfmj.viewcore.util.GLFocusUtils;
 
 /**
  * 
@@ -155,6 +156,7 @@ public class GLPageManager {
 			if (view != null && mCurrentView != view){
 				if (mCurrentView != null){
 					mRootView.removeView(mCurrentView);
+					GLFocusUtils.lostAllViewFocus();
 				}
 				mRootView.addView(view, true);
 //				if (!view.isFocused()){
