@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Surface;
 
+import com.baofeng.mojing.MojingSDK;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.interfaces.IGLPlayerListener;
 import com.bfmj.viewcore.player.GLSystemPlayer;
@@ -20,20 +21,41 @@ import com.bfmj.viewcore.view.GLPlayerView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
+import com.mojing.sdk.pay.widget.mudoles.Glass;
+import com.mojing.sdk.pay.widget.mudoles.Manufacturer;
+import com.mojing.sdk.pay.widget.mudoles.ManufacturerList;
+import com.mojing.sdk.pay.widget.mudoles.Product;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class LxkTestActivity extends BaseViewActivity {
 	private GLRootView rootView;
-//	MediaPlayer player;
-
 	GLSystemPlayer player;
+
+//	GLSystemPlayer player;
 
 
 	@SuppressLint("SdCardPath")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.setDistortionEnable(false);
+//		super.setDistortionEnable(false);
+		if (!MojingSDK.GetInitSDK()) {
+			MojingSDK.Init(this.getApplicationContext());
+		}
+		ManufacturerList m_ManufacturerList = ManufacturerList.getInstance("zh");
+
+		List<Manufacturer> manufacturers = m_ManufacturerList.mManufaturerList;
+		Log.e("glasses", "manufacturers => " + manufacturers.size() + " == ");
+		List<Product> products = manufacturers.get(0).mProductList;
+		Log.e("glasses", "products => " + products.size() + " == ");
+		List<Glass> glasses = products.get(0).mGlassList;
+		Log.e("glasses", "products => " + glasses.size() + " == ");
+		String key = glasses.get(0).mKey;
+		Log.e("glasses", "key => " + key + " == ");
+		setMojingType(key);
 		super.onCreate(savedInstanceState);
 
 		rootView = getRootView();
@@ -41,94 +63,94 @@ public class LxkTestActivity extends BaseViewActivity {
 		rootView.onResume();
 
 		//////////////
-		GLViewFocusListener listener = new GLViewFocusListener() {
-
-			@Override
-			public void onFocusChange(GLRectView view, boolean focused) {
-				if (focused){
-					view.setBackground(R.drawable.a1);
-				} else {
-					view.setBackground(R.drawable.a2);
-				}
-			}
-		};
-
-		GLImageView[] imageViews = new GLImageView[2];
-		Log.d("aaaaaaaaaaaa", "");
-
-//		GLImageView line = new GLImageView(this);
-//		line.setX( 1198);
-//		line.setY( 0);
-//		line.setLayoutParams(4, 2400);
-//		line.setBackground(new GLColor(0, 1, 0));
-//		rootView.addView(line);
-
-
-
-		for (int i = 0; i < imageViews.length; i++) {
-			imageViews[i] = new GLImageView(this);
-			imageViews[i].setX(100);
-			imageViews[i].setY(100);
-			imageViews[i].setLayoutParams(300, 300);
-			imageViews[i].setImage(R.drawable.a2);
-			imageViews[i].setDepth(4 - (i - 100)*0.005f);
-			imageViews[i].setFocusListener(listener);
-			rootView.addView(imageViews[i]);
-		}
-
-//		imageViews[0].setBackground(new GLColor(1, 0, 0));
-
-		GLCursorView cursorView = new GLCursorView(this);
-		cursorView.setX( 1190);
-		cursorView.setY( 1190);
-		cursorView.setLayoutParams(20, 20);
-		cursorView.setBackground(new GLColor(1.0f, 0, 0));
-		cursorView.setDepth(3);
-		rootView.addView(cursorView);
-
-		GLTextView textView = new GLTextView(this);
-		textView.setX( 1000 );
-		textView.setY( 1200);
-		textView.setLayoutParams( 1000, 200 );
-		textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
-		textView.setText("北京欢迎你");
-		textView.setTextSize(100);
-		rootView.addView(textView);
-
-		initLog();
-
-		long time =  System.currentTimeMillis();
-
-		for (int i = 0; i < 2000; i++){
-			float[] mMVPMatrix = new float[16];
-			float[] mVMatrix = new float[16];
-			float[] mProjMatrix = new float[16];
-			float[] currMatrix = new float[16];
-
-//			Matrix.setIdentityM(mProjMatrix, 0);
-//			Matrix.setIdentityM(mProjMatrix, 0);
-//			Matrix.setIdentityM(mProjMatrix, 0);
-
-			Matrix.multiplyMM(mMVPMatrix, 0, mVMatrix, 0, currMatrix, 0);
-			Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mMVPMatrix, 0);
-		}
-
-		Log.d("testmmtime", "m1 total = " + (System.currentTimeMillis() - time));
-		time =  System.currentTimeMillis();
-
-		for (int i = 0; i < 2000; i++){
-			float[] mVMatrix = new float[16];
-			float[] mProjMatrix = new float[16];
-			float[] currMatrix = new float[16];
-
-//			Matrix.setIdentityM(mProjMatrix, 0);
-//			Matrix.setIdentityM(mProjMatrix, 0);
-//			Matrix.setIdentityM(mProjMatrix, 0);
-
-			multiplay(multiplay(currMatrix, mVMatrix ), mProjMatrix);
-		}
-
-		Log.d("testmmtime", "m2 total = " + (System.currentTimeMillis() - time));
+//		GLViewFocusListener listener = new GLViewFocusListener() {
+//
+//			@Override
+//			public void onFocusChange(GLRectView view, boolean focused) {
+//				if (focused){
+//					view.setBackground(R.drawable.a1);
+//				} else {
+//					view.setBackground(R.drawable.a2);
+//				}
+//			}
+//		};
+//
+//		GLImageView[] imageViews = new GLImageView[2];
+//		Log.d("aaaaaaaaaaaa", "");
+//
+////		GLImageView line = new GLImageView(this);
+////		line.setX( 1198);
+////		line.setY( 0);
+////		line.setLayoutParams(4, 2400);
+////		line.setBackground(new GLColor(0, 1, 0));
+////		rootView.addView(line);
+//
+//
+//
+//		for (int i = 0; i < imageViews.length; i++) {
+//			imageViews[i] = new GLImageView(this);
+//			imageViews[i].setX(100);
+//			imageViews[i].setY(100);
+//			imageViews[i].setLayoutParams(300, 300);
+//			imageViews[i].setImage(R.drawable.a2);
+//			imageViews[i].setDepth(4 - (i - 100)*0.005f);
+//			imageViews[i].setFocusListener(listener);
+//			rootView.addView(imageViews[i]);
+//		}
+//
+////		imageViews[0].setBackground(new GLColor(1, 0, 0));
+//
+//		GLCursorView cursorView = new GLCursorView(this);
+//		cursorView.setX( 1190);
+//		cursorView.setY( 1190);
+//		cursorView.setLayoutParams(20, 20);
+//		cursorView.setBackground(new GLColor(1.0f, 0, 0));
+//		cursorView.setDepth(3);
+//		rootView.addView(cursorView);
+//
+//		GLTextView textView = new GLTextView(this);
+//		textView.setX( 1000 );
+//		textView.setY( 1200);
+//		textView.setLayoutParams( 1000, 200 );
+//		textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
+//		textView.setText("北京欢迎你");
+//		textView.setTextSize(100);
+//		rootView.addView(textView);
+//
+//		initLog();
+//
+//		long time =  System.currentTimeMillis();
+//
+//		for (int i = 0; i < 2000; i++){
+//			float[] mMVPMatrix = new float[16];
+//			float[] mVMatrix = new float[16];
+//			float[] mProjMatrix = new float[16];
+//			float[] currMatrix = new float[16];
+//
+////			Matrix.setIdentityM(mProjMatrix, 0);
+////			Matrix.setIdentityM(mProjMatrix, 0);
+////			Matrix.setIdentityM(mProjMatrix, 0);
+//
+//			Matrix.multiplyMM(mMVPMatrix, 0, mVMatrix, 0, currMatrix, 0);
+//			Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mMVPMatrix, 0);
+//		}
+//
+//		Log.d("testmmtime", "m1 total = " + (System.currentTimeMillis() - time));
+//		time =  System.currentTimeMillis();
+//
+//		for (int i = 0; i < 2000; i++){
+//			float[] mVMatrix = new float[16];
+//			float[] mProjMatrix = new float[16];
+//			float[] currMatrix = new float[16];
+//
+////			Matrix.setIdentityM(mProjMatrix, 0);
+////			Matrix.setIdentityM(mProjMatrix, 0);
+////			Matrix.setIdentityM(mProjMatrix, 0);
+//
+//			multiplay(multiplay(currMatrix, mVMatrix ), mProjMatrix);
+//		}
+//
+//		Log.d("testmmtime", "m2 total = " + (System.currentTimeMillis() - time));
 
 // 		GLImageView imageView = new GLImageView(this);
 //		imageView.setImage(R.drawable.ic_launcher);
@@ -196,64 +218,104 @@ public class LxkTestActivity extends BaseViewActivity {
 //			}
 //		}).start();
 
+		final GLPanoView panoView = GLPanoView.getSharedPanoView(this);
+		panoView.setRenderType(GLPanoView.RENDER_TYPE_VIDEO);
 
-//		player = new GLSystemPlayer(this);
-//		player.setVideoPath("/mnt/sdcard/1.mp4");
-//		player.setLayoutParams(960, 960);
-//		player.setDepth(4);
-////		player.set3D(true);
-//		//player.rotate(90);
-//		player.setListener(new IGLPlayerListener() {
+//		player = new MediaPlayer();
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+				rootView.queueEvent(new Runnable() {
+					@Override
+					public void run() {
 //
-//			@Override
-//			public void onVideoSizeChanged(GLPlayerView player, int width, int height) {
-//				// TODO Auto-generated method stub
+//						try {
+//							player.setDataSource("/mnt/sdcard/beardyman_cyberlink_720.mp4");
+//							player.setSurface(new Surface(panoView.getSurfaceTexture()));
 //
-//			}
-//
-//			@Override
-//			public void onTimedText(GLPlayerView player, String text) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//
-//			@Override
-//			public void onSeekComplete(GLPlayerView player) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//
-//			@Override
-//			public void onPrepared(GLPlayerView player) {
-//				player.start();
-//			}
-//
-//			@Override
-//			public boolean onInfo(GLPlayerView player, int what, Object extra) {
-//				// TODO Auto-generated method stub
-//				return false;
-//			}
-//
-//			@Override
-//			public boolean onError(GLPlayerView player, int what, int extra) {
-//				// TODO Auto-generated method stub
-//				return false;
-//			}
-//
-//			@Override
-//			public void onCompletion(GLPlayerView player) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//
-//			@Override
-//			public void onBufferingUpdate(GLPlayerView player, int percent) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//		});
-//
-//		rootView.addView(player);
+//							player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//								@Override
+//								public void onPrepared(MediaPlayer mp) {
+//									mp.start();
+//								}
+//							});
+//							player.prepareAsync();
+//						} catch (IOException e) {
+//							e.printStackTrace();
+//						}
+
+//						Log.d("play", "GLSystemPlayer");
+						player = new GLSystemPlayer(LxkTestActivity.this);
+						player.setVideoPath("/mnt/sdcard/疯狂动物城.mp4");
+						player.setLayoutParams(2400, 2400);
+						player.setDepth(4);
+//		player.set3D(true);
+						//player.rotate(90);
+						player.setListener(new IGLPlayerListener() {
+
+							@Override
+							public void onVideoSizeChanged(GLPlayerView player, int width, int height) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void onTimedText(GLPlayerView player, String text) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void onSeekComplete(GLPlayerView player) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void onPrepared(GLPlayerView player) {
+								Log.d("play", "onPrepared");
+								player.start();
+							}
+
+							@Override
+							public boolean onInfo(GLPlayerView player, int what, Object extra) {
+								// TODO Auto-generated method stub
+								return false;
+							}
+
+							@Override
+							public boolean onError(GLPlayerView player, int what, int extra) {
+								// TODO Auto-generated method stub
+								return false;
+							}
+
+							@Override
+							public void onCompletion(GLPlayerView player) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void onBufferingUpdate(GLPlayerView player, int percent) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+
+						rootView.addView(player);
+					}
+				});
+			}
+		}).start();
+
+
 
 //		GLSenceView senceView = new GLSenceView(this);
 //		senceView.setImage(R.drawable.sence);
