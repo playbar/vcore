@@ -30,34 +30,7 @@ import com.bfmj.viewcore.view.BaseViewActivity;
  * description:
  */
 public class GLTextureUtils {
-	public static boolean mUseMipMap = false;
-
-	public static int initImageTexture(Context context, int drawableId) {
-		//通过输入流加载图片===============begin===================
-        InputStream is = context.getResources().openRawResource(drawableId);
-        Bitmap bitmap;
-        try 
-        {
-        	bitmap = BitmapFactory.decodeStream(is);
-        } 
-        finally 
-        {
-            try 
-            {
-                is.close();
-            } 
-            catch(IOException e) 
-            {
-                e.printStackTrace();
-            }
-        }
-        //通过输入流加载图片===============end=====================  
-        
-        return initImageTexture(context, bitmap, true);
-	}
-	
-	public static int initImageTexture(Context context, Bitmap bm, boolean isRecycle) {
-//		Log.e("GLTextureUtils", "initImageTexture begin");
+	public static int initImageTexture(Bitmap bm, boolean isRecycle, boolean useMipMap) {
 		if (bm == null) {
 			return -1;
 		}
@@ -67,14 +40,14 @@ public class GLTextureUtils {
 
 		GLES30.glGenTextures(1, textures, 0);
 		
-		if (mUseMipMap) {
+		if (useMipMap) {
 			GLES30.glEnable(GLES30.GL_TEXTURE_2D);
 			GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textures[0]);
 			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER,GLES30.GL_LINEAR_MIPMAP_LINEAR);
 			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D,GLES30.GL_TEXTURE_MAG_FILTER,GLES30.GL_LINEAR_MIPMAP_LINEAR);
 			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S,GLES30.GL_CLAMP_TO_EDGE);
 			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T,GLES30.GL_CLAMP_TO_EDGE);
-	        //实际加载纹理       
+	        //实际加载纹理
 			GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, bm, 0);
 			GLES30.glGenerateMipmap(GLES30.GL_TEXTURE_2D);
 		} else {
@@ -83,15 +56,14 @@ public class GLTextureUtils {
 			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D,GLES30.GL_TEXTURE_MAG_FILTER,GLES30.GL_LINEAR);
 			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S,GLES30.GL_CLAMP_TO_EDGE);
 			GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T,GLES30.GL_CLAMP_TO_EDGE);
-	        //实际加载纹理       
+	        //实际加载纹理
 	        GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, bm, 0);
 		}
         
         if (isRecycle){
 	        bm.recycle(); 		  //纹理加载成功后释放图片
 		}
-//		BaseViewActivity.log(System.currentTimeMillis() + "-create : " + textures[0] + " " + Thread.currentThread());
-//		Log.e("GLTextureUtils", "initImageTexture end");
+
         return textures[0];
 	}
 	
@@ -99,7 +71,7 @@ public class GLTextureUtils {
 		if (textureId < 0) {
 			return;
 		}
-		BaseViewActivity.log(System.currentTimeMillis() + "-release : " + textureId + " " + Thread.currentThread());
+
 		GLES30.glDeleteTextures(1, new int[]{textureId}, 0);
 	}
 	

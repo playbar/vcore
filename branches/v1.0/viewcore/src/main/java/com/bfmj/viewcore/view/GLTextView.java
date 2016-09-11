@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
@@ -180,7 +181,7 @@ public class GLTextView extends GLRectView {
 						int textureId = -1;
 
 						if (bmpTemp != null) {
-							textureId = GLTextureUtils.initImageTexture(getContext(), bmpTemp, false);
+							textureId = GLTextureUtils.initImageTexture(GLTextureUtils.handleBitmap(bmpTemp, getInnerWidth(), getInnerHeight()), false, false);
 							bmpTemp.recycle();
 							bmpTemp = null;
 						}
@@ -202,29 +203,29 @@ public class GLTextView extends GLRectView {
 	}
 	
 	private Bitmap createBitmap(){
-		int width = (int)(getInnerWidth() / GLScreenParams.getScaleRate());
-		int height = (int)(getInnerHeight() / GLScreenParams.getScaleRate());
+		float width = getInnerWidth();
+		float height = getInnerHeight();
 		
 		if (width <= 0){
 			return null;
 		}
 		
-		float scale = (float)mTextSize / 28;
-		width = (int)(width / scale);
-		height = (int)(height / scale);
+		float scale = mTextSize / 128.0f;
+		width = width / scale;
+		height = height / scale;
 		
         TextPaint p = new TextPaint();
         p.setAntiAlias(true);
         //字体颜色
         if (mTextGLColor != null){
-        	p.setARGB((int)(mTextGLColor.getA() * 255), (int)(mTextGLColor.getR() * 255), 
+        	p.setARGB((int)(mTextGLColor.getA() * 255), (int)(mTextGLColor.getR() * 255),
         			(int)(mTextGLColor.getG() * 255), (int)(mTextGLColor.getB() * 255));
         } else {
         	p.setColor(mTextColor);
         }
         
         p.setTypeface(GLFontUtils.getInstance(getContext()).getFontTypeface());
-        p.setTextSize(28 / GLScreenParams.getScaleRate());
+        p.setTextSize(128);
         
         float lineHeight = mLineHeight == -1 ? 1.0f : (float)mLineHeight / mTextSize / 1.2f;
         //绘制字体
@@ -257,10 +258,10 @@ public class GLTextView extends GLRectView {
     		return null;
     	}
     	
-    	Bitmap bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+    	Bitmap bitmap = Bitmap.createBitmap((int)width, (int)height, Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(Color.TRANSPARENT);
-        
+
     	sl.draw(canvas);
 
 		return bitmap;

@@ -138,14 +138,12 @@ public class GLImageView extends GLRectView {
 						setHeight(height + getPaddingTop() + getPaddingBottom());
 					}
 
-					GLTextureUtils.mUseMipMap = getMipMap();
-
 					int textureId = -1;
 					if (mIsCutting && (width > 128 || height > 128) ) {
 						mTmpbitmap = GLTextureUtils.handleBitmap(mTmpbitmap, width, height);
 						isRecycle = true;
 					}
-					textureId = GLTextureUtils.initImageTexture(getContext(), mTmpbitmap, isRecycle);
+					textureId = GLTextureUtils.initImageTexture(mTmpbitmap, isRecycle, true);
 					if (textureId > 0) {
 						if (mRenderParams == null){
 							mRenderParams = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);

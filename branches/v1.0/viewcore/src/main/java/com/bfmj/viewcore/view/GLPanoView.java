@@ -518,7 +518,7 @@ public class GLPanoView extends GLView {
 
         if (bitmap != null){
             releaseTexture(mTextureId);
-            mTextureId = GLTextureUtils.initImageTexture(getContext(), bitmap, isRecycle);
+            mTextureId = GLTextureUtils.initImageTexture(bitmap, isRecycle, false);
         }
     }
 

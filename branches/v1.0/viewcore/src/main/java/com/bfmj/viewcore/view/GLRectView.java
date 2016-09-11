@@ -980,7 +980,7 @@ public class GLRectView extends GLView {
 
 				int textureId = 0;
 
-				textureId = GLTextureUtils.initImageTexture(getContext(), bmp, true);
+				textureId = GLTextureUtils.initImageTexture(bmp, true, true);
 				if (textureId > 0) {
 					if (mBackgroundRender == null){
 						mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
@@ -1026,7 +1026,6 @@ public class GLRectView extends GLView {
 					isRecycle = false;
 				}
 				if (bitmap != null) {
-					GLTextureUtils.mUseMipMap = getMipMap();
 					if (width > 128 || height > 128) {
 						bitmap = GLTextureUtils.handleBitmap(bitmap, width, height);
 					}
