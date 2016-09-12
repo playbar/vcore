@@ -48,10 +48,11 @@ public class GLMatrixState {
     //保护变换矩阵
     public void pushMatrix(){
     	stackTop++;
-    	for(int i=0;i<16;i++)
-    	{
-    		mStack[stackTop][i]=currMatrix[i];
-    	}
+//    	for(int i=0;i<16;i++)
+//    	{
+//    		mStack[stackTop][i]=currMatrix[i];
+//    	}
+        System.arraycopy(currMatrix, 0, mStack[stackTop], 0, 16);
     }
     
     //恢复变换矩阵
@@ -59,10 +60,11 @@ public class GLMatrixState {
         if (stackTop < 0){
             stackTop = 0;
         }
-    	for(int i=0;i<16;i++)
-    	{
-    		currMatrix[i]=mStack[stackTop][i];
-    	}
+//    	for(int i=0;i<16;i++)
+//    	{
+//    		currMatrix[i]=mStack[stackTop][i];
+//    	}
+        System.arraycopy(mStack[stackTop], 0, currMatrix, 0, 16);
     	stackTop--;
     }
     

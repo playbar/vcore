@@ -34,6 +34,7 @@ public class TextViewActivity extends BaseViewActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 //		setMojingType("42EGCV-WQXG87-WHQHS8-YYYTEF-4SWGST-CRY7SS");
+		setMojingType("WNE8QN-QVCCZN-XXF8W3-9Q2YDH-AQZRA2-XVDZ9Q");
 		super.onCreate(savedInstanceState);
 
 //		BitmapOp bmtOp = new BitmapOp();
@@ -130,7 +131,7 @@ public class TextViewActivity extends BaseViewActivity {
 	}
 
 	public void addImageViewTest(){
-		GLImageView[] imageViews = new GLImageView[10];
+		GLImageView[] imageViews = new GLImageView[100];
 		Random random=new Random();
 		for (int i = 0; i < imageViews.length; i++) {
 			imageViews[i] = new GLImageView(this);
@@ -146,18 +147,18 @@ public class TextViewActivity extends BaseViewActivity {
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-//		Log.e("onKeyUp", "onKeyUpn code =" + keyCode);
-		switch (keyCode) {
-			case KeyEvent.KEYCODE_MENU:
-				return true;
-			case KeyEvent.KEYCODE_BACK:
-				addImageViewTest();
-				return true;
-			default:
-				break;
-		}
-		return false;
-//		return super.onKeyUp(keyCode, event);
+		Log.e("onKeyUp", "onKeyUpn code =" + keyCode);
+//		switch (keyCode) {
+//			case KeyEvent.KEYCODE_MENU:
+//				return true;
+//			case KeyEvent.KEYCODE_BACK:
+//				addImageViewTest();
+//				return true;
+//			default:
+//				break;
+//		}
+//		return false;
+		return super.onKeyUp(keyCode, event);
 	}
 
 	@Override

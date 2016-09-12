@@ -58,6 +58,7 @@ public class ListViewActivity extends BaseViewActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		setMojingType("WNE8QN-QVCCZN-XXF8W3-9Q2YDH-AQZRA2-XVDZ9Q");
 		super.onCreate(savedInstanceState);
 		
 //		aq = new AQuery(this);
