@@ -17,7 +17,6 @@ import com.baofeng.mojing.MojingSDK;
 import com.baofeng.mojing.MojingSurfaceView;
 import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.distortion.Distortion;
-import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.render.GLColorRect;
 import com.bfmj.viewcore.render.GLImageRect;
 import com.bfmj.viewcore.render.GLScreenParams;
@@ -390,7 +389,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        Logger.printTime("begin-->");
         GLThreadUtil.onDrawFrame(gl);
 
         times ++;
@@ -423,7 +421,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         int height = mWidth / 2;
         float nearRight = GLScreenParams.getNear() * (float)Math.tan(GLScreenParams.getFOV() / 2);
 
-        Logger.printTime();
         //双屏
         if (mIsDouble) {
             for (int i = 0; i < 2; i++) {
@@ -433,7 +430,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                     GLES30.glViewport(i * mWidth / 2, (mHeight - height) / 2, mWidth / 2, height);
                 }
 
-                Logger.printTime();
                 // 为了绘制中间的视频,把GLRectView分成两部分
                 ArrayList<GLRectView> imageRectView1 = new ArrayList<>();
                 ArrayList<GLRectView> imageRectView2 = new ArrayList<>();
@@ -459,7 +455,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                         }
                     }
                 }
-                Logger.printTime();
                 if (imageRectView1.size() > 0){
                     GLImageRect.getInstance().drawViews(imageRectView1);
                 }
@@ -476,7 +471,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                         view.onAfterDraw(i == 0 ? true : false);
                     }
                 }
-                Logger.printTime();
             }
 
             if (mDistortion != null) {

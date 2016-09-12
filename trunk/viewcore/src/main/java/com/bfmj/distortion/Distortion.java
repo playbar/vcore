@@ -53,9 +53,7 @@ public class Distortion {
 		GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
 //		Log.e("Distortion","afterDraw begin");
 		if (GLES30.glIsTexture(this.mTextureIds[0]) && GLES30.glIsTexture(this.mTextureIds[1])){
-			Logger.printTime();
 			MojingSDK.DrawTexture(this.mTextureIds[0], this.mTextureIds[1]);
-			Logger.printTime();
 		} else {
 			this.framebufferId = generateFrameBufferObject();
 		}

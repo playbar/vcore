@@ -9,10 +9,9 @@ public abstract class GLRect {
 	private float vertices[] = {
        -0.5f,  0.5f, 0.0f,
        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-       -0.5f,  0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-       	0.5f,  0.5f, 0.0f
+		0.5f,  0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f
+
     };
 	
 	public abstract void draw(float[] mtx);

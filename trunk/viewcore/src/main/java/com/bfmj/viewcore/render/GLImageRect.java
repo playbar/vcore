@@ -41,10 +41,8 @@ public class GLImageRect extends GLRect {
     private float texCoor[] = {
     	0.0f, 0.0f,
     	0.0f, 1.0f,
-        1.0f, 1.0f,
-    	0.0f, 0.0f,
-        1.0f, 1.0f,
-        1.0f, 0.0f
+		1.0f, 0.0f,
+		1.0f, 1.0f
     };
     
     private int mTextureId = -1;
@@ -162,7 +160,8 @@ public class GLImageRect extends GLRect {
         GLES30.glUniform1f(muAlphaHandle, getAlpha());
         GLES30.glUniform1f(muMaskHandle, getMask());
 
-        GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, getVertices().length / 3);
+        GLES30.glDrawArrays(GLES30.GL_TRIANGLE_STRIP, 0, 4);
+//		GLES30.glDrawElements(GLES30.GL_TRIANGLE_STRIP, 4, GLES30.GL_UNSIGNED_SHORT, 0);
 
 	}
 
