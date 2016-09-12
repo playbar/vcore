@@ -980,7 +980,7 @@ public class GLRectView extends GLView {
 
 				int textureId = 0;
 
-				textureId = GLTextureUtils.initImageTexture(bmp, true, true);
+				textureId = GLTextureUtils.initImageTexture(bmp, true, false);
 				if (textureId > 0) {
 					if (mBackgroundRender == null){
 						mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
