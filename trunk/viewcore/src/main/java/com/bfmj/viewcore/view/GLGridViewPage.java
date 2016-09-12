@@ -409,7 +409,7 @@ public class GLGridViewPage extends GLGridView {
 				textView.setBackground(mDefaultColor);
 			}
 			textView.setAlignment( GLTextView.ALIGN_CENTER );
-			textView.setPadding(0, 10, 0, 0);
+			textView.setPadding(0, 5, 0, 0);
 			textView.setText(""+i);
 			textView.setTextSize(40);
 			final int index = i;
