@@ -32,7 +32,7 @@ public class GLFocusUtils {
 	private static OnCursorDepthChangeListener mCursorDepthChangeListener;
 	
 	private static GLRectView mFocusedView;
-	private int mComputeTimes = 0;
+	private static int mComputeTimes = 0;
 	
 	/**
 	 * 开启头控
@@ -131,7 +131,7 @@ public class GLFocusUtils {
 	 * @param views View列表
 	 * @return 
 	 */
-	public void handleFocused(float[] headView, ArrayList<GLView> views){
+	public static void handleFocused(float[] headView, ArrayList<GLView> views){
 		GLFocusUtils.headView = headView;
 		
 		if (!isOpenHeadControl){
@@ -207,7 +207,13 @@ public class GLFocusUtils {
 			}
 		}
 
-		if (!hasFocused && mFocusedView != null){
+		if (!hasFocused){
+			lostAllViewFocus();
+		}
+	}
+
+	public static void lostAllViewFocus(){
+		if (mFocusedView != null){
 			mFocusedView.onFocusChange(TO_UNKNOWN, false);
 			GLRectView parent = mFocusedView.getParent();
 			if (parent != null && parent instanceof GLGroupView){
@@ -217,7 +223,7 @@ public class GLFocusUtils {
 		}
 	}
 
-	private GLGroupView getHasListenerParent(GLRectView view){
+	private static GLGroupView getHasListenerParent(GLRectView view){
 		GLGroupView parent = view.getParent();
 		while (parent != null){
 			if (parent.hasListeter()){
@@ -248,7 +254,7 @@ public class GLFocusUtils {
 	 * @param views View列表
 	 * @return 
 	 */
-	public boolean handleFocused(int direction, GLRectView view, ArrayList<GLRectView> views){
+	public static boolean handleFocused(int direction, GLRectView view, ArrayList<GLRectView> views){
 		if (isOpenHeadControl){
 			return false;
 		}

@@ -36,7 +36,9 @@ public class BaseViewActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		instance = this;
 
-		MojingSDK.Init(this);
+		if (!MojingSDK.GetInitSDK()) {
+			MojingSDK.Init(this.getApplicationContext());
+		}
 		rootView = new GLRootView(this);
 		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		

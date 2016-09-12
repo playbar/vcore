@@ -52,6 +52,8 @@ public class ListViewActivity extends BaseViewActivity {
 			"通讯录", "日历", "照相机", "时钟", "游戏", "短信",
 			"铃声", "设置", "语音", "天气", "浏览器", "视频"
 	};
+
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -41,7 +41,7 @@ public class GenTextureTask implements Runnable {
         egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, mEglContext);
 
 //            int textureId = createTexture(mBmp);
-        int textureId = GLTextureUtils.initImageTexture(mContext, mBmp, false );
+        int textureId = GLTextureUtils.initImageTexture(mBmp, false, true);
         if( null != exprotTex ){
             exprotTex.exportId( textureId, mHashCode );
         }

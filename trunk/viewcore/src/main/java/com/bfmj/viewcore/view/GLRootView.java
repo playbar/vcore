@@ -43,7 +43,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     private boolean isVisible = true;
 
     //	private MoJingGroy mMoJingGroy;
-    private GLFocusUtils mGlFocusUtils;
+    //private GLFocusUtils mGlFocusUtils;
     //private MoJingDistortion mDistortion;
     private Distortion mDistortion;
     private boolean mDistortionEnable = true;
@@ -137,7 +137,6 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         mLockedAngle = activity.getLockedAngle();
 
         initHeadView();
-        mGlFocusUtils = new GLFocusUtils();
     }
 
     @Override
@@ -494,7 +493,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             }
         }
 
-        mGlFocusUtils.handleFocused(groyMatrix, allViews);
+        GLFocusUtils.handleFocused(groyMatrix, allViews);
     }
 
     private void saveLastAngle() {
@@ -598,10 +597,10 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         addView(view);
 
         if (isFoucs) {
-            if (mGlFocusUtils.getFocusedView() != null) {
-                mGlFocusUtils.getFocusedView().onFocusChange(GLFocusUtils.TO_UNKNOWN, false);
+            if (GLFocusUtils.getFocusedView() != null) {
+                GLFocusUtils.getFocusedView().onFocusChange(GLFocusUtils.TO_UNKNOWN, false);
             }
-            mGlFocusUtils.setFousedView(view);
+            GLFocusUtils.setFousedView(view);
             view.onFocusChange(GLFocusUtils.TO_UNKNOWN, true);
         }
     }
@@ -609,9 +608,9 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     public void removeView(GLView view) {
         if (view instanceof GLRectView) {
             GLRectView v1 = (GLRectView) view;
-            GLRectView v2 = mGlFocusUtils.getFocusedView();
+            GLRectView v2 = GLFocusUtils.getFocusedView();
             if (v1 == v2 || v1.isGrandChild(v2)) {
-                mGlFocusUtils.setFousedView(null);
+                GLFocusUtils.setFousedView(null);
             }
         }
         view.release();
@@ -748,16 +747,16 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             ArrayList<GLRectView> views = getRectViews();
             switch (keycode) {
                 case MojingKeyCode.KEYCODE_DPAD_LEFT:
-                    mGlFocusUtils.handleFocused(GLFocusUtils.TO_LEFT, view, views);
+                    GLFocusUtils.handleFocused(GLFocusUtils.TO_LEFT, view, views);
                     break;
                 case MojingKeyCode.KEYCODE_DPAD_RIGHT:
-                    mGlFocusUtils.handleFocused(GLFocusUtils.TO_RIGHT, view, views);
+                    GLFocusUtils.handleFocused(GLFocusUtils.TO_RIGHT, view, views);
                     break;
                 case MojingKeyCode.KEYCODE_DPAD_UP:
-                    mGlFocusUtils.handleFocused(GLFocusUtils.TO_UP, view, views);
+                    GLFocusUtils.handleFocused(GLFocusUtils.TO_UP, view, views);
                     break;
                 case MojingKeyCode.KEYCODE_DPAD_DOWN:
-                    mGlFocusUtils.handleFocused(GLFocusUtils.TO_DOWN, view, views);
+                    GLFocusUtils.handleFocused(GLFocusUtils.TO_DOWN, view, views);
                     break;
                 default:
                     break;
