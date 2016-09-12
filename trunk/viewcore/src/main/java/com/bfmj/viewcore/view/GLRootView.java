@@ -686,9 +686,11 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                         return -1;
                     } else if (lhs.getDepth() < rhs.getDepth()) {
                         return 1;
-                    } else if (lhs.getDepth() - lhs.getmIncrementDepth() - 0.001f > rhs.getDepth() - rhs.getmIncrementDepth()) {
+                    }
+                    else if (lhs.getDepth() - lhs.getmIncrementDepth() > rhs.getDepth() - rhs.getmIncrementDepth()) {
                         return -1;
                     }
+
                     return 0;
                 }
             });

@@ -777,6 +777,16 @@ public class GLRectView extends GLView {
 		setDepth(getDepth() + tz);
 	}
 
+	public void translatesuper(float tx, float ty, float tz) {
+
+		mIncrementX = tx;
+		mIncrementDepth = tz;
+		x = x + tx;
+		y = y + ty;
+		depth = depth + tz;
+	}
+
+
 	/**
 	 * 设置空间位置
 	 * @param position 空间位置，放大10倍
@@ -809,6 +819,18 @@ public class GLRectView extends GLView {
 			angelZ += angle;
 		}
 	}
+
+	public void rotatesuper(float angle, float rx, float ry, float rz){
+		//Matrix.rotateM(getMatrixState().getRotateMatrix(), 0, angle, rx, ry, rz);
+		if (rx > 0){
+			angelX += angle;
+		} else if (ry > 0){
+			angelY += angle;
+		} else {
+			angelZ += angle;
+		}
+	}
+
 
 	public float getAngelX(){
 		return angelX;

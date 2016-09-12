@@ -860,16 +860,8 @@ public class GLGroupView extends GLRectView {
 			for (GLRectView childView : childViews) {
 				translateArray = rotateTranslate(this, childView);
 				float depth = GLScreenParams.getScreenWidth() / 2400 * translateArray[0] * sinv;
-				childView.translate(translateArray[0]*(1-cosv), 0, depth);
-
-//				if( angle > 0 ) {
-//					float depth = GLScreenParams.getScreenWidth() / 2400 * translateArray[0] * sinv;
-//					childView.translate(translateArray[0]*(1-cosv), 0, depth);
-//				}else{
-//					float depth = GLScreenParams.getScreenWidth() / 2400 * translateArray[0] * sinv;
-//					childView.translate(translateArray[0]*(1-cosv), 0, depth);
-//				}
-
+				depth=(float)(Math.floor(depth*1000000)/1000000);
+				childView.translatesuper(translateArray[0]*(1-cosv), 0, depth);
 				childView.rotate(angle, rx, ry, rz);
 			}
 		}
