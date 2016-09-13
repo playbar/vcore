@@ -104,6 +104,7 @@ public class GLImageRect extends GLRect {
 				GLMatrixState state = view.getMatrixState();
 				state.pushMatrix();
 				float[] curMatrix = state.getCurrentMatrix();
+//				Matrix.translateM(curMatrix, 0, 0, 0, d );
 				Matrix.translateM(curMatrix, 0, 0, 0, d + view.getZPosition() * 0.0001f);
 				if (view.getAngelX() != 0){
 					Matrix.rotateM(curMatrix, 0, view.getAngelX(), 1, 0, 0);
@@ -124,7 +125,7 @@ public class GLImageRect extends GLRect {
 				setMask(render.getMask());
 				draw(state.getFinalMatrix());
 
-				d += 0.0004f;
+				d += 0.0001f;
 				state.popMatrix();
 			}
 		}

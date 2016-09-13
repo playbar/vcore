@@ -316,7 +316,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         isSurfaceCreated = true;
 
 //        GLES30.glEnable(GLES30.GL_DEPTH_TEST);
-//        GLES30.glDepthFunc(GLES30.GL_LEQUAL);
+//        GLES30.glDepthFunc(GLES30.GL_GREATER);
 //        GLES30.glEnable(GLES30.GL_DITHER);
 //        GLES30.glEnable(GLES10.GL_MULTISAMPLE);
 
@@ -644,6 +644,30 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         return views;
     }
 
+    private static void viewSort( ArrayList<GLRectView>  views) {
+        for (int i = 0; i < views.size(); i++) {
+            GLRectView temp = views.get(i);
+            int left = 0;
+            int right = i-1;
+            int mid = 0;
+            while(left<=right){
+                mid = (left+right)/2;
+                GLRectView rhs = views.get(mid);
+                if(temp.getDepth() - temp.getmIncrementDepth() >rhs.getDepth() - rhs.getmIncrementDepth()){
+                    right = mid-1;
+                }else{
+                    left = mid+1;
+                }
+            }
+            for (int j = i-1; j >= left; j--) {
+                views.set(j+1, views.get(j));
+            }
+            if(left != i){
+                views.set(left, temp);
+            }
+        }
+    }
+
     /**
      * 遍历所有的view
      *
@@ -659,7 +683,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             return views1;
         }
 
-        try {
+//        try {
             for (GLView view : mChild) {
                 if (!view.isVisible()) {
                     continue;
@@ -672,43 +696,34 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                 }
             }
 
-            Collections.sort(views2, new Comparator<GLRectView>() {
+            viewSort(views2);
 
-                @Override
-                public int compare(GLRectView lhs, GLRectView rhs) {
-                    if (lhs == null || rhs == null) {
-                        return 0;
-                    }
-
-                    if (lhs.getZIndex() < rhs.getZIndex()) {
-                        return 1;
-                    } else if (lhs.getZIndex() > rhs.getZIndex()) {
-                        return -1;
-                    } else if (lhs.getDepth() < rhs.getDepth()) {
-                        return 1;
-                    }
-                    else if( lhs.getDepth() > rhs.getDepth()){
-                        if( lhs.getmIncrementDepth() > rhs.getmIncrementDepth() ){
-                            return 1;
-                        }
-                        else
-                        {
-                            return -1;
-                        }
-                    }
-
-                    return 0;
-                }
-            });
-
-            int zPosition = 0;
-            for (GLRectView view : views2) {
-                if (view != null) {
-                    view.setZPosition(zPosition++);
-                }
+//        } catch (Exception e) {
+//            Log.e("GLRootView", e.getMessage());
+//        }
+        int zPosition = 0;
+        for (GLRectView view : views2) {
+            if (view != null) {
+                view.setZPosition(zPosition++);
             }
-        } catch (Exception e) {
         }
+//        Log.e("GLRootView", "begin--------->");
+//        for( GLRectView view : views2) {
+////            if (view instanceof GLTextView)
+//            {
+//                if( view.getParent() != null){
+//                    GLRectView v = view.getParent();
+//                    Log.e("GLRootView", "p->D:"+v.getDepth() +",IN:" + v.getmIncrementDepth() +
+//                            ", z:" + v.getZPosition() + ",zindex=" + v.getZIndex() +",class=" + v.toString());
+//                }
+//                Log.e("GLRootView", "D:"+view.getDepth() +",IN:" + view.getmIncrementDepth() +
+//                        ", z:" + view.getZPosition()+",zindex=" + view.getZIndex() +",class=" +view.toString());
+//
+////                Logger.printTime(((GLTextView) view).getText());
+//            }
+//        }
+//
+//        Log.e("GLRootView", "end--------->");
 
         views1.addAll(views2);
 

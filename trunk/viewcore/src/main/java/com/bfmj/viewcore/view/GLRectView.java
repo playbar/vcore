@@ -761,6 +761,14 @@ public class GLRectView extends GLView {
 		mIncrementX = tx;
 		setX(getX() + tx);
 	}
+
+	public void translateZ(float tz)
+	{
+		mIncrementDepth = tz;
+		depth = depth + tz;
+	}
+
+
 	public void translate(float tx, float ty, float tz) {
 //		float screenWidth = GLScreenParams.getScreenWidth();
 //		float screenHeight = GLScreenParams.getScreenHeight();

@@ -685,6 +685,7 @@ public class GLGroupView extends GLRectView {
 			for (int i = 0; i < size; i++) {
 				GLRectView view = this.mChildView.get(i);
 				view.setDepth(view.getDepth() + changeDepth );
+//				view.translateZ(changeDepth);
 //				view.translate(0, 0, view.getmIncrementDepth());
 			}
 		}
