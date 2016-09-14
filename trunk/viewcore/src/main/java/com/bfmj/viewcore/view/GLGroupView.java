@@ -838,6 +838,15 @@ public class GLGroupView extends GLRectView {
 		super.scale(sx, sy);
 	}
 
+	public void rotateonly(float angle, float rx, float ry, float rz)
+	{
+		float radian = (float) (Math.PI / 180 * (-angle));
+		mCosV = (float) Math.cos(radian);
+		mSinV= (float) Math.sin(radian);
+		mAngle = angle;
+		super.rotate(angle, rx, ry, rz);
+	}
+
 	/**
 	 * 设置旋转
 	 * @author linzanxian  @Date 2015年3月20日 上午11:02:42
