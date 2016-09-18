@@ -698,32 +698,13 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
             viewSort(views2);
 
-                @Override
-                public int compare(GLRectView lhs, GLRectView rhs) {
-                    if (lhs == null || rhs == null) {
-                        return 0;
-                    }
-
-                    if (lhs.getZIndex() < rhs.getZIndex()) {
-                        return 1;
-                    } else if (lhs.getZIndex() > rhs.getZIndex()) {
-                        return -1;
-                    } else if (lhs.getDepth() < rhs.getDepth()) {
-                        return 1;
-                    } else if (lhs.getDepth() > rhs.getDepth()) {
-                        return -1;
-                    }
-                    return 0;
-                }
-            });
-
             int zPosition = 0;
             for (GLRectView view : views2) {
                 if (view != null) {
                     view.setZPosition(zPosition++);
                 }
             }
-        }
+//        }
 //        Log.e("GLRootView", "begin--------->");
 //        for( GLRectView view : views2) {
 ////            if (view instanceof GLTextView)
