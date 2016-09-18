@@ -13,7 +13,7 @@ import android.content.Context;
 /**
  * Group
  * ClassName: GLGroupView <br/>
- * @author linzanxian    
+ * @author linzanxian
  * @date: 2015年3月9日 上午10:46:33 <br/>  
  * description:
  */
@@ -28,12 +28,12 @@ public class GLGroupView extends GLRectView {
 	protected float mCosV = 0.0f;
 	protected float mSinV = 0.0f;
 	protected float mAngle = 0.0f;
-	
+
 	public GLGroupView(Context context) {
 		super(context);
 		init();
 	}
-	
+
 	/**
 	 * 初始化
 	 * @author linzanxian  @Date 2015年3月16日 下午2:31:14
@@ -43,7 +43,7 @@ public class GLGroupView extends GLRectView {
 	private void init() {
 		mGlFocusUtils = new GLFocusUtils();
 	}
-	
+
 //	/**
 //	 * 设置属性
 //	 * @author linzanxian  @Date 2015年3月13日 下午2:55:28
@@ -70,13 +70,13 @@ public class GLGroupView extends GLRectView {
 		}
 
 		view.setFixed(isFixed());
-		
+
 		if (isInitDraw) {
 			view.initDraw();
 		}
 		mChildView.add(view);
 	}
-	
+
 	/**
 	 * 添加view
 	 * @author linzanxian  @Date 2015年3月10日 下午12:02:34
@@ -92,22 +92,22 @@ public class GLGroupView extends GLRectView {
 		}
 
 		view.setFixed(isFixed());
-		
+
 		if (isInitDraw) {
 			view.initDraw();
 		}
-		
+
 		if (index > mChildView.size()) {
 			index = mChildView.size() - 1;
 		}
-		
+
 		if (index < 0) {
 			index = 0;
 		}
-		
+
 		mChildView.add(index, view);
 	}
-	
+
 	/**
 	 * 删除view
 	 * @author linzanxian  @Date 2015年3月10日 下午12:02:34
@@ -120,7 +120,7 @@ public class GLGroupView extends GLRectView {
 		view.release();
 		view = null;
 	}
-	
+
 	/**
 	 * 删除view
 	 * @author linzanxian  @Date 2015年3月10日 下午12:02:34
@@ -136,9 +136,9 @@ public class GLGroupView extends GLRectView {
 		mChildView.remove(index);
 		view.release();
 		view = null;
-		
+
 	}
-	
+
 	/**
 	 * 删除所有的子view
 	 * @author linzanxian  @Date 2015年4月13日 上午11:36:07
@@ -151,11 +151,11 @@ public class GLGroupView extends GLRectView {
 			for (int i = 0; i < size; i++) {
 				removeView(mChildView.get(0));
 			}
-			
+
 			mChildView.clear();
 		}
 	}
-	
+
 	/**
 	 * 获取全部子view
 	 * @author linzanxian  @Date 2015年3月17日 下午5:22:34
@@ -165,29 +165,29 @@ public class GLGroupView extends GLRectView {
 	public ArrayList<GLRectView> getView() {
 		return mChildView;
 	}
-	
+
 	/**
 	 * 根据索引获取view
 	 * @author linzanxian  @Date 2015年3月17日 下午5:20:40
 	 * description:获取view
-	 * @param index 索引 
+	 * @param index 索引
 	 * @return GLRectView
 	 */
 	public GLRectView getView(int index) {
 		if (mChildView == null || index >= mChildView.size()) {
 			return null;
 		}
-		
+
 		int size = mChildView.size();
 		for (int i=0; i<size; i++) {
 			if (index == i) {
 				return mChildView.get(i);
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * 根据Id获取view
 	 * @author linzanxian  @Date 2015年3月17日 下午5:39:41
@@ -199,7 +199,7 @@ public class GLGroupView extends GLRectView {
 		if (mChildView == null) {
 			return null;
 		}
-		
+
 		int size = mChildView.size();
 		for (int i=0; i<size; i++) {
 			String gId = mChildView.get(i).getId();
@@ -207,10 +207,10 @@ public class GLGroupView extends GLRectView {
 				return mChildView.get(i);
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * 绘制初始化
 	 * @author linzanxian  @Date 2015年3月10日 下午12:04:21
@@ -226,54 +226,54 @@ public class GLGroupView extends GLRectView {
 
 		super.initDraw();
 	}
-	
+
 	@Override
 	public void onResume(){
 		for (GLRectView view : mChildView) {
 			view.onResume();
 		}
-		
+
 		super.onResume();
 	}
-	
+
 	@Override
 	public void onPause(){
 		for (GLRectView view : mChildView) {
 			view.onPause();
 		}
-		
+
 		super.onPause();
 	}
-	
+
 	@Override
 	public void onSurfaceCreated() {
-		
+
 		for (GLRectView view : mChildView) {
 			view.onSurfaceCreated();
 		}
-		
+
 		super.onSurfaceCreated();
 	}
-	
+
 	@Override
 	public void onSurfaceChanged(int width, int height) {
-		
+
 		for (GLRectView view : mChildView) {
 			view.onSurfaceChanged(width, height);
 		}
-		
+
 		super.onSurfaceChanged(width, height);
 	}
 
-	
+
 	/**
 	 * 改变同级view
 	 * @author linzanxian  @Date 2015年3月11日 下午6:29:54
 	 * description:改变同级子元素
-	 * @param left 左  
+	 * @param left 左
 	 * @param top 上
-	 * @param right 右  
-	 * @param bottom 下  
+	 * @param right 右
+	 * @param bottom 下
 	 * @return void
 	 */
 	protected void setViewMargin(float left, float top, float right, float bottom) {
@@ -281,14 +281,14 @@ public class GLGroupView extends GLRectView {
 			if (getParent() instanceof GLLinearView) { //线性布局时
 				ArrayList<GLRectView> mView = getParent().mChildView;
 				boolean isChange = false;
-				
+
 				int size = mView.size();
 				for (int i = 0; i < size; i++) {
 					GLRectView currView = mView.get(i);
 					if (this.equals(currView)) {
 						isChange = true;
 					}
-					
+
 					//重置受影响的子元素
 					if (isChange) {
 						setPosition(this, left, top, right, bottom);
@@ -299,31 +299,31 @@ public class GLGroupView extends GLRectView {
 					|| getParent() instanceof GLAbsoluteView) { //相对布局、绝对布局
 				//父级是相对布局，只改变当前view, 同级view不用改变
 				setPosition(this, left, top, right, bottom);
-				
+
 				//改变子布局或元素
 				//setChildViewMargin(this, left, top, right, bottom);
 			}
 		} else { //最上层
 			setPosition(this, left, top, right, bottom);
-			
+
 			//setChildViewMargin(this, left, top, right, bottom);
 		}
 	}
-	
+
 	/**
 	 * 改变子元素
 	 * @author linzanxian  @Date 2015年3月11日 下午6:20:43
 	 * description:改变子元素, 添加其它布局在此处理
 	 * @param mView GLRectView
-	 * @param left 左  
+	 * @param left 左
 	 * @param top 上
-	 * @param right 右  
-	 * @param bottom 下  
+	 * @param right 右
+	 * @param bottom 下
 	 * @return void
 	 */
 	protected void setChildViewMargin(GLRectView mView, float left, float top, float right, float bottom) {
 		if (mView != null) {
-			
+
 			GLRelativeView relativeView = null;
 			ArrayList<GLRectView> cViews = null;
 			if (mView instanceof GLLinearView) { //线性布局
@@ -335,8 +335,8 @@ public class GLGroupView extends GLRectView {
 			} else if(mView instanceof GLAbsoluteView) { //绝对布局
 				GLAbsoluteView absoluteView = (GLAbsoluteView) mView;
 				cViews = absoluteView.mChildView;
-			} 
-			
+			}
+
 			if (cViews != null && cViews.size() > 0) {
 				for (GLRectView childView : cViews) {
 					boolean isOf = false;
@@ -351,7 +351,7 @@ public class GLGroupView extends GLRectView {
 							}
 						}
 					}
-					
+
 					if (!isOf) {
 						setPosition(childView, left, top, right, bottom);
 						//setChildViewMargin(childView, left, top, right, bottom);
@@ -359,18 +359,18 @@ public class GLGroupView extends GLRectView {
 				}
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * 设置相对布局的位置
 	 * @author linzanxian  @Date 2015年3月12日 上午10:45:07
 	 * description:设置相对布局的位置
 	 * @param mView GLRectView
-	 * @param left 左  
+	 * @param left 左
 	 * @param top 上
-	 * @param right 右  
-	 * @param bottom 下   
+	 * @param right 右
+	 * @param bottom 下
 	 * @return void
 	 */
 	private void setPosition(GLRectView view, float left, float top, float right, float bottom) {
@@ -404,7 +404,7 @@ public class GLGroupView extends GLRectView {
 			}*/
 		}
 	}
-	
+
 	/**
 	 * 重置子元素
 	 * @author linzanxian  @Date 2015年3月12日 下午5:25:05
@@ -416,12 +416,12 @@ public class GLGroupView extends GLRectView {
 		if (view == null) {
 			return;
 		}
-		
+
 		try {
 			if (view instanceof GLLinearView) {
 				GLLinearView linearView = (GLLinearView) view;
 				ArrayList<GLRectView> childViews = linearView.mChildView;
-	
+
 				float maxX = view.getX() + view.getPaddingLeft();
 				float maxY = view.getY() + view.getPaddingTop();
 				int size = childViews.size();
@@ -444,7 +444,7 @@ public class GLGroupView extends GLRectView {
 								childView.setY(view.getY() + (view.getHeight() - view.getPaddingTop() - view.getPaddingBottom() - childView.getHeight())/2 + view.getPaddingTop());
 							}
 						}
-						
+
 						if (linearView.getOrientation().equals(GLConstant.GLOrientation.HORIZONTAL)) {
 							if (i == 0) {
 								maxX = childView.getX() + childView.getWidth() + childView.getMarginRight();
@@ -468,7 +468,7 @@ public class GLGroupView extends GLRectView {
 			} else if(view instanceof GLRelativeView) {
 				GLRelativeView relativeView = (GLRelativeView) view;
 				ArrayList<GLRectView> childViews = relativeView.mChildView;
-				
+
 				int size = childViews.size();
 				if (size > 0) {
 					parent : for (int i = 0; i < size; i++) {
@@ -482,7 +482,7 @@ public class GLGroupView extends GLRectView {
 									continue parent;
 								}
 							}
-							
+
 							if (childView.getAlign() == null
 									|| childView.getAlign().equals(GLConstant.GLAlign.DEFAULT)
 									|| childView.getAlign().equals(GLConstant.GLAlign.LEFT)
@@ -517,7 +517,7 @@ public class GLGroupView extends GLRectView {
 			} else if(view instanceof GLAbsoluteView) {
 				GLAbsoluteView absuluteView = (GLAbsoluteView) view;
 				ArrayList<GLRectView> childViews = absuluteView.mChildView;
-				
+
 				int size = childViews.size();
 				if (size > 0) {
 					for (int i = 0; i < size; i++) {
@@ -527,14 +527,14 @@ public class GLGroupView extends GLRectView {
 							childView.setY(view.getY() + view.getPaddingTop() + childView.getMarginTop());
 							childView.translateX( childView.getmIncrementX());
 						}
-						
+
 						//resetChildView(childView);
 					}
 				}
 			} else if(view instanceof GLListView) {
 				GLListView listView = (GLListView) view;
 				ArrayList<GLRectView> childViews = listView.mChildView;
-				
+
 				int size = childViews.size();
 				if (size > 0) {
 					for (int i = 0; i < size; i++) {
@@ -544,14 +544,14 @@ public class GLGroupView extends GLRectView {
 							childView.setY(childView.getY() + view.getY() - listView.mY);
 							childView.translateX( childView.getmIncrementX());
 						}
-						
+
 						//resetChildView(childView);
 					}
 				}
 			} else if(view instanceof GLGridView) {
 				GLGridView gridView = (GLGridView) view;
 				ArrayList<GLRectView> childViews = gridView.mChildView;
-				
+
 				int size = childViews.size();
 				if (size > 0) {
 					for (int i = 0; i < size; i++) {
@@ -561,14 +561,14 @@ public class GLGroupView extends GLRectView {
 							childView.setY(childView.getY() + view.getY() - gridView.mY);
 							childView.translateX( childView.getmIncrementX());
 						}
-						
+
 						//resetChildView(childView);
 					}
 				}
 			} else if(view instanceof GLProcessView) {
 				GLProcessView listView = (GLProcessView) view;
 				ArrayList<GLRectView> childViews = listView.mChildView;
-				
+
 				int size = childViews.size();
 				if (size > 0) {
 					for (int i = 0; i < size; i++) {
@@ -577,25 +577,25 @@ public class GLGroupView extends GLRectView {
 							childView.setX(view.getX());
 							childView.setY(view.getY());
 						}
-						
+
 						//resetChildView(childView);
 					}
 				}
 			}
 		} catch (Exception e) {
-			
+
 		}
 	}
-	
+
 	/**
 	 * 设置子view内距
 	 * @author linzanxian  @Date 2015年3月13日 下午1:47:06
 	 * description:设置子view内距
 	 * @param mView GLRectView
-	 * @param left 左  
+	 * @param left 左
 	 * @param top 上
-	 * @param right 右  
-	 * @param bottom 下   
+	 * @param right 右
+	 * @param bottom 下
 	 * @return void
 	 */
 	protected void setChildViewPadding(GLRectView childView, float left, float top, float right, float bottom) {
@@ -604,24 +604,24 @@ public class GLGroupView extends GLRectView {
 				|| childView.getAlign().equals(GLConstant.GLAlign.TOP)
 				|| childView.getAlign().equals(GLConstant.GLAlign.LEFT)) {
 			childView.setX(childView.getX() + left - getPaddingLeft());
-			childView.setY(childView.getY() + top - getPaddingTop());	
+			childView.setY(childView.getY() + top - getPaddingTop());
 		} else if(childView.getAlign().equals(GLConstant.GLAlign.CENTER)) {
 			childView.setX(childView.getX() + (left - getPaddingLeft())/2 - (right - getPaddingRight())/2);
-			childView.setY(childView.getY() + (top - getPaddingTop())/2 - (bottom - getPaddingBottom())/2);	
+			childView.setY(childView.getY() + (top - getPaddingTop())/2 - (bottom - getPaddingBottom())/2);
 		} else if(childView.getAlign().equals(GLConstant.GLAlign.CENTER_HORIZONTAL)) {
 			childView.setX(childView.getX() + (left - getPaddingLeft())/2 - (right - getPaddingRight())/2);
-			childView.setY(childView.getY() + top - getPaddingTop());	
+			childView.setY(childView.getY() + top - getPaddingTop());
 		} else if(childView.getAlign().equals(GLConstant.GLAlign.CENTER_VERTICAL)) {
 			childView.setX(childView.getX() + left - getPaddingLeft());
-			childView.setY(childView.getY() + (top - getPaddingTop())/2 - (bottom - getPaddingBottom())/2);	
+			childView.setY(childView.getY() + (top - getPaddingTop())/2 - (bottom - getPaddingBottom())/2);
 		} else if(childView.getAlign().equals(GLConstant.GLAlign.BOTTOM)) {
 			childView.setX(childView.getX() + left - getPaddingLeft());
-			childView.setY(childView.getY() + getPaddingBottom() - bottom);	
+			childView.setY(childView.getY() + getPaddingBottom() - bottom);
 		} else if(childView.getAlign().equals(GLConstant.GLAlign.RIGHT)) {
 			childView.setX(childView.getX() + getPaddingRight() - right);
-			childView.setY(childView.getY() + top - getPaddingTop());	
+			childView.setY(childView.getY() + top - getPaddingTop());
 		}
-		
+
 		//重置子view位置
 		//resetChildView(childView);
 	}
@@ -642,7 +642,7 @@ public class GLGroupView extends GLRectView {
 		resetChildView(this);
 		//mX = 0;
 	}
-	
+
 	public void setThisX(float x) {
 		super.setX(x);
 	}
@@ -660,11 +660,11 @@ public class GLGroupView extends GLRectView {
 		mY = this.getY();
 
 		super.setY(y);
-		
+
 		resetChildView(this);
 		//mY = 0;
 	}
-	
+
 	public void setThisY(float y) {
 		super.setY(y);
 	}
@@ -681,7 +681,7 @@ public class GLGroupView extends GLRectView {
 		if (this.mChildView != null && this.mChildView.size() > 0) {
 			int size = this.mChildView.size();
 			float changeDepth = depth - this.getDepth();
-			
+
 			for (int i = 0; i < size; i++) {
 				GLRectView view = this.mChildView.get(i);
 				view.setDepth(view.getDepth() + changeDepth );
@@ -689,10 +689,10 @@ public class GLGroupView extends GLRectView {
 //				view.translate(0, 0, view.getmIncrementDepth());
 			}
 		}
-		
+
 		super.setDepth(depth);
 	}
-	
+
 	/**
 	 * 只设置当前view深度
 	 * @param depth
@@ -700,7 +700,7 @@ public class GLGroupView extends GLRectView {
 	public void setThisDepth(float depth) {
 		super.setDepth(depth);
 	}
-	
+
 	/**
 	 * 设置子view x,y坐标
 	 * @author linzanxian  @Date 2015年3月19日 下午6:48:09
@@ -719,7 +719,7 @@ public class GLGroupView extends GLRectView {
 			}
 		}
 	}
-	
+
 	/**
 	 * 设置子view x,y坐标
 	 * @author linzanxian  @Date 2015年3月19日 下午6:48:09
@@ -735,7 +735,7 @@ public class GLGroupView extends GLRectView {
 //			}
 //		}
 //	}
-	
+
 	/**
 	 * 设置子view x,y坐标
 	 * @author linzanxian  @Date 2015年3月19日 下午6:48:09
@@ -751,7 +751,7 @@ public class GLGroupView extends GLRectView {
 //			}
 //		}
 //	}
-	
+
 	/**
 	 * 设置子view x,y坐标
 	 * @author linzanxian  @Date 2015年3月19日 下午6:48:09
@@ -767,7 +767,7 @@ public class GLGroupView extends GLRectView {
 //			}
 //		}
 //	}
-	
+
 	/**
 	 * 设置子view x坐标
 	 * @author linzanxian  @Date 2015年3月19日 下午6:48:09
@@ -778,7 +778,7 @@ public class GLGroupView extends GLRectView {
 	public void setChildX(float x) {
 		setChildXY(x, NOXY);
 	}
-	
+
 	/**
 	 * 设置子view y坐标
 	 * @author linzanxian  @Date 2015年3月19日 下午6:48:09
@@ -798,53 +798,55 @@ public class GLGroupView extends GLRectView {
 	 * @return void
 	 */
 	@Override
-	public void scale(float sx, float sy) {	
+	public void scale(float sx, float sy) {
 		if (!isSetOriginal()) {
 			super.scale(sx, sy);
-			
+
 			ArrayList<GLRectView> childViews = getChildViews(this);
 			if (childViews != null && childViews.size() > 0) {
 				for (GLRectView childView : childViews) {
 					childView.scale(sx, sy);
-					
+
 					scaleCorrect(this, childView, sx, sy);
 				}
-				
+
 				//resetChildView(this);
 			}
 		} else {
 			scaleChild(this, this, sx, sy);
 		}
 	}
-	
+
 	private void scaleChild(GLRectView view, GLRectView parentView, float sx, float sy) {
 		ArrayList<GLRectView> childViews = getChildViews(parentView);
 		if (childViews != null && childViews.size() > 0) {
 			for (GLRectView childView : childViews) {
 				scaleCorrect(view, childView, sx, sy);
-				
+
 				scaleChild(view, childView, sx, sy);
 			}
 		}
-		
+
 		if (parentView instanceof GLGroupView) {
 			((GLGroupView) parentView).scaleSuper(sx, sy);
 		} else {
 			parentView.scale(sx, sy);
 		}
 	}
-	
-	private void scaleSuper(float sx, float sy) {
-		super.scale(sx, sy);
-	}
 
 	public void rotateonly(float angle, float rx, float ry, float rz)
 	{
 		float radian = (float) (Math.PI / 180 * (-angle));
-		mCosV = (float) Math.cos(radian);
-		mSinV= (float) Math.sin(radian);
+		float cosv = (float) Math.cos(radian);
+		float sinv = (float) Math.sin(radian);
+		mCosV = cosv;
+		mSinV = sinv;
 		mAngle = angle;
 		super.rotate(angle, rx, ry, rz);
+	}
+
+	private void scaleSuper(float sx, float sy) {
+		super.scale(sx, sy);
 	}
 
 	/**
@@ -865,13 +867,19 @@ public class GLGroupView extends GLRectView {
 		float radian = (float) (Math.PI / 180 * (-angle));
 		float cosv = (float) Math.cos(radian);
 		float sinv = (float) Math.sin(radian);
-//		translateArray = rotateTranslate(this.getParent(), this);
-		if (childViews != null && childViews.size() > 0) {
+		if(childViews != null && childViews.size() > 0) {
 			for (GLRectView childView : childViews) {
 				translateArray = rotateTranslate(this, childView);
 				float depth = GLScreenParams.getScreenWidth() / 2400 * translateArray[0] * sinv;
 				depth=(float)(Math.floor(depth*1000000)/1000000);
-				childView.translatesuper(translateArray[0]*(1-cosv), 0, depth);
+				float tx = translateArray[0]*(1-cosv);
+				GLRectView pview = childView.getParent();
+				if( pview != null ) {
+					childView.translatesuper(tx, 0, depth + pview.getmIncrementDepth());
+				}else{
+					childView.translatesuper(tx, 0, depth);
+				}
+
 				childView.rotate(angle, rx, ry, rz);
 			}
 		}
@@ -880,7 +888,7 @@ public class GLGroupView extends GLRectView {
 		mAngle = angle;
 		super.rotate(angle, rx, ry, rz);
 	}
-	
+
 	private Float[] rotateTranslate(GLRectView parentView, GLRectView currentView) {
 		if( parentView == null )
 			return null;
@@ -888,30 +896,30 @@ public class GLGroupView extends GLRectView {
 		float parentCenterY = parentView.getHeight()/2;
 		float currentCenterX = currentView.getWidth()/2;
 		float currentCenterY = currentView.getHeight()/2;
-		float parentX = parentView.getX();
-		float curentX = currentView.getX();
-		
+		float parentX = parentView.getX() - parentView.getmIncrementX();
+		float curentX = currentView.getX() - currentView.getmIncrementX();
+
 		float translateX = parentCenterX - currentCenterX - (curentX -parentX);
 		float translateY = parentCenterY - currentCenterY;
 		float translateZ = parentView.getDepth() - currentView.getDepth();
-		
-		
+
+
 //		currentView.translate(translateX, 0, translateZ);
-		
+
 		Float[] translateArray = new Float[3];
 		translateArray[0] = translateX;
 		translateArray[1] = translateY;
 		translateArray[2] = translateZ;
-		
+
 		return translateArray;
 	}
-	
+
 	/**
 	 * 旋转修正
 	 * @author linzanxian  @Date 2015年4月2日 上午9:57:40
 	 * description:旋转修正
-	 * @param pView 父view 
-	 * @param cView 子view 
+	 * @param pView 父view
+	 * @param cView 子view
 	 * @return void
 	 */
 	private void rotateCorrect(GLRectView pView, GLRectView cView, float angle, float rx, float ry, float rz) {
@@ -921,7 +929,7 @@ public class GLGroupView extends GLRectView {
 			float cCenterX = cView.getWidth()/2;
 			float pDepth = pView.getDepth();
 			float cDepth = cView.getDepth();
-			
+
 			float CenterDistance = (pCenterX - cCenterX)/ GLScreenParams.getXDpi();
 			float tz = (float) (CenterDistance*Math.sin(radian));
 			float tx = CenterDistance - (float) (CenterDistance*Math.cos(radian));
@@ -931,7 +939,7 @@ public class GLGroupView extends GLRectView {
 			cView.translate(tx, 0, -tz);
 		}
 	}
-	
+
 	/**
 	 * 设置透明度
 	 * @author linzanxian  @Date 2015年3月20日 上午10:52:37
@@ -947,17 +955,17 @@ public class GLGroupView extends GLRectView {
 				childView.setAlpha(alpha);
 			}
 		}
-		
+
 		super.setAlpha(alpha);
 	}
-	
+
 	/**
 	 * 可见
 	 * @author linzanxian  @Date 2015年3月27日 下午3:44:24
 	 * description:移动
 	 * @param tx x坐标
 	 * @param ty y坐标
-	 * @param tz z坐标 
+	 * @param tz z坐标
 	 * @return void
 	 */
 	@Override
@@ -970,17 +978,17 @@ public class GLGroupView extends GLRectView {
 //Log.d("test", "childView");				
 			}
 		}*/
-		
+
 		super.setVisible(visible);
 	}
-	
+
 	/**
 	 * 移动
 	 * @author linzanxian  @Date 2015年3月27日 下午3:44:24
 	 * description:移动
 	 * @param tx x坐标
 	 * @param ty y坐标
-	 * @param tz z坐标 
+	 * @param tz z坐标
 	 * @return void
 	 */
 	@Override
@@ -991,17 +999,17 @@ public class GLGroupView extends GLRectView {
 				childView.translate(tx, ty, tz);
 			}
 		}
-		
+
 		super.translate(tx, ty, tz);
 	}
-	
+
 	/**
 	 * 平移子view
 	 * @author linzanxian  @Date 2015年4月1日 上午9:51:43
 	 * description:平移子view
 	 * @param tx x坐标
 	 * @param ty y坐标
-	 * @param tz z坐标 
+	 * @param tz z坐标
 	 * @return void
 	 */
 	public void translateChild(float tx, float ty, float tz) {
@@ -1025,7 +1033,7 @@ public class GLGroupView extends GLRectView {
 		if (view instanceof GLGroupView) {
 			childViews = ((GLGroupView) view).mChildView;
 		}
-		
+
 		return childViews;
 	}
 
@@ -1041,17 +1049,17 @@ public class GLGroupView extends GLRectView {
 
 	@Override
 	public boolean onKeyDown(int keycode) {
-		
+
 		GLRectView view = getFocusedView();
 		boolean flag = false;
 		if (view != null && view.isVisible()){
-			flag = view.onKeyDown(keycode);		
+			flag = view.onKeyDown(keycode);
 		}
 
 		if (!flag){
 			flag = super.onKeyDown(keycode);
 		}
-		
+
 		if (!flag && !isAutomaticFocus){
 			switch (keycode) {
 				case MojingKeyCode.KEYCODE_DPAD_LEFT:
@@ -1093,15 +1101,15 @@ public class GLGroupView extends GLRectView {
 		}
 		return flag ? true : super.onKeyLongPress(keycode);
 	}
-	
+
 	public GLRectView getFocusedChild(){
 		return getFocusedView();
 	}
-	
+
 	public void setFocusedChild(GLRectView child){
 		mGlFocusUtils.setFousedView(child);
 	}
-	
+
 	public void onFocusChild(){
 		if (getFocusedView() != null){
 			getFocusedView().onFocusChange(GLFocusUtils.TO_UNKNOWN, false);
@@ -1114,14 +1122,14 @@ public class GLGroupView extends GLRectView {
 		if (isFocused() == isFocused){
 			return;
 		}
-		
+
 		if (!isFocused && getFocusedView() != null){
 			getFocusedView().onFocusChange(direction, false);
 			mGlFocusUtils.setFousedView(null);
 		}
 
 		super.onFocusChange(direction, isFocused);
-		
+
 		if (isFocused && direction != GLFocusUtils.TO_UNKNOWN){
 			mGlFocusUtils.handleFocused(direction, null, mChildView);
 		}
@@ -1133,38 +1141,38 @@ public class GLGroupView extends GLRectView {
 			getParent().lostParentFocus();
 		}
 	}
-	
+
 	/**
 	 * 缩放修正
 	 * @author linzanxian  @Date 2015年4月2日 下午6:59:20
 	 * description:缩放修正
-	 * @param pView 父view 
-	 * @param cView 子view 
+	 * @param pView 父view
+	 * @param cView 子view
 	 * @return void
 	 */
 	private void scaleCorrect(GLRectView pView, GLRectView cView, float sx, float sy) {
 		if (!isSetOriginal()) {
 			float pCenterX = pView.getWidth()/2 + pView.getX();
 			float pCenterY = pView.getHeight()/2 + pView.getY();
-			
+
 			float cCenterX = 0;
 			if (cView.getWidth() > pView.getWidth()) {
 				cCenterX = pView.getWidth()/2 + cView.getX();
 			} else {
 				cCenterX = cView.getWidth()/2 + cView.getX();
 			}
-			
+
 			float cCenterY = 0;
 			if (cView.getHeight() > pView.getHeight()) {
 				cCenterY = pView.getHeight()/2 + cView.getY();
 			} else {
 				cCenterY = cView.getHeight()/2 + cView.getY();
 			}
-			
-			
+
+
 			float ty = 0;
 			float tx = 0;
-	
+
 			if (pCenterX == cCenterX) {
 				tx = 0;
 			} else {
@@ -1175,7 +1183,7 @@ public class GLGroupView extends GLRectView {
 			} else {
 				ty = (sy - 1) * -(pCenterY - cCenterY);
 			}
-	
+
 			//Log.d("test2", sx +"===="+ sy +"===="+ cView.getTranslateX() +"===="+ tx +"===="+ cView.getTranslateY() +"===="+ ty +"===="+ cView.getX() +"===="+ cView.getY());
 //			cView.setX(cView.getX() + tx - cView.getTranslateX());
 //			cView.setY(cView.getY() + ty - cView.getTranslateY());
@@ -1187,7 +1195,7 @@ public class GLGroupView extends GLRectView {
 			float pCenterY = pView.getHeight()/2 + pView.getOriginalY();
 			float cCenterX = cView.getWidth()/2 + cView.getOriginalX();
 			float cCenterY = cView.getHeight()/2 + cView.getOriginalY();
-			
+
 			float ty = 0;
 			float tx = 0;
 			if (pCenterX == cCenterX) {
@@ -1200,7 +1208,7 @@ public class GLGroupView extends GLRectView {
 			} else {
 				ty = (sy - 1) * -(pCenterY - cCenterY);
 			}
-			
+
 			if (cView instanceof GLGroupView) {
 				((GLGroupView) cView).setThisX(cView.getOriginalX() + tx);
 				((GLGroupView) cView).setThisY(cView.getOriginalY() + ty);
@@ -1218,11 +1226,11 @@ public class GLGroupView extends GLRectView {
 	public void setAutomaticFocus(boolean isAutomaticFocus) {
 		this.isAutomaticFocus = isAutomaticFocus;
 	}
-	
+
 	public ArrayList<GLRectView> getChildView() {
 		return mChildView;
 	}
-	
+
 	@Override
 	public void setOriginal() {
 		ArrayList<GLRectView> childViews = getChildViews(this);
@@ -1231,10 +1239,10 @@ public class GLGroupView extends GLRectView {
 				childView.setOriginal();
 			}
 		}
-		
+
 		super.setOriginal();
 	}
-	
+
 	@Override
 	public void release() {
 		for (int i = 0; i < mChildView.size(); i++) {
@@ -1242,7 +1250,7 @@ public class GLGroupView extends GLRectView {
 		}
 		super.release();
 	}
-	
+
 	@Override
 	public void setLookAngle(float lookAngle) {
 		for (int i = 0; i < mChildView.size(); i++) {
@@ -1250,7 +1258,7 @@ public class GLGroupView extends GLRectView {
 		}
 		super.setLookAngle(lookAngle);
 	}
-	
+
 	@Override
 	public void setLookTranslateZ(float mLookTranslateZ) {
 		for (int i = 0; i < mChildView.size(); i++) {
@@ -1258,7 +1266,7 @@ public class GLGroupView extends GLRectView {
 		}
 		super.setLookTranslateZ(mLookTranslateZ);
 	}
-	
+
 	@Override
 	public void setMask(float mask) {
 		for (int i = 0; i < mChildView.size(); i++) {
@@ -1266,7 +1274,7 @@ public class GLGroupView extends GLRectView {
 		}
 		super.setMask(mask);
 	}
-	
+
 	@Override
 	public void setZIndex(int index) {
 		for (int i = 0; i < mChildView.size(); i++) {
