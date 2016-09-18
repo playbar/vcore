@@ -212,7 +212,8 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 			mX += view.getMarginLeft();
 			if(this.mOrderType == this.HORIZONTAL){
 				view.setX(mX);
-				view.setY(GLListView.this.getY() + getMarginTop());
+//				view.setY(GLListView.this.getY() + getMarginTop());
+				view.setY(GLListView.this.getY() + getPaddingTop()+ view.getMarginTop());
 				mX += view.getWidth() + this.mItemSpacing;
 			} else{
 				view.setX(GLListView.this.getX() + getMarginLeft());

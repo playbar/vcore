@@ -890,7 +890,10 @@ public class GLRectView extends GLView {
 		int i = 0;
 		int ilen = mRenders.size();
 		for ( i = 0; i < ilen; i++) {
-			mRenders.get(i).setAlpha(alpha);
+			GLRenderParams renderParams = mRenders.get(i);
+			if (renderParams != null){
+				renderParams.setAlpha(alpha);
+			}
 		}
 	}
 
