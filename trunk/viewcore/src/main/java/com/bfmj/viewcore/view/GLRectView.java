@@ -17,6 +17,8 @@ import com.bfmj.viewcore.animation.GLRotateAnimation;
 import com.bfmj.viewcore.animation.GLScaleAnimation;
 import com.bfmj.viewcore.animation.GLTransformation;
 import com.bfmj.viewcore.animation.GLTranslateAnimation;
+import com.bfmj.viewcore.entity.LayerInfo;
+import com.bfmj.viewcore.entity.TextInfo;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
@@ -25,6 +27,7 @@ import com.bfmj.viewcore.render.GLRenderParams;
 import com.bfmj.viewcore.render.GLScreenParams;
 import com.bfmj.viewcore.util.BitmapOp;
 import com.bfmj.viewcore.util.GLFocusUtils;
+import com.bfmj.viewcore.util.GLFontUtils;
 import com.bfmj.viewcore.util.GLGenTexTask;
 import com.bfmj.viewcore.util.GLMatrixState;
 import com.bfmj.viewcore.util.GLTextureUtils;
@@ -35,9 +38,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.opengl.Matrix;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.animation.AnimationUtils;
 
@@ -1669,36 +1676,142 @@ public class GLRectView extends GLView {
 
 		GLThreadPool.getThreadPool().execute(new Runnable() {
 			public void run() {
-				Bitmap bBitmap = null;
-				Bitmap fBitmap = null;
-				float width = getWidth();
-				float height = getHeight();
-				float innerWidth = getInnerWidth();
-				float innerHeight = getInnerHeight();
+				ArrayList<LayerInfo> layerInfos = new ArrayList<>();
+				LayerInfo layerInfo = null;
 
 				if (mBackgroundResId != 0) {
-					bBitmap = createBitmap(mBackgroundResId);
+					layerInfo = new LayerInfo();
+					layerInfo.setType(LayerInfo.LayerType.TYPE_RESOURCE_ID);
+					layerInfo.setResourceId(mBackgroundResId);
+					layerInfos.add(layerInfo);
 				} else if (mBackgroundBitmap != null) {
-					bBitmap = GLTextureUtils.handleBitmap(mBackgroundBitmap, width, height);
+					layerInfo = new LayerInfo();
+					layerInfo.setType(LayerInfo.LayerType.TYPE_BITMAP);
+					layerInfo.setBitmap(mBackgroundBitmap);
+					layerInfos.add(layerInfo);
 				} else if (mBackgroundColor != null){
-					bBitmap = GLTextureUtils.handleColor(mBackgroundColor, width, height);
+					layerInfo = new LayerInfo();
+					layerInfo.setType(LayerInfo.LayerType.TYPE_COLOR);
+					layerInfo.setColor(mBackgroundColor);
+					layerInfos.add(layerInfo);
 				}
 
+				Rect rect = new Rect((int)paddingLeft, (int)paddingTop, (int)getWidth() - (int)paddingRight,
+						(int)getHeight() - (int)paddingBottom);
 				if (mFrontResId != 0){
-					fBitmap = createBitmap(mFrontResId);
+					layerInfo = new LayerInfo();
+					layerInfo.setType(LayerInfo.LayerType.TYPE_RESOURCE_ID);
+					layerInfo.setResourceId(mFrontResId);
+					layerInfo.setRect(rect);
+					layerInfos.add(layerInfo);
 				} else if (mFrontBitmap != null){
-					fBitmap = GLTextureUtils.handleBitmap(mFrontBitmap, innerWidth, innerHeight);
+					layerInfo = new LayerInfo();
+					layerInfo.setType(LayerInfo.LayerType.TYPE_BITMAP);
+					layerInfo.setBitmap(mFrontBitmap);
+					layerInfo.setRect(rect);
+					layerInfos.add(layerInfo);
 				}
 
-				if (bBitmap != null && fBitmap != null){
-					getTexture(mergeBitmap(bBitmap, fBitmap));
-				} else if (bBitmap != null){
-					getTexture(bBitmap);
-				} else if (fBitmap != null){
-					getTexture(fBitmap);
+				if (layerInfos.size() > 0){
+					Bitmap bitmap = createBitmap(layerInfos);
+					if (bitmap != null){
+						bitmap = GLTextureUtils.handleBitmap(bitmap, getWidth(), getHeight());
+						getTexture(bitmap);
+					}
 				}
 			}
 		});
+	}
+
+	/**
+	 * 根据layerinfo list生成bitmap
+	 * @param layerInfos
+	 * @return
+	 */
+	private Bitmap createBitmap(ArrayList<LayerInfo> layerInfos){
+		Bitmap bitmap = null;
+		//初始化画布
+		int width = (int)getWidth();
+		int height = (int)getHeight();
+
+		if (width > 0 && height > 0) {
+			bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+			Canvas canvas = new Canvas(bitmap);
+			canvas.drawColor(Color.TRANSPARENT);
+
+			for (int i = 0; i < layerInfos.size(); i++) {
+				LayerInfo layerInfo = layerInfos.get(i);
+				if (layerInfo != null) {
+					drawLayer(canvas, layerInfo);
+				}
+			}
+		}
+		return bitmap;
+	}
+
+	/**
+	 * 根据类型绘制
+	 * @param canvas
+	 * @param layerInfo
+	 */
+	private void drawLayer(Canvas canvas, LayerInfo layerInfo){
+		Rect rect = layerInfo.getRect();
+		if (rect == null){
+			rect = new Rect(0, 0, (int)getWidth(), (int)getHeight());
+		}
+
+		switch (layerInfo.getType()){
+			case TYPE_RESOURCE_ID:
+				Bitmap rBitmap = createBitmap(layerInfo.getResourceId());
+				canvas.drawBitmap(rBitmap, new Rect(0, 0, rBitmap.getWidth(), rBitmap.getHeight()),
+						rect, new Paint());
+				break;
+			case TYPE_BITMAP:
+				Bitmap dBitmap = layerInfo.getBitmap();
+				canvas.drawBitmap(dBitmap, new Rect(0, 0, dBitmap.getWidth(), dBitmap.getHeight()),
+						rect, new Paint());
+				break;
+			case TYPE_COLOR:
+				Paint p = new Paint();
+				p.setStyle(Paint.Style.FILL);
+				GLColor color = layerInfo.getColor();
+				p.setARGB((int)(color.getA() * 255.0F), (int)(color.getR() * 255.0F), (int)(color.getG() * 255.0F), (int)(color.getB() * 255.0F));
+				canvas.drawRect(rect, p);
+				break;
+			case TYPE_TEXT:
+				TextInfo info = layerInfo.getTextInfo();
+				drawText(canvas, info, rect);
+				break;
+		}
+	}
+
+	/**
+	 * 绘制文字
+	 * @param canvas
+	 * @param info
+	 * @param rect
+	 */
+	private void drawText(Canvas canvas, TextInfo info, Rect rect){
+		GLColor tColor = info.getColor();
+		TextPaint tp = new TextPaint();
+		tp.setARGB((int)(tColor.getA() * 255.0F), (int)(tColor.getR() * 255.0F), (int)(tColor.getG() * 255.0F), (int)(tColor.getB() * 255.0F));
+		tp.setTypeface(GLFontUtils.getInstance(this.getContext()).getFontTypeface());
+		tp.setTextSize(info.getSize());
+		// 先将文字绘制到临时的canvas上
+		int w = (rect.right - rect.left);
+		int h = (rect.bottom - rect.top);
+		if (w > 0 && h > 0){
+			Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+			Canvas cv = new Canvas(bm);
+			cv.drawColor(Color.TRANSPARENT);
+
+			float lineHeight = info.getLineHeight() > 0 ? (float)info.getLineHeight() / info.getSize() : 1.2f;
+			StaticLayout sl = new StaticLayout(info.getContent(), tp, w, Layout.Alignment.ALIGN_NORMAL, lineHeight, 0.0F, true);
+			sl.draw(cv);
+
+			canvas.drawBitmap(bm, new Rect(0, 0, bm.getWidth(), bm.getHeight()),
+					rect, new Paint());
+		}
 	}
 
 	private Bitmap createBitmap(int resId){
@@ -1717,23 +1830,5 @@ public class GLRectView extends GLView {
 			}
 		}
 		return bm;
-	}
-
-	private Bitmap mergeBitmap(Bitmap bbm, Bitmap fbm){
-		int width = (int) getWidth();
-		int height = (int) getHeight();
-
-		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(bitmap);
-
-		Rect oRect = new Rect(0, 0, bbm.getWidth(), bbm.getHeight());
-		Rect dRect = new Rect(0, 0, width, height);
-		canvas.drawBitmap(bbm, oRect, dRect, new Paint());
-
-		oRect = new Rect(0, 0, fbm.getWidth(), fbm.getHeight());
-		dRect = new Rect((int)getPaddingLeft(), (int)getPaddingTop(), (int)(width - getPaddingRight()), (int)(height - getPaddingBottom()));
-		canvas.drawBitmap(fbm, oRect, dRect, new Paint());
-
-		return bitmap;
 	}
 }

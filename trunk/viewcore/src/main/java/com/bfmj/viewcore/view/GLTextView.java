@@ -172,8 +172,8 @@ public class GLTextView extends GLRectView {
 	}
 	
 	private Bitmap createBitmap(){
-		int width = (int)(getInnerWidth() / GLScreenParams.getScaleRate());
-		int height = (int)(getInnerHeight() / GLScreenParams.getScaleRate());
+		int width = (int)getInnerWidth();
+		int height = (int)getInnerHeight();
 		
 		if (width <= 0){
 			return null;
@@ -194,7 +194,7 @@ public class GLTextView extends GLRectView {
         }
         
         p.setTypeface(GLFontUtils.getInstance(getContext()).getFontTypeface());
-        p.setTextSize(28 / GLScreenParams.getScaleRate());
+        p.setTextSize(28);
         
         float lineHeight = mLineHeight == -1 ? 1.0f : (float)mLineHeight / mTextSize / 1.2f;
         //绘制字体
