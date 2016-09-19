@@ -210,6 +210,7 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 
 
 			mX += view.getMarginLeft();
+			view.rotate( mAngle, 0, 1, 0);
 			if(this.mOrderType == this.HORIZONTAL){
 				view.setX(mX);
 //				view.setY(GLListView.this.getY() + getMarginTop());
@@ -220,7 +221,7 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 				view.setY(getY() + getMarginTop() + (view.getHeight() + this.mItemSpacing)*j);
 				//view.setY(view.getMarginTop() + (view.getHeight() + this.mItemSpacing + view.getMarginTop() + view.getMarginBottom())*j);
 			}
-			view.rotate( mAngle, 0, 1, 0);
+
 			mDefaultDepth = view.getDepth();
 
 

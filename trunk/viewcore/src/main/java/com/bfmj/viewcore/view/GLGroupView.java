@@ -431,7 +431,7 @@ public class GLGroupView extends GLRectView {
 						if (childView != null) {
 							if (childView.getAlign() == null
 									|| childView.getAlign().equals(GLConstant.GLAlign.DEFAULT)) {
-								childView.setX(maxX + childView.getMarginLeft());
+								childView.setX(maxX + childView.getMarginLeft() + childView.getmIncrementX());
 								childView.setY(maxY + childView.getMarginTop());
 							} else if(childView.getAlign().equals(GLConstant.GLAlign.CENTER)) {
 								childView.setX(view.getX() + (view.getWidth() - view.getPaddingLeft() - view.getPaddingRight() - childView.getWidth())/2 + view.getPaddingLeft());
@@ -440,14 +440,14 @@ public class GLGroupView extends GLRectView {
 								childView.setX(view.getX() + (view.getWidth() - view.getPaddingLeft() - view.getPaddingRight() - childView.getWidth())/2 + view.getPaddingLeft());
 								childView.setY(maxY + childView.getMarginTop());
 							} else if(childView.getAlign().equals(GLConstant.GLAlign.CENTER_VERTICAL)) {
-								childView.setX(maxX + childView.getMarginLeft());
+								childView.setX(maxX + childView.getMarginLeft() - childView.getmIncrementX());
 								childView.setY(view.getY() + (view.getHeight() - view.getPaddingTop() - view.getPaddingBottom() - childView.getHeight())/2 + view.getPaddingTop());
 							}
 						}
 
 						if (linearView.getOrientation().equals(GLConstant.GLOrientation.HORIZONTAL)) {
 							if (i == 0) {
-								maxX = childView.getX() + childView.getWidth() + childView.getMarginRight();
+								maxX = childView.getX() + childView.getWidth() + childView.getMarginRight() - childView.getmIncrementX();
 							} else {
 								if (maxX < (childView.getX() + childView.getWidth() + childView.getMarginRight())) {
 									maxX = childView.getX() + childView.getWidth() + childView.getMarginRight();
@@ -462,7 +462,7 @@ public class GLGroupView extends GLRectView {
 								}
 							}
 						}
-						childView.translateX( childView.getmIncrementX());
+//						childView.translateX( childView.getmIncrementX());
 					}
 				}
 			} else if(view instanceof GLRelativeView) {
