@@ -181,7 +181,7 @@ public class GLTextView extends GLRectView {
 						int textureId = -1;
 
 						if (bmpTemp != null) {
-							textureId = GLTextureUtils.initImageTexture(GLTextureUtils.handleBitmap(bmpTemp, getInnerWidth(), getInnerHeight()), false, false);
+							textureId = GLTextureUtils.initImageTexture(bmpTemp, false, false);
 							bmpTemp.recycle();
 							bmpTemp = null;
 						}
