@@ -57,7 +57,7 @@ public class GridViewActivity extends BaseViewActivity {
 
 	public List<Map<String, Object>> getData(){
 		//cion和iconName的长度是相同的，这里任选其一都可以
-		for(index=0; index < 1; ++index){
+		for(index=0; index < 10; ++index){
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("image", icon[index]);
 			map.put("text", iconName[index]);
@@ -73,7 +73,7 @@ public class GridViewActivity extends BaseViewActivity {
 		Log.d("test time", "time 1 = > " + System.currentTimeMillis());
 //		setMojingType("42EGCV-WQXG87-WHQHS8-YYYTEF-4SWGST-CRY7SS");
 		// 3288 key
-		setMojingType("WNE8QN-QVCCZN-XXF8W3-9Q2YDH-AQZRA2-XVDZ9Q");
+//		setMojingType("WNE8QN-QVCCZN-XXF8W3-9Q2YDH-AQZRA2-XVDZ9Q");
 		super.onCreate(savedInstanceState);
 		Log.d("test time", "time 2 = > " + System.currentTimeMillis());
 		rootView = getRootView();
@@ -103,7 +103,7 @@ public class GridViewActivity extends BaseViewActivity {
 			}
 		};
 
-		gridView = new GLGridViewPage( this, 3, 3 );
+		gridView = new GLGridViewPage( this, 2, 2 );
 		gridView.setX(500);
 		gridView.setY(500);
 		gridView.setLayoutParams(40, 40);
@@ -129,7 +129,7 @@ public class GridViewActivity extends BaseViewActivity {
 //		gridView.setTotalCount( 6 );
 		gridView.setAdapter( adapter );
 		//gridView.rotate(90.0f, 1.0f, 0.0f, 0.0f );
-		gridView.rotate(30, 0, 1, 0);
+//		gridView.rotate(30, 0, 1, 0);
 //		gridView.setDepth( 3.5f);
 		rootView.addView(gridView);
 
