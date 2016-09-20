@@ -196,7 +196,13 @@ public class GLProcessView extends GLGroupView {
 	public void initDraw() {
 		super.initDraw();
 	}
-	
+
+	@Override
+	public void setLayoutParams(float width, float height){
+		super.setLayoutParams(width, height);
+		mImageView.mImgWidht = width;
+		mImageView.mImgHeight = height;
+	}
 	/**
 	 * 设置属性
 	 * @author linzanxian  @Date 2015年3月17日 下午2:35:36
@@ -206,7 +212,7 @@ public class GLProcessView extends GLGroupView {
 		if (mImageView == null) {
 			return;
 		}
-		
+
 		this.addView(mImageView);
 		
 		if (mGlProcessMode == GLConstant.GLProcessMode.CIRCLE) {
@@ -218,6 +224,7 @@ public class GLProcessView extends GLGroupView {
 				rotate();
 			}
 		}
+
 	}
 	
 	/**
@@ -226,14 +233,6 @@ public class GLProcessView extends GLGroupView {
 	 * @return void
 	 */
 	private void rotate() {
-		/*
-		new Handler().postDelayed(new Runnable(){    
-  		    public void run() {
-  		    	
-  		    	mImageView.rotate(-45, 0f, 0f, 1f);
-  		    	rotate();
-  		    }    
-  		}, mSpeed);*/
 		
 		new Thread(new Runnable() {  
             

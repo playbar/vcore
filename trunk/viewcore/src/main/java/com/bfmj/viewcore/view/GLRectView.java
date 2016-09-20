@@ -110,6 +110,8 @@ public class GLRectView extends GLView {
 	private boolean isSetOriginal = false;
 	private float mLookAngle = 0;
 	private float mLookTranslateZ = 0;
+	public float mImgWidht = 0;
+	public float mImgHeight = 0;
 
 	private GLConstant.GLAlign mAlign;
 	private float mRotateAngle = 0;
@@ -1734,9 +1736,12 @@ public class GLRectView extends GLView {
 		//初始化画布
 		int width = (int)getWidth();
 		int height = (int)getHeight();
-
+		if( width == 0 || height == 0 ){
+			width = (int)mImgWidht;
+			height = (int)mImgHeight;
+		}
+		Bitmap bitmap = null;
 		if (width > 0 && height > 0) {
-			Bitmap bitmap = null;
 			bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 			Canvas canvas = new Canvas(bitmap);
 			canvas.drawColor(Color.TRANSPARENT);
@@ -1747,13 +1752,12 @@ public class GLRectView extends GLView {
 					drawLayer(canvas, layerInfo);
 				}
 			}
-			return bitmap;
 		}
 		else
 		{
-			Bitmap rBitmap = createBitmap(layerInfos.get(0).getResourceId());
-			return rBitmap;
+			bitmap = createBitmap(layerInfos.get(0).getResourceId());
 		}
+		return bitmap;
 
 	}
 
@@ -1763,9 +1767,15 @@ public class GLRectView extends GLView {
 	 * @param layerInfo
 	 */
 	private void drawLayer(Canvas canvas, LayerInfo layerInfo){
+		int width = (int)getWidth();
+		int height = (int)getHeight();
+		if( width == 0 || height == 0 ){
+			width = (int)mImgWidht;
+			height = (int)mImgHeight;
+		}
 		Rect rect = layerInfo.getRect();
 		if (rect == null){
-			rect = new Rect(0, 0, (int)getWidth(), (int)getHeight());
+			rect = new Rect(0, 0, width, height);
 		}
 
 		switch (layerInfo.getType()){
