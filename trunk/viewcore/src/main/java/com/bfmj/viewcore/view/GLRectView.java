@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.baofeng.mojing.MojingSDK;
 import com.baofeng.mojing.input.base.MojingKeyCode;
+import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.animation.GLAnimation;
 import com.bfmj.viewcore.animation.GLRotateAnimation;
 import com.bfmj.viewcore.animation.GLScaleAnimation;
@@ -1729,12 +1730,13 @@ public class GLRectView extends GLView {
 	 * @return
 	 */
 	private Bitmap createBitmap(ArrayList<LayerInfo> layerInfos){
-		Bitmap bitmap = null;
+
 		//初始化画布
 		int width = (int)getWidth();
 		int height = (int)getHeight();
 
 		if (width > 0 && height > 0) {
+			Bitmap bitmap = null;
 			bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 			Canvas canvas = new Canvas(bitmap);
 			canvas.drawColor(Color.TRANSPARENT);
@@ -1745,8 +1747,14 @@ public class GLRectView extends GLView {
 					drawLayer(canvas, layerInfo);
 				}
 			}
+			return bitmap;
 		}
-		return bitmap;
+		else
+		{
+			Bitmap rBitmap = createBitmap(layerInfos.get(0).getResourceId());
+			return rBitmap;
+		}
+
 	}
 
 	/**

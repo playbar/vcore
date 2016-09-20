@@ -2,31 +2,49 @@ package com.bfmj.distortion;
 
 
 import android.util.Log;
+
 import java.text.SimpleDateFormat;
 
 
 /**
  * 日志打印工具类
- * @author yanzw    
- * @date: 2015-1-16 上午11:04:57 
+ * @author yanzw
+ * @date: 2015-1-16 上午11:04:57
  */
 public class Logger {
-	
+
 	private static String TAG = "viewcore";
 	private static String MSG = "";
 	protected static boolean debugMode = true;
-	
+
 	public static String getDebugTag() {
 		return TAG;
 	}
-	
+
+	private static long lastTime = System.currentTimeMillis();
+	private static int times = 1;
 	/**
 	 * Sets the tag to be used in LogCat debug messages
-	 * 
+	 *
 	 * @param tag any valid String for LogCat tags
 	 */
 	public static void setDebugTag(String tag) {
 		Logger.TAG = tag;
+	}
+
+	public static void printFPS()
+	{
+		if( times >= 30 )
+		{
+			long temp = System.currentTimeMillis();
+			long time = temp - lastTime;
+			lastTime = temp;
+			int fps = (int)(times *1000 / time);
+			Log.w(TAG, "FPS:" + fps);
+			times = 1;
+		}else{
+			++times;
+		}
 	}
 
 	public static void printTime()
@@ -44,7 +62,7 @@ public class Logger {
 		setCallerInfo( msg + str);
 		Log.w(TAG, MSG);
 	}
-	
+
 	/**
 	 * set debugMode
 	 * @param debug
@@ -52,10 +70,10 @@ public class Logger {
 	public static void setDebugMode(boolean debug) {
 		Logger.debugMode = debug;
 	}
-	
+
 	/**
 	 * Prints a warning to LogCat with information about the engine warning
-	 * 
+	 *
 	 * @param message The message to be passed on
 	 */
 	public static void warning(String message) {
@@ -64,10 +82,10 @@ public class Logger {
 		setCallerInfo(message);
 		Log.w(TAG, MSG);
 	}
-	
+
 	/**
 	 * Prints a warning to LogCat with information about the engine warning
-	 * 
+	 *
 	 * @param message The message to be passed on
 	 */
 	public static void w(String message) {
@@ -76,10 +94,10 @@ public class Logger {
 		setCallerInfo(message);
 		Log.w(TAG, MSG);
 	}
-	
+
 	/**
 	 * Prints to the verbose stream of LogCat with information from the engine
-	 * 
+	 *
 	 * @param message The message to be passed on
 	 */
 	public static void print(String message) {
@@ -88,7 +106,7 @@ public class Logger {
 		setCallerInfo(message);
 		Log.v(TAG, MSG);
 	}
-	
+
 	/**
 	 * 打印 error 消息 到 LogCat
 	 * @param message 消息
@@ -99,7 +117,7 @@ public class Logger {
 		setCallerInfo(message);
 		Log.e(TAG, MSG);
 	}
-	
+
 	/**
 	 * 打印 error 消息 到 LogCat
 	 * @param message 消息
@@ -110,7 +128,7 @@ public class Logger {
 		setCallerInfo(message);
 		Log.e(TAG, MSG);
 	}
-	
+
 	/**
 	 * 打印 error 消息 到 LogCat
 	 * @param message	消息
@@ -122,7 +140,7 @@ public class Logger {
 		setCallerInfo(message);
 		Log.e(TAG, MSG, t);
 	}
-	
+
 	/**
 	 * 打印 error 消息 到 LogCat
 	 * @param message	消息
@@ -134,7 +152,7 @@ public class Logger {
 		setCallerInfo(message);
 		Log.e(TAG, MSG, t);
 	}
-	
+
 	/**
 	 * 打印 verbose 消息 到 LogCat
 	 * @param message
@@ -145,7 +163,7 @@ public class Logger {
 		setCallerInfo(message);
 		Log.v(TAG, MSG);
 	}
-	
+
 	/**
 	 * 打印 verbose 消息 到 LogCat
 	 * @param message
@@ -156,14 +174,14 @@ public class Logger {
 		setCallerInfo(message);
 		Log.v(TAG, MSG);
 	}
-	
+
 	/**
 	 * Forces the application to exit, this is messy, unsure if it should be used. For debugging purposes while testing, it will be.
 	 */
 	public static void forceExit() {
 		System.exit(0);
 	}
-	
+
 	/**
 	 * 打印 info 消息 到 LogCat
 	 * @param message	打印的消息
@@ -174,10 +192,10 @@ public class Logger {
 		setCallerInfo(message);
 		Log.i(TAG, MSG);
 	}
-	
+
 	/**
 	 * 打印 info 消息 到 LogCat
-	 * @param tag		
+	 * @param tag
 	 * @param message
 	 */
 	public static void i(String tag, String message){
@@ -221,7 +239,7 @@ public class Logger {
 		if(message == null) return ;
 		setCallerInfo(message);
 	}
-	
+
 	/**
 	 * 打印 debug 消息 到 LogCat
 	 * @param tag
@@ -235,53 +253,53 @@ public class Logger {
 		}
 		setCallerInfo(message);
 	}
-	
+
 	/**
 	 * 推断调用类和方法名
 	 * @return
 	 */
-	 public static CallerInfo inferCaller(){
-		 // Get the stack trace.
-		 StackTraceElement stack[] = (new Throwable()).getStackTrace();
-		 // First, search back to a method in the Logger class.
-		 int ix = 0;
-		 while (ix < stack.length) {
-			 StackTraceElement frame = stack[ix];
-			 String cname = frame.getClassName();
-			 if (cname.equals("com.bfmj.distortion.Logger")) {
-				 break;
-			 }
-			 ix++;
-		 }
-		 // Now search for the first frame before the "Logger" class.
-		 while (ix < stack.length) {
-			 StackTraceElement frame = stack[ix];
-			 String cname = frame.getClassName();
-			 if (!cname.equals("com.bfmj.distortion.Logger")) {
-				 // We've found the relevant frame.
-				 CallerInfo callerInfo = new CallerInfo();
-				 callerInfo.setFileName(frame.getFileName());
-				 callerInfo.setMethodName(frame.getMethodName());
-				 callerInfo.setLineNumber(frame.getLineNumber()+"");
-				 return callerInfo;
-			 }
-		 	ix++;
-		 }
-		 // We haven't found a suitable frame, so just punt. This is
-		 // OK as we are only commited to making a "best effort" here.
-		 return null;
-	 }
-	 
-	 /**
-	  * Logger类的调用者信息类
- 	  * @author yanzw
-	  * @date 2014-5-9 上午11:56:14
-	  */
-	 private static class CallerInfo{
-		 private String fileName = "";
-		 private String methodName = "";
-		 private String lineNumber = "";
-		 
+	public static CallerInfo inferCaller(){
+		// Get the stack trace.
+		StackTraceElement stack[] = (new Throwable()).getStackTrace();
+		// First, search back to a method in the Logger class.
+		int ix = 0;
+		while (ix < stack.length) {
+			StackTraceElement frame = stack[ix];
+			String cname = frame.getClassName();
+			if (cname.equals("com.bfmj.distortion.Logger")) {
+				break;
+			}
+			ix++;
+		}
+		// Now search for the first frame before the "Logger" class.
+		while (ix < stack.length) {
+			StackTraceElement frame = stack[ix];
+			String cname = frame.getClassName();
+			if (!cname.equals("com.bfmj.distortion.Logger")) {
+				// We've found the relevant frame.
+				CallerInfo callerInfo = new CallerInfo();
+				callerInfo.setFileName(frame.getFileName());
+				callerInfo.setMethodName(frame.getMethodName());
+				callerInfo.setLineNumber(frame.getLineNumber()+"");
+				return callerInfo;
+			}
+			ix++;
+		}
+		// We haven't found a suitable frame, so just punt. This is
+		// OK as we are only commited to making a "best effort" here.
+		return null;
+	}
+
+	/**
+	 * Logger类的调用者信息类
+	 * @author yanzw
+	 * @date 2014-5-9 上午11:56:14
+	 */
+	private static class CallerInfo{
+		private String fileName = "";
+		private String methodName = "";
+		private String lineNumber = "";
+
 		public String getFileName() {
 			return fileName;
 		}
@@ -293,7 +311,7 @@ public class Logger {
 		public String getMethodName() {
 			return methodName;
 		}
-		
+
 		public void setMethodName(String methodName) {
 			this.methodName = methodName;
 		}
@@ -305,6 +323,6 @@ public class Logger {
 		public void setLineNumber(String lineNumber) {
 			this.lineNumber = lineNumber;
 		}
-		 
-	 }
+
+	}
 }

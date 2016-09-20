@@ -131,7 +131,7 @@ public class GLProcessView extends GLGroupView {
 	public void setProcessColor(int resId) {
 		mImageView = new GLImageView(mContext);
 		mImageView.setBackground(resId);
-		
+
 		setLayoutParams();
 	}
 	
@@ -157,7 +157,7 @@ public class GLProcessView extends GLGroupView {
 	public void setProcessColor(GLColor color) {
 		mImageView = new GLImageView(mContext);
 		mImageView.setBackground(color);
-		
+
 		setLayoutParams();
 	}
 	
@@ -178,7 +178,9 @@ public class GLProcessView extends GLGroupView {
 
 		mImageView.setX(getX()+getPaddingLeft());
 		mImageView.setY(getY()+getPaddingTop());
-		mImageView.setLayoutParams( (getWidth()-getPaddingLeft()-getPaddingRight())/100 * process, getHeight()-getPaddingTop()-getPaddingBottom());
+
+		mImageView.setLayoutParams((getWidth() - getPaddingLeft() - getPaddingRight()) / 100 * process, getHeight() - getPaddingTop() - getPaddingBottom());
+
 	}
 	
 	public void setProcess(int process) {
