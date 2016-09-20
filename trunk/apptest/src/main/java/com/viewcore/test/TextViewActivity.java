@@ -233,6 +233,7 @@ public class TextViewActivity extends BaseViewActivity {
 										msg +=  " [" + min + "~" + max + "]";
 									}
 									fps.setText(msg);
+									Log.e("apptest", msg);
 								}
 							});
 						}
