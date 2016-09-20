@@ -653,7 +653,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             while(left<=right){
                 mid = (left+right)/2;
                 GLRectView rhs = views.get(mid);
-                if(temp.getDepth() - temp.getmIncrementDepth() >rhs.getDepth() - rhs.getmIncrementDepth()){
+                if(temp.getDepth() - temp.getmIncrementDepth() - 0.000001f >rhs.getDepth() - rhs.getmIncrementDepth()){
                     right = mid-1;
                 }else{
                     left = mid+1;
