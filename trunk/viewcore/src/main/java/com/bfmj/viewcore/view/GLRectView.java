@@ -492,6 +492,13 @@ public class GLRectView extends GLView {
 		mbNeedUpdate = true;
 	}
 
+	public void setImgWH(float w, float h)
+	{
+		this.mImgWidth = w;
+		this.mImgHeight = h;
+		mbNeedUpdate = true;
+	}
+
 	/**
 	 * 设置内边距
 	 * @author lixianke  @Date 2015-6-23 下午2:00:10
@@ -1713,7 +1720,11 @@ public class GLRectView extends GLView {
 				if (layerInfos.size() > 0){
 					Bitmap bitmap = createBitmap(layerInfos);
 					if (bitmap != null){
-						bitmap = GLTextureUtils.handleBitmap(bitmap, getWidth(), getHeight());
+						float width = getWidth();
+						if( width < 0.001 ) {
+							width = mImgWidth;
+						}
+						bitmap = GLTextureUtils.handleBitmap(bitmap, width, getHeight());
 						getTexture(bitmap);
 					}
 				}
@@ -1731,10 +1742,12 @@ public class GLRectView extends GLView {
 		//初始化画布
 		int width = (int)getWidth();
 		int height = (int)getHeight();
-		if( width == 0 || height == 0 ){
+
+		if( width < 0.0001 || height < 0.0001 ){
 			width = (int) mImgWidth;
 			height = (int)mImgHeight;
 		}
+
 		Bitmap bitmap = null;
 		if (width > 0 && height > 0) {
 			bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -1764,7 +1777,7 @@ public class GLRectView extends GLView {
 	private void drawLayer(Canvas canvas, LayerInfo layerInfo){
 		int width = (int)getWidth();
 		int height = (int)getHeight();
-		if( width == 0 || height == 0 ){
+		if( width < 0.001 || height < 0.001 ){
 			width = (int) mImgWidth;
 			height = (int)mImgHeight;
 		}
