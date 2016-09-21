@@ -10,7 +10,7 @@ import com.bfmj.viewcore.render.GLConstant;
 /**
  * 进度view
  * ClassName: GLProcessView <br/>
- * @author linzanxian    
+ * @author linzanxian
  * @date: 2015年3月17日 上午9:57:12 <br/>  
  * description:进度view
  */
@@ -18,7 +18,7 @@ public class GLProcessView extends GLGroupView {
 	private GLConstant.GLProcessMode mGlProcessMode = GLConstant.GLProcessMode.RECTANGLE; //默认长方形
 	private GLColor mColorBackgroup = new GLColor(1.0f, 1.0f, 1.0f);
 	private GLColor mColorProcess = new GLColor(0.2f, 1.0f, 0.2f);
-	private GLImageView mImageView;
+	private GLImageView mImageView = null;
 	private Context mContext;
 	private boolean mRotate = false;
 	private int mSpeed = 100;
@@ -27,7 +27,7 @@ public class GLProcessView extends GLGroupView {
 
 	public GLProcessView(Context context) {
 		super(context);
-		
+
 		mContext = context;
 		init();
 	}
@@ -41,12 +41,12 @@ public class GLProcessView extends GLGroupView {
 	 */
 	public GLProcessView(Context context, GLConstant.GLProcessMode mode) {
 		super(context);
-		
+
 		mContext = context;
 		mGlProcessMode = mode;
 		init();
 	}
-	
+
 	/**
 	 * 初始化
 	 * @author linzanxian  @Date 2015年3月17日 上午10:55:41
@@ -61,10 +61,10 @@ public class GLProcessView extends GLGroupView {
 	/**
 	 * 设置外边距
 	 * @author linzanxian  @Date 2015年3月17日 上午10:09:16
-	 * @param left 左  
+	 * @param left 左
 	 * @param top 上
-	 * @param right 右  
-	 * @param bottom 下  
+	 * @param right 右
+	 * @param bottom 下
 	 * @return void
 	 */
 	@Override
@@ -75,18 +75,18 @@ public class GLProcessView extends GLGroupView {
 			mImageView.setX(getX());
 			mImageView.setY(getY());
 		}
-				
+
 		super.setMargin(left, top, right, bottom);
 	}
-	
+
 	/**
 	 * 设置相对布局的位置
 	 * @author linzanxian  @Date 2015年3月12日 上午10:45:07
 	 * @param mView GLRectView
-	 * @param left 左  
+	 * @param left 左
 	 * @param top 上
-	 * @param right 右  
-	 * @param bottom 下   
+	 * @param right 右
+	 * @param bottom 下
 	 * @return void
 	 */
 	private void setPosition(GLRectView view, float left, float top, float right, float bottom) {
@@ -129,12 +129,14 @@ public class GLProcessView extends GLGroupView {
 	 * @return void
 	 */
 	public void setProcessColor(int resId) {
-		mImageView = new GLImageView(mContext);
+		if( null == mImageView) {
+			mImageView = new GLImageView(mContext);
+		}
 		mImageView.setBackground(resId);
 
 		setLayoutParams();
 	}
-	
+
 	/**
 	 * 设置进度颜色
 	 * @author linzanxian  @Date 2015年3月17日 下午2:26:08
@@ -142,9 +144,11 @@ public class GLProcessView extends GLGroupView {
 	 * @return void
 	 */
 	public void setProcessColor(Bitmap bitmap) {
-		mImageView = new GLImageView(mContext);
+		if( null == mImageView) {
+			mImageView = new GLImageView(mContext);
+		}
 		mImageView.setBackground(bitmap);
-		
+
 		setLayoutParams();
 	}
 
@@ -155,12 +159,14 @@ public class GLProcessView extends GLGroupView {
 	 * @return void
 	 */
 	public void setProcessColor(GLColor color) {
-		mImageView = new GLImageView(mContext);
+		if( null == mImageView ) {
+			mImageView = new GLImageView(mContext);
+		}
 		mImageView.setBackground(color);
 
 		setLayoutParams();
 	}
-	
+
 	/**
 	 * 更新进度
 	 * @author linzanxian  @Date 2015年3月17日 下午2:25:38
@@ -182,11 +188,11 @@ public class GLProcessView extends GLGroupView {
 		mImageView.setLayoutParams((getWidth() - getPaddingLeft() - getPaddingRight()) / 100 * process, getHeight() - getPaddingTop() - getPaddingBottom());
 
 	}
-	
+
 	public void setProcess(int process) {
 		setProcess((float)process);
 	}
-	
+
 	/**
 	 * 绘制初始化
 	 * @author linzanxian  @Date 2015年3月10日 下午12:04:21
@@ -200,7 +206,10 @@ public class GLProcessView extends GLGroupView {
 	@Override
 	public void setLayoutParams(float width, float height){
 		super.setLayoutParams(width, height);
-		mImageView.mImgWidht = width;
+		if( null == mImageView ) {
+			mImageView = new GLImageView(mContext);
+		}
+		mImageView.mImgWidth = width;
 		mImageView.mImgHeight = height;
 	}
 	/**
@@ -214,7 +223,7 @@ public class GLProcessView extends GLGroupView {
 		}
 
 		this.addView(mImageView);
-		
+
 		if (mGlProcessMode == GLConstant.GLProcessMode.CIRCLE) {
 			mImageView.setX(getX());
 			mImageView.setY(getY());
@@ -226,31 +235,31 @@ public class GLProcessView extends GLGroupView {
 		}
 
 	}
-	
+
 	/**
 	 * 旋转
 	 * @author linzanxian  @Date 2015年3月18日 下午1:58:09
 	 * @return void
 	 */
 	private void rotate() {
-		
-		new Thread(new Runnable() {  
-            
-            @Override  
-            public void run() {  
-            	while (mRotate) {
-            		try {  
-                        Thread.sleep(mSpeed);  
-                    } catch (InterruptedException e) {  
-                    	e.printStackTrace();
-                    }  
-            		
-            		mImageView.rotate(-mAngle, 0f, 0f, 1f);
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				while (mRotate) {
+					try {
+						Thread.sleep(mSpeed);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+
+					mImageView.rotate(-mAngle, 0f, 0f, 1f);
 				}
-            }  
-        }).start();
+			}
+		}).start();
 	}
-	
+
 	/**
 	 * 设置转动速度.默认100，越小越快
 	 * @author linzanxian  @Date 2015年3月18日 下午1:59:04
@@ -260,11 +269,11 @@ public class GLProcessView extends GLGroupView {
 	public void setSpeed(int speed) {
 		mSpeed = speed;
 	}
-	
+
 	public float getProcess() {
 		return mProcess;
 	}
-	
+
 	public void removeRotate() {
 		mRotate = false;
 	}
@@ -272,7 +281,7 @@ public class GLProcessView extends GLGroupView {
 	public float getAngle() {
 		return mAngle;
 	}
-	
+
 	/**
 	 * 每帧选中的角度
 	 * @author lixianke  @Date 2015-7-6 下午5:40:18

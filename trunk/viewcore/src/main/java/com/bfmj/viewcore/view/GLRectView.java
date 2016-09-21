@@ -6,13 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import com.baofeng.mojing.MojingSDK;
 import com.baofeng.mojing.input.base.MojingKeyCode;
-import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.animation.GLAnimation;
 import com.bfmj.viewcore.animation.GLRotateAnimation;
 import com.bfmj.viewcore.animation.GLScaleAnimation;
@@ -26,7 +22,6 @@ import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLConstant;
 import com.bfmj.viewcore.render.GLRenderParams;
 import com.bfmj.viewcore.render.GLScreenParams;
-import com.bfmj.viewcore.util.BitmapOp;
 import com.bfmj.viewcore.util.GLFocusUtils;
 import com.bfmj.viewcore.util.GLFontUtils;
 import com.bfmj.viewcore.util.GLGenTexTask;
@@ -110,7 +105,7 @@ public class GLRectView extends GLView {
 	private boolean isSetOriginal = false;
 	private float mLookAngle = 0;
 	private float mLookTranslateZ = 0;
-	public float mImgWidht = 0;
+	public float mImgWidth = 0;
 	public float mImgHeight = 0;
 
 	private GLConstant.GLAlign mAlign;
@@ -1737,7 +1732,7 @@ public class GLRectView extends GLView {
 		int width = (int)getWidth();
 		int height = (int)getHeight();
 		if( width == 0 || height == 0 ){
-			width = (int)mImgWidht;
+			width = (int) mImgWidth;
 			height = (int)mImgHeight;
 		}
 		Bitmap bitmap = null;
@@ -1770,7 +1765,7 @@ public class GLRectView extends GLView {
 		int width = (int)getWidth();
 		int height = (int)getHeight();
 		if( width == 0 || height == 0 ){
-			width = (int)mImgWidht;
+			width = (int) mImgWidth;
 			height = (int)mImgHeight;
 		}
 		Rect rect = layerInfo.getRect();
