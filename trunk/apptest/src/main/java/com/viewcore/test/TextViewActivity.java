@@ -130,7 +130,7 @@ public class TextViewActivity extends BaseViewActivity {
 		imgView.setX(800);
 		imgView.setY(800);
 		imgView.setLayoutParams(300, 300);
-		imgView.setEdgeWidth( 0.01f);
+//		imgView.setEdgeWidth( 0.01f);
 //		imgView.setLTColor( new float[]{0.0f, 1.0f, 0.0f, 1.0f});
 		imgView.setImage(R.drawable.weather);
 		rootView.addView(imgView);
