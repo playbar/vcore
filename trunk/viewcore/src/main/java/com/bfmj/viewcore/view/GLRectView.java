@@ -134,6 +134,12 @@ public class GLRectView extends GLView {
 	private  ArrayList<GLAnimation> mAnimations = new ArrayList<GLAnimation>();
 	private GLViewFocusListener mFocusListener;
 
+	private float[] mLTColor = new float[]{1.0f, 0.0f, 0.0f, 1.0f};
+	private float[] mLBColor = new float[]{0.0f, 1.0f, 0.0f, 1.0f};
+	private float[] mRTColor = new float[]{0.0f, 0.0f, 1.0f, 1.0f};
+	private float[] mRBColor = new float[]{1.0f, 0.0f, 1.0f, 1.0f};
+	private float mEdgeWidth = 0.0f;
+
 	public GLRectView(Context context) {
 		super(context);
 		mContext = context;
@@ -918,6 +924,39 @@ public class GLRectView extends GLView {
 		for (i = 0; i < ilen; i++) {
 			mRenders.get(i).setMask(mask);
 		}
+	}
+
+	public void setEdgeWidth(float w){
+		mEdgeWidth = w;
+	}
+
+	public float getEdgeWidth(){
+		return mEdgeWidth;
+	}
+	public void setLTColor(float[] ltcolor){
+		mLTColor = ltcolor;
+	}
+	public void setLBColor(float[] lbcolor)
+	{
+		mLBColor = lbcolor;
+	}
+	public void setRTColor(float []rtcolor)
+	{
+		mRTColor = rtcolor;
+	}
+	public void setRBColor(float[]rbcolor)
+	{
+		mRBColor = rbcolor;
+	}
+
+	public float []getEgdeColor()
+	{
+		float []edgeColor = new float[16];
+		System.arraycopy(mLTColor, 0, edgeColor, 0, 4);
+		System.arraycopy(mLBColor, 0, edgeColor, 4, 4);
+		System.arraycopy(mRTColor, 0, edgeColor, 8, 4);
+		System.arraycopy(mRBColor, 0, edgeColor, 12, 4);
+		return edgeColor;
 	}
 
 	protected void addRender(GLRenderParams render) {

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import com.bfmj.viewcore.util.GLMatrixState;
 import com.bfmj.viewcore.util.GLShaderManager;
 import com.bfmj.viewcore.view.GLRectView;
-import com.bfmj.viewcore.view.GLView;
 
 import android.opengl.GLES30;
 import android.opengl.Matrix;
@@ -23,29 +22,74 @@ import android.opengl.Matrix;
 public class GLImageRect extends GLRect {
 	private static GLImageRect instance;
 	
-	private FloatBuffer vertexBuffer, textureVerticesBuffer;
+	private FloatBuffer vertexBuffer;
+	private FloatBuffer textureVerticesBuffer;
     private int mProgram;
     private int muMVPMatrixHandle;
     private int muAlphaHandle;
+	private int muWidhtHandle;
     private int muMaskHandle;
     private int mPositionHandle;
+	private int mColorHandle;
     private int mTextureCoordHandle;
     
     private int verLen=0;
     private int textureLen = 0;
-	
+
 	private int vboVertexNew = 0;  //bufferIndex++;
 	private int vboTextureNew = 0; // bufferIndex++;
-	private int []mvbo = new int[2];
+	private int vboColorNew = 0;
+	private int []mvbo = new int[3];
 
-    private float texCoor[] = {
-    	0.0f, 0.0f,
-    	0.0f, 1.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f
-    };
+
+//	private float[] mLTColor = new float[]{1.0f, 0.0f, 0.0f, 1.0f};
+//	private float[] mLBColor = new float[]{0.0f, 1.0f, 0.0f, 1.0f};
+//	private float[] mRTColor = new float[]{0.0f, 0.0f, 1.0f, 1.0f};
+//	private float[] mRBColor = new float[]{1.0f, 0.0f, 1.0f, 1.0f};
+	private float mEdgeWidth = 0.0f;
+	float mEdgeColors[] = new float[16];
     
     private int mTextureId = -1;
+
+	public void setEdgeWidth(float w){
+		if( w < 0.0f)
+			mEdgeWidth = 0.0f;
+		else if( w > 0.5f )
+			mEdgeWidth = 0.5f;
+		else
+			mEdgeWidth = w;
+	}
+//	public void setLTColor(float[] ltcolor){
+//		mLTColor = ltcolor;
+//	}
+//	public void setLBColor(float[] lbcolor)
+//	{
+//		mLBColor = lbcolor;
+//	}
+//	public void setRTColor(float []rtcolor)
+//	{
+//		mRTColor = rtcolor;
+//	}
+//	public void setRBColor(float[]rbcolor)
+//	{
+//		mRBColor = rbcolor;
+//	}
+	public void setEdgeColor( float []edgeColor)
+	{
+		if( mEdgeWidth < 0.00001)
+			return;
+		mEdgeColors = edgeColor;
+		int colorLen = mEdgeColors.length*4;
+		ByteBuffer llbb = ByteBuffer.allocateDirect(colorLen);
+		llbb.order(ByteOrder.nativeOrder());
+		FloatBuffer colorBuf=llbb.asFloatBuffer();
+		colorBuf.put(mEdgeColors);
+		colorBuf.position(0);
+
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboColorNew);
+		GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, colorLen, colorBuf,
+				GLES30.GL_STATIC_DRAW);
+	}
     
     public static GLImageRect getInstance(){
     	if (instance == null){
@@ -67,12 +111,14 @@ public class GLImageRect extends GLRect {
     }
     
     private void init(){
-		GLES30.glGenBuffers( 2, mvbo, 0 );
+		GLES30.glGenBuffers( 3, mvbo, 0 );
 		vboVertexNew = mvbo[0];
 		vboTextureNew = mvbo[1];
+		vboColorNew = mvbo[2];
 
     	initVertex();
     	initTextureBuffer();
+//		initColorBuffer();
     	
     	createProgram();
     }
@@ -123,6 +169,8 @@ public class GLImageRect extends GLRect {
 				setTextureId(render.getTextureId());
 				setAlpha(render.getAlpha());
 				setMask(render.getMask());
+				setEdgeWidth(view.getEdgeWidth());
+				setEdgeColor(view.getEgdeColor());
 				draw(state.getFinalMatrix());
 
 				d += 0.0001f;
@@ -139,13 +187,17 @@ public class GLImageRect extends GLRect {
 
 
 		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboVertexNew);
-		GLES30.glEnableVertexAttribArray(0);
+		GLES30.glEnableVertexAttribArray(mPositionHandle);
 		GLES30.glVertexAttribPointer(mPositionHandle, 3, GLES30.GL_FLOAT, false, 0, 0);
 
 
 		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboTextureNew);
-		GLES30.glEnableVertexAttribArray(1);
+		GLES30.glEnableVertexAttribArray(mTextureCoordHandle);
 		GLES30.glVertexAttribPointer(mTextureCoordHandle, 2, GLES30.GL_FLOAT, false, 0, 0);
+
+		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboColorNew);
+		GLES30.glEnableVertexAttribArray(mColorHandle);
+		GLES30.glVertexAttribPointer(mColorHandle, 4, GLES30.GL_FLOAT, false, 0, 0 );
 
 
 	}
@@ -160,6 +212,7 @@ public class GLImageRect extends GLRect {
         GLES30.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mtx, 0);
         GLES30.glUniform1f(muAlphaHandle, getAlpha());
         GLES30.glUniform1f(muMaskHandle, getMask());
+		GLES30.glUniform1f(muWidhtHandle, mEdgeWidth);
 
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_STRIP, 0, 4);
 //		GLES30.glDrawElements(GLES30.GL_TRIANGLE_STRIP, 4, GLES30.GL_UNSIGNED_SHORT, 0);
@@ -185,8 +238,10 @@ public class GLImageRect extends GLRect {
         muMVPMatrixHandle = GLES30.glGetUniformLocation(mProgram, "uMVPMatrix");
         muAlphaHandle = GLES30.glGetUniformLocation(mProgram, "uAlpha");
         muMaskHandle = GLES30.glGetUniformLocation(mProgram, "uMask");
+		muWidhtHandle = GLES30.glGetUniformLocation(mProgram, "uWidth");
         mTextureCoordHandle = GLES30.glGetAttribLocation(mProgram, "inputTextureCoordinate");
         mPositionHandle = GLES30.glGetAttribLocation(mProgram, "vPosition");
+		mColorHandle = GLES30.glGetAttribLocation(mProgram, "aColor");
 	}
     
 //    private void vertexVBO() {
@@ -222,6 +277,12 @@ public class GLImageRect extends GLRect {
 	}
 	
 	private void initTextureBuffer(){
+		float texCoor[] = {
+			0.0f, 0.0f,
+			0.0f, 1.0f,
+			1.0f, 0.0f,
+			1.0f, 1.0f
+		};
         textureLen = texCoor.length*4;
 		ByteBuffer llbb = ByteBuffer.allocateDirect(textureLen);
 		llbb.order(ByteOrder.nativeOrder());
@@ -233,8 +294,26 @@ public class GLImageRect extends GLRect {
 		GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, textureLen, textureVerticesBuffer,
 				GLES30.GL_STATIC_DRAW);
 	}
+
+//	private void initColorBuffer(){
+//		mEdgeColors = new float[16];
+//		System.arraycopy(mLTColor, 0, mEdgeColors, 0, 4);
+//		System.arraycopy(mLBColor, 0, mEdgeColors, 4, 4);
+//		System.arraycopy(mRTColor, 0, mEdgeColors, 8, 4);
+//		System.arraycopy(mRBColor, 0, mEdgeColors, 12, 4);
+//		int colorLen = mEdgeColors.length*4;
+//		ByteBuffer llbb = ByteBuffer.allocateDirect(colorLen);
+//		llbb.order(ByteOrder.nativeOrder());
+//		FloatBuffer colorBuffer=llbb.asFloatBuffer();
+//		colorBuffer.put(mEdgeColors);
+//		colorBuffer.position(0);
+//
+//		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboColorNew);
+//		GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, colorLen, colorBuffer,
+//				GLES30.GL_STATIC_DRAW);
+//	}
 	
 	public void release(){
-		GLES30.glDeleteBuffers(2, new int[]{vboVertexNew, vboTextureNew}, 0);
+		GLES30.glDeleteBuffers(3, new int[]{vboVertexNew, vboTextureNew, vboColorNew}, 0);
 	}
 }

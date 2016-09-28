@@ -19,8 +19,9 @@ public class GLRenderParams {
 	private float mask = 1;
 	private GLColor color;
 	private int textureId = -1;
+
 	private GLVideoRect.TextureType textureType;
-	
+
 	public GLRenderParams(int type){
 		this.type = type;
 	}

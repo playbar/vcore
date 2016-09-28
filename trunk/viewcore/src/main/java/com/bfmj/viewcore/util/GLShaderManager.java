@@ -18,13 +18,16 @@ public class GLShaderManager {
 		"uniform float uMask;" +
         "attribute vec3 vPosition;" +
         "attribute vec2 inputTextureCoordinate;" +
+		"attribute vec4 aColor;" +
         "varying vec2 textureCoordinate;" +
         "varying float vAlpha;" +
         "varying float vMask;" +
+		"varying vec4 vColor;" +
         "void main()" +
         "{"+
             "gl_Position = uMVPMatrix * vec4(vPosition, 1);"+
             "textureCoordinate = inputTextureCoordinate;" +
+			"vColor = aColor;" +
             "vAlpha = uAlpha;" +
             "vMask = uMask;" +
         "}";
@@ -33,11 +36,17 @@ public class GLShaderManager {
 		"precision mediump float;" +
         "varying vec2 textureCoordinate;\n" +
         "uniform sampler2D s_texture;\n" +
+		"uniform float uWidth;" +
         "varying float vAlpha;" +
         "varying float vMask;" +
+		"varying vec4 vColor;"+
         "void main() {" +
-        	"vec4 color = texture2D( s_texture, textureCoordinate );\n" +
-        	"gl_FragColor = vec4(color.r * vMask, color.g * vMask, color.b * vMask, color.a * vAlpha);\n" +
+			"vec2 coord = textureCoordinate;" +
+        	"vec4 color = texture2D( s_texture, coord );\n" +
+			"if(coord.x > 1.0 - uWidth || coord.x < uWidth || coord.y < uWidth || coord.y > 1.0 - uWidth )"+
+			"	gl_FragColor = vColor;"+
+			"else"+
+			"	gl_FragColor = vec4(color.r * vMask, color.g * vMask, color.b * vMask, color.a * vAlpha);" +
         "}";
 	
 	public static final String VERTEX_SENCE =
