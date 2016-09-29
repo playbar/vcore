@@ -1545,6 +1545,11 @@ public class GLRectView extends GLView {
 	 * @return
 	 */
 	public void setLookAngle(float lookAngle) {
+		if (lookAngle != 0){
+			this.setCostomHeadView(true);
+		} else {
+			this.setCostomHeadView(false);
+		}
 		this.mLookAngle = lookAngle;
 	}
 
