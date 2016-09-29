@@ -10,9 +10,9 @@ import java.io.Serializable;
  * Created by lixianke on 2016/9/13.
  */
 public class TextInfo implements Serializable {
-    private static final Layout.Alignment ALIGN_LEFT  = Layout.Alignment.ALIGN_NORMAL;
-    private static final Layout.Alignment ALIGN_CENTER  = Layout.Alignment.ALIGN_CENTER;
-    private static final Layout.Alignment ALIGN_RIGHT  = Layout.Alignment.ALIGN_OPPOSITE;
+    public static final Layout.Alignment ALIGN_LEFT  = Layout.Alignment.ALIGN_NORMAL;
+    public static final Layout.Alignment ALIGN_CENTER  = Layout.Alignment.ALIGN_CENTER;
+    public static final Layout.Alignment ALIGN_RIGHT  = Layout.Alignment.ALIGN_OPPOSITE;
 
     private String content;
     private int size = 32;
