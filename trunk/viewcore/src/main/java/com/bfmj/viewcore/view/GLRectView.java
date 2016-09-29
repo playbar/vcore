@@ -1125,8 +1125,7 @@ public class GLRectView extends GLView {
 	@Override
 	public void onBeforeDraw(boolean isLeft) {
 		updateRect();
-		GLRenderParams render = getRenders().size() > 0 ? getRenders().get(0) : null;
-		if (!isVisible() || !isSurfaceCreated || render == null){
+		if (!isBDraw() || !isSurfaceCreated){
 			return;
 		}
 
@@ -1154,35 +1153,17 @@ public class GLRectView extends GLView {
 
 		Matrix.translateM(curMatrix, 0, centerX, centerY, 0);
 
-		Matrix.translateM(curMatrix, 0, 0, 0, -getDepth() + getZPosition() * 0.0001f);
-		if (getAngelX() != 0){
-			Matrix.rotateM(curMatrix, 0, getAngelX(), 1, 0, 0);
-		}
-		if (getAngelY() != 0){
-			Matrix.rotateM(curMatrix, 0, getAngelY(), 0, 1, 0);
-		}
-		if (getAngelZ() != 0){
-			Matrix.rotateM(curMatrix, 0, getAngelZ(), 0, 0, 1);
-		}
-
-		if (render.getScaleX() != 1.0f || render.getScaleY() != 1.0f){
-			Matrix.scaleM(curMatrix, 0, render.getScaleX(), render.getScaleY(), 1);
-		}
-
 		//动画处理
 		doAnimation();
-
-		finalMatrix = state.getFinalMatrix();
-		getMatrixState().popMatrix();
-	}
-
-	private float[] finalMatrix = new float[16];
-	public float[] getFinalMatrix(){
-		return finalMatrix;
 	}
 
 	@Override
-	public void onAfterDraw(boolean isLeft) {}
+	public void onAfterDraw(boolean isLeft) {
+		if (!isBDraw() || !isSurfaceCreated){
+			return;
+		}
+		getMatrixState().popMatrix();
+	}
 
 	@Override
 	public void draw() {}

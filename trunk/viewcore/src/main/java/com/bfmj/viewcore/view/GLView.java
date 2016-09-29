@@ -22,6 +22,7 @@ public abstract class GLView implements GLRenderListener {
 	private float mAlpha = 1.0f;
 	private float mMask = 1.0f;
 	private boolean isVisible = true;
+	private boolean mbDraw = true;
 	private float mEyeDeviation = GLScreenParams.getEyeDistance();
 	private boolean isFixed = false;
 	private boolean isCostomHeadView;
@@ -84,6 +85,17 @@ public abstract class GLView implements GLRenderListener {
 	 */
 	public void setVisible(boolean isVisible) {
 		this.isVisible = isVisible;
+	}
+
+	public boolean isBDraw()
+	{
+		return mbDraw;
+	}
+
+	public boolean setBDraw( boolean bdraw)
+	{
+		mbDraw = bdraw;
+		return mbDraw;
 	}
 	
 	public GLMatrixState getMatrixState(){

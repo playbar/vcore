@@ -1,16 +1,11 @@
 package com.bfmj.viewcore.view;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Queue;
 
 
-import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.baofeng.mojing.MojingSDK;
@@ -31,7 +26,6 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.AttributeSet;
-import android.util.Log;
 
 public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Renderer {
     private ArrayList<GLView> mChild = new ArrayList<GLView>();
@@ -430,7 +424,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                 GLPlayerView playerView = null;
                 for (int j = 0; j < allViews.size(); j++) {
                     GLView view = allViews.get(j);
-                    if (view != null  && view.isVisible()) {
+                    if (view != null  && view.setBDraw( view.isVisible())) {
                         view.getMatrixState().setVMatrix(groyMatrix);
                         Matrix.frustumM(view.getMatrixState().getProjMatrix(), 0, -nearRight, nearRight, -nearRight, nearRight, GLScreenParams.getNear(), GLScreenParams.getFar());
                         //					Matrix.orthoM(view.getMatrixState().getProjMatrix(), 0, -40, 40, -40, 40, GLScreenParams.getNear(), GLScreenParams.getFar());
@@ -461,7 +455,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
                 for (int j = 0; j < allViews.size(); j++) {
                     GLView view = allViews.get(j);
-                    if (view != null  && view.isVisible()) {
+                    if (view != null  && view.isBDraw()) {
                         view.onAfterDraw(i == 0 ? true : false);
                     }
                 }
