@@ -65,7 +65,7 @@ public class BaseViewActivity extends Activity {
 	}
 
 	private void doLog(String msg){
-		Log.d("BaseViewActivity", msg);
+//		Log.d("BaseViewActivity", msg);
 	}
 
 	/**

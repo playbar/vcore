@@ -34,7 +34,7 @@ public class GenTextureTask implements Runnable {
         if( mEglContext == null ){
             return;
         }
-        Log.e("GetTextureTask", "--->run");
+//        Log.e("GetTextureTask", "--->run");
         EGL10 egl = (EGL10) EGLContext.getEGL();
         EGLDisplay eglDisplay =egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY); // egl.eglGetCurrentDisplay();
 

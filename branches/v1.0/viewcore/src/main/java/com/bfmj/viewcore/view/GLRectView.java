@@ -1276,7 +1276,6 @@ public class GLRectView extends GLView {
 		onHeadFocusChange(isFocused);
 
 		if (mFocusListener != null){
-			Log.d("focus", "on focus = > " + isFocused + " === " + this.hashCode());
 			mFocusListener.onFocusChange(this, isFocused);
 		}
 	}

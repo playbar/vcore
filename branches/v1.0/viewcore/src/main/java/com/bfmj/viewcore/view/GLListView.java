@@ -160,8 +160,6 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 	}
 
 	public void setOpenHeadControl(boolean isOpen){
-
-		Log.d("StickUtil","GLListView setOpenHeadControl:" + isOpen);
 		if(isOpen){
 			GLFocusUtils.openHeadControl();
 			resetFocusForHead();
@@ -484,14 +482,12 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 
 	private void resetFocusForHead(){
 
-		Log.d("tttttt","0");
 		for(int i=0;i<GLListView.this.getChildView().size();i++){
 			GLRectView _childview = GLListView.this.getView(i);
 
 			final int _index = i;
 
 			if(_childview!= null && isOpenHeadControl()){//
-				Log.d("tttttt","1");
 				_childview.setFocusListener(new GLViewFocusListener() {
 
 					@Override
@@ -564,12 +560,12 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 				boolean isRepeat = false;
 				int changeNum = 0;
 				if ((mFocusIndex+1) >= mTotalCount) {
-					Log.d("ddddd","mFocusIndex:" + mFocusIndex + "---mTotalCount:" + mTotalCount);
+//					Log.d("ddddd","mFocusIndex:" + mFocusIndex + "---mTotalCount:" + mTotalCount);
 					if(mOnItemSelectedListener!=null)
 						mOnItemSelectedListener.onNoItemData();
 					return;
 				}
-				Log.d("aaa-onitemselect", "mFocusIndex:" + mFocusIndex);
+//				Log.d("aaa-onitemselect", "mFocusIndex:" + mFocusIndex);
 				if(mNumOneScreen >= mTotalCount){//如果显示一屏
 					mFocusIndex++;
 				}
@@ -822,7 +818,7 @@ public class GLListView extends GLAdapterView<GLListAdapter>{
 					if(_tempbig == null) return;
 					//回调选中事件
 					if(mOnItemSelectedListener!=null){
-						Log.d("aaa-onitemselect---5","mfocusIndex:" + mFocusIndex);
+//						Log.d("aaa-onitemselect---5","mfocusIndex:" + mFocusIndex);
 						mOnItemSelectedListener.onItemSelected(null, _tempbig, mFocusIndex, mSelectedIndex);
 					}
 

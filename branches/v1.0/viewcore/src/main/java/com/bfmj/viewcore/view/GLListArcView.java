@@ -338,7 +338,7 @@ public class GLListArcView extends GLAdapterView<GLListAdapter>{
 		final GLRectView _childview = childview;
 		
 		if(_childview!= null && isOpenHeadControl()){//
-			Log.d("itemfocus","listview-position:" + position);
+//			Log.d("itemfocus","listview-position:" + position);
 			_childview.setFocusListener(new GLViewFocusListener() {
 				
 				@Override
@@ -414,7 +414,7 @@ public class GLListArcView extends GLAdapterView<GLListAdapter>{
 						mOnItemSelectedListener.onNoItemData();
 					return;
 				}
-				Log.d("aaa-onitemselect", "mFocusIndex:" + mFocusIndex);
+//				Log.d("aaa-onitemselect", "mFocusIndex:" + mFocusIndex);
 				if(mNumOneScreen >= mTotalCount){//如果显示一屏
 					mFocusIndex++;
 				}
@@ -630,7 +630,7 @@ public class GLListArcView extends GLAdapterView<GLListAdapter>{
 								
 								mOnItemSelectedListener.onItemSelected(null, _tempbig, mFocusIndex, mSelectedIndex);
 								if(_tempChangeNum<mNumOneScreen){
-									Log.d("ListView","mFocusIndex:" + mFocusIndex);
+//									Log.d("ListView","mFocusIndex:" + mFocusIndex);
 									GLRectView _templittle = GLListArcView.this.getView(mFocusIndex+1);
 									if(_templittle == null) return;
 									mOnItemSelectedListener.onNothingSelected(null, _templittle, mFocusIndex + 1, mStartIndex+mFocusIndex+1);
@@ -651,7 +651,7 @@ public class GLListArcView extends GLAdapterView<GLListAdapter>{
 					if(_tempbig == null) return;
 					//回调选中事件				
 					if(mOnItemSelectedListener!=null){
-						Log.d("aaa-onitemselect---5","mfocusIndex:" + mFocusIndex);
+//						Log.d("aaa-onitemselect---5","mfocusIndex:" + mFocusIndex);
 						mOnItemSelectedListener.onItemSelected(null, _tempbig, mFocusIndex, mSelectedIndex);
 					}
 					
