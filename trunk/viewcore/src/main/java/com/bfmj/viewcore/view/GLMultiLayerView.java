@@ -148,7 +148,7 @@ public class GLMultiLayerView extends GLRelativeView {
             cv.drawColor(Color.TRANSPARENT);
 
             float lineHeight = info.getLineHeight() > 0 ? (float)info.getLineHeight() / info.getSize() : 1.2f;
-            StaticLayout sl = new StaticLayout(info.getContent(), tp, w, Layout.Alignment.ALIGN_NORMAL, lineHeight, 0.0F, true);
+            StaticLayout sl = new StaticLayout(info.getContent(), tp, w, info.getAlignment(), lineHeight, 0.0F, true);
             sl.draw(cv);
 
             canvas.drawBitmap(bm, new Rect(0, 0, bm.getWidth(), bm.getHeight()),
