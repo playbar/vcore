@@ -233,6 +233,23 @@ public class GLFocusUtils {
 		}
 		return null;
 	}
+
+	public static float[] getPosition(float[] headView, float depth){
+		float x1 = getX(0);
+		float y1 = getY(0);
+
+		float x2 = getX(GLScreenParams.getXDpi());
+		float y2 = getY(GLScreenParams.getYDpi());
+
+		float[] outPos = new float[]{0, 0};
+
+		boolean isFoused = MojingSDK.DirectionalRadiaInRect(headView, new float[]{x1, y1}, new float[]{x2, y2}, -depth, outPos);
+
+		float rate = GLScreenParams.getXDpi() / GLScreenParams.getScreenWidth();
+		outPos[0] = (int)(outPos[0] * rate);
+		outPos[1] = (int)(outPos[1] * rate);
+		return outPos;
+	}
 	
 	/**
 	 * 处理焦点

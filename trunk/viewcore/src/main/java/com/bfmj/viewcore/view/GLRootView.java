@@ -404,16 +404,10 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
 
         final ArrayList<GLView> allViews = getAllViews();
+//        Log.e("onDrawFrame", "allViews size = >" + allViews.size());
 
         if (mGroyEnable) {
             MojingSDK.getLastHeadView(headView);
-            String msg = "{";
-            for (int h = 0; h < headView.length; h++){
-                msg += headView[h];
-                if (h < headView.length - 1){
-                    msg += ",";
-                }
-            }
         }
 
         final float[] groyMatrix = getGroyMatrix();
@@ -633,6 +627,9 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             int size = groupView.getView().size();
             for (int i = 0; i < size; i++) {
                 view = groupView.getView(i);
+                if (view == null || !view.isVisible()){
+                    continue;
+                }
                 if (view instanceof GLGroupView) {
                     views.addAll(getViews((GLGroupView) view));
                 } else {
