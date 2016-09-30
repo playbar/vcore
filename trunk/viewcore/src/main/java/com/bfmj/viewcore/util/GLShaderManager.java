@@ -37,13 +37,14 @@ public class GLShaderManager {
         "varying vec2 textureCoordinate;\n" +
         "uniform sampler2D s_texture;\n" +
 		"uniform float uWidth;" +
+		"uniform float uHeight;" +
         "varying float vAlpha;" +
         "varying float vMask;" +
 		"varying vec4 vColor;"+
         "void main() {" +
 			"vec2 coord = textureCoordinate;" +
         	"vec4 color = texture2D( s_texture, coord );\n" +
-			"if(coord.x > 1.0 - uWidth || coord.x < uWidth || coord.y < uWidth || coord.y > 1.0 - uWidth )"+
+			"if(coord.x > 1.0 - uWidth || coord.x < uWidth || coord.y < uHeight || coord.y > 1.0 - uHeight )"+
 			"	gl_FragColor = vColor;"+
 			"else"+
 			"	gl_FragColor = vec4(color.r * vMask, color.g * vMask, color.b * vMask, color.a * vAlpha);" +

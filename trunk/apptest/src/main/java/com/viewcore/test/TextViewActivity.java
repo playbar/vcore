@@ -2,24 +2,18 @@ package com.viewcore.test;
 
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
-import com.bfmj.viewcore.interfaces.GLOnKeyListener;
-import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.util.GLGenTexTask;
 import com.bfmj.viewcore.view.BaseViewActivity;
-import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLImageView;
-import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
 
-import java.io.InputStream;
 import java.util.Random;
 
 public class TextViewActivity extends BaseViewActivity {
@@ -130,7 +124,7 @@ public class TextViewActivity extends BaseViewActivity {
 		imgView.setX(800);
 		imgView.setY(800);
 		imgView.setLayoutParams(300, 300);
-//		imgView.setEdgeWidth( 0.01f);
+		imgView.setEdgeWH( 0.01f, 0.08f);
 //		imgView.setLTColor( new float[]{0.0f, 1.0f, 0.0f, 1.0f});
 		imgView.setImage(R.drawable.weather);
 		rootView.addView(imgView);

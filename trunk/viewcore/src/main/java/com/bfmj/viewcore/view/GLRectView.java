@@ -139,6 +139,7 @@ public class GLRectView extends GLView {
 	private float[] mRTColor = new float[]{0.0f, 0.0f, 1.0f, 1.0f};
 	private float[] mRBColor = new float[]{1.0f, 0.0f, 1.0f, 1.0f};
 	private float mEdgeWidth = 0.0f;
+	private float mEdgeHeight = 0.0f;
 
 	public GLRectView(Context context) {
 		super(context);
@@ -926,13 +927,19 @@ public class GLRectView extends GLView {
 		}
 	}
 
-	public void setEdgeWidth(float w){
+	public void setEdgeWH(float w, float h){
 		mEdgeWidth = w;
+		mEdgeHeight = h;
 	}
 
 	public float getEdgeWidth(){
 		return mEdgeWidth;
 	}
+
+	public float getmEdgeHeight(){
+		return mEdgeHeight;
+	}
+
 	public void setLTColor(float[] ltcolor){
 		mLTColor = ltcolor;
 	}
@@ -949,7 +956,7 @@ public class GLRectView extends GLView {
 		mRBColor = rbcolor;
 	}
 
-	public float []getEgdeColor()
+	public float [] getEdgeColor()
 	{
 		float []edgeColor = new float[16];
 		System.arraycopy(mLTColor, 0, edgeColor, 0, 4);
