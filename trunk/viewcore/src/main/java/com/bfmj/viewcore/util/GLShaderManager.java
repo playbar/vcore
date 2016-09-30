@@ -44,7 +44,7 @@ public class GLShaderManager {
         "void main() {" +
 			"vec2 coord = textureCoordinate;" +
         	"vec4 color = texture2D( s_texture, coord );\n" +
-			"if(coord.x > 1.0 - uWidth || coord.x < uWidth || coord.y < uHeight || coord.y > 1.0 - uHeight )"+
+			"if(coord.x > 1.0001 - uWidth || coord.x < uWidth - 0.0001 || coord.y < uHeight - 0.0001 || coord.y > 1.0001 - uHeight )"+
 			"	gl_FragColor = vColor;"+
 			"else"+
 			"	gl_FragColor = vec4(color.r * vMask, color.g * vMask, color.b * vMask, color.a * vAlpha);" +
