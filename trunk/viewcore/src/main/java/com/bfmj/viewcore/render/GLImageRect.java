@@ -184,6 +184,11 @@ public class GLImageRect extends GLRect {
 				setMask(render.getMask());
 				setEdgeWidth(view.getEdgeWidth());
 				setmEdgeHeight(view.getmEdgeHeight());
+				if( mEdgeWidth > 0.000001f) {
+					GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboColorNew);
+					GLES30.glEnableVertexAttribArray(mColorHandle);
+					GLES30.glVertexAttribPointer(mColorHandle, 4, GLES30.GL_FLOAT, false, 0, 0);
+				}
 				setEdgeColor(view.getEdgeColor());
 				draw(state.getFinalMatrix());
 				d += 0.0001f;
@@ -208,12 +213,6 @@ public class GLImageRect extends GLRect {
 		GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboTextureNew);
 		GLES30.glEnableVertexAttribArray(mTextureCoordHandle);
 		GLES30.glVertexAttribPointer(mTextureCoordHandle, 2, GLES30.GL_FLOAT, false, 0, 0);
-
-		if( mEdgeWidth > 0.000001f) {
-			GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboColorNew);
-			GLES30.glEnableVertexAttribArray(mColorHandle);
-			GLES30.glVertexAttribPointer(mColorHandle, 4, GLES30.GL_FLOAT, false, 0, 0);
-		}
 
 	}
 

@@ -129,7 +129,7 @@ public class TextViewActivity extends BaseViewActivity {
 		imgView.setImage(R.drawable.weather);
 		rootView.addView(imgView);
 
-//		addImageViewTest();
+		addImageViewTest();
 
 	}
 
@@ -142,6 +142,7 @@ public class TextViewActivity extends BaseViewActivity {
 			imageViews[i].setY(random.nextInt(2400));
 			imageViews[i].setLayoutParams(300, 300);
 			imageViews[i].setImage(R.drawable.calendar);
+			imageViews[i].setEdgeWH(0.1f, 0.1f);
 //			imageViews[i].setDepth(4 - (i - 100)*0.005f);
 			rootView.addView(imageViews[i]);
 		}
