@@ -154,7 +154,7 @@ public class GLShaderManager {
 		int status[] = new int[1];
 		GLES30.glGetShaderiv( shader, GLES30.GL_COMPILE_STATUS, status, 0 );
 		if( status[0] != GLES30.GL_TRUE ){
-			Log.e("GLImageRect", " " + GLES30.glGetShaderInfoLog(shader));
+//			Log.e("GLImageRect", " " + GLES30.glGetShaderInfoLog(shader));
 		}
         return shader;
     }
