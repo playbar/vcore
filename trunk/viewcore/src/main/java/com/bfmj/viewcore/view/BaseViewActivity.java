@@ -262,7 +262,7 @@ public class BaseViewActivity extends Activity {
 						}
 					}
 				}
-				if (!flag) {
+				if (!flag && keyCode == MojingKeyCode.KEYCODE_BACK) {
 					finish();
 				}
 			}
