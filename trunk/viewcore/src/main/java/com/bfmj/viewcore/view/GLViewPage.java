@@ -1,5 +1,6 @@
 package com.bfmj.viewcore.view;
 
+import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.viewcore.util.GLExtraData;
 
 import android.content.Context;
@@ -119,4 +120,8 @@ public abstract class GLViewPage {
 		mPageManager.pop(this);
 		onFinish();
 	}
+
+	public boolean onKeyDown(int keyCode){return false;}
+
+	public boolean onKeyUp(int keycode){return false;}
 }

@@ -250,12 +250,20 @@ public class BaseViewActivity extends Activity {
 			@Override
 			public void run() {
 				boolean flag = rootView.onKeyDown(keyCode);
-				if (keyCode == MojingKeyCode.KEYCODE_BACK && !flag){
-					if (getPageManager().hasMorePage()){
-						mPageManager.pop();
-					} else {
-						finish();
+				if (!flag && mPageManager != null){
+					GLViewPage page = mPageManager.getIndexView();
+					if (page != null){
+						flag = page.onKeyDown(keyCode);
 					}
+					if (!flag){
+						if (mPageManager.hasMorePage()){
+							mPageManager.pop();
+							flag = true;
+						}
+					}
+				}
+				if (!flag) {
+					finish();
 				}
 			}
 		});
@@ -267,7 +275,12 @@ public class BaseViewActivity extends Activity {
 			
 			@Override
 			public void run() {
-				rootView.onKeyUp(keyCode);
+				if (!rootView.onKeyUp(keyCode) && mPageManager != null){
+					GLViewPage page = mPageManager.getIndexView();
+					if (page != null){
+						page.onKeyUp(keyCode);
+					}
+				};
 			}
 		});
 		return false;
