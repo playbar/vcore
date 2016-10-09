@@ -255,11 +255,10 @@ public class BaseViewActivity extends Activity {
 					if (page != null){
 						flag = page.onKeyDown(keyCode);
 					}
-					if (!flag){
-						if (mPageManager.hasMorePage()){
-							mPageManager.pop();
-							flag = true;
-						}
+					if (!flag && keyCode == MojingKeyCode.KEYCODE_BACK
+					 		&& mPageManager.hasMorePage()){
+						mPageManager.pop();
+						flag = true;
 					}
 				}
 				if (!flag && keyCode == MojingKeyCode.KEYCODE_BACK) {
