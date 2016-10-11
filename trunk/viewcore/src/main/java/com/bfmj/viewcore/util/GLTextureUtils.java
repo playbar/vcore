@@ -128,6 +128,7 @@ public class GLTextureUtils {
 			Rect oRect = new Rect(0, 0, bWidth, bHeight);
 			Rect dRect = new Rect(border, border, w - border, h - border);
         	canvas.drawBitmap(bm, oRect, dRect, p);
+			bm.recycle();
 		} catch (Exception e) {
 			return null;
 		}

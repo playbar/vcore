@@ -107,6 +107,7 @@ public class GLMultiLayerView extends GLRelativeView {
                 Bitmap rBitmap = createBitmap(layerInfo.getResourceId());
                 canvas.drawBitmap(rBitmap, new Rect(0, 0, rBitmap.getWidth(), rBitmap.getHeight()),
                         rect, new Paint());
+                rBitmap.recycle();
                 break;
             case TYPE_BITMAP:
                 Bitmap dBitmap = layerInfo.getBitmap();
@@ -153,6 +154,8 @@ public class GLMultiLayerView extends GLRelativeView {
 
             canvas.drawBitmap(bm, new Rect(0, 0, bm.getWidth(), bm.getHeight()),
                     rect, new Paint());
+
+            bm.recycle();
         }
     }
 
