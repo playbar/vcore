@@ -161,14 +161,14 @@ public class TextViewActivity extends BaseViewActivity {
 //		rectView.setLayoutParams( 200, 200 );
 //		rootView.addView( rectView );
 
-//		GLImageView imgView = new GLImageView(this);
-//		imgView.setX(800);
-//		imgView.setY(800);
-//		imgView.setLayoutParams(300, 300);
-//		imgView.setEdgeWH( 0.01f, 0.08f);
-////		imgView.setLTColor( new float[]{0.0f, 1.0f, 0.0f, 1.0f});
-//		imgView.setImage(R.drawable.weather);
-//		rootView.addView(imgView);
+		GLImageView imgView = new GLImageView(this);
+		imgView.setX(800);
+		imgView.setY(800);
+		imgView.setLayoutParams(300, 300);
+		imgView.setEdgeWH( 0.01f, 0.08f);
+//		imgView.setLTColor( new float[]{0.0f, 1.0f, 0.0f, 1.0f});
+		imgView.setImage(R.drawable.weather);
+		rootView.addView(imgView);
 
 //		addImageViewTest();
 
