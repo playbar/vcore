@@ -1,9 +1,9 @@
 package com.bfmj.viewcore.render;
 
 public class GLVector3 {
-	private float x;
-	private float y;
-	private float z;
+	public float x;
+	public float y;
+	public float z;
 	
 	public float getX() {
 		return x;

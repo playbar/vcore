@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import android.annotation.SuppressLint;
 
 import com.baofeng.mojing.MojingSDK;
+import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.render.GLScreenParams;
+import com.bfmj.viewcore.render.GLVector2;
+import com.bfmj.viewcore.render.GLVector3;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLGroupView;
 import com.bfmj.viewcore.view.GLRectView;
@@ -178,6 +181,21 @@ public class GLFocusUtils {
 			float vx2 = getX(v.getLeft() + v.getX() + v.getWidth());
 			float vy2 = getY(v.getTop() + v.getY() + v.getHeight());
 			float z = -v.getDepth();
+
+			//			float[] q = new float[4];
+//			MojingSDK.getLastHeadQuarternion(q);
+//			Log.e("FocusUtil", "x=" + q[0] + ",y=" + q[1] + ",z=" + q[2] + ",w=" + q[3]);
+			GLVector3 tl = new GLVector3(vx1, vy1, -3.7f);
+			GLVector3 tr = new GLVector3(vx2, vy1, -3.3f);
+			GLVector3 bl = new GLVector3(vx1, vy2, -3.7f);
+			IntersectionTest test = new IntersectionTest(tl, tr, bl);
+			float [] vec = new float[]{0, 0, -1, 0};
+			vec = IntersectionTest.vecMulMatrxi(vec, headView);
+			GLVector3 ori = new GLVector3(vec[0], vec[1], vec[2]);
+//			Matrix.multiplyMM();
+			GLVector2 vec2 = new GLVector2();
+			boolean b = test.Intersection( ori, vec2);
+			Logger.printTime("" + b);
 
 			if (MojingSDK.DirectionalRadiaInRect(v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView, new float[]{vx1, vy1}, new float[]{vx2, vy2}, z, new float[2])){
 				if (v.hasListeter()){

@@ -10,9 +10,13 @@ import android.view.MotionEvent;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.util.GLGenTexTask;
 import com.bfmj.viewcore.view.BaseViewActivity;
+import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
+import com.bfmj.viewcore.view.GLRectView;
+import com.bfmj.viewcore.interfaces.GLOnKeyListener;
+import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 
 import java.util.Random;
 
@@ -65,53 +69,53 @@ public class TextViewActivity extends BaseViewActivity {
 
 //		addShowFPS();
 
+
+		GLTextView textView = new GLTextView(this);
+		textView.setX( 1000);
+		textView.setY( 1000 );
+		textView.setLayoutParams(200, 200 );
+		textView.setBackground( new GLColor(1.0f, 1.0f, 1.0f));
+		textView.setTextColor(new GLColor(1.0f, 0.0f, 0.0f));
+		textView.setText("88");
+		textView.setPadding(10, 5, 0, 0);
+		textView.setTextSize(40);
+		textView.setOnKeyListener(new GLOnKeyListener() {
+			@Override
+			public boolean onKeyDown(GLRectView view, int keycode) {
+				view.setAlpha( 0.3f );
+				return false;
+			}
+
+			@Override
+			public boolean onKeyUp(GLRectView view, int keycode) {
+				view.setAlpha( 1.0f );
+				return false;
+			}
+
+			@Override
+			public boolean onKeyLongPress(GLRectView view, int keycode) {
+				return false;
+			}
+		});
+		textView.setFocusListener(new GLViewFocusListener() {
+			@Override
+			public void onFocusChange(GLRectView view, boolean focused) {
+				if( focused )
+					view.setAlpha( 0.6f );
+				else
+					view.setAlpha( 1.0f );
+			}
+		});
+
+		rootView.addView(textView);
 //
-//		GLTextView textView = new GLTextView(this);
-//		textView.setX( 1000);
-//		textView.setY( 2000 );
-//		textView.setLayoutParams(60, 60 );
-//		textView.setBackground( new GLColor(1.0f, 1.0f, 1.0f));
-//		textView.setTextColor(new GLColor(1.0f, 0.0f, 0.0f));
-//		textView.setText("88");
-//		textView.setPadding(10, 5, 0, 0);
-//		textView.setTextSize(40);
-//		textView.setOnKeyListener(new GLOnKeyListener() {
-//			@Override
-//			public boolean onKeyDown(GLRectView view, int keycode) {
-//				view.setAlpha( 0.3f );
-//				return false;
-//			}
-//
-//			@Override
-//			public boolean onKeyUp(GLRectView view, int keycode) {
-//				view.setAlpha( 1.0f );
-//				return false;
-//			}
-//
-//			@Override
-//			public boolean onKeyLongPress(GLRectView view, int keycode) {
-//				return false;
-//			}
-//		});
-//		textView.setFocusListener(new GLViewFocusListener() {
-//			@Override
-//			public void onFocusChange(GLRectView view, boolean focused) {
-//				if( focused )
-//					view.setAlpha( 0.3f );
-//				else
-//					view.setAlpha( 1.0f );
-//			}
-//		});
-//
-//		rootView.addView(textView);
-//
-//		GLCursorView cursorView = new GLCursorView(this);
-//		cursorView.setX(1190);
-//		cursorView.setY(1190);
-//		cursorView.setLayoutParams( 20, 20);
-//		cursorView.setBackground(new GLColor(1.0f, 0, 0));
-//		cursorView.setDepth(3);
-//		rootView.addView(cursorView);
+		GLCursorView cursorView = new GLCursorView(this);
+		cursorView.setX(1190);
+		cursorView.setY(1190);
+		cursorView.setLayoutParams( 20, 20);
+		cursorView.setBackground(new GLColor(1.0f, 1.0f, 1.0f));
+		cursorView.setDepth(3);
+		rootView.addView(cursorView);
 //
 //		GLRectView rectView = new GLRectView(this);
 //		rectView.setBackground( new GLColor(1.0f, 0.0f, 0.0f));
@@ -120,16 +124,16 @@ public class TextViewActivity extends BaseViewActivity {
 //		rectView.setLayoutParams( 200, 200 );
 //		rootView.addView( rectView );
 
-		GLImageView imgView = new GLImageView(this);
-		imgView.setX(800);
-		imgView.setY(800);
-		imgView.setLayoutParams(300, 300);
-		imgView.setEdgeWH( 0.01f, 0.08f);
-//		imgView.setLTColor( new float[]{0.0f, 1.0f, 0.0f, 1.0f});
-		imgView.setImage(R.drawable.weather);
-		rootView.addView(imgView);
+//		GLImageView imgView = new GLImageView(this);
+//		imgView.setX(800);
+//		imgView.setY(800);
+//		imgView.setLayoutParams(300, 300);
+//		imgView.setEdgeWH( 0.01f, 0.08f);
+////		imgView.setLTColor( new float[]{0.0f, 1.0f, 0.0f, 1.0f});
+//		imgView.setImage(R.drawable.weather);
+//		rootView.addView(imgView);
 
-		addImageViewTest();
+//		addImageViewTest();
 
 	}
 

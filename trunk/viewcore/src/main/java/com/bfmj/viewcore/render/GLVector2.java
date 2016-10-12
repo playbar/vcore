@@ -1,8 +1,8 @@
 package com.bfmj.viewcore.render;
 
 public class GLVector2 {
-	private float s;
-	private float t;
+	public float s;
+	public float t;
 	
 	public float getS() {
 		return s;
