@@ -170,7 +170,7 @@ public class GLImageRect extends GLRect {
 				setAlpha(render.getAlpha());
 				setMask(render.getMask());
 				setEdgeWidth(view.getEdgeWidth());
-				setEdgeColor(view.getEgdeColor());
+				setEdgeColor(view.getEdgeColor());
 				draw(state.getFinalMatrix());
 				d += 0.0001f;
 				state.popMatrix();
