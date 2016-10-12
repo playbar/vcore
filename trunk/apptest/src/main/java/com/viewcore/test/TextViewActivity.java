@@ -7,8 +7,12 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.render.GLColor;
+import com.bfmj.viewcore.render.GLVector2;
+import com.bfmj.viewcore.render.GLVector3;
 import com.bfmj.viewcore.util.GLGenTexTask;
+import com.bfmj.viewcore.util.IntersectionTest;
 import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLImageView;
@@ -28,12 +32,42 @@ public class TextViewActivity extends BaseViewActivity {
 
 	AssetManager assetManager =null;
 
+	public void testIntersection()
+	{
+		GLVector3 tl = new GLVector3(-2.4002545f, 0.8000848f, -3.7f);
+		GLVector3 tr = new GLVector3(0.0f,        0.8000848f, -3.3f);
+		GLVector3 bl = new GLVector3(-2.4002545f, -0.0f,      -3.7f);
+
+		GLVector3 light = new GLVector3(-0.17050685f, -0.18699859f, -0.9674465f);
+		IntersectionTest test = new IntersectionTest(tl, tr, bl);
+		GLVector2 vec2 = new GLVector2();
+		boolean b = test.Intersection( light, vec2);
+		Logger.printTime("" + b);
+		return;
+	}
+
+	public void testIntersection1()
+	{
+		GLVector3 tl = new GLVector3(-1.2001272f, 0.8000848f, -2.7998729f);
+		GLVector3 tr = new GLVector3(1.2001272f,  0.8000848f, -5.200127f);
+		GLVector3 bl = new GLVector3(-1.2001272f, -0.0f,      -2.7998729f);
+
+		GLVector3 light = new GLVector3(-0.3503908f, 0.067306325f, -0.93419f);
+		IntersectionTest test = new IntersectionTest(tl, tr, bl);
+		GLVector2 vec2 = new GLVector2();
+		boolean b = test.Intersection( light, vec2);
+		Logger.printTime("" + b);
+		return;
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 //		setMojingType("42EGCV-WQXG87-WHQHS8-YYYTEF-4SWGST-CRY7SS");
 //		setMojingType("WNE8QN-QVCCZN-XXF8W3-9Q2YDH-AQZRA2-XVDZ9Q");
 		super.onCreate(savedInstanceState);
+
+		testIntersection1();
 
 //		BitmapOp bmtOp = new BitmapOp();
 //		String str = bmtOp.stringFromJNI();
@@ -71,14 +105,16 @@ public class TextViewActivity extends BaseViewActivity {
 
 
 		GLTextView textView = new GLTextView(this);
-		textView.setX( 1000);
+		textView.setX( 600);
 		textView.setY( 1000 );
-		textView.setLayoutParams(200, 200 );
+		textView.setLayoutParams(600, 200 );
 		textView.setBackground( new GLColor(1.0f, 1.0f, 1.0f));
 		textView.setTextColor(new GLColor(1.0f, 0.0f, 0.0f));
 		textView.setText("88");
 		textView.setPadding(10, 5, 0, 0);
 		textView.setTextSize(40);
+		textView.rotate(45, 0, 1, 0);
+//		textView.setDepth(3.5f);
 		textView.setOnKeyListener(new GLOnKeyListener() {
 			@Override
 			public boolean onKeyDown(GLRectView view, int keycode) {
@@ -113,7 +149,8 @@ public class TextViewActivity extends BaseViewActivity {
 		cursorView.setX(1190);
 		cursorView.setY(1190);
 		cursorView.setLayoutParams( 20, 20);
-		cursorView.setBackground(new GLColor(1.0f, 1.0f, 1.0f));
+		cursorView.setBackground(new GLColor(0xff0000));
+//		cursorView.setBackground(new GLColor(1.0f, 1.0f, 1.0f));
 		cursorView.setDepth(3);
 		rootView.addView(cursorView);
 //

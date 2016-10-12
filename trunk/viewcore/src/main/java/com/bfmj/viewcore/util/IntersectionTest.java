@@ -59,9 +59,12 @@ public class IntersectionTest
         c /= distance;
         d /= distance;
 
-        GLVector3 vec = GLVector3.Sub(topRight, topLeft);
+        GLVector3 vec = new GLVector3();
+        vec = GLVector3.Sub(topRight, topLeft, vec);
         m_xAxis = GLVector3.Normalize(vec);
-        m_yAxis = GLVector3.Normalize(GLVector3.Sub(bottomLeft, topLeft));//normalize(bottomLeft - topLeft);
+        GLVector3 vecy = new GLVector3();
+        vecy = GLVector3.Sub(bottomLeft, topLeft, vecy);
+        m_yAxis = GLVector3.Normalize(vecy);//normalize(bottomLeft - topLeft);
 
         m_width = Distance(topLeft, topRight);
         m_height = Distance(topLeft, bottomLeft);

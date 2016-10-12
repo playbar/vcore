@@ -86,6 +86,14 @@ public class GLVector3 {
 		lhs.z-=rhs.z;
 		return lhs;
 	}
+
+	public static GLVector3 Sub(GLVector3 lhs,GLVector3 rhs, GLVector3 re)
+	{
+		re.x = lhs.x - rhs.x;
+		re.y = lhs.y - rhs.y;
+		re.z = lhs.z - rhs.z;
+		return re;
+	}
 	
 	public static float Angle(GLVector3 lhs,GLVector3 rhs){
 		

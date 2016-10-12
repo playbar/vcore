@@ -4,6 +4,7 @@ import java.security.acl.Group;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import com.baofeng.mojing.MojingSDK;
 import com.bfmj.distortion.Logger;
@@ -182,22 +183,63 @@ public class GLFocusUtils {
 			float vy2 = getY(v.getTop() + v.getY() + v.getHeight());
 			float z = -v.getDepth();
 
-			//			float[] q = new float[4];
+//			if( v.getAngelY() > 0) {
+//				float centerx = v.getCenterX();
+//				float len = vx2 - centerx;
+//				float radian = (float) (Math.PI / 180 * (v.getAngelY()));
+//				float fcos = (float) Math.cos(radian);
+//				float aa = len / 2;
+//				float b = len * fcos;
+//				float a = centerx + b;
+//				float x = ((3.5f * a) /(b - 3.5f));
+//				vx2 = centerx + aa + 0.3f;
+//				float rolen = (float) Math.sqrt(len * len - (4.0 - v.getDepth()) * (4.0 - v.getDepth()));
+//				vx1 = centerx - rolen;
+//			}
+//			else{
+//				float centerx = v.getCenterX();
+//				float len = centerx - vx1;
+//				float radian = (float) (Math.PI / 180 * (v.getAngelY()));
+//				float fcos = (float) Math.cos(radian);
+//				float aa = len * fcos;
+//				vx1 = centerx - aa;
+////				float rolen = (float) Math.sqrt(len * len - (4.0 - v.getDepth()) * (4.0 - v.getDepth()));
+////				vx2 = centerx + rolen;
+//			}
+
+
+//			float[] q = new float[4];
 //			MojingSDK.getLastHeadQuarternion(q);
 //			Log.e("FocusUtil", "x=" + q[0] + ",y=" + q[1] + ",z=" + q[2] + ",w=" + q[3]);
-			GLVector3 tl = new GLVector3(vx1, vy1, -3.7f);
-			GLVector3 tr = new GLVector3(vx2, vy1, -3.3f);
-			GLVector3 bl = new GLVector3(vx1, vy2, -3.7f);
+
+			float centerx = v.getCenterX();
+			float len = vx2 - centerx;
+			float radian = (float) (Math.PI / 180 * (v.getAngelY()));
+			float fcos = (float) Math.cos(radian);
+			float depth = len * fcos;
+
+			float [] vec = new float[]{-0.1f, 0, -1, 0};
+			if( v.getAngelY() > 0 )
+			{
+				vec[0] = -0.05f;
+				vx2 = centerx + len * fcos;
+			}
+			else if( v.getAngelY() < 0)
+			{
+				vec[0] = -0.1f;
+			}
+			GLVector3 tl = new GLVector3(vx1, vy1, z + depth);
+			GLVector3 tr = new GLVector3(vx2, vy1, z - depth);
+			GLVector3 bl = new GLVector3(vx1, vy2, z + depth);
 			IntersectionTest test = new IntersectionTest(tl, tr, bl);
-			float [] vec = new float[]{0, 0, -1, 0};
-			vec = IntersectionTest.vecMulMatrxi(vec, headView);
+			vec = IntersectionTest.vecMulMatrxi(vec, v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView );
 			GLVector3 ori = new GLVector3(vec[0], vec[1], vec[2]);
-//			Matrix.multiplyMM();
 			GLVector2 vec2 = new GLVector2();
 			boolean b = test.Intersection( ori, vec2);
 			Logger.printTime("" + b);
 
-			if (MojingSDK.DirectionalRadiaInRect(v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView, new float[]{vx1, vy1}, new float[]{vx2, vy2}, z, new float[2])){
+//			if (MojingSDK.DirectionalRadiaInRect(v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView, new float[]{vx1, vy1}, new float[]{vx2, vy2}, z, new float[2])){
+			if(b){
 				if (v.hasListeter()){
 					hasFocused = true;
 				} else if (getHasListenerParent(v) != null){
