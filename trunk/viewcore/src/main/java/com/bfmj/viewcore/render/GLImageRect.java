@@ -28,7 +28,6 @@ public class GLImageRect extends GLRect {
     private int muMVPMatrixHandle;
     private int muAlphaHandle;
 	private int muWidhtHandle;
-	private int muHeightHandle;
     private int muMaskHandle;
     private int mPositionHandle;
 	private int mColorHandle;
@@ -48,7 +47,6 @@ public class GLImageRect extends GLRect {
 //	private float[] mRTColor = new float[]{0.0f, 0.0f, 1.0f, 1.0f};
 //	private float[] mRBColor = new float[]{1.0f, 0.0f, 1.0f, 1.0f};
 	private float mEdgeWidth = 0.0f;
-	private float mEdgeHeight = 0.0f;
 	float mEdgeColors[] = new float[16];
     
     private int mTextureId = -1;
@@ -60,17 +58,6 @@ public class GLImageRect extends GLRect {
 			mEdgeWidth = 0.5f;
 		else
 			mEdgeWidth = w;
-	}
-
-	public void setmEdgeHeight( float h)
-	{
-		if( h < 0.0f){
-			mEdgeHeight = 0.0f;
-		} else if( h > 0.5f){
-			mEdgeHeight = 0.5f;
-		}else{
-			mEdgeHeight = h;
-		}
 	}
 //	public void setLTColor(float[] ltcolor){
 //		mLTColor = ltcolor;
@@ -183,13 +170,7 @@ public class GLImageRect extends GLRect {
 				setAlpha(render.getAlpha());
 				setMask(render.getMask());
 				setEdgeWidth(view.getEdgeWidth());
-				setmEdgeHeight(view.getmEdgeHeight());
-				if( mEdgeWidth > 0.000001f) {
-					GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboColorNew);
-					GLES30.glEnableVertexAttribArray(mColorHandle);
-					GLES30.glVertexAttribPointer(mColorHandle, 4, GLES30.GL_FLOAT, false, 0, 0);
-				}
-				setEdgeColor(view.getEdgeColor());
+				setEdgeColor(view.getEgdeColor());
 				draw(state.getFinalMatrix());
 				d += 0.0001f;
 				state.popMatrix();
@@ -214,6 +195,12 @@ public class GLImageRect extends GLRect {
 		GLES30.glEnableVertexAttribArray(mTextureCoordHandle);
 		GLES30.glVertexAttribPointer(mTextureCoordHandle, 2, GLES30.GL_FLOAT, false, 0, 0);
 
+		if( mEdgeWidth > 0.000001f) {
+			GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboColorNew);
+			GLES30.glEnableVertexAttribArray(mColorHandle);
+			GLES30.glVertexAttribPointer(mColorHandle, 4, GLES30.GL_FLOAT, false, 0, 0);
+		}
+
 	}
 
     public void draw(float[] mtx) {
@@ -227,7 +214,7 @@ public class GLImageRect extends GLRect {
         GLES30.glUniform1f(muAlphaHandle, getAlpha());
         GLES30.glUniform1f(muMaskHandle, getMask());
 		GLES30.glUniform1f(muWidhtHandle, mEdgeWidth);
-		GLES30.glUniform1f(muHeightHandle, mEdgeHeight);
+
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_STRIP, 0, 4);
 //		GLES30.glDrawElements(GLES30.GL_TRIANGLE_STRIP, 4, GLES30.GL_UNSIGNED_SHORT, 0);
 
@@ -253,7 +240,6 @@ public class GLImageRect extends GLRect {
         muAlphaHandle = GLES30.glGetUniformLocation(mProgram, "uAlpha");
         muMaskHandle = GLES30.glGetUniformLocation(mProgram, "uMask");
 		muWidhtHandle = GLES30.glGetUniformLocation(mProgram, "uWidth");
-		muHeightHandle = GLES30.glGetUniformLocation(mProgram, "uHeight");
         mTextureCoordHandle = GLES30.glGetAttribLocation(mProgram, "inputTextureCoordinate");
         mPositionHandle = GLES30.glGetAttribLocation(mProgram, "vPosition");
 		mColorHandle = GLES30.glGetAttribLocation(mProgram, "aColor");
