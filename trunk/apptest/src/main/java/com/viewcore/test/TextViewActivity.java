@@ -105,7 +105,7 @@ public class TextViewActivity extends BaseViewActivity {
 
 
 		GLTextView textView = new GLTextView(this);
-		textView.setX( 600);
+		textView.setX( 1700);
 		textView.setY( 1000 );
 		textView.setLayoutParams(600, 200 );
 		textView.setBackground( new GLColor(1.0f, 1.0f, 1.0f));
@@ -113,8 +113,8 @@ public class TextViewActivity extends BaseViewActivity {
 		textView.setText("88");
 		textView.setPadding(10, 5, 0, 0);
 		textView.setTextSize(40);
-		textView.rotate(45, 0, 1, 0);
-//		textView.setDepth(3.5f);
+		textView.rotate(-45, 0, 1, 0);
+		textView.setDepth(3.5f);
 		textView.setOnKeyListener(new GLOnKeyListener() {
 			@Override
 			public boolean onKeyDown(GLRectView view, int keycode) {
