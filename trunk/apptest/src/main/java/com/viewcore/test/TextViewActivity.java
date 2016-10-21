@@ -170,7 +170,7 @@ public class TextViewActivity extends BaseViewActivity {
 		imgView.setImage(R.drawable.weather);
 		rootView.addView(imgView);
 
-//		addImageViewTest();
+		addImageViewTest();
 
 	}
 

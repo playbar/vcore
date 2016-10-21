@@ -156,6 +156,7 @@ public class GLGridViewPage extends GLGridView {
 	}
 
 	public void resetPage(){
+		mTotalCount = 0;
 		mStartIndex = 0;
 		mCurIndex = 1;
 		mCount = 0;

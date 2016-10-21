@@ -24,7 +24,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	private GLListAdapter mGLAdapter;
 	private int mNumOneScreen=-1;
 	private int mTotalCount = 0;
-	private GLRectView convertView;
+//	private GLRectView convertView;
 	private OnItemSelectedListener mOnItemSelectedListener;
 	private OnItemClickListener mOnItemClickListener;
 	private int mPrevIndex = 0;
@@ -168,7 +168,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if( tempIndex > this.mNumOneScreen + cIndex || tempIndex > this.mTotalCount-1){
 					break;
 				}
-				GLRectView view = this.mGLAdapter.getGLView(tempIndex, convertView, null);
+				GLRectView view = this.mGLAdapter.getGLView(tempIndex, null, null);
 				if (col == 0 && rows == 0) {
 					mFirstView = view;
 				}
@@ -252,7 +252,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if( tempIndex > this.mNumOneScreen + cIndex || tempIndex > this.mTotalCount-1){
 					break;
 				}
-				GLRectView view = this.mGLAdapter.getGLView(tempIndex, convertView, null);
+				GLRectView view = this.mGLAdapter.getGLView(tempIndex, null, null);
 				if (col == 0 && row == 0) {
 					mFirstView = view;
 				}
@@ -334,7 +334,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if( tempIndex > this.mNumOneScreen + cIndex || tempIndex > this.mTotalCount-1){
 					break;
 				}
-				GLRectView view = this.mGLAdapter.getGLView(tempIndex, convertView, null);
+				GLRectView view = this.mGLAdapter.getGLView(tempIndex, null, null);
 				if (col == 0 && row == 0) {
 					mFirstView = view;
 				}
@@ -409,7 +409,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 			return;
 		removeAllView();
 		this.mTotalCount = mGLAdapter.getCount();
-		if( mStartIndex > mTotalCount ){
+		if( mStartIndex >= mTotalCount ){
 			mStartIndex = 0;
 		}
 		if( mOrientation.equals( GLConstant.GLOrientation.HORIZONTAL )){

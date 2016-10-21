@@ -12,6 +12,7 @@ import com.baofeng.mojing.MojingSDK;
 import com.baofeng.mojing.MojingSurfaceView;
 import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.distortion.Distortion;
+import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.render.GLColorRect;
 import com.bfmj.viewcore.render.GLImageRect;
 import com.bfmj.viewcore.render.GLScreenParams;
@@ -482,6 +483,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
         GLFocusUtils.handleFocused(groyMatrix, allViews);
 
+        Logger.printFPS();
     }
 
     private void saveLastAngle() {

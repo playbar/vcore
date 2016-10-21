@@ -128,6 +128,55 @@ public class GLFocusUtils {
 		return mCurosrPosition;
 	}
 
+	public static float[] getInverser(float[] vec)
+	{
+		float []dst = new float[4];
+		float n = vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2] + vec[3] * vec[3];
+		if (n == 1.0f)
+		{
+			dst[0] = vec[0];
+			dst[1] = -vec[1];
+			dst[2] = -vec[2];
+			dst[3] = -vec[3];
+			//w = w;
+
+			return dst;
+		}
+
+		// Too close to zero.
+		if (n < 0.000001f)
+			return dst;
+
+		n = 1.0f / n;
+		dst[0] = vec[0] * n;
+		dst[1] = -vec[1] * n;
+		dst[2] = -vec[2] * n;
+		dst[3] = -vec[3] * n;
+		return dst;
+	}
+
+	public static float[] getVector(){
+		float []dst = new float[4];
+		float []val = new float[4];
+		float[] q = new float[4];
+		MojingSDK.getLastHeadQuarternion(q);
+		float [] vec = new float[]{0, 0, -1, 0};
+
+		dst[0] = q[0] * vec[0] + q[1]*vec[3] + q[2]*vec[2] - q[3]*vec[1];
+		dst[1] = q[0] * vec[1] - q[1]*vec[2] + q[2]*vec[3] + q[3]*vec[0];
+		dst[2] = q[0] * vec[2] + q[1]*vec[1] - q[2]*vec[0] + q[3]*vec[3];
+		dst[3] = q[0] * vec[3] - q[1]*vec[0] - q[2]*vec[1] - q[3]*vec[2];
+
+		/////
+
+		float [] invec = getInverser( q );
+		val[0] = dst[0] * invec[0] + dst[1]*invec[3] + dst[2]*invec[2] - dst[3]*invec[1];
+		val[1] = dst[0] * invec[1] - dst[1]*invec[2] + dst[2]*invec[3] + dst[3]*invec[0];
+		val[2] = dst[0] * invec[2] + dst[1]*invec[1] - dst[2]*invec[0] + dst[3]*invec[3];
+		val[3] = dst[0] * invec[3] - dst[1]*invec[0] - dst[2]*invec[1] - dst[3]*invec[2];
+
+		return val;
+	}
 	/**
 	 * 处理焦点
 	 * @author lixianke  @Date 2015-3-16 上午10:52:11
@@ -186,28 +235,17 @@ public class GLFocusUtils {
 			if( v.getAngelY() > 0.01) {
 				float centerx = v.getCenterX();
 				float len = vx2 - centerx;
-//				float radian = (float) (Math.PI / 180 * (v.getAngelY()));
-//				float fcos = (float) Math.cos(radian);
 				float aa = len / 2;
-//				float b = len * fcos;
-//				float a = centerx + b;
-//				float x = ((3.5f * a) /(b - 3.5f));
 				float vx22 = 3.5f*vx2 / (aa + 3.5f);
 				vx2 = vx22;
-//				float rolen = (float) Math.sqrt(len * len - (4.0 - v.getDepth()) * (4.0 - v.getDepth()));
-//				float vx11 = (vx1 * 0.5f / 3.5f);
 				vx1 = vx1*8/7;
 			}
 			else if( v.getAngelY() < -0.01){
 				float centerx = v.getCenterX();
 				float len = centerx - vx1;
-//				float radian = (float) (Math.PI / 180 * (v.getAngelY()));
-//				float fcos = (float) Math.cos(radian);
 				float aa = len /2;
 				float vx11 = 3.5f*vx1 / (aa + 3.5f);
 				vx1 = vx11;
-//				float rolen = (float) Math.sqrt(len * len - (4.0 - v.getDepth()) * (4.0 - v.getDepth()));
-//				vx2 = centerx + rolen;
 				vx2 = vx2 * 8 / 7;
 			}
 
@@ -216,35 +254,39 @@ public class GLFocusUtils {
 //			MojingSDK.getLastHeadQuarternion(q);
 //			Log.e("FocusUtil", "x=" + q[0] + ",y=" + q[1] + ",z=" + q[2] + ",w=" + q[3]);
 
-			///////////
-//			float centerx = v.getCenterX();
-//			float len = vx2 - centerx;
-//			float radian = (float) (Math.PI / 180 * (v.getAngelY()));
-//			float fcos = (float) Math.cos(radian);
-//			float depth = len * fcos;
-//
-//			float [] vec = new float[]{-0.1f, 0, -1, 0};
+			/////////
+			float centerx = v.getCenterX();
+			float len = vx2 - centerx;
+			float radian = (float) (Math.PI / 180 * (v.getAngelY()));
+			float fcos = (float) Math.cos(radian);
+			float depth = len * fcos;
+
+			float [] vec = new float[]{0, 0, -4, 0};
+//			float []vec = getVector();
+//			Log.e("FocusUtil", "x=" + vec[0] + ",y=" + vec[1] + ",z=" + vec[2] + ",w=" + vec[3]);
 //			if( v.getAngelY() > 0 )
 //			{
-//				vec[0] = -0.05f;
+////				vec[0] = -0.05f;
 //				vx2 = centerx + len * fcos;
 //			}
 //			else if( v.getAngelY() < 0)
 //			{
 //				vec[0] = -0.1f;
 //			}
-//			GLVector3 tl = new GLVector3(vx1, vy1, z + depth);
-//			GLVector3 tr = new GLVector3(vx2, vy1, z - depth);
-//			GLVector3 bl = new GLVector3(vx1, vy2, z + depth);
-//			IntersectionTest test = new IntersectionTest(tl, tr, bl);
-//			vec = IntersectionTest.vecMulMatrxi(vec, v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView );
-//			GLVector3 ori = new GLVector3(vec[0], vec[1], vec[2]);
-//			GLVector2 vec2 = new GLVector2();
-//			boolean b = test.Intersection( ori, vec2);
+
+			GLVector3 tl = new GLVector3(vx1, vy1, z + depth);
+			GLVector3 tr = new GLVector3(vx2, vy1, z - depth);
+			GLVector3 bl = new GLVector3(vx1, vy2, z + depth);
+			IntersectionTest test = new IntersectionTest(tl, tr, bl);
+			float []ret = IntersectionTest.vecMulMatrxi(vec, v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView );
+			GLVector3 ori = new GLVector3(ret[0], ret[1], ret[2]);
+//			GLVector3 ori = new GLVector3(q[1], q[2], q[3]);
+			GLVector2 vec2 = new GLVector2();
+			boolean b = test.Intersection( ori, vec2);
 //			Logger.printTime("" + b);
 
-			if (MojingSDK.DirectionalRadiaInRect(v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView, new float[]{vx1, vy1}, new float[]{vx2, vy2}, z, new float[2])){
-//			if(b){
+//			if (MojingSDK.DirectionalRadiaInRect(v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView, new float[]{vx1, vy1}, new float[]{vx2, vy2}, z, new float[2])){
+			if(b){
 				if (v.hasListeter()){
 					hasFocused = true;
 				} else if (getHasListenerParent(v) != null){
