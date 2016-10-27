@@ -232,33 +232,34 @@ public class GLFocusUtils {
 			float vy2 = getY(v.getTop() + v.getY() + v.getHeight());
 			float z = -v.getDepth();
 
-			if( v.getAngelY() > 0.01) {
-				float centerx = v.getCenterX();
-				float len = vx2 - centerx;
-				float aa = len / 2;
-				float vx22 = 3.5f*vx2 / (aa + 3.5f);
-				vx2 = vx22;
-				vx1 = vx1*8/7;
-			}
-			else if( v.getAngelY() < -0.01){
-				float centerx = v.getCenterX();
-				float len = centerx - vx1;
-				float aa = len /2;
-				float vx11 = 3.5f*vx1 / (aa + 3.5f);
-				vx1 = vx11;
-				vx2 = vx2 * 8 / 7;
-			}
+//			if( v.getAngelY() > 0.01) {
+//				float centerx = v.getCenterX();
+//				float len = vx2 - centerx;
+//				float aa = len / 2;
+//				float vx22 = 3.5f*vx2 / (aa + 3.5f);
+//				vx2 = vx22;
+//				vx1 = vx1*8/7;
+//			}
+//			else if( v.getAngelY() < -0.01){
+//				float centerx = v.getCenterX();
+//				float len = centerx - vx1;
+//				float aa = len /2;
+//				float vx11 = 3.5f*vx1 / (aa + 3.5f);
+//				vx1 = vx11;
+//				vx2 = vx2 * 8 / 7;
+//			}
 
 
 //			float[] q = new float[4];
 //			MojingSDK.getLastHeadQuarternion(q);
 //			Log.e("FocusUtil", "x=" + q[0] + ",y=" + q[1] + ",z=" + q[2] + ",w=" + q[3]);
 
+
 			/////////
 			float centerx = v.getCenterX();
 			float len = vx2 - centerx;
 			float radian = (float) (Math.PI / 180 * (v.getAngelY()));
-			float fcos = (float) Math.cos(radian);
+			float fcos = (float) Math.sin(radian);
 			float depth = len * fcos;
 
 			float [] vec = new float[]{0, 0, -4, 0};
