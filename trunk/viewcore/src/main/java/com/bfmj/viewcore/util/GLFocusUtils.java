@@ -24,6 +24,7 @@ import com.bfmj.viewcore.view.GLView;
  * description:
  */
 public class GLFocusUtils {
+	private static final String TAG = "GLFocusUtils";
 	public static final int TO_LEFT = 0;
 	public static final int TO_RIGHT = 1;
 	public static final int TO_UP = 2;
@@ -177,6 +178,83 @@ public class GLFocusUtils {
 
 		return val;
 	}
+
+    private static float[] mRemoteDirection = new float[]{0,0,-1};
+    private static void getRemoteDirection(float [] direction)
+    {
+        direction[0] = mRemoteDirection[0];
+        direction[1] = mRemoteDirection[1];
+        direction[2] = mRemoteDirection[2];
+        direction[3] = 0;
+    }
+
+    public static void setRemoteDirection(float[] direction)
+    {
+        mRemoteDirection[0] = direction[0];
+        mRemoteDirection[1] = direction[1];
+        mRemoteDirection[2] = direction[2];
+    }
+
+    private static float[] mRemotePos = new float[]{0,0,0};
+    public static void setRemotePos(float[] pos)
+    {
+        mRemotePos[0] = pos[0];
+        mRemotePos[1] = pos[1];
+        mRemotePos[2] = pos[2];
+    }
+
+    private static void getRemotePos(float[] pos)
+    {
+        pos[0] = mRemotePos[0];
+        pos[1] = mRemotePos[1];
+        pos[2] = mRemotePos[2];
+    }
+    private static float[] mRemoteIntersectionPos = new float[]{0,0,-1};
+    private static float[] mRemoteIntersectionAirpos = new float[]{0,0,-1};
+    private static boolean mRemoteIntersection = false;
+    private static void setRemoteIntersectionPos(boolean intersection, float[] pos)
+    {
+        mRemoteIntersection = intersection;
+        mRemoteIntersectionPos[0] = pos[0];
+        mRemoteIntersectionPos[1] = pos[1];
+        mRemoteIntersectionPos[2] = pos[2];
+
+        if(intersection)
+        {
+            GLVector3 airpos = new GLVector3(pos[0], pos[1], pos[2]);
+            GLVector3.Normalize(airpos);
+            mRemoteIntersectionAirpos[0] = airpos.x;
+            mRemoteIntersectionAirpos[1] = airpos.y;
+            mRemoteIntersectionAirpos[2] = airpos.z;
+        }
+
+        //Log.d(TAG, String.format("intersection="+intersection+" inter pos:(%.03f,%.03f,%.03f) airpos:(%.03f,%.03f,%.03f)", mRemoteIntersectionPos[0], mRemoteIntersectionPos[1], mRemoteIntersectionPos[2], mRemoteIntersectionAirpos[0],mRemoteIntersectionAirpos[1],mRemoteIntersectionAirpos[2]));
+    }
+
+    public static boolean getRemoteIntersectionPos(float[] pos, float[] airpos)
+    {
+        for(int i=0;i<3;i++)
+        {
+            pos[i] = mRemoteIntersectionPos[i];
+            airpos[i] = mRemoteIntersectionAirpos[i];
+        }
+
+        return mRemoteIntersection;
+    }
+
+    //cal no focus intersection pos
+    //[in] pos:remote pos
+    //[in] intersectionPos: remote direction
+    //[out] airpos: return intersection pos for no foused situation
+    private static void calcAirpos(float[] pos, float[] vec, float[] airpos)
+    {
+        GLVector3 t = new GLVector3(vec[0], vec[1], vec[2]);
+        GLVector3.Normalize(t);
+        airpos[0] = t.x+pos[0];
+        airpos[1] = t.y+pos[1];
+        airpos[2] = t.z+pos[2];
+    }
+
 	/**
 	 * 处理焦点
 	 * @author lixianke  @Date 2015-3-16 上午10:52:11
@@ -216,6 +294,13 @@ public class GLFocusUtils {
 		mCurosrPosition[0] = (int)(outPos[0] * rate);
 		mCurosrPosition[1] = (int)(outPos[1] * rate);
 
+		float [] vec = new float[]{0, 0, -1, 0};
+		float [] pos = new float[] {0,0,0};
+		float [] intersectionPos = new float[] {0,0,0};
+		boolean intersection = false;
+		getRemoteDirection(vec);
+		getRemotePos(pos);
+
 		for (int i = views.size() - 1; i >= 0; i--) {
 			if (!(views.get(i) instanceof GLRectView)) {
 				continue;
@@ -254,40 +339,42 @@ public class GLFocusUtils {
 //			MojingSDK.getLastHeadQuarternion(q);
 //			Log.e("FocusUtil", "x=" + q[0] + ",y=" + q[1] + ",z=" + q[2] + ",w=" + q[3]);
 
-
 			/////////
 			float centerx = v.getCenterX();
 			float len = vx2 - centerx;
 			float radian = (float) (Math.PI / 180 * (v.getAngelY()));
-			float fcos = (float) Math.sin(radian);
-			float depth = len * fcos;
+			float fsin = (float) Math.sin(radian);
+			float depth = len * fsin;
 
-			float [] vec = new float[]{0, 0, -4, 0};
-//			float []vec = getVector();
-//			Log.e("FocusUtil", "x=" + vec[0] + ",y=" + vec[1] + ",z=" + vec[2] + ",w=" + vec[3]);
-//			if( v.getAngelY() > 0 )
-//			{
-////				vec[0] = -0.05f;
-//				vx2 = centerx + len * fcos;
-//			}
-//			else if( v.getAngelY() < 0)
-//			{
-//				vec[0] = -0.1f;
-//			}
+			//3 points of control view
+			GLVector3 tl = new GLVector3(vx1-pos[0], vy1-pos[1], z + depth-pos[2]);
+			GLVector3 tr = new GLVector3(vx2-pos[0], vy1-pos[1], z - depth-pos[2]);
+			GLVector3 bl = new GLVector3(vx1-pos[0], vy2-pos[1], z + depth-pos[2]);
 
-			GLVector3 tl = new GLVector3(vx1, vy1, z + depth);
-			GLVector3 tr = new GLVector3(vx2, vy1, z - depth);
-			GLVector3 bl = new GLVector3(vx1, vy2, z + depth);
+			//init intersction class with control view
 			IntersectionTest test = new IntersectionTest(tl, tr, bl);
+
+			//translate direction to headview or custom view
 			float []ret = IntersectionTest.vecMulMatrxi(vec, v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView );
-			GLVector3 ori = new GLVector3(ret[0], ret[1], ret[2]);
-//			GLVector3 ori = new GLVector3(q[1], q[2], q[3]);
+
+			//translated direction
+			GLVector3 transDirection = new GLVector3(ret[0], ret[1], ret[2]);
+			intersectionPos[0] = transDirection.x;
+			intersectionPos[1] = transDirection.y;
+			intersectionPos[2] = transDirection.z;
+
+			//[output var] pos on the control view
 			GLVector2 vec2 = new GLVector2();
-			boolean b = test.Intersection( ori, vec2);
-//			Logger.printTime("" + b);
+
+			//do intersection detect
+			intersection = test.Intersection( transDirection, vec2);
 
 //			if (MojingSDK.DirectionalRadiaInRect(v.isCostomHeadView() ? v.getMatrixState().getVMatrix() : headView, new float[]{vx1, vy1}, new float[]{vx2, vy2}, z, new float[2])){
-			if(b){
+			if(intersection){
+				intersectionPos[0] = tl.x+vec2.s*(tr.x-tl.x);
+				intersectionPos[1] = tl.y+vec2.t*(bl.y-tl.y);
+				intersectionPos[2] = tl.z;
+
 				if (v.hasListeter()){
 					hasFocused = true;
 				} else if (getHasListenerParent(v) != null){
@@ -315,8 +402,15 @@ public class GLFocusUtils {
 			}
 		}
 
-		if (!hasFocused){
+		if (!hasFocused) {
 			lostAllViewFocus();
+			float[] airpos = new float[] {0,0,0};
+			calcAirpos(pos, intersectionPos, airpos);
+			setRemoteIntersectionPos(intersection, airpos);
+		}
+		else
+		{
+			setRemoteIntersectionPos(intersection, intersectionPos);
 		}
 	}
 
