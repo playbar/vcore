@@ -180,13 +180,14 @@ public class GLProcessView extends GLGroupView {
 		if (mImageView == null) {
 			setProcessColor(mColorProcess);
 		}
-//		mProcess = process;
 
 		mImageView.setX(getX()+getPaddingLeft());
 		mImageView.setY(getY()+getPaddingTop());
 
-		mImageView.setLayoutParams((getWidth() - getPaddingLeft() - getPaddingRight()) / 100 * process, getHeight() - getPaddingTop() - getPaddingBottom());
+		mImageView.setLayoutParams((getWidth() - getPaddingLeft() - getPaddingRight()) / 100 * process,
+				getHeight() - getPaddingTop() - getPaddingBottom());
 
+		return;
 	}
 	
 	public void setProcess(int process) {
