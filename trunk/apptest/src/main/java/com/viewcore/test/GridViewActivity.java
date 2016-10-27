@@ -78,6 +78,13 @@ public class GridViewActivity extends BaseViewActivity {
 		Log.d("test time", "time 2 = > " + System.currentTimeMillis());
 		rootView = getRootView();
 
+		int jj = 0;
+		int ff = 0;
+		for( int i = 0; i < 100; i++)
+		{
+			ff = ++jj;
+		}
+
 		rootView.onResume();
 		//rootView.setDoubleScreen(false);
 		rootView.setDistortionEnable( true );
