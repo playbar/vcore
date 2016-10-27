@@ -179,6 +179,44 @@ public class GLFocusUtils {
 		return val;
 	}
 
+    //[in/out] dir:direction to translate AND translated direction output
+    //[in] qua: quaternion for translate
+    private static void transDirectionByQuaternion(float[] dir, float[] qua)
+    {
+        float x = qua[0];
+        float y = qua[1];
+        float z = qua[2];
+        float w = qua[3];
+
+        //translate quaternion to matrix
+        float matrix[][] = new float[3][3];
+        matrix[0][0] = 1-2*y*y-2*z*z;
+        matrix[0][1] = 2*x*y+2*w*z;
+        matrix[0][2] = 2*x*z-2*w*y;
+
+        matrix[1][0] = 2*x*y-2*w*z;
+        matrix[1][1] = 1-2*x*x-2*z*z;
+        matrix[1][2] = 2*y*z+2*w*x;
+
+        matrix[2][0] = 2*x*z+2*w*y;
+        matrix[2][1] = 2*y*z-2*w*x;
+        matrix[2][2] = 1-2*x*x-2*y*y;
+
+        float x0 = dir[0];
+        float y0 = dir[1];
+        float z0 = dir[2];
+        //translate direction by matrix
+        float x1 = x0*matrix[0][0]+y0*matrix[1][0]+z0*matrix[2][0];
+        float y1 = x0*matrix[0][1]+y0*matrix[1][1]+z0*matrix[2][1];
+        float z1 = x0*matrix[0][2]+y0*matrix[1][2]+z0*matrix[2][2];
+
+        dir[0] = x1;
+        dir[1] = y1;
+        dir[2] = z1;
+    }
+
+    private static float[] mRemoteQuaternion = new float[]{0,0,0,1};
+
     private static float[] mRemoteDirection = new float[]{0,0,-1};
     private static void getRemoteDirection(float [] direction)
     {
@@ -186,6 +224,8 @@ public class GLFocusUtils {
         direction[1] = mRemoteDirection[1];
         direction[2] = mRemoteDirection[2];
         direction[3] = 0;
+
+        transDirectionByQuaternion(direction, mRemoteQuaternion);
     }
 
     public static void setRemoteDirection(float[] direction)
