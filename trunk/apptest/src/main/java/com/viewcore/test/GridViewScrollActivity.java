@@ -15,9 +15,9 @@ import com.bfmj.viewcore.view.GLAdapterView;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLGridViewScroll;
 import com.bfmj.viewcore.view.GLImageView;
-import com.bfmj.viewcore.view.GLProcessView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
+import com.bfmj.viewcore.view.GLSeekBarView;
 import com.bfmj.viewcore.view.GLTextView;
 import com.bfmj.viewcore.view.GLView;
 
@@ -30,7 +30,7 @@ public class GridViewScrollActivity extends BaseViewActivity {
 
 	private GLRootView rootView;
 	private GLGridViewScroll gridView;
-	private GLSeekBarView processView;
+//	private GLSeekBarView processView;
 	private AQuery aq;
 	private GridViewAdapter adapter;
 	private int index;
@@ -189,15 +189,15 @@ public class GridViewScrollActivity extends BaseViewActivity {
 		});
 
 
-		processView = new GLSeekBarView(this);
-		processView.setBackground(R.drawable.playbar_progressbar_bg);
-//		processView.setProcessColor(R.drawable.playbar_progressbar);
-		processView.setBarImage(R.drawable.playbar_progressbar);
-		processView.setLayoutParams(500,20);
-		processView.setX(1000);
-		processView.setY(2000);
-		rootView.addView(processView);
-		processView.setProcess(0);
+//		processView = new GLSeekBarView(this);
+//		processView.setBackground(R.drawable.playbar_progressbar_bg);
+////		processView.setProcessColor(R.drawable.playbar_progressbar);
+//		processView.setBarImage(R.drawable.playbar_progressbar);
+//		processView.setLayoutParams(500,20);
+//		processView.setX(1000);
+//		processView.setY(2000);
+//		rootView.addView(processView);
+//		processView.setProcess(0);
 //		processView.setMargin(30,10,0,0);
 
 //		GLProcessView processView = new GLProcessView(this);
@@ -266,7 +266,7 @@ public class GridViewScrollActivity extends BaseViewActivity {
 		//rootView.setBackgroundColor( 0xFFFFFF );
 
 
-		updateProgress();
+//		updateProgress();
 //		rootView.addView(listView);		
 
 	}
@@ -309,7 +309,7 @@ public class GridViewScrollActivity extends BaseViewActivity {
 					} catch (Exception e) {
 
 					}
-					processView.setProcess(i);
+//					processView.setProcess(i);
 				}
 
 

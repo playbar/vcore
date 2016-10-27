@@ -3,6 +3,7 @@ package com.bfmj.viewcore.view;
 import android.content.Context;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
+import com.bfmj.viewcore.R;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
@@ -137,7 +138,6 @@ public class GLGridViewScroll extends GLGridView {
 	}
 
 	public void nextPage(){
-		mbIndexFocused = false;
 		if( mCurIndex < mCount ){
 			++mCurIndex;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
@@ -146,7 +146,6 @@ public class GLGridViewScroll extends GLGridView {
 	}
 
 	public void previousPage(){
-		mbIndexFocused = false;
 		if( mCurIndex > 1 ){
 			--mCurIndex;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
@@ -160,8 +159,6 @@ public class GLGridViewScroll extends GLGridView {
 		mStartIndex = 0;
 		mCurIndex = 1;
 		mCount = 0;
-		mbIndexFocused = false;
-		mCurFocuseIndex = 0;
 	}
 
 	public boolean isLastPage(){
@@ -197,7 +194,7 @@ public class GLGridViewScroll extends GLGridView {
 		if( nextBtnImgView == null || prvBtnImgView == null ){
 			return false;
 		}
-		if( nextBtnImgView.isFocused() || prvBtnImgView.isFocused() || mbIndexFocused ) {
+		if( nextBtnImgView.isFocused() || prvBtnImgView.isFocused() ) {
 			if (keycode == MojingKeyCode.KEYCODE_ENTER) {
 //			if (keycode == 96) {
 				getRootView().queueEvent(new Runnable() {
@@ -217,10 +214,6 @@ public class GLGridViewScroll extends GLGridView {
 //							--mCurIndex;
 //							setStartIndex((mCurIndex - 1) * getNumOneScreen());
 //							requestLayout();
-						} else if (mbIndexFocused) {
-							setStartIndex((mCurFocuseIndex - 1) * getNumOneScreen());
-							mCurIndex = mCurFocuseIndex;
-							requestLayout();
 						}
 					}
 				});
@@ -282,18 +275,12 @@ public class GLGridViewScroll extends GLGridView {
 
 	private GLImageView prvBtnImgView = null;//new GLImageView( this.getContext() );
 	private GLImageView nextBtnImgView = null;// new GLImageView(this.getContext());
-	private float mStart = 0.0f;
-	private float mMidPos = 0.0f;
+	private GLSeekBarView processView = null;
 	private float mOffsetX = 0.0f;
-	private float mStep = 80.0f;
 	private int mCurIndex = 1; //当前分页的位置,从1开始计数
-	private int mCurFocuseIndex = 0;
 	private int mCount = 0;  // 分页的个数, 从1开始计数
-	private int mShowMaxCount = 0;
-	private boolean mbIndexFocused = false;
 	private int mTotalCount = 0; // 最大的内容个数
 
-	private final static int MAXSHOW = 7;
 	private float mBtnSpace = 20; // 底部按钮也GridView之间的距离
 
 	private boolean mbNumListVisible = true;
@@ -348,6 +335,7 @@ public class GLGridViewScroll extends GLGridView {
 
 		nextBtnImgView = new GLImageView(this.getContext());
 		prvBtnImgView = new GLImageView( this.getContext() );
+
 		if ( ! mbNumListVisible ){
 			return;
 		}
@@ -361,80 +349,20 @@ public class GLGridViewScroll extends GLGridView {
 			++totalPageCount;
 
 
-		mMidPos = getX() + getMarginLeft() + getWidth() / 2 + mOffsetX;
+		int iw = (int)(getWidth() / mCount);
 
+		processView = new GLSeekBarView(this.getContext());
+		processView.setBackground(R.drawable.playbar_progressbar_bg);
+//		processView.setProcessColor(R.drawable.playbar_progressbar);
+		processView.setBarWidth(iw);
+		processView.setBarImage(R.drawable.playbar_progressbar);
+		processView.setLayoutParams(getWidth(),mBtnSpace);
+		processView.setX(getX());
+		processView.setY(getY() + getWidth() - mBtnSpace);
+		addView(processView);
+		int process = ((mCurIndex - 1) * 100 / mCount);
+		processView.setProcess(process);
 
-		mShowMaxCount = mCount > MAXSHOW ? MAXSHOW : mCount;
-
-		int istart = 1;
-		int iend = mCount;
-		if( mCount > MAXSHOW ) {
-			if( mCurIndex <= MAXSHOW / 2 ){
-				istart = 1;
-			} else{
-				istart = (mCurIndex + MAXSHOW/2) < mCount ? mCurIndex - MAXSHOW / 2 : (mCount + 1 - MAXSHOW);
-			}
-			iend = istart + MAXSHOW - 1;
-
-		}
-
-//		istart +=95;
-//		iend += 95;
-
-		int width = 60;
-		mStep = 80.0f;
-		String strText = "" + iend;
-		if( strText.length() > 2) {
-			width = 60 + (strText.length() - 2) * 25;
-			mStep += (strText.length() - 2) * 25;
-
-		}
-		if( mCount > 1 ){
-			mStart = mMidPos - (mStep * mShowMaxCount) / 2;
-		}
-		else{
-			mStart = mMidPos;
-		}
-		for( int i = istart; i <= iend; ++i ) {
-
-			GLTextView textView = new GLTextView(this.getContext());
-			textView.setX(mStart + (i - istart) * mStep);
-			textView.setY(getY() + getHeight() + mBtnSpace);
-
-			textView.setLayoutParams(width, 60);
-			textView.setTextColor(new GLColor(1.0f, 1.0f, 1.0f));
-			textView.setTextPadding(4);
-			if( mCurIndex == i ){
-				textView.setBackground( mSelectedColor );
-			}else {
-				textView.setBackground(mDefaultColor);
-			}
-			textView.setAlignment( GLTextView.ALIGN_CENTER );
-			textView.setPadding(0, 5, 0, 0);
-			textView.setText(""+i);
-			textView.setTextSize(40);
-			final int index = i;
-			textView.setFocusListener(new GLViewFocusListener() {
-				@Override
-				public void onFocusChange(GLRectView view, boolean focused) {
-					if (focused){
-						mbIndexFocused = true;
-						if( mCurIndex != index ) {
-							view.setBackground(mOnFouseColor);
-						}
-						mCurFocuseIndex = index;
-
-					}
-					else{
-						mbIndexFocused = false;
-						if( mCurIndex != index ){
-							view.setBackground(mDefaultColor);
-						}
-					}
-				}
-			});
-			addView(textView);
-		}
 //		if( mCurIndex < totalPageCount)
 		{
 			showNextBtn();

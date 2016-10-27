@@ -1,25 +1,15 @@
-package com.viewcore.test;
+package com.bfmj.viewcore.view;
 
 import android.content.Context;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
-import com.bfmj.viewcore.interfaces.GLViewFocusListener;
-import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.util.GLFocusUtils;
-import com.bfmj.viewcore.view.GLImageView;
-import com.bfmj.viewcore.view.GLProcessView;
-import com.bfmj.viewcore.view.GLRectView;
-import com.bfmj.viewcore.view.GLTextView;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class GLSeekBarView extends GLProcessView {
     private int mResImg;
     private GLImageView mBarView;
-//    private IPlayerControlCallBack mCallBack;
     private int bar_width = 100;
     private int bar_height=20;
 
@@ -38,6 +28,11 @@ public class GLSeekBarView extends GLProcessView {
         this.addView(mBarView);
     }
 
+    public void setBarWidth(int w)
+    {
+        bar_width = w;
+    }
+
     @Override
     public void addView(GLRectView view) {
         view.setX(this.getX() + this.getPaddingLeft() + view.getMarginLeft());
@@ -47,7 +42,7 @@ public class GLSeekBarView extends GLProcessView {
 
     @Override
     public void setProcess(int process) {
-        float width = (this.getWidth() - bar_width - this.getPaddingLeft() - this.getPaddingRight()) / 100.0F * process;
+        float width = (this.getWidth() - this.getPaddingLeft() - this.getPaddingRight()) / 100.0F * process;
 //        this.mBarView.setLayoutParams(bar_width ,bar_height);
         this.mBarView.setX(this.getX() + this.getPaddingLeft()+width);
         this.mBarView.setY(this.getY() + this.getPaddingTop());
