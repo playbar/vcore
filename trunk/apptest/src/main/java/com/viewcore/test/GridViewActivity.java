@@ -123,7 +123,7 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setNumOnFouseColor( new GLColor(1.0f, 0.0f, 1.0f ));
 		gridView.setFlipLeftIcon(R.drawable.flip_leftarrow);
 		gridView.setFlipRightIcon( R.drawable.flip_rightarrow );
-//		gridView.setNumVisible( false );
+//		gridView.setSeekBarVisible( false );
 
 		gridView.setOrientation(GLConstant.GLOrientation.VERTICAL );
 

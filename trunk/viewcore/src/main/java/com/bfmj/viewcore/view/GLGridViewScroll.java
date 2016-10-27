@@ -3,7 +3,6 @@ package com.bfmj.viewcore.view;
 import android.content.Context;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
-import com.bfmj.viewcore.R;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
@@ -283,7 +282,7 @@ public class GLGridViewScroll extends GLGridView {
 
 	private float mBtnSpace = 20; // 底部按钮也GridView之间的距离
 
-	private boolean mbNumListVisible = true;
+	private boolean mbSeekBarVisible = true;
 	private GLColor mDefaultColor = new GLColor(0.43f, 0.4f, 0.34f); // 默认页码选中状态
 	private GLColor mSelectedColor = new GLColor(0.21f, 0.45f, 0.68f );
 	private GLColor mOnFouseColor = new GLColor( 0.33f, 0.3f, 0.23f );
@@ -291,8 +290,8 @@ public class GLGridViewScroll extends GLGridView {
 	private int mFlipRightID = 0; //R.drawable.flip_rightarrow;
 
 	//是否显示页码
-	public void setNumVisible( boolean b ){
-		mbNumListVisible = b;
+	public void setSeekBarVisible(boolean b ){
+		mbSeekBarVisible = b;
 	}
 
 	//设置页码默认颜色
@@ -330,15 +329,24 @@ public class GLGridViewScroll extends GLGridView {
 	}
 
 
+	private int mBackgroundResId = 0;
+	private int mResImg = 0;
+	public void setProcessBackground(int resId){
+		mBackgroundResId = resId;
+	}
+
+	public void setBarImage(int resId)
+	{
+		mResImg = resId;
+	}
 	//创建分页
 	public void showPage(){
 
-		nextBtnImgView = new GLImageView(this.getContext());
-		prvBtnImgView = new GLImageView( this.getContext() );
-
-		if ( ! mbNumListVisible ){
+		if ( !mbSeekBarVisible){
 			return;
 		}
+		nextBtnImgView = new GLImageView(this.getContext());
+		prvBtnImgView = new GLImageView( this.getContext() );
 
 		mCount = getTotalNum() / getNumOneScreen();
 		if( getTotalNum() % getNumOneScreen() != 0 )
@@ -352,10 +360,10 @@ public class GLGridViewScroll extends GLGridView {
 		int iw = (int)(getWidth() / mCount);
 
 		processView = new GLSeekBarView(this.getContext());
-		processView.setBackground(R.drawable.playbar_progressbar_bg);
+		processView.setBackground(mBackgroundResId);
 //		processView.setProcessColor(R.drawable.playbar_progressbar);
 		processView.setBarWidth(iw);
-		processView.setBarImage(R.drawable.playbar_progressbar);
+		processView.setBarImage(mResImg);
 		processView.setLayoutParams(getWidth(),mBtnSpace);
 		processView.setX(getX());
 		processView.setY(getY() + getWidth() - mBtnSpace);

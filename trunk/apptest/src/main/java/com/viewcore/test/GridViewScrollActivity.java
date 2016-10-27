@@ -17,7 +17,6 @@ import com.bfmj.viewcore.view.GLGridViewScroll;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
-import com.bfmj.viewcore.view.GLSeekBarView;
 import com.bfmj.viewcore.view.GLTextView;
 import com.bfmj.viewcore.view.GLView;
 
@@ -112,7 +111,7 @@ public class GridViewScrollActivity extends BaseViewActivity {
 			}
 		};
 
-		gridView = new GLGridViewScroll( this, 2, 3 );
+		gridView = new GLGridViewScroll( this, 3, 3 );
 		gridView.setX(500);
 		gridView.setY(500);
 		gridView.setLayoutParams(40, 40);
@@ -125,9 +124,23 @@ public class GridViewScrollActivity extends BaseViewActivity {
 		gridView.setNumOnFouseColor( new GLColor(1.0f, 0.0f, 1.0f ));
 		gridView.setFlipLeftIcon(R.drawable.flip_leftarrow);
 		gridView.setFlipRightIcon( R.drawable.flip_rightarrow );
-//		gridView.setNumVisible( false );
+		gridView.setProcessBackground(R.drawable.playbar_progressbar_bg);
+		gridView.setBarImage(R.drawable.playbar_progressbar);
+//		gridView.setSeekBarVisible( false );
 
 		gridView.setOrientation(GLConstant.GLOrientation.VERTICAL );
+		gridView.setPrvPageChange(new GLGridViewScroll.PageChangeListener() {
+			public void onPageChange() {
+				gridView.previousPage();
+			}
+		});
+
+		gridView.setNextPageChange(new GLGridViewScroll.PageChangeListener() {
+			@Override
+			public void onPageChange() {
+				gridView.nextPage();
+			}
+		});
 
 		getData();
 		adapter = new GridViewAdapter(listData, this);
