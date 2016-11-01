@@ -42,10 +42,15 @@ public class TestVertexLoadActivity extends BaseViewActivity {
 //		cursorView.setFixed(false);
         getRootView().addView(cursorView);
 
+        showSkyBox(SCENE_TYPE_DEFAULT);
+
+    }
+
+    public void showVideo(){
         final GLPanoView panoView = GLPanoView.getSharedPanoView(this);
         panoView.setRenderType(GLPanoView.RENDER_TYPE_VIDEO);
 
-         player = new MediaPlayer();
+        player = new MediaPlayer();
 
 
         new Thread(new Runnable() {
@@ -61,7 +66,7 @@ public class TestVertexLoadActivity extends BaseViewActivity {
                     @Override
                     public void run() {
                         try {
-                            player.setDataSource("/mnt/sdcard/1.mp4");
+                            player.setDataSource("/mnt/sdcard/test.mp4");
                             player.setSurface(new Surface(panoView.getSurfaceTexture()));
 
                             player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -88,6 +93,7 @@ public class TestVertexLoadActivity extends BaseViewActivity {
 //                });
             }
         }).start();
+        return;
     }
 
     /**
@@ -105,6 +111,7 @@ public class TestVertexLoadActivity extends BaseViewActivity {
             mSkyboxView.setImage(R.drawable.skybox_launcher);
         } else {
             mSkyboxView.setImage(R.drawable.skybox_launcher);
+            mSkyboxView.setLeftImage(R.drawable.strip);
         }
 
         mSkyboxView.setVisible(true);

@@ -7,7 +7,7 @@ model {
         buildToolsVersion '23.0.2'
         defaultConfig {
             applicationId = 'com.viewcore.test'
-            minSdkVersion.apiLevel = 13
+            minSdkVersion.apiLevel = 14
             targetSdkVersion.apiLevel = 24
             versionCode 1
             versionName "1.0"

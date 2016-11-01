@@ -70,10 +70,14 @@ public class GLPanoView extends GLView {
 
     private boolean isSurfaceCreated = false;
     private boolean isNeedInitVertex = false;
-    private int mTextureId = -1;
+
     private SurfaceTexture mSurfaceTexture = null;
+    private int mTextureId = -1;
     private int mResId = -1;
     private Bitmap mBitmap;
+    private int mLeftTextureId = -1;
+    private int mLeftResId = -1;
+    private Bitmap mLeftBitmap;
     private boolean mVideoPrepared = false;
 
     private float[] mRotateHeadview = new float[3];
@@ -221,10 +225,14 @@ public class GLPanoView extends GLView {
         mPlayType = PLAY_TYPE_2D;
         mRotateHeadview = new float[3];
         GLTextureUtils.releaseTexture(mTextureId);
+        GLTextureUtils.releaseTexture(mLeftTextureId);
         mTextureId = -1;
         mSurfaceTexture = null;
         mResId = -1;
         mBitmap = null;
+        mLeftTextureId = -1;
+        mLeftResId = -1;
+        mLeftBitmap = null;
         mVideoPrepared = false;
     }
 
@@ -247,6 +255,19 @@ public class GLPanoView extends GLView {
         }
     }
 
+    public void setLeftImage(int resId){
+        if (mLeftResId == resId){
+            return;
+        }
+
+        mLeftResId = resId;
+        mLeftBitmap = null;
+
+        if (isSurfaceCreated){
+            getRootView().mCreateTextureQueue.offer(this);
+        }
+    }
+
     /**
      * 设置图片
      * @author lixianke  @Date 2015-3-11 下午5:07:28
@@ -260,6 +281,19 @@ public class GLPanoView extends GLView {
 
         mBitmap = bitmap;
         mResId = -1;
+
+        if (isSurfaceCreated){
+            getRootView().mCreateTextureQueue.offer(this);
+        }
+    }
+
+    public void setLeftImage(Bitmap bitmap){
+        if (mLeftBitmap == bitmap){
+            return;
+        }
+
+        mLeftBitmap = bitmap;
+        mLeftResId = -1;
 
         if (isSurfaceCreated){
             getRootView().mCreateTextureQueue.offer(this);
@@ -362,8 +396,13 @@ public class GLPanoView extends GLView {
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
 
-        GLES30.glBindTexture(mRenderType == RENDER_TYPE_VIDEO ? GLES11Ext.GL_TEXTURE_EXTERNAL_OES :
-                GLES30.GL_TEXTURE_2D, mTextureId);
+        if( isLeft && mLeftTextureId > -1 ){
+            GLES30.glBindTexture(mRenderType == RENDER_TYPE_VIDEO ? GLES11Ext.GL_TEXTURE_EXTERNAL_OES :
+                    GLES30.GL_TEXTURE_2D, mLeftTextureId);
+        }else {
+            GLES30.glBindTexture(mRenderType == RENDER_TYPE_VIDEO ? GLES11Ext.GL_TEXTURE_EXTERNAL_OES :
+                    GLES30.GL_TEXTURE_2D, mTextureId);
+        }
 
         GLES30.glUniformMatrix4fv(muMVPMatrixHandles[mRenderType], 1, false, getMatrixState().getFinalMatrix(), 0);
         GLES30.glUniform1f(muAlphaHandles[mRenderType], getAlpha());
@@ -499,9 +538,10 @@ public class GLPanoView extends GLView {
 
         boolean isRecycle = true;
         Bitmap bitmap = null;
+
+        /// right
         if (mResId > -1){
             InputStream is = getContext().getResources().openRawResource(mResId);
-
             try {
                 bitmap = BitmapFactory.decodeStream(is);
             } finally {
@@ -520,6 +560,30 @@ public class GLPanoView extends GLView {
             releaseTexture(mTextureId);
             mTextureId = GLTextureUtils.initImageTexture(bitmap, isRecycle, false);
         }
+
+        /// left
+        isRecycle = true;
+        bitmap = null;
+        if (mLeftResId > -1){
+            InputStream is = getContext().getResources().openRawResource(mLeftResId);
+            try {
+                bitmap = BitmapFactory.decodeStream(is);
+            } finally {
+                try {
+                    is.close();
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (mLeftBitmap != null){
+            bitmap = mLeftBitmap;
+            isRecycle = false;
+        }
+
+        if (bitmap != null){
+            releaseTexture(mLeftTextureId);
+            mLeftTextureId = GLTextureUtils.initImageTexture(bitmap, isRecycle, false);
+        }
     }
 
     @Override
@@ -534,15 +598,22 @@ public class GLPanoView extends GLView {
     @Override
     public void release() {
         isSurfaceCreated = false;
-        if (mTextureId > -1){
+        if (mTextureId > -1 || mLeftTextureId > -1){
             BaseViewActivity activity = (BaseViewActivity)getContext();
             if (activity != null && activity.getRootView() != null) {
                 activity.getRootView().queueEvent(new Runnable() {
 
                     @Override
                     public void run() {
-                        GLTextureUtils.releaseTexture(mTextureId);
-                        mTextureId = -1;
+                        if( mTextureId > -1) {
+                            GLTextureUtils.releaseTexture(mTextureId);
+                            mTextureId = -1;
+                        }
+                        if( mLeftTextureId > -1){
+                            GLTextureUtils.releaseTexture(mLeftTextureId);
+                            mLeftTextureId = -1;
+                        }
+
                     }
                 });
             }
