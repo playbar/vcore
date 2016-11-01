@@ -281,7 +281,7 @@ public class GLGridViewScroll extends GLGridView {
 	private int mCount = 0;  // 分页的个数, 从1开始计数
 	private int mTotalCount = 0; // 最大的内容个数
 
-	private float mBtnSpace = 20; // 底部按钮也GridView之间的距离
+	private float mBtnSpace = -20; // 底部按钮也GridView之间的距离
 
 	private boolean mbSeekBarVisible = true;
 	private GLColor mDefaultColor = new GLColor(0.43f, 0.4f, 0.34f); // 默认页码选中状态
@@ -365,9 +365,9 @@ public class GLGridViewScroll extends GLGridView {
 //		processView.setProcessColor(R.drawable.playbar_progressbar);
 		processView.setBarWidth(iw);
 		processView.setBarImage(mResImg);
-		processView.setLayoutParams(getWidth(),mBtnSpace);
+		processView.setLayoutParams(getWidth(),20);
 		processView.setX(getX());
-		processView.setY(getY() + getWidth() - mBtnSpace);
+		processView.setY(getY() + getWidth() + mBtnSpace);
 		addView(processView);
 		if( mCount > 0) {
 			int process = ((mCurIndex - 1) * 100 / mCount);

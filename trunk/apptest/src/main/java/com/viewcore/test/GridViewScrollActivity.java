@@ -118,6 +118,7 @@ public class GridViewScrollActivity extends BaseViewActivity {
 		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
 		gridView.setHorizontalSpacing( 20.0f);
 		gridView.setVerticalSpacing( 20.0f);
+		gridView.setBottomSpaceing( 500);
 //		gridView.setPadding( 10, 10, 10, 10);
 //		gridView.setMargin( 10, 10, 10, 10 );
 //		gridView.setNumDefaultColor( new GLColor(1.0f, 0.0f, 1.0f ));
