@@ -1,6 +1,7 @@
 package com.bfmj.viewcore.view;
 
 import java.util.ArrayList;
+//import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -61,7 +62,8 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     private float mXangle = 0;
     private boolean isResetGroy = false;
     private boolean mIsDouble = true;
-
+    private boolean mRecenter = false;
+    private float[] mRecenterMatrix = new float[16];
 
     public static int createTexture(Bitmap bitmap) {
         int[] textures = new int[1];
@@ -483,6 +485,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
         GLFocusUtils.handleFocused(groyMatrix, allViews);
 
+//        debugRecenter();
         Logger.printFPS();
     }
 
@@ -542,6 +545,9 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                 }
             }
 
+            if(mRecenter) {
+                Matrix.multiplyMM(matrix, 0, matrix, 0, mRecenterMatrix, 0);
+            }
         } else {
             System.arraycopy(headView, 0, matrix, 0, 16);
         }
@@ -569,6 +575,12 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         } else {
             Matrix.setLookAtM(headView, 0, 0, 0, 0, 0, 0, -4, 0, 1, 0);
         }
+    }
+
+    public void reCenter() {
+        mRecenter = true;
+        MojingSDK.getLastHeadView(mRecenterMatrix);
+        Matrix.invertM(mRecenterMatrix, 0, mRecenterMatrix, 0);
     }
 
     public void addView(GLView view) {
@@ -874,4 +886,17 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     public boolean getIsDoubleScreen() {
         return mIsDouble;
     }
+
+    //recenter debuging. do receter ever debugRecenterInterval ms. called in onDrawFrame
+//    private static long debugRecenterTime = new Date().getTime();
+//    private static final long debugRecenterInterval = 5000;
+//    private void debugRecenter()
+//    {
+//        long now = new Date().getTime();
+//        if(now - debugRecenterTime >= debugRecenterInterval)
+//        {
+//            reCenter();
+//            debugRecenterTime = new Date().getTime();
+//        }
+//    }
 }
