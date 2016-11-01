@@ -64,6 +64,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     private boolean mIsDouble = true;
     private boolean mRecenter = false;
     private float[] mRecenterMatrix = new float[16];
+    private float[] mRecenterAngles = new float[3];
 
     public static int createTexture(Bitmap bitmap) {
         int[] textures = new int[1];
@@ -546,7 +547,10 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             }
 
             if(mRecenter) {
-                Matrix.multiplyMM(matrix, 0, matrix, 0, mRecenterMatrix, 0);
+                //Matrix.multiplyMM(matrix, 0, matrix, 0, mRecenterMatrix, 0);
+                Matrix.rotateM(matrix, 0, mRecenterAngles[0], 0, 1, 0);
+                Matrix.rotateM(matrix, 0, mRecenterAngles[1], 1, 0, 0);
+                Matrix.rotateM(matrix, 0, mRecenterAngles[2], 0, 0, 1);
             }
         } else {
             System.arraycopy(headView, 0, matrix, 0, 16);
@@ -580,7 +584,12 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     public void reCenter() {
         mRecenter = true;
         MojingSDK.getLastHeadView(mRecenterMatrix);
-        Matrix.invertM(mRecenterMatrix, 0, mRecenterMatrix, 0);
+        GLFocusUtils.getEulerAngles(mRecenterMatrix, mRecenterAngles, 0);
+        int i=0;
+        for(i=0;i<3;i++)
+        {
+            mRecenterAngles[i] = (float)Math.toDegrees(mRecenterAngles[i]);
+        }
     }
 
     public void addView(GLView view) {
