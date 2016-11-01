@@ -111,7 +111,7 @@ public class GridViewScrollActivity extends BaseViewActivity {
 			}
 		};
 
-		gridView = new GLGridViewScroll( this, 3, 3 );
+		gridView = new GLGridViewScroll( this, 1, 2 );
 		gridView.setX(500);
 		gridView.setY(500);
 		gridView.setLayoutParams(40, 40);

@@ -123,6 +123,7 @@ public class GLGridViewScroll extends GLGridView {
 		if(  mTotalCount < getTotalNum() ){
 			mTotalCount = getTotalNum();
 		}
+
 		mCount = getTotalNum() / getNumOneScreen();
 		if( getTotalNum() % getNumOneScreen() != 0 )
 			++mCount;
@@ -368,8 +369,10 @@ public class GLGridViewScroll extends GLGridView {
 		processView.setX(getX());
 		processView.setY(getY() + getWidth() - mBtnSpace);
 		addView(processView);
-		int process = ((mCurIndex - 1) * 100 / mCount);
-		processView.setProcess(process);
+		if( mCount > 0) {
+			int process = ((mCurIndex - 1) * 100 / mCount);
+			processView.setProcess(process);
+		}
 
 //		if( mCurIndex < totalPageCount)
 		{

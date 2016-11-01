@@ -22,7 +22,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	private float mVerticalSpacing=0.0f;//垂直间距离
 	private float mHorizontalSpacing=0.0f;//水平间距离
 	private GLListAdapter mGLAdapter;
-	private int mNumOneScreen=-1;
+	private int mNumOneScreen=1;
 	private int mTotalCount = 0;
 //	private GLRectView convertView;
 	private OnItemSelectedListener mOnItemSelectedListener;
@@ -72,6 +72,9 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	}
 
 	public int getNumOneScreen(){
+		if( mNumOneScreen == 0 ) {
+			mNumOneScreen = 1;
+		}
 		return mNumOneScreen;
 	}
 
@@ -137,7 +140,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	@Override
 	public void setAdapter(GLListAdapter adapter) {
 		// TODO Auto-generated method stub
-		if( adapter == null ){
+		if( adapter == null || adapter.getCount() == 0 ){
 			return;
 		}
 
