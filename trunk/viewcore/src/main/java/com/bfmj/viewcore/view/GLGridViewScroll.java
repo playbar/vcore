@@ -367,7 +367,7 @@ public class GLGridViewScroll extends GLGridView {
 		processView.setBarImage(mResImg);
 		processView.setLayoutParams(getWidth(),20);
 		processView.setX(getX());
-		processView.setY(getY() + getWidth() + mBtnSpace);
+		processView.setY(getY() + getHeight() + mBtnSpace);
 		addView(processView);
 		if( mCount > 0) {
 			int process = ((mCurIndex - 1) * 100 / mCount);
