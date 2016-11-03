@@ -1,5 +1,6 @@
 package com.viewcore.test;
 
+import com.bfmj.viewcore.animation.GLAlphaAnimation;
 import com.bfmj.viewcore.animation.GLAnimation;
 import com.bfmj.viewcore.animation.GLScaleAnimation;
 import com.bfmj.viewcore.animation.GLTranslateAnimation;
@@ -23,16 +24,32 @@ public class AnimUtils {
 //            view.startAnimation(animation2);
 //        }
         startTranslate(view,focuse);
+//        startAlphaAnimation(view, focuse);
     }
 
-    public static void startTranslate(final GLRectView view , boolean focuse){
+    public static void startAlphaAnimation(final GLRectView view, boolean focuse ) {
+        if( focuse){
+            GLAnimation animation = new GLAlphaAnimation(1,0);
+            animation.setAnimView(view);
+            animation.setDuration(300);
+            view.startAnimation(animation);
+        }else{
+            GLAnimation animation = new GLAlphaAnimation(0,1);
+            animation.setAnimView(view);
+            animation.setDuration(300);
+            view.startAnimation(animation);
+        }
+
+    }
+
+    public static void startTranslate( GLRectView view , boolean focuse){
         if(focuse) {
-            GLAnimation animation1 = new GLTranslateAnimation(0, 0, -0.5f);
+            GLAnimation animation1 = new GLTranslateAnimation(-100, 0, -0.5f);
             animation1.setAnimView(view);
             animation1.setDuration(300);
             view.startAnimation(animation1);
         } else {
-            GLAnimation animation1 = new GLTranslateAnimation(0, 0, 0.5f);
+            GLAnimation animation1 = new GLTranslateAnimation(100, 0, 0.5f);
             animation1.setAnimView(view);
             animation1.setDuration(300);
             view.startAnimation(animation1);

@@ -2,6 +2,7 @@ package com.viewcore.test;
 
 import android.content.Context;
 
+import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLRelativeView;

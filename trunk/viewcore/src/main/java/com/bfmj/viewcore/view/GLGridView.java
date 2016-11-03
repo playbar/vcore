@@ -3,8 +3,13 @@ package com.bfmj.viewcore.view;
 import java.util.ArrayList;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
+import com.bfmj.distortion.Logger;
+import com.bfmj.viewcore.animation.GLAlphaAnimation;
+import com.bfmj.viewcore.animation.GLAnimation;
+import com.bfmj.viewcore.animation.GLTranslateAnimation;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
+import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLConstant;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 
@@ -29,6 +34,8 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	private OnItemClickListener mOnItemClickListener;
 	private int mPrevIndex = 0;
 	private GLRectView mFirstView;
+	protected ArrayList<GLRectView> mItemViews = new ArrayList<GLRectView>();
+//	private GLGroupView mItemViews;
 	
 	
 	/**
@@ -84,6 +91,11 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	 */
 	public GLGridView(Context context) {
 		super(context);
+//		mItemViews = new GLGroupView(context);
+//		mItemViews.setX(500);
+//		mItemViews.setY(500);
+//		mItemViews.setLayoutParams(1000, 1000 );
+//		addView(mItemViews);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -111,22 +123,29 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	 */
 	public GLGridView(Context context, int rows, int columns){
 		super(context);
+//		mItemViews = new GLGroupView(context);
+//		mItemViews.setX(500);
+//		mItemViews.setY(500);
+//		mItemViews.setLayoutParams(1000, 1000 );
+//		mItemViews.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
+//		mItemViews.setVisible(true);
+//		addView(mItemViews);
 		this.mNumColumns = columns;
 		this.mNumRows = rows;
 	}
 	
-	@Override
-	public void addView(GLRectView view) {
-		// TODO Auto-generated method stub
-		super.addView(view);
-	}
+//	@Override
+//	public void addView(GLRectView view) {
+//		// TODO Auto-generated method stub
+//		super.addView(view);
+//	}
 	
-	@Override
-	public void addView(int index, GLRectView view) {
-		// TODO Auto-generated method stub
-		super.addView(index, view);
-		
-	}
+//	@Override
+//	public void addView(int index, GLRectView view) {
+//		// TODO Auto-generated method stub
+//		super.addView(index, view);
+//
+//	}
 
 	@Override
 	public GLListAdapter getGLAdapter() {
@@ -161,17 +180,27 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 
 	public void showHItem( int cIndex ){
 		int tempIndex=cIndex;
-		//int width = getInnerWidth()
-//		int ipos = 0;
+		int index = 0;
 		for(int rows=0; rows<this.mNumRows; rows++)
 		{
 			for(int col=0;col<this.mNumColumns;col++)
 			{
 				//如果大于设置的一屏显示数则不再添加
+
+				GLRectView item = null;
+				if( mItemViews.size() == mNumOneScreen) {
+					item = mItemViews.get(index);
+				}
+				index++;
 				if( tempIndex > this.mNumOneScreen + cIndex || tempIndex > this.mTotalCount-1){
+					if( item != null )
+					{
+						item.setVisible(false);
+					}
 					break;
 				}
-				GLRectView view = this.mGLAdapter.getGLView(tempIndex, null, null);
+
+				GLRectView view = this.mGLAdapter.getGLView(tempIndex, item, this);
 				if (col == 0 && rows == 0) {
 					mFirstView = view;
 				}
@@ -183,16 +212,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				view.setY(getY() + getPaddingTop() + view.getHeight() * rows + this.mVerticalSpacing * rows);
 
 				view.setId("gridview_" + tempIndex);
-//				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
-//					@Override
-//					public void run() {
-//						synchronized (this) {
-//							GLGridView.this.addView(view);
-//						}
-//					}
-//				});
 
-				//final int position = mNumColumns*rows+col;
 				final int position = tempIndex;
 
 				view.setFocusListener(new GLViewFocusListener() {
@@ -237,7 +257,12 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if( view.getDepth() > this.getDepth() ){
 					view.setDepth( this.getDepth() );
 				}
-				this.addView(view);
+				if( item == null) {
+					addView(view);
+					mItemViews.add(view);
+				}else {
+					item.setVisible(true);
+				}
 				tempIndex++;
 			}
 		}
@@ -245,8 +270,6 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 
 	public void showVItem( int cIndex ){
 		int tempIndex=cIndex;
-		//int width = getInnerWidth()
-//		int ipos = 0;
 		for(int col=0; col<this.mNumColumns; col++)
 		{
 			for(int row=0; row<this.mNumRows; row++)
@@ -264,7 +287,6 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 
 				view.setId("gridview_" + tempIndex);
 
-				//final int position = mNumColumns*row+col;
 				final int position = tempIndex;
 				view.setFocusListener(new GLViewFocusListener() {
 
@@ -308,16 +330,8 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if( view.getDepth() > this.getDepth() ){
 					view.setDepth( this.getDepth() );
 				}
-				this.addView(view);
-//				GLGridView.this.addView(view);
-//				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
-//					@Override
-//					public void run() {
-//						synchronized (this) {
-//							GLGridView.this.addView(view);
-//						}
-//					}
-//				});
+				addView(view);
+				mItemViews.add(view);
 				tempIndex++;
 			}
 		}
@@ -326,9 +340,6 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 
 	public void showVRItem( int cIndex ){
 		int tempIndex=cIndex;
-		//int width = getInnerWidth()
-
-//		int ipos = 0;
 		for(int col=this.mNumColumns -1; col >= 0; --col )
 		{
 			for(int row=0; row<this.mNumRows; row++)
@@ -390,19 +401,53 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if( view.getDepth() > this.getDepth() ){
 					view.setDepth( this.getDepth() );
 				}
-				this.addView(view);
-//				GLGridView.this.addView(view);
-//				(((BaseViewActivity) getContext()).getRootView()).queueEvent(new Runnable() {
-//					@Override
-//					public void run() {
-//						synchronized (this) {
-//							GLGridView.this.addView(view);
-//						}
-//					}
-//				});
+				addView(view);
+				mItemViews.add(view);
 				tempIndex++;
 			}
 		}
+	}
+
+	public static void setTranslateAnimation(GLRectView view, float x, float y,float z){
+		if(view == null)
+			return;
+		GLAnimation animation = new GLTranslateAnimation(x, y, z);
+		animation.setAnimView(view);
+		animation.setDuration(500);
+		view.startAnimation(animation);
+	}
+
+	public static void startGLAlphaAnimation(GLRectView view, float startAlpha, float endAlpha) {
+		if (view == null)
+			return;
+		GLAnimation animation = new GLAlphaAnimation(startAlpha,endAlpha);
+		animation.setAnimView(view);
+		animation.setDuration(300);
+		view.startAnimation(animation);
+	}
+
+	public void pageChange(){
+		mNumOneScreen =  mNumRows * mNumColumns;
+		if(this.mGLAdapter ==null)
+			return;
+//		removeAllView();
+		int count = mItemViews.size();
+//		for (int i = 0; i < count; ++i){
+//			setTranslateAnimation( mItemViews.get(i), -40, 0, 0);
+//		}
+//		setTranslateAnimation(this, -40, 0, 0);
+		this.mTotalCount = mGLAdapter.getCount();
+		if( mStartIndex >= mTotalCount ){
+			mStartIndex = 0;
+		}
+//		if( mOrientation.equals( GLConstant.GLOrientation.HORIZONTAL )){
+//			showHItem(mStartIndex);
+//		}else if( mOrientation.equals(GLConstant.GLOrientation.VERTICAL )){
+//			showVItem(mStartIndex);
+//		}else {
+//			showVRItem( mStartIndex );
+//		}
+		return;
 	}
 
 	@Override
@@ -410,7 +455,6 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 		mNumOneScreen =  mNumRows * mNumColumns;
 		if(this.mGLAdapter ==null)
 			return;
-		removeAllView();
 		this.mTotalCount = mGLAdapter.getCount();
 		if( mStartIndex >= mTotalCount ){
 			mStartIndex = 0;
@@ -424,7 +468,18 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 		}
 		return;
 
+	}
 
+	@Override
+	public void doAnimationEnd(){
+		if( mOrientation.equals( GLConstant.GLOrientation.HORIZONTAL )){
+			showHItem(mStartIndex);
+		}else if( mOrientation.equals(GLConstant.GLOrientation.VERTICAL )){
+			showVItem(mStartIndex);
+		}else {
+			showVRItem( mStartIndex );
+		}
+//		Logger.print("end");
 	}
 
 	@Override

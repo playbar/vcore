@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.androidquery.callback.AjaxStatus;
+import com.bfmj.viewcore.animation.GLAnimation;
+import com.bfmj.viewcore.animation.GLTranslateAnimation;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.view.BaseViewActivity;
@@ -58,7 +60,7 @@ public class ListViewActivity extends BaseViewActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		setMojingType("WNE8QN-QVCCZN-XXF8W3-9Q2YDH-AQZRA2-XVDZ9Q");
+//		setMojingType("WNE8QN-QVCCZN-XXF8W3-9Q2YDH-AQZRA2-XVDZ9Q");
 		super.onCreate(savedInstanceState);
 		
 //		aq = new AQuery(this);
@@ -102,6 +104,10 @@ public class ListViewActivity extends BaseViewActivity {
 				Log.e("ListViewActivity", "OnItemSelectedListener.onItemSelected");
 				AnimUtils.startScaleAndTranslate(((ChannelRightItemView)glview),true);
 				//glview.setAlpha( 0.3f );
+//				GLAnimation animation1 = new GLTranslateAnimation(-100, 0, -0.5f);
+//				animation1.setAnimView((ChannelRightItemView)glview);
+//				animation1.setDuration(300);
+//				((ChannelRightItemView)glview).startAnimation(animation1);
 			}
 
 			@Override
@@ -202,13 +208,21 @@ public class ListViewActivity extends BaseViewActivity {
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		Log.e("onKeyUp", "onKeyUpn code =" + keyCode);
-		listView.onKeyUp( keyCode );
+//		listView.onKeyUp( keyCode );
+		GLAnimation animation1 = new GLTranslateAnimation(-100, 0, -0.5f);
+		animation1.setAnimView(listView);
+		animation1.setDuration(300);
+		listView.startAnimation(animation1);
 		return false;
 	}
 
 	public boolean onKeyDown( int keyCode, KeyEvent event ){
 		Log.e("onKeyDown", "onKeyDown code = " + keyCode );
-		listView.onKeyDown( keyCode );
+//		listView.onKeyDown( keyCode );
+		GLAnimation animation1 = new GLTranslateAnimation(100, 0, 0.5f);
+		animation1.setAnimView(listView);
+		animation1.setDuration(300);
+		listView.startAnimation(animation1);
 		return false;
 	}
 	

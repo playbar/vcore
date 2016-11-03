@@ -3,6 +3,8 @@ package com.bfmj.viewcore.view;
 import android.content.Context;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
+import com.bfmj.viewcore.animation.GLAnimation;
+import com.bfmj.viewcore.animation.GLTranslateAnimation;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.util.GLFocusUtils;
 
@@ -38,6 +40,14 @@ public class GLSeekBarView extends GLProcessView {
         view.setX(this.getX() + this.getPaddingLeft() + view.getMarginLeft());
         view.setY(this.getY() + this.getPaddingTop() + view.getMarginTop());
         super.addView(view);
+    }
+
+    public void setProcessAnimation(int process){
+        float step = (this.getWidth() - this.getPaddingLeft() - this.getPaddingRight()) / process;
+        GLAnimation animation = new GLTranslateAnimation(step, 0, 0);
+        animation.setAnimView(mBarView);
+        animation.setDuration(500);
+        mBarView.startAnimation(animation);
     }
 
     @Override

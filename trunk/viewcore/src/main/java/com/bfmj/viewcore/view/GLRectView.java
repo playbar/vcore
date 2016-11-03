@@ -1190,8 +1190,8 @@ public class GLRectView extends GLView {
 
 			boolean isStart = animation.isStart();
 			boolean isEnd = animation.isEnd();
-			GLTransformation t = animation.getGlTransformation();
-			if (t == null) {
+			GLTransformation transform = animation.getGlTransformation();
+			if (transform == null) {
 				animation.setStart(false);
 				mAnimations.remove(animation);
 				continue;
@@ -1200,7 +1200,7 @@ public class GLRectView extends GLView {
 			if (isStart)
 			{
 				if (!isEnd) {
-					boolean retIsEnd = animation.getTransformation(AnimationUtils.currentAnimationTimeMillis(), t);
+					boolean retIsEnd = animation.getTransformation(AnimationUtils.currentAnimationTimeMillis(), transform);
 					animation.setEnd(retIsEnd);
 
 					GLRectView animView = animation.getAnimView();
@@ -1211,16 +1211,17 @@ public class GLRectView extends GLView {
 						if (animation.isOnlyChids() && animView instanceof GLGroupView)
 						{
 							GLGroupView grpView = (GLGroupView)animation.getAnimView();
-							grpView.setChildXY(t.getX(), t.getY());
+							grpView.setChildXY(transform.getX(), transform.getY());
 						}
 						else //全部view xy位移
 						{
-							animView.setX(getX() + t.getX());
-							animView.setY(getY() + t.getY());
+							animView.setX(getX() + transform.getX());
+							animView.setY(getY() + transform.getY());
 						}
 
-						float currdep = getDepth() + t.getZ();
-						if (currdep > animView.getParent().getDepth())
+						float currdep = getDepth() + transform.getZ();
+						GLGroupView parent = animView.getParent();
+						if (parent != null && currdep > parent.getDepth())
 						{
 							currdep = animView.getParent().getDepth();
 						}
@@ -1230,20 +1231,21 @@ public class GLRectView extends GLView {
 					else if (animation instanceof GLScaleAnimation)
 					{
 
-						animView.scale(t.getX(), t.getY());
+						animView.scale(transform.getX(), transform.getY());
 					}
 					else if (animation instanceof GLRotateAnimation)
 					{
 						//Log.d("test", "getDegree:"+t.getDegree() +";getX:" + t.getX());
-						animView.rotate(t.getDegree(), t.getX(), t.getY(), t.getZ());
+						animView.rotate(transform.getDegree(), transform.getX(), transform.getY(), transform.getZ());
 					}
 					else if (animation instanceof GLAlphaAnimation)
 					{
-						animView.setAlpha(t.getAlpha());
+						animView.setAlpha(transform.getAlpha());
 					}
 
 				} else {
 					mAnimations.remove(animation);
+					doAnimationEnd();
 				}
 			}
 		}
@@ -1481,6 +1483,9 @@ public class GLRectView extends GLView {
 	public void setAnimEndZ(float animEndZ) {
 		this.animEndZ = animEndZ;
 	}
+
+	//动画结束后回调
+	public void doAnimationEnd(){}
 
 	public static float getDepthScale() {
 		return depthScale;

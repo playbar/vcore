@@ -3,6 +3,7 @@ package com.bfmj.viewcore.view;
 import android.content.Context;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
+import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
@@ -118,6 +119,7 @@ public class GLGridViewScroll extends GLGridView {
 		super.setAdapter( adapter );
 	}
 
+	private boolean mbadd = false;
 	@Override
 	public void requestLayout(){
 		if(  mTotalCount < getTotalNum() ){
@@ -134,24 +136,48 @@ public class GLGridViewScroll extends GLGridView {
 		}
 
 		super.requestLayout();
-		showPage();
+		if( !mbadd ) {
+			mbadd = true;
+			showPage();
+		}
+
 	}
 
 	public void nextPage(){
+
 		if( mCurIndex < mCount ){
+			processView.setProcessAnimation( mCount );
 			++mCurIndex;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
-			requestLayout();
+			pageChange();
 		}
 	}
 
 	public void previousPage(){
 		if( mCurIndex > 1 ){
+			processView.setProcessAnimation( -mCount );
 			--mCurIndex;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
-			requestLayout();
+			pageChange();
 
 		}
+	}
+
+	public void pageChange(){
+		if(  mTotalCount < getTotalNum() ){
+			mTotalCount = getTotalNum();
+		}
+
+		mCount = getTotalNum() / getNumOneScreen();
+		if( getTotalNum() % getNumOneScreen() != 0 )
+			++mCount;
+
+		if( mCurIndex > mCount && mCount > 0 ){
+			mCurIndex = mCount;
+			setStartIndex((mCurIndex - 1) * getNumOneScreen());
+		}
+
+		super.pageChange();
 	}
 
 	public void resetPage(){
@@ -233,7 +259,7 @@ public class GLGridViewScroll extends GLGridView {
 
 	private void showPrvBtn(){
 		prvBtnImgView.setX(getX() - 80 );
-		prvBtnImgView.setY(getY() + getHeight() / 2 - 30);
+		prvBtnImgView.setY(getY() + getHeight() + mBtnSpace - 10);
 		prvBtnImgView.setLayoutParams(60, 60);
 		prvBtnImgView.setImage(mFlipLeftID );
 		prvBtnImgView.setBackground( mDefaultColor);
@@ -255,7 +281,7 @@ public class GLGridViewScroll extends GLGridView {
 	private void showNextBtn(){
 
 		nextBtnImgView.setX(getX() + getWidth() + 20);
-		nextBtnImgView.setY(getY() + getHeight()/2 - 30);
+		nextBtnImgView.setY(getY() + getHeight() + mBtnSpace -10);
 		nextBtnImgView.setLayoutParams(60, 60);
 		nextBtnImgView.setImage(mFlipRightID);
 		nextBtnImgView.setBackground( mDefaultColor );
@@ -341,6 +367,7 @@ public class GLGridViewScroll extends GLGridView {
 		mResImg = resId;
 	}
 	//创建分页
+
 	public void showPage(){
 
 		if ( !mbSeekBarVisible){
@@ -369,19 +396,13 @@ public class GLGridViewScroll extends GLGridView {
 		processView.setX(getX());
 		processView.setY(getY() + getHeight() + mBtnSpace);
 		addView(processView);
-		if( mCount > 0) {
-			int process = ((mCurIndex - 1) * 100 / mCount);
-			processView.setProcess(process);
-		}
+//		if( mCount > 0) {
+//			int process = ((mCurIndex - 1) * 100 / mCount);
+//			processView.setProcess(process);
+//		}
 
-//		if( mCurIndex < totalPageCount)
-		{
-			showNextBtn();
-		}
-//		if (mCurIndex > 1 && mCurIndex <= mCount)
-		{
-			showPrvBtn();
-		}
+		showNextBtn();
+		showPrvBtn();
 
 		return;
 	}
