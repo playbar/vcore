@@ -5,6 +5,8 @@ import android.content.Context;
 import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.adapter.GLListAdapter;
+import com.bfmj.viewcore.animation.GLAnimation;
+import com.bfmj.viewcore.animation.GLTranslateAnimation;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLConstant;
@@ -15,6 +17,8 @@ public class GLGridViewScroll extends GLGridView {
 	 * GLGridView构造函数
 	 * @param context
 	 */
+	private boolean mbMoveEnd = true;
+
 	public GLGridViewScroll(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
@@ -134,7 +138,7 @@ public class GLGridViewScroll extends GLGridView {
 			mCurIndex = mCount;
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
 		}
-
+		SetMoveDirection(EMoveDirection.MOVENONE);
 		super.requestLayout();
 		if( !mbadd ) {
 			mbadd = true;
@@ -143,23 +147,38 @@ public class GLGridViewScroll extends GLGridView {
 
 	}
 
-	public void nextPage(){
+//	public void listenDoAnimation(){
+//		mbMoveEnd = false;
+//		GLAnimation animation = new GLTranslateAnimation(0, 0, 0);
+//		animation.setAnimView(this);
+//		animation.setDuration(500);
+//		this.startAnimation(animation);
+//	}
 
-		if( mCurIndex < mCount ){
-			processView.setProcessAnimation( mCount );
+
+	public void doAnimationEnd(){
+		mbMoveEnd = true;
+	}
+
+	public void nextPage(){
+		if( mCurIndex < mCount && mbMoveEnd ){
+			mbMoveEnd = false;
 			++mCurIndex;
+			SetMoveDirection(EMoveDirection.MOVERTOL);
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
 			pageChange();
+			processView.setProcessAnimation( mCount );
 		}
 	}
 
 	public void previousPage(){
-		if( mCurIndex > 1 ){
-			processView.setProcessAnimation( -mCount );
+		if( mCurIndex > 1 && mbMoveEnd){
+			mbMoveEnd = false;
 			--mCurIndex;
+			processView.setProcessAnimation( -mCount );
+			SetMoveDirection(EMoveDirection.MOVELTOR);
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
 			pageChange();
-
 		}
 	}
 

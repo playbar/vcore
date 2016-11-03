@@ -1245,7 +1245,11 @@ public class GLRectView extends GLView {
 
 				} else {
 					mAnimations.remove(animation);
-					doAnimationEnd();
+//					doAnimationEnd();
+					GLGroupView parent = getParent();
+					if( null != parent) {
+						parent.doAnimationEnd();
+					}
 				}
 			}
 		}

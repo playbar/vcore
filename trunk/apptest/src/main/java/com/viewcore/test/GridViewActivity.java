@@ -110,7 +110,7 @@ public class GridViewActivity extends BaseViewActivity {
 			}
 		};
 
-		gridView = new GLGridViewPage( this, 2, 3 );
+		gridView = new GLGridViewPage( this, 2, 2 );
 		gridView.setX(500);
 		gridView.setY(500);
 		gridView.setLayoutParams(40, 40);
@@ -125,7 +125,7 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setFlipRightIcon( R.drawable.flip_rightarrow );
 //		gridView.setSeekBarVisible( false );
 
-		gridView.setOrientation(GLConstant.GLOrientation.VERTICAL );
+		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
 
 		getData();
 		adapter = new GridViewAdapter(listData, this);

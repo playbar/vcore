@@ -3,13 +3,11 @@ package com.bfmj.viewcore.view;
 import java.util.ArrayList;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
-import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.animation.GLAlphaAnimation;
 import com.bfmj.viewcore.animation.GLAnimation;
 import com.bfmj.viewcore.animation.GLTranslateAnimation;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
-import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLConstant;
 import com.bfmj.viewcore.adapter.GLListAdapter;
 
@@ -35,9 +33,24 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	private int mPrevIndex = 0;
 	private GLRectView mFirstView;
 	protected ArrayList<GLRectView> mItemViews = new ArrayList<GLRectView>();
-//	private GLGroupView mItemViews;
-	
-	
+	protected ArrayList<GLRectView> mItemViews2 = new ArrayList<GLRectView>();
+	protected ArrayList<GLRectView> mItemViewCur = mItemViews;
+	protected ArrayList<GLRectView> mItemViewBack = mItemViews2;
+	protected boolean mbpageChange = true;
+
+	public enum EMoveDirection {
+		MOVENONE,
+		MOVELTOR,
+		MOVERTOL
+	}
+	protected EMoveDirection mMoveDirection = EMoveDirection.MOVENONE;
+
+	public void SetMoveDirection(EMoveDirection dir){
+		mMoveDirection = dir;
+	}
+
+
+
 	/**
 	 * 设置列数
 	 * @param columns 列数
@@ -91,11 +104,6 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	 */
 	public GLGridView(Context context) {
 		super(context);
-//		mItemViews = new GLGroupView(context);
-//		mItemViews.setX(500);
-//		mItemViews.setY(500);
-//		mItemViews.setLayoutParams(1000, 1000 );
-//		addView(mItemViews);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -123,29 +131,9 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	 */
 	public GLGridView(Context context, int rows, int columns){
 		super(context);
-//		mItemViews = new GLGroupView(context);
-//		mItemViews.setX(500);
-//		mItemViews.setY(500);
-//		mItemViews.setLayoutParams(1000, 1000 );
-//		mItemViews.setBackground(new GLColor(1.0f, 0.0f, 0.0f));
-//		mItemViews.setVisible(true);
-//		addView(mItemViews);
 		this.mNumColumns = columns;
 		this.mNumRows = rows;
 	}
-	
-//	@Override
-//	public void addView(GLRectView view) {
-//		// TODO Auto-generated method stub
-//		super.addView(view);
-//	}
-	
-//	@Override
-//	public void addView(int index, GLRectView view) {
-//		// TODO Auto-generated method stub
-//		super.addView(index, view);
-//
-//	}
 
 	@Override
 	public GLListAdapter getGLAdapter() {
@@ -188,27 +176,37 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				//如果大于设置的一屏显示数则不再添加
 
 				GLRectView item = null;
-				if( mItemViews.size() == mNumOneScreen) {
-					item = mItemViews.get(index);
+				if( mItemViewCur.size() == mNumOneScreen) {
+					item = mItemViewCur.get(index);
+					index++;
 				}
-				index++;
+
 				if( tempIndex > this.mNumOneScreen + cIndex || tempIndex > this.mTotalCount-1){
 					if( item != null )
 					{
 						item.setVisible(false);
 					}
-					break;
+					continue;
 				}
 
 				GLRectView view = this.mGLAdapter.getGLView(tempIndex, item, this);
+				view.setAlpha(0.01f);
+				view.setVisible(false);
 				if (col == 0 && rows == 0) {
 					mFirstView = view;
 				}
 				if( view == null ){
 					continue;
 				}
-
-				view.setX(getX() + getPaddingLeft() + getMarginLeft() + view.getWidth() * col + this.mHorizontalSpacing * col);
+				float fx = getX() + getPaddingLeft() + getMarginLeft() + view.getWidth() * col + this.mHorizontalSpacing * col;
+				if( EMoveDirection.MOVERTOL == mMoveDirection){
+					fx += this.getWidth();
+				}else if( EMoveDirection.MOVELTOR == mMoveDirection){
+					fx -= this.getWidth();
+				}else{
+					view.setAlpha(1.0f);
+				}
+				view.setX(fx);
 				view.setY(getY() + getPaddingTop() + view.getHeight() * rows + this.mVerticalSpacing * rows);
 
 				view.setId("gridview_" + tempIndex);
@@ -259,8 +257,14 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				}
 				if( item == null) {
 					addView(view);
-					mItemViews.add(view);
+					mItemViewCur.add(view);
+					view.setVisible(true);
 				}else {
+					if(  EMoveDirection.MOVENONE == mMoveDirection){
+						item.setAlpha(1.0f);
+					}else {
+						item.setAlpha(0.01f);
+					}
 					item.setVisible(true);
 				}
 				tempIndex++;
@@ -270,19 +274,41 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 
 	public void showVItem( int cIndex ){
 		int tempIndex=cIndex;
+		int index = 0;
 		for(int col=0; col<this.mNumColumns; col++)
 		{
 			for(int row=0; row<this.mNumRows; row++)
 			{
 				//如果大于设置的一屏显示数则不再添加
-				if( tempIndex > this.mNumOneScreen + cIndex || tempIndex > this.mTotalCount-1){
-					break;
+				GLRectView item = null;
+				if(mItemViewCur.size() == mNumOneScreen ){
+					item = mItemViewCur.get(index);
 				}
-				GLRectView view = this.mGLAdapter.getGLView(tempIndex, null, null);
+				index++;
+				if( tempIndex > this.mNumOneScreen + cIndex || tempIndex > this.mTotalCount-1){
+					if( null != item ){
+						item.setVisible(false);
+					}
+					continue;
+				}
+				GLRectView view = this.mGLAdapter.getGLView(tempIndex, item, this);
+				view.setAlpha(0.01f);
+				view.setVisible(false);
 				if (col == 0 && row == 0) {
 					mFirstView = view;
 				}
-				view.setX(getX() + getPaddingLeft() + getMarginLeft() + view.getWidth() * col + this.mHorizontalSpacing * col);
+				if(view == null ){
+					continue;
+				}
+				float fx = getX() + getPaddingLeft() + getMarginLeft() + view.getWidth() * col + this.mHorizontalSpacing * col;
+				if( EMoveDirection.MOVERTOL == mMoveDirection){
+					fx += this.getWidth();
+				}else if( EMoveDirection.MOVELTOR == mMoveDirection){
+					fx -= this.getWidth();
+				}else{
+					view.setAlpha(1.0f);
+				}
+				view.setX(fx);
 				view.setY(getY() + getPaddingTop() + getMarginTop() + view.getHeight() * row + this.mVerticalSpacing * row);
 
 				view.setId("gridview_" + tempIndex);
@@ -330,8 +356,18 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if( view.getDepth() > this.getDepth() ){
 					view.setDepth( this.getDepth() );
 				}
-				addView(view);
-				mItemViews.add(view);
+				if( item == null) {
+					addView(view);
+					mItemViewCur.add(view);
+					view.setVisible(true);
+				}else {
+					if(EMoveDirection.MOVENONE == mMoveDirection){
+						item.setAlpha(1.0f);
+					}else {
+						item.setAlpha(0.01f);
+					}
+					item.setVisible(true);
+				}
 				tempIndex++;
 			}
 		}
@@ -340,19 +376,45 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 
 	public void showVRItem( int cIndex ){
 		int tempIndex=cIndex;
+		int index = 0;
 		for(int col=this.mNumColumns -1; col >= 0; --col )
 		{
 			for(int row=0; row<this.mNumRows; row++)
 			{
 				//如果大于设置的一屏显示数则不再添加
-				if( tempIndex > this.mNumOneScreen + cIndex || tempIndex > this.mTotalCount-1){
-					break;
+				GLRectView item = null;
+				if( mItemViewCur.size() == mNumOneScreen ){
+					item = mItemViewCur.get(index);
 				}
-				GLRectView view = this.mGLAdapter.getGLView(tempIndex, null, null);
+				index++;
+				if( tempIndex > this.mNumOneScreen + cIndex || tempIndex > this.mTotalCount-1){
+					if( null != item ){
+						item.setVisible(false);
+					}
+					continue;
+				}
+				GLRectView view = this.mGLAdapter.getGLView(tempIndex, item, this);
+				view.setAlpha(0.01f);
+				view.setVisible(false);
 				if (col == 0 && row == 0) {
 					mFirstView = view;
 				}
-				view.setX((getX() + getWidth()) - getPaddingLeft() - getMarginRight() - (view.getWidth() + this.mHorizontalSpacing) * (mNumColumns - col) );
+				if( view == null ){
+					continue;
+				}
+
+//				float fx = getX() + getPaddingLeft() + getMarginLeft() + view.getWidth() * col + this.mHorizontalSpacing * col;
+				float fx = (getX() + getWidth()) - getPaddingLeft() - getMarginRight() - (view.getWidth() + this.mHorizontalSpacing) * (mNumColumns - col);
+				if( EMoveDirection.MOVERTOL == mMoveDirection){
+					fx += this.getWidth();
+				}else if( EMoveDirection.MOVELTOR == mMoveDirection){
+					fx -= this.getWidth();
+				}else{
+					view.setAlpha(1.0f);
+				}
+				view.setX(fx);
+
+//				view.setX((getX() + getWidth()) - getPaddingLeft() - getMarginRight() - (view.getWidth() + this.mHorizontalSpacing) * (mNumColumns - col) );
 				view.setY(getY() + getPaddingTop() + getMarginTop() + view.getHeight() * row + this.mVerticalSpacing * row);
 
 				view.setId("gridview_" + tempIndex);
@@ -401,8 +463,18 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				if( view.getDepth() > this.getDepth() ){
 					view.setDepth( this.getDepth() );
 				}
-				addView(view);
-				mItemViews.add(view);
+				if( item == null) {
+					addView(view);
+					mItemViewCur.add(view);
+					view.setVisible(true);
+				}else {
+					if(EMoveDirection.MOVENONE == mMoveDirection){
+						item.setAlpha(1.0f);
+					}else {
+						item.setAlpha(0.01f);
+					}
+					item.setVisible(true);
+				}
 				tempIndex++;
 			}
 		}
@@ -422,31 +494,49 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 			return;
 		GLAnimation animation = new GLAlphaAnimation(startAlpha,endAlpha);
 		animation.setAnimView(view);
-		animation.setDuration(300);
+		animation.setDuration(500);
 		view.startAnimation(animation);
 	}
 
 	public void pageChange(){
+		mbpageChange = !mbpageChange;
+		if(mbpageChange){
+			mItemViewCur = mItemViews;
+			mItemViewBack = mItemViews2;
+		}else{
+			mItemViewCur = mItemViews2;
+			mItemViewBack = mItemViews;
+		}
 		mNumOneScreen =  mNumRows * mNumColumns;
 		if(this.mGLAdapter ==null)
 			return;
-//		removeAllView();
-		int count = mItemViews.size();
-//		for (int i = 0; i < count; ++i){
-//			setTranslateAnimation( mItemViews.get(i), -40, 0, 0);
-//		}
-//		setTranslateAnimation(this, -40, 0, 0);
+		float fx = 0.0f;
+		if(EMoveDirection.MOVERTOL == mMoveDirection ){
+			fx = -this.getWidth();
+		}else if( EMoveDirection.MOVELTOR == mMoveDirection){
+			fx = this.getWidth();
+		}
+		int count = mItemViewBack.size();
+		for (int i = 0; i < count; ++i){
+			setTranslateAnimation(mItemViewBack.get(i), fx, 0, 0);
+			startGLAlphaAnimation(mItemViewBack.get(i), 1.0f, 0.0f);
+		}
 		this.mTotalCount = mGLAdapter.getCount();
 		if( mStartIndex >= mTotalCount ){
 			mStartIndex = 0;
 		}
-//		if( mOrientation.equals( GLConstant.GLOrientation.HORIZONTAL )){
-//			showHItem(mStartIndex);
-//		}else if( mOrientation.equals(GLConstant.GLOrientation.VERTICAL )){
-//			showVItem(mStartIndex);
-//		}else {
-//			showVRItem( mStartIndex );
-//		}
+		if( mOrientation.equals( GLConstant.GLOrientation.HORIZONTAL )){
+			showHItem(mStartIndex);
+		}else if( mOrientation.equals(GLConstant.GLOrientation.VERTICAL )){
+			showVItem(mStartIndex);
+		}else {
+			showVRItem( mStartIndex );
+		}
+		count = mItemViewCur.size();
+		for (int i = 0; i < count; ++i){
+			setTranslateAnimation(mItemViewCur.get(i), fx, 0, 0);
+			startGLAlphaAnimation(mItemViewCur.get(i), 0.0f, 1.0f);
+		}
 		return;
 	}
 
@@ -468,18 +558,6 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 		}
 		return;
 
-	}
-
-	@Override
-	public void doAnimationEnd(){
-		if( mOrientation.equals( GLConstant.GLOrientation.HORIZONTAL )){
-			showHItem(mStartIndex);
-		}else if( mOrientation.equals(GLConstant.GLOrientation.VERTICAL )){
-			showVItem(mStartIndex);
-		}else {
-			showVRItem( mStartIndex );
-		}
-//		Logger.print("end");
 	}
 
 	@Override

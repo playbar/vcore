@@ -3,6 +3,7 @@ package com.bfmj.viewcore.view;
 import android.content.Context;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
+import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.animation.GLAnimation;
 import com.bfmj.viewcore.animation.GLTranslateAnimation;
 import com.bfmj.viewcore.interfaces.GLOnKeyListener;
@@ -51,6 +52,14 @@ public class GLSeekBarView extends GLProcessView {
     }
 
     @Override
+//    public void doAnimationEnd(){
+//        GLGroupView parent = getParent();
+//        if( parent != null && parent instanceof GLGridViewScroll){
+//            ((GLGridViewScroll) parent).animationEnd();
+//        }
+//    }
+
+
     public void setProcess(int process) {
         float width = (this.getWidth() - this.getPaddingLeft() - this.getPaddingRight()) / 100.0F * process;
 //        this.mBarView.setLayoutParams(bar_width ,bar_height);

@@ -8,8 +8,11 @@ import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLConstant;
 
+import java.util.ArrayList;
+
 public class GLGridViewPage extends GLGridView {
 
+	protected ArrayList<GLRectView> mViewsBack = new ArrayList<GLRectView>();
 	/**
 	 * GLGridView构造函数
 	 * @param context
@@ -117,6 +120,8 @@ public class GLGridViewPage extends GLGridView {
 		}
 		super.setAdapter( adapter );
 	}
+
+	private boolean mbadd = false;
 
 	@Override
 	public void requestLayout(){
@@ -346,8 +351,16 @@ public class GLGridViewPage extends GLGridView {
 	//创建分页
 	public void showPage(){
 
+		int count = mViewsBack.size();
+		for( int i = 0; i < count; ++i){
+			removeView(mViewsBack.get(i));
+		}
+		mViewsBack.clear();
+
 		nextBtnImgView = new GLImageView(this.getContext());
+		mViewsBack.add(nextBtnImgView);
 		prvBtnImgView = new GLImageView( this.getContext() );
+		mViewsBack.add(prvBtnImgView);
 		if ( ! mbNumListVisible ){
 			return;
 		}
@@ -434,6 +447,7 @@ public class GLGridViewPage extends GLGridView {
 				}
 			});
 			addView(textView);
+			mViewsBack.add(textView);
 		}
 		if( mCurIndex < totalPageCount) {
 			showNextBtn();
