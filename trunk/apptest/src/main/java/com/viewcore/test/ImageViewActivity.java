@@ -36,17 +36,20 @@ public class ImageViewActivity extends BaseViewActivity {
 		rootView.onResume();
 
 
-		GLImageView[] imageViews = new GLImageView[200];
+		GLImageView[] imageViews = new GLImageView[1];
 		Log.d("aaaaaaaaaaaa", "");
 
 
 		Random random=new Random();
 		for (int i = 0; i < imageViews.length; i++) {
 			imageViews[i] = new GLImageView(this);
-			imageViews[i].setX(random.nextInt(2400));
-			imageViews[i].setY(random.nextInt(2400));
+//			imageViews[i].setX(random.nextInt(2400));
+//			imageViews[i].setY(random.nextInt(2400));
+			imageViews[i].setX(800);
+			imageViews[i].setY(800);
 			imageViews[i].setLayoutParams(300, 300);
 			imageViews[i].setImage(R.drawable.a2);
+			imageViews[i].setAlpha(0.5f);
 //			imageViews[i].setDepth(4 - (i - 100)*0.005f);
 			rootView.addView(imageViews[i]);
 		}

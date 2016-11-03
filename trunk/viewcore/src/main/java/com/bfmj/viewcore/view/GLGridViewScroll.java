@@ -168,6 +168,11 @@ public class GLGridViewScroll extends GLGridView {
 
 	public void doAnimationEnd(){
 		mbMoveEnd = true;
+
+		for( GLRectView var : mItemViewBack){
+			removeView(var);
+		}
+		mItemViewBack.clear();
 	}
 
 	public void nextPage(){
@@ -185,10 +190,10 @@ public class GLGridViewScroll extends GLGridView {
 		if( mCurIndex > 1 && mbMoveEnd){
 			mbMoveEnd = false;
 			--mCurIndex;
-			processView.setProcessAnimation( -mCount );
 			SetMoveDirection(EMoveDirection.MOVELTOR);
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
 			pageChange();
+			processView.setProcessAnimation( -mCount );
 		}
 	}
 

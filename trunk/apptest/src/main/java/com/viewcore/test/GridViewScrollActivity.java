@@ -130,7 +130,7 @@ public class GridViewScrollActivity extends BaseViewActivity {
 		gridView.setBarImage(R.drawable.playbar_progressbar);
 //		gridView.setSeekBarVisible( false );
 
-		gridView.setOrientation(GLConstant.GLOrientation.VERTICAL_RIGHT );
+		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
 		gridView.setPrvPageChange(new GLGridViewScroll.PageChangeListener() {
 			public void onPageChange() {
 				gridView.previousPage();

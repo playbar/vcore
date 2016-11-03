@@ -1083,6 +1083,7 @@ public class GLRectView extends GLView {
 				if (textureId > 0) {
 					if (mBackgroundRender == null){
 						mBackgroundRender = new GLRenderParams(GLRenderParams.RENDER_TYPE_IMAGE);
+						mBackgroundRender.setAlpha(getAlpha());
 						mRenders.add(0, mBackgroundRender);
 					} else if (mBackgroundRender.getTextureId() > 0){
 						releaseTexture(mBackgroundRender.getTextureId());
