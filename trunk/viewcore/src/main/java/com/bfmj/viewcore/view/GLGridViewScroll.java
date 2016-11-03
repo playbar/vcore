@@ -3,10 +3,7 @@ package com.bfmj.viewcore.view;
 import android.content.Context;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
-import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.adapter.GLListAdapter;
-import com.bfmj.viewcore.animation.GLAnimation;
-import com.bfmj.viewcore.animation.GLTranslateAnimation;
 import com.bfmj.viewcore.interfaces.GLViewFocusListener;
 import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.render.GLConstant;
@@ -68,6 +65,10 @@ public class GLGridViewScroll extends GLGridView {
 
 	public void setBottomSpaceing( float spaceing){
 		mBtnSpace = spaceing;
+	}
+
+	public void setBtnHorSpace( float space ){
+		mBtnHorSpace = space;
 	}
 	/**
 	 * 设置一屏显示几条数据
@@ -145,6 +146,15 @@ public class GLGridViewScroll extends GLGridView {
 			showPage();
 		}
 
+		nextBtnImgView.setVisible( false );
+		prvBtnImgView.setVisible(false);
+		if( mCurIndex < mTotalPageCount){
+			nextBtnImgView.setVisible( true );
+		}
+		if( mCurIndex > 1 && mCurIndex <= mCount ){
+			prvBtnImgView.setVisible(true );
+		}
+
 	}
 
 //	public void listenDoAnimation(){
@@ -197,6 +207,15 @@ public class GLGridViewScroll extends GLGridView {
 		}
 
 		super.pageChange();
+
+		nextBtnImgView.setVisible( false );
+		prvBtnImgView.setVisible(false);
+		if( mCurIndex < mTotalPageCount){
+			nextBtnImgView.setVisible( true );
+		}
+		if( mCurIndex > 1 && mCurIndex <= mCount ){
+			prvBtnImgView.setVisible(true );
+		}
 	}
 
 	public void resetPage(){
@@ -277,7 +296,7 @@ public class GLGridViewScroll extends GLGridView {
 
 
 	private void showPrvBtn(){
-		prvBtnImgView.setX(getX() - 80 );
+		prvBtnImgView.setX(getX() - 60 - mBtnHorSpace );
 		prvBtnImgView.setY(getY() + getHeight() + mBtnSpace - 10);
 		prvBtnImgView.setLayoutParams(60, 60);
 		prvBtnImgView.setImage(mFlipLeftID );
@@ -299,7 +318,7 @@ public class GLGridViewScroll extends GLGridView {
 
 	private void showNextBtn(){
 
-		nextBtnImgView.setX(getX() + getWidth() + 20);
+		nextBtnImgView.setX(getX() + getWidth() + mBtnHorSpace);
 		nextBtnImgView.setY(getY() + getHeight() + mBtnSpace -10);
 		nextBtnImgView.setLayoutParams(60, 60);
 		nextBtnImgView.setImage(mFlipRightID);
@@ -325,8 +344,10 @@ public class GLGridViewScroll extends GLGridView {
 	private int mCurIndex = 1; //当前分页的位置,从1开始计数
 	private int mCount = 0;  // 分页的个数, 从1开始计数
 	private int mTotalCount = 0; // 最大的内容个数
+	private int mTotalPageCount = 0;
 
 	private float mBtnSpace = -20; // 底部按钮也GridView之间的距离
+	private float mBtnHorSpace = 20;
 
 	private boolean mbSeekBarVisible = true;
 	private GLColor mDefaultColor = new GLColor(0.43f, 0.4f, 0.34f); // 默认页码选中状态
@@ -399,9 +420,9 @@ public class GLGridViewScroll extends GLGridView {
 		if( getTotalNum() % getNumOneScreen() != 0 )
 			++mCount;
 
-		int totalPageCount = mTotalCount / getNumOneScreen();
+		mTotalPageCount = mTotalCount / getNumOneScreen();
 		if( mTotalCount % getNumOneScreen() != 0 )
-			++totalPageCount;
+			++mTotalPageCount;
 
 
 		int iw = (int)(getWidth() / mCount);
