@@ -15,7 +15,7 @@ model {
             platformVersion = 23
             moduleName = 'viewcore'
             toolchain = 'clang'
-            stl         = 'gnustl_static'
+            stl         = 'system'
             cppFlags.addAll(['-std=c++11', '-Wall', '-fno-rtti', '-fno-exceptions'])
             CFlags.addAll(['-Wall'])
             abiFilters.addAll(['armeabi'])

@@ -6,8 +6,7 @@
 #define ASGLES3JNI_THREADPOOL_H
 
 
-#include <vector>
-#include <string>
+#include <string.h>
 #include <pthread.h>
 
 using namespace std;
@@ -18,20 +17,34 @@ using namespace std;
 class CTask
 {
 protected:
-    string m_strTaskName;  /** 任务的名称 */
+    char* m_strTaskName = NULL;  /** 任务的名称 */
     void* m_ptrData;       /** 要执行的任务的具体数据 */
 public:
-    CTask(){}
-    CTask(string taskName)
+    CTask(){prev = NULL; next = NULL;}
+    CTask(char* taskName)
     {
-        m_strTaskName = taskName;
+        prev = NULL; next = NULL;
+        int len = strlen(taskName);
+        if( len > 0) {
+            m_strTaskName = (char*)malloc(len+1);
+            memcpy(m_strTaskName, taskName, len);
+            m_strTaskName[len] = 0;
+        }
         m_ptrData = NULL;
     }
     virtual int Run()= 0;
     void SetData(void* data);    /** 设置任务数据 */
 
 public:
-    virtual ~CTask(){}
+    virtual ~CTask(){
+        if(NULL != m_strTaskName) {
+            free(m_strTaskName);
+        }
+    }
+
+public:
+    CTask *prev;
+    CTask *next;
 };
 
 /**
@@ -40,7 +53,7 @@ public:
 class CThreadPool
 {
 private:
-    static  vector<CTask*> m_vecTaskList;     /** 任务列表 */
+    static  CTask* m_vecTaskList;     /** 任务列表 */
     static  bool shutdown;                    /** 线程退出标志 */
     int     m_iThreadNum;                     /** 线程池中启动的线程数 */
     pthread_t   *pthread_id;

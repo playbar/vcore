@@ -10,8 +10,55 @@ void CTask::SetData(void * data)
     m_ptrData = data;
 }
 
-vector<CTask*> CThreadPool::m_vecTaskList;         //任务列表
+CTask* CThreadPool::m_vecTaskList = NULL;         //任务列表
 bool CThreadPool::shutdown = false;
+
+int list_size(CTask *root) {
+    int count = 0;
+    while(root != NULL)
+    {
+        count++;
+        root = root->next;
+    }
+    return count;
+}
+
+CTask * list_erase_head(CTask *task) {
+    if (NULL == task) {
+        return NULL;
+    }
+    CTask *next = task->next;
+    CTask *prev = task->prev;
+    if (NULL != next) {
+    next->prev = prev;
+    }
+    if(NULL != prev) {
+        prev->next = next;
+    }
+
+    task->next = NULL;
+    task->prev = NULL;
+    return next;
+}
+
+void list_push_back(CTask **root, CTask *t) {
+    if(NULL == root) return;
+    if(NULL == *root)
+    {
+        *root = t;
+        return;
+    }
+
+    CTask *now = *root;
+    while(now->next != NULL)
+    {
+        now = now->next;
+    }
+
+    now->next = t;
+    t->prev = now;
+    t->next = NULL;
+}
 
 pthread_mutex_t CThreadPool::m_pthreadMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t CThreadPool::m_pthreadCond = PTHREAD_COND_INITIALIZER;
@@ -41,7 +88,7 @@ void* CThreadPool::ThreadFunc(void* threadData)
     while (1)
     {
         pthread_mutex_lock(&m_pthreadMutex);
-        while (m_vecTaskList.size() == 0 && !shutdown)
+        while (list_size(m_vecTaskList) == 0 && !shutdown)
         {
             pthread_cond_wait(&m_pthreadCond, &m_pthreadMutex);
         }
@@ -52,16 +99,13 @@ void* CThreadPool::ThreadFunc(void* threadData)
             pthread_exit(NULL);
         }
 
-        vector<CTask*>::iterator iter = m_vecTaskList.begin();
-
         /**
         * 取出一个任务并处理之
         */
-        CTask* task = *iter;
-        if (iter != m_vecTaskList.end())
+        CTask* task = m_vecTaskList;
+        if (task != NULL)
         {
-            task = *iter;
-            m_vecTaskList.erase(iter);
+            m_vecTaskList = list_erase_head(m_vecTaskList);
         }
 
         pthread_mutex_unlock(&m_pthreadMutex);
@@ -85,7 +129,7 @@ void* CThreadPool::ThreadFunc(void* threadData)
 int CThreadPool::AddTask(CTask *task)
 {
     pthread_mutex_lock(&m_pthreadMutex);
-    this->m_vecTaskList.push_back(task);
+    list_push_back(&m_vecTaskList, task);
     pthread_mutex_unlock(&m_pthreadMutex);
     pthread_cond_signal(&m_pthreadCond);
     return 0;
@@ -119,7 +163,7 @@ int CThreadPool::StopAll()
     {
         return -1;
     }
-    printf("Now I will end all threads!!/n");
+//    printf("Now I will end all threads!!/n");
     /** 唤醒所有等待线程，线程池要销毁了 */
     shutdown = true;
     pthread_cond_broadcast(&m_pthreadCond);
@@ -145,6 +189,6 @@ int CThreadPool::StopAll()
  */
 int CThreadPool::getTaskSize()
 {
-    return m_vecTaskList.size();
+    return list_size(m_vecTaskList);
 }
 
