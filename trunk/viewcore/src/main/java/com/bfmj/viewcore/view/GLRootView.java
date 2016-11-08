@@ -394,9 +394,11 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             return;
         }
 
-        GLView v = mCreateTextureQueue.poll();
-        if (v != null){
-            v.createTexture();
+        if( !mCreateTextureQueue.isEmpty()) {
+            GLView v = mCreateTextureQueue.poll();
+            if (v != null) {
+                v.createTexture();
+            }
         }
 
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);

@@ -36,6 +36,10 @@ public class GLSeekBarView extends GLProcessView {
         bar_width = w;
     }
 
+    public void setBarHeight(int h){
+        bar_height = h;
+    }
+
     @Override
     public void addView(GLRectView view) {
         view.setX(this.getX() + this.getPaddingLeft() + view.getMarginLeft());

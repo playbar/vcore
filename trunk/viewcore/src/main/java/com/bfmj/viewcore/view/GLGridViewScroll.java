@@ -146,14 +146,14 @@ public class GLGridViewScroll extends GLGridView {
 			showPage();
 		}
 
-		nextBtnImgView.setVisible( false );
-		prvBtnImgView.setVisible(false);
-		if( mCurIndex < mTotalPageCount){
-			nextBtnImgView.setVisible( true );
-		}
-		if( mCurIndex > 1 && mCurIndex <= mCount ){
-			prvBtnImgView.setVisible(true );
-		}
+//		mNextBtnImgView.setVisible( false );
+//		mPrvBtnImgView.setVisible(false);
+//		if( mCurIndex < mTotalPageCount){
+//			mNextBtnImgView.setVisible( true );
+//		}
+//		if( mCurIndex > 1 && mCurIndex <= mCount ){
+//			mPrvBtnImgView.setVisible(true );
+//		}
 
 	}
 
@@ -182,7 +182,7 @@ public class GLGridViewScroll extends GLGridView {
 			SetMoveDirection(EMoveDirection.MOVERTOL);
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
 			pageChange();
-			processView.setProcessAnimation( mCount );
+			mProcessView.setProcessAnimation( mCount );
 		}
 	}
 
@@ -193,7 +193,7 @@ public class GLGridViewScroll extends GLGridView {
 			SetMoveDirection(EMoveDirection.MOVELTOR);
 			setStartIndex((mCurIndex - 1) * getNumOneScreen());
 			pageChange();
-			processView.setProcessAnimation( -mCount );
+			mProcessView.setProcessAnimation( -mCount );
 		}
 	}
 
@@ -213,14 +213,14 @@ public class GLGridViewScroll extends GLGridView {
 
 		super.pageChange();
 
-		nextBtnImgView.setVisible( false );
-		prvBtnImgView.setVisible(false);
-		if( mCurIndex < mTotalPageCount){
-			nextBtnImgView.setVisible( true );
-		}
-		if( mCurIndex > 1 && mCurIndex <= mCount ){
-			prvBtnImgView.setVisible(true );
-		}
+//		mNextBtnImgView.setVisible( false );
+//		mPrvBtnImgView.setVisible(false);
+//		if( mCurIndex < mTotalPageCount){
+//			mNextBtnImgView.setVisible( true );
+//		}
+//		if( mCurIndex > 1 && mCurIndex <= mCount ){
+//			mPrvBtnImgView.setVisible(true );
+//		}
 	}
 
 	public void resetPage(){
@@ -260,23 +260,23 @@ public class GLGridViewScroll extends GLGridView {
 
 	@Override
 	public boolean onKeyUp(int keycode){
-		if( nextBtnImgView == null || prvBtnImgView == null ){
+		if( mNextBtnImgView == null || mPrvBtnImgView == null ){
 			return false;
 		}
-		if( nextBtnImgView.isFocused() || prvBtnImgView.isFocused() ) {
+		if( mNextBtnImgView.isFocused() || mPrvBtnImgView.isFocused() ) {
 			if (keycode == MojingKeyCode.KEYCODE_ENTER) {
 //			if (keycode == 96) {
 				getRootView().queueEvent(new Runnable() {
 					@Override
 					public void run() {
-						if (nextBtnImgView.isFocused()) {
+						if (mNextBtnImgView.isFocused()) {
 							if( mNextPageChange != null ){
 								mNextPageChange.onPageChange();
 							}
 //							++mCurIndex;
 //							setStartIndex((mCurIndex - 1) * getNumOneScreen());
 //							requestLayout();
-						} else if (prvBtnImgView.isFocused()) {
+						} else if (mPrvBtnImgView.isFocused()) {
 							if( mPrvPageChange != null ){
 								mPrvPageChange.onPageChange();
 							}
@@ -301,50 +301,54 @@ public class GLGridViewScroll extends GLGridView {
 
 
 	private void showPrvBtn(){
-		prvBtnImgView.setX(getX() - 60 - mBtnHorSpace );
-		prvBtnImgView.setY(getY() + getHeight() + mBtnSpace - 10);
-		prvBtnImgView.setLayoutParams(60, 60);
-		prvBtnImgView.setImage(mFlipLeftID );
-		prvBtnImgView.setBackground( mDefaultColor);
+		mPrvBtnImgView.setX(mOffsetX + getX() +(getWidth() - mProcessViewWidth) / 2 - mBtnImageWidth - mBtnHorSpace );
+		mPrvBtnImgView.setY(getY() + getHeight() + mBtnSpace - (mBtnImageHeight - mProcessViewHeight)/2);
+		mPrvBtnImgView.setLayoutParams(mBtnImageWidth, mBtnImageHeight);
+		mPrvBtnImgView.setImage(mFlipLeftID );
+		mPrvBtnImgView.setBackground( mDefaultColor);
 
-		prvBtnImgView.setFocusListener(new GLViewFocusListener() {
+		mPrvBtnImgView.setFocusListener(new GLViewFocusListener() {
 			@Override
 			public void onFocusChange(GLRectView view, boolean focused) {
 				if (focused) {
-					prvBtnImgView.setBackground( mOnFouseColor );
+					mPrvBtnImgView.setBackground( mOnFouseColor );
 				} else {
-					prvBtnImgView.setBackground(mDefaultColor );
+					mPrvBtnImgView.setBackground(mDefaultColor );
 				}
 			}
 		});
-		addView(prvBtnImgView);
+		addView(mPrvBtnImgView);
 		return;
 	}
 
 	private void showNextBtn(){
 
-		nextBtnImgView.setX(getX() + getWidth() + mBtnHorSpace);
-		nextBtnImgView.setY(getY() + getHeight() + mBtnSpace -10);
-		nextBtnImgView.setLayoutParams(60, 60);
-		nextBtnImgView.setImage(mFlipRightID);
-		nextBtnImgView.setBackground( mDefaultColor );
+		mNextBtnImgView.setX(mOffsetX + getX() + (getWidth() + mProcessViewWidth) / 2 + mBtnHorSpace);
+		mNextBtnImgView.setY(getY() + getHeight() + mBtnSpace -(mBtnImageHeight - mProcessViewHeight)/2);
+		mNextBtnImgView.setLayoutParams(mBtnImageWidth, mBtnImageHeight);
+		mNextBtnImgView.setImage(mFlipRightID);
+		mNextBtnImgView.setBackground( mDefaultColor );
 
-		nextBtnImgView.setFocusListener(new GLViewFocusListener() {
+		mNextBtnImgView.setFocusListener(new GLViewFocusListener() {
 			@Override
 			public void onFocusChange(GLRectView view, boolean focused) {
 				if (focused) {
-					nextBtnImgView.setBackground( mOnFouseColor );
+					mNextBtnImgView.setBackground( mOnFouseColor );
 				} else {
-					nextBtnImgView.setBackground( mDefaultColor );
+					mNextBtnImgView.setBackground( mDefaultColor );
 				}
 			}
 		});
-		addView(nextBtnImgView);
+		addView(mNextBtnImgView);
 	}
 
-	private GLImageView prvBtnImgView = null;//new GLImageView( this.getContext() );
-	private GLImageView nextBtnImgView = null;// new GLImageView(this.getContext());
-	private GLSeekBarView processView = null;
+	private GLImageView mPrvBtnImgView = null;//new GLImageView( this.getContext() );
+	private GLImageView mNextBtnImgView = null;// new GLImageView(this.getContext());
+	private GLSeekBarView mProcessView = null;
+	private float mProcessViewWidth = 312;
+	private float mProcessViewHeight = 20;
+	private float mBtnImageWidth = 80;
+	private float mBtnImageHeight = 80;
 	private float mOffsetX = 0.0f;
 	private int mCurIndex = 1; //当前分页的位置,从1开始计数
 	private int mCount = 0;  // 分页的个数, 从1开始计数
@@ -400,6 +404,33 @@ public class GLGridViewScroll extends GLGridView {
 		this.mOffsetX = offsetx;
 	}
 
+	public void setProcessViewWidth(float w){
+		mProcessViewWidth = w;
+	}
+
+	public void setProcessViewHeight(float h){
+		mProcessViewHeight = h;
+	}
+
+	public void setBtnImageWidth(float w){
+		mBtnImageWidth = w;
+	}
+
+	public void setBtnImageHeight(float h){
+		mBtnImageHeight = h;
+	}
+
+	public void setPrvBtnImgViewVisible(boolean b){
+		if( null != mPrvBtnImgView ) {
+			mPrvBtnImgView.setVisible(b);
+		}
+	}
+
+	public void setNextBtnImgViewVisible(boolean b){
+		if( null != mNextBtnImgView ) {
+			mNextBtnImgView.setVisible(b);
+		}
+	}
 
 	private int mBackgroundResId = 0;
 	private int mResImg = 0;
@@ -418,8 +449,8 @@ public class GLGridViewScroll extends GLGridView {
 		if ( !mbSeekBarVisible){
 			return;
 		}
-		nextBtnImgView = new GLImageView(this.getContext());
-		prvBtnImgView = new GLImageView( this.getContext() );
+		mNextBtnImgView = new GLImageView(this.getContext());
+		mPrvBtnImgView = new GLImageView( this.getContext() );
 
 		mCount = getTotalNum() / getNumOneScreen();
 		if( getTotalNum() % getNumOneScreen() != 0 )
@@ -430,20 +461,21 @@ public class GLGridViewScroll extends GLGridView {
 			++mTotalPageCount;
 
 
-		int iw = (int)(getWidth() / mCount);
+		int iw = (int)(mProcessViewWidth / mCount);
 
-		processView = new GLSeekBarView(this.getContext());
-		processView.setBackground(mBackgroundResId);
-//		processView.setProcessColor(R.drawable.playbar_progressbar);
-		processView.setBarWidth(iw);
-		processView.setBarImage(mResImg);
-		processView.setLayoutParams(getWidth(),20);
-		processView.setX(getX());
-		processView.setY(getY() + getHeight() + mBtnSpace);
-		addView(processView);
+		mProcessView = new GLSeekBarView(this.getContext());
+		mProcessView.setBackground(mBackgroundResId);
+//		mProcessView.setProcessColor(R.drawable.playbar_progressbar);
+		mProcessView.setBarWidth(iw);
+		mProcessView.setBarHeight((int)mProcessViewHeight);
+		mProcessView.setBarImage(mResImg);
+		mProcessView.setLayoutParams(mProcessViewWidth,mProcessViewHeight);
+		mProcessView.setX(mOffsetX + getX() + (getWidth() - mProcessViewWidth) / 2);
+		mProcessView.setY(getY() + getHeight() + mBtnSpace);
+		addView(mProcessView);
 //		if( mCount > 0) {
 //			int process = ((mCurIndex - 1) * 100 / mCount);
-//			processView.setProcess(process);
+//			mProcessView.setProcess(process);
 //		}
 
 		showNextBtn();

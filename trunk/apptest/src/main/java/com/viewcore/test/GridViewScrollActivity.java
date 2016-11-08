@@ -118,8 +118,8 @@ public class GridViewScrollActivity extends BaseViewActivity {
 		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
 		gridView.setHorizontalSpacing( 20.0f);
 		gridView.setVerticalSpacing( 20.0f);
-		gridView.setBtnHorSpace( 80);
-//		gridView.setBottomSpaceing( 500);
+		gridView.setBtnHorSpace( 0);
+		gridView.setBottomSpaceing( 100);
 //		gridView.setPadding( 10, 10, 10, 10);
 //		gridView.setMargin( 10, 10, 10, 10 );
 //		gridView.setNumDefaultColor( new GLColor(1.0f, 0.0f, 1.0f ));
@@ -128,6 +128,13 @@ public class GridViewScrollActivity extends BaseViewActivity {
 		gridView.setFlipRightIcon( R.drawable.flip_rightarrow );
 		gridView.setProcessBackground(R.drawable.playbar_progressbar_bg);
 		gridView.setBarImage(R.drawable.playbar_progressbar);
+		gridView.setOffsetX( 100);
+		gridView.setBtnImageWidth(60);
+		gridView.setBtnImageHeight(60);
+		gridView.setProcessViewWidth(400);
+		gridView.setProcessViewHeight(40);
+		gridView.setPrvBtnImgViewVisible(false);
+		gridView.setNextBtnImgViewVisible(false);
 //		gridView.setSeekBarVisible( false );
 
 		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
