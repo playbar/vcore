@@ -3,6 +3,8 @@ package com.bfmj.viewcore.view;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -1155,15 +1157,50 @@ public class GLRectView extends GLView {
 		float[] curMatrix = state.getCurrentMatrix();
 		state.pushMatrix();
 
-		getEyeMatrix(state.getVMatrix(), isLeft);
-		Matrix.translateM(state.getVMatrix(), 0, 0, 0, mLookTranslateZ);
-		Matrix.rotateM(state.getVMatrix(), 0, mLookAngle, 0, 1, 0);
+
+//		getEyeMatrix(state.getVMatrix(), isLeft);
+//		Matrix.translateM(state.getVMatrix(), 0, 0, 0, mLookTranslateZ);
+//		Matrix.rotateM(state.getVMatrix(), 0, mLookAngle, 0, 1, 0);
+		generateMatrix(state, isLeft, mLookTranslateZ, mLookAngle, mEyeDeviation);
 
 		Matrix.translateM(curMatrix, 0, centerX, centerY, 0);
 
 		//动画处理
 		doAnimation();
 	}
+
+	private static HashMap<Integer, float[]> vmhash = new HashMap<>();
+
+	private static void generateMatrix(GLMatrixState state, boolean isLeft, float mLookTranslateZ, float mLookAngle, float mEyeDeviation) {
+		float []VMatrix = state.getVMatrix();
+		int hashCode = Arrays.hashCode(VMatrix);
+		hashCode = hashCode*31+Float.floatToIntBits(mLookTranslateZ);
+		hashCode = hashCode*31+Float.floatToIntBits(mLookAngle);
+		hashCode = hashCode*31+Float.floatToIntBits(mEyeDeviation);
+		hashCode += isLeft?1:0;
+
+		Integer key = new Integer(hashCode);
+		float[] value = vmhash.get(key);
+
+		if(value != null)
+		{
+			for(int i=0;i<16;i++) {
+				VMatrix[i] = value[i];
+			}
+		}
+		else {
+			GLView.getEyeMatrix(VMatrix, isLeft, mEyeDeviation);
+			Matrix.translateM(state.getVMatrix(), 0, 0, 0, mLookTranslateZ);
+			if(mLookAngle > -0.01f && mLookAngle <0.01f) {
+				Matrix.rotateM(state.getVMatrix(), 0, mLookAngle, 0, 1, 0);
+			}
+			vmhash.put(new Integer(hashCode), VMatrix);
+		}
+
+		if(vmhash.size() > 20) {
+			vmhash.clear();
+		}
+    }
 
 	@Override
 	public void onAfterDraw(boolean isLeft) {

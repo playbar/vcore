@@ -23,7 +23,7 @@ public abstract class GLView implements GLRenderListener {
 	private float mMask = 1.0f;
 	private boolean isVisible = true;
 	private boolean mbDraw = true;
-	private float mEyeDeviation = GLScreenParams.getEyeDistance();
+	protected float mEyeDeviation = GLScreenParams.getEyeDistance();
 	private boolean isFixed = false;
 	private boolean isCostomHeadView;
 	
@@ -180,6 +180,25 @@ public abstract class GLView implements GLRenderListener {
         }
 		
 		Matrix.rotateM(headView, 0, (float)yaw, 0, 1, 0);		
+	}
+
+	protected static void getEyeMatrix(float[] headView, boolean isLeft, float mEyeDeviation) {
+		double yaw;
+		if (Math.sqrt(1.0F - headView[6] * headView[6]) >= 0.01F) {
+			yaw = Math.toDegrees((double) Math.atan2(-headView[2],headView[10]));
+		} else {
+			yaw = 0.0F;
+		}
+
+		Matrix.rotateM(headView, 0, -(float)yaw, 0, 1, 0);
+
+		if (isLeft){
+			Matrix.translateM(headView, 0, mEyeDeviation / 2, 0, 0);
+		} else {
+			Matrix.translateM(headView, 0, -mEyeDeviation/ 2, 0, 0);
+		}
+
+		Matrix.rotateM(headView, 0, (float)yaw, 0, 1, 0);
 	}
 
 	public GLRootView getRootView(){
