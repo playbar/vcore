@@ -14,6 +14,7 @@ import com.baofeng.mojing.MojingSurfaceView;
 import com.baofeng.mojing.input.base.MojingKeyCode;
 import com.bfmj.distortion.Distortion;
 import com.bfmj.distortion.Logger;
+import com.bfmj.viewcore.entity.Model3dLib;
 import com.bfmj.viewcore.render.GLColorRect;
 import com.bfmj.viewcore.render.GLImageRect;
 import com.bfmj.viewcore.render.GLScreenParams;
@@ -135,6 +136,8 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         mLockedAngle = activity.getLockedAngle();
 
         initHeadView();
+        // init model3d library
+        Model3dLib.getInstance().loadModel3dLib();
     }
 
     @Override

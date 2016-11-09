@@ -1,5 +1,6 @@
 package com.viewcore.test;
 
+import android.opengl.Matrix;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -15,6 +16,7 @@ import com.bfmj.viewcore.view.GLAdapterView;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLGridViewScroll;
 import com.bfmj.viewcore.view.GLImageView;
+import com.bfmj.viewcore.view.GLModelView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
@@ -34,6 +36,7 @@ public class GridViewScrollActivity extends BaseViewActivity {
 	private GridViewAdapter adapter;
 	private int index;
 	private List<Map<String, Object>> listData = new ArrayList<Map<String, Object>>();
+	private GLModelView	modelView;
 
 	// 图片封装为一个数组
 	private int[] icon = {
@@ -287,7 +290,27 @@ public class GridViewScrollActivity extends BaseViewActivity {
 		rootView.addView(cursorView);
 		//rootView.setBackgroundColor( 0xFFFFFF );
 
+		modelView = new GLModelView(this);
+		if(modelView != null) {
+			float[] prjMatrix = new float[16];
+			float[] mvpMatrix = new float[16];
+			float[] VMatrix = new float[16];
+			Matrix.setLookAtM(VMatrix, 0,
+					0, 0, 15,
+					0, 0, 0,
+					0, 1, 0);
+			Matrix.frustumM( prjMatrix, 0,
+                        -1, 1,
+                        -1, 1,
+                        3, 2000);
 
+			Matrix.multiplyMM(mvpMatrix, 0,
+					prjMatrix,0,
+					VMatrix, 0);
+			modelView.setMatrix(mvpMatrix);
+			modelView.loadModel("/sdcard/model/amenemhat/amenemhat.obj");
+			rootView.addView(modelView);
+		}
 //		updateProgress();
 //		rootView.addView(listView);		
 

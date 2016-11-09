@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="E:\sources\svn\VRROM\MJViewCore\trunk\ndk_helper\src\main\assets"/><source path="E:\sources\svn\VRROM\MJViewCore\trunk\ndk_helper\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="E:\sources\svn\VRROM\MJViewCore\trunk\ndk_helper\src\debug\assets"/></dataSet></merger>

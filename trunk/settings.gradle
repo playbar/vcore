@@ -1,2 +1,2 @@
-include ':viewcore'
+include ':viewcore', ':ndk_helper', ':native_app_glue', ':model3d'
 include ':apptest'
