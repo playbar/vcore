@@ -305,18 +305,17 @@ public class GLGridViewScroll extends GLGridView {
 		mPrvBtnImgView.setY(getY() + getHeight() + mBtnSpace - (mBtnImageHeight - mProcessViewHeight)/2);
 		mPrvBtnImgView.setLayoutParams(mBtnImageWidth, mBtnImageHeight);
 		mPrvBtnImgView.setImage(mFlipLeftID );
-		mPrvBtnImgView.setBackground( mDefaultColor);
-
-		mPrvBtnImgView.setFocusListener(new GLViewFocusListener() {
-			@Override
-			public void onFocusChange(GLRectView view, boolean focused) {
-				if (focused) {
-					mPrvBtnImgView.setBackground( mOnFouseColor );
-				} else {
-					mPrvBtnImgView.setBackground(mDefaultColor );
-				}
-			}
-		});
+//		mPrvBtnImgView.setBackground( mDefaultColor);
+//		mPrvBtnImgView.setFocusListener(new GLViewFocusListener() {
+//			@Override
+//			public void onFocusChange(GLRectView view, boolean focused) {
+//				if (focused) {
+//					mPrvBtnImgView.setBackground( mOnFouseColor );
+//				} else {
+//					mPrvBtnImgView.setBackground(mDefaultColor );
+//				}
+//			}
+//		});
 		addView(mPrvBtnImgView);
 		return;
 	}
@@ -327,18 +326,18 @@ public class GLGridViewScroll extends GLGridView {
 		mNextBtnImgView.setY(getY() + getHeight() + mBtnSpace -(mBtnImageHeight - mProcessViewHeight)/2);
 		mNextBtnImgView.setLayoutParams(mBtnImageWidth, mBtnImageHeight);
 		mNextBtnImgView.setImage(mFlipRightID);
-		mNextBtnImgView.setBackground( mDefaultColor );
-
-		mNextBtnImgView.setFocusListener(new GLViewFocusListener() {
-			@Override
-			public void onFocusChange(GLRectView view, boolean focused) {
-				if (focused) {
-					mNextBtnImgView.setBackground( mOnFouseColor );
-				} else {
-					mNextBtnImgView.setBackground( mDefaultColor );
-				}
-			}
-		});
+//		mNextBtnImgView.setBackground( mDefaultColor );
+//
+//		mNextBtnImgView.setFocusListener(new GLViewFocusListener() {
+//			@Override
+//			public void onFocusChange(GLRectView view, boolean focused) {
+//				if (focused) {
+//					mNextBtnImgView.setBackground( mOnFouseColor );
+//				} else {
+//					mNextBtnImgView.setBackground( mDefaultColor );
+//				}
+//			}
+//		});
 		addView(mNextBtnImgView);
 	}
 
@@ -400,6 +399,11 @@ public class GLGridViewScroll extends GLGridView {
 		return mCurIndex;
 	}
 
+	//获取分页的总数
+	public int getPageCount(){
+		return mCount;
+	}
+
 	public void setOffsetX(float offsetx ){
 		this.mOffsetX = offsetx;
 	}
@@ -431,6 +435,15 @@ public class GLGridViewScroll extends GLGridView {
 			mNextBtnImgView.setVisible(b);
 		}
 	}
+
+	public GLImageView getPrvBtnImgView(){
+		return mPrvBtnImgView;
+	}
+
+	public GLImageView getNextBtnImgView(){
+		return mNextBtnImgView;
+	}
+
 
 	private int mBackgroundResId = 0;
 	private int mResImg = 0;
