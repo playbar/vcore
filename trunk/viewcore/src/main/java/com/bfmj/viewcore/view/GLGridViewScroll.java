@@ -473,7 +473,6 @@ public class GLGridViewScroll extends GLGridView {
 		if( mTotalCount % getNumOneScreen() != 0 )
 			++mTotalPageCount;
 
-
 		int iw = (int)(mProcessViewWidth / mCount);
 
 		mProcessView = new GLSeekBarView(this.getContext());

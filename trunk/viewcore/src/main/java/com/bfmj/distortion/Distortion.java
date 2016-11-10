@@ -42,8 +42,8 @@ public class Distortion {
 		this.mTextureIds[eye] = textureParameter.m_EyeTexID;
 		GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, this.mTextureIds[eye], 0);
 		GLES30.glClear(GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
-//    	GLES30.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		GLES30.glClearColor(0.3f, 0.3f, 0.6f, 1.0f);
+    	GLES30.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+//		GLES30.glClearColor(0.3f, 0.3f, 0.6f, 1.0f);
     	mTextureWidth = textureParameter.m_Width;
     	mTextureHeight = textureParameter.m_Height;
     	GLES30.glViewport(0, 0, mTextureWidth, mTextureHeight);
