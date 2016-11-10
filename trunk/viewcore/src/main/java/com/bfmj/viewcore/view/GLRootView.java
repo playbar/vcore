@@ -414,7 +414,8 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             MojingSDK.getLastHeadView(headView);
         }
 
-        final float[] groyMatrix = getGroyMatrix();
+        float [] noRecenterMatrix = new float[16];
+        final float[] groyMatrix = getGroyMatrix(noRecenterMatrix);
 
         int height = mWidth / 2;
         float nearRight = GLScreenParams.getNear() * (float)Math.tan(GLScreenParams.getFOV() / 2);
@@ -435,7 +436,12 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                 for (int j = 0; j < allViews.size(); j++) {
                     GLView view = allViews.get(j);
                     if (view != null  && view.setBDraw( view.isVisible())) {
-                        view.getMatrixState().setVMatrix(groyMatrix);
+                        if(view instanceof GLPanoView) {//no not recenter skybox(GLPanoView draw it)
+                            view.getMatrixState().setVMatrix(noRecenterMatrix);
+                        }
+                        else {
+                            view.getMatrixState().setVMatrix(groyMatrix);
+                        }
                         Matrix.frustumM(view.getMatrixState().getProjMatrix(), 0, -nearRight, nearRight, -nearRight, nearRight, GLScreenParams.getNear(), GLScreenParams.getFar());
                         //					Matrix.orthoM(view.getMatrixState().getProjMatrix(), 0, -40, 40, -40, 40, GLScreenParams.getNear(), GLScreenParams.getFar());
                         //			Matrix.setLookAtM(view.getMatrixState().getVMatrix(), 0, 0, 0, 0, headView[2], -headView[6], headView[10], 0, 1, 0);
@@ -504,7 +510,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         isResetGroy = false;
     }
 
-    private float[] getGroyMatrix() {
+    private float[] getGroyMatrix(float[] noRecenterMatrix) {
         float[] matrix = new float[16];
         if (mGroyEnable) {
             float[] out = new float[3];
@@ -549,6 +555,12 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
                 } else {
                     Matrix.rotateM(matrix, 0, mLastXangle, 0, 1, 0);
+                }
+            }
+
+            if(noRecenterMatrix != null) {
+                for(int i=0;i<16;i++) {
+                    noRecenterMatrix[i] = matrix[i];
                 }
             }
 
