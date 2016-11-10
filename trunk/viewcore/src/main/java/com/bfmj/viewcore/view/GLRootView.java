@@ -4,6 +4,7 @@ import java.util.ArrayList;
 //import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -83,7 +84,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     //////////
 
-    public Queue<GLView> mCreateTextureQueue = new LinkedList<>();
+    public Queue<GLView> mCreateTextureQueue = new ConcurrentLinkedQueue<>();
 
     public GLRootView(Context context) {
         super(context);
