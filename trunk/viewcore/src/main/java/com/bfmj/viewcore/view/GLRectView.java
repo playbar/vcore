@@ -39,6 +39,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.opengl.GLES30;
 import android.opengl.Matrix;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -143,6 +144,11 @@ public class GLRectView extends GLView {
 	private float mEdgeWidth = 0.0f;
 	private float mEdgeHeight = 0.0f;
 
+	private int mScissorX = 0;
+	private int mScissorY = 0;
+	private int mScissorW = 0;
+	private int mScissorH = 0;
+
 	public GLRectView(Context context) {
 		super(context);
 		mContext = context;
@@ -175,6 +181,13 @@ public class GLRectView extends GLView {
 		}
 
 		isFocusable = focusable;
+	}
+
+	public void setScissor(int x, int y, int w, int h){
+		mScissorX = x;
+		mScissorY = y;
+		mScissorW = w;
+		mScissorH = h;
 	}
 
 	/**
@@ -1167,6 +1180,8 @@ public class GLRectView extends GLView {
 
 		//动画处理
 		doAnimation();
+//		GLES30.glEnable(GLES30.GL_SCISSOR_TEST);
+//		GLES30.glScissor( mScissorX, mScissorY, mScissorW, mScissorH);
 	}
 
 	private static HashMap<Integer, float[]> vmhash = new HashMap<>();
@@ -1209,6 +1224,7 @@ public class GLRectView extends GLView {
 
 	@Override
 	public void onAfterDraw(boolean isLeft) {
+//		GLES30.glDisable(GLES30.GL_SCISSOR_TEST);
 		if (!isBDraw() || !isSurfaceCreated){
 			return;
 		}

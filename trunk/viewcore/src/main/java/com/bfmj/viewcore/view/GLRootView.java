@@ -492,7 +492,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         GLFocusUtils.handleFocused(groyMatrix, allViews);
 
 //        debugRecenter();
-        Logger.printFPS();
+//        Logger.printFPS();
     }
 
     private void saveLastAngle() {

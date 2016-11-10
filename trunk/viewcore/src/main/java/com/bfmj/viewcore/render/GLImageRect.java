@@ -222,6 +222,8 @@ public class GLImageRect extends GLRect {
     		return;
     	}
 
+//		GLES30.glEnable(GLES30.GL_SCISSOR_TEST);
+//		GLES30.glScissor( 1, 1, 600,1200);
 		GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, mTextureId);
         GLES30.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mtx, 0);
         GLES30.glUniform1f(muAlphaHandle, getAlpha());
@@ -229,6 +231,7 @@ public class GLImageRect extends GLRect {
 		GLES30.glUniform1f(muWidhtHandle, mEdgeWidth);
 		GLES30.glUniform1f(muHeightHandle, mEdgeHeight);
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_STRIP, 0, 4);
+//		GLES30.glDisable(GLES30.GL_SCISSOR_TEST);
 //		GLES30.glDrawElements(GLES30.GL_TRIANGLE_STRIP, 4, GLES30.GL_UNSIGNED_SHORT, 0);
 
 	}

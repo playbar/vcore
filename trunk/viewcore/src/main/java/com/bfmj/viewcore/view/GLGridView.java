@@ -190,14 +190,15 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 				}
 
 				GLRectView view = this.mGLAdapter.getGLView(tempIndex, item, this);
-				view.setAlpha(0.01f);
-				view.setVisible(false);
 				if (col == 0 && rows == 0) {
 					mFirstView = view;
 				}
 				if( view == null ){
 					continue;
 				}
+				view.setAlpha(0.01f);
+				view.setVisible(false);
+
 				float fx = getX() + getPaddingLeft() + getMarginLeft() + view.getWidth() * col + this.mHorizontalSpacing * col;
 				if( EMoveDirection.MOVERTOL == mMoveDirection){
 					fx += this.getWidth();
@@ -292,14 +293,15 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 					continue;
 				}
 				GLRectView view = this.mGLAdapter.getGLView(tempIndex, item, this);
-				view.setAlpha(0.01f);
-				view.setVisible(false);
 				if (col == 0 && row == 0) {
 					mFirstView = view;
 				}
 				if(view == null ){
 					continue;
 				}
+				view.setAlpha(0.01f);
+				view.setVisible(false);
+
 				float fx = getX() + getPaddingLeft() + getMarginLeft() + view.getWidth() * col + this.mHorizontalSpacing * col;
 				if( EMoveDirection.MOVERTOL == mMoveDirection){
 					fx += this.getWidth();
@@ -394,14 +396,14 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 					continue;
 				}
 				GLRectView view = this.mGLAdapter.getGLView(tempIndex, item, this);
-				view.setAlpha(0.01f);
-				view.setVisible(false);
 				if (col == 0 && row == 0) {
 					mFirstView = view;
 				}
 				if( view == null ){
 					continue;
 				}
+				view.setAlpha(0.01f);
+				view.setVisible(false);
 
 //				float fx = getX() + getPaddingLeft() + getMarginLeft() + view.getWidth() * col + this.mHorizontalSpacing * col;
 				float fx = (getX() + getWidth()) - getPaddingLeft() - getMarginRight() - (view.getWidth() + this.mHorizontalSpacing) * (mNumColumns - col);
