@@ -1189,12 +1189,17 @@ public class GLRectView extends GLView {
 			}
 		}
 		else {
+			value = new float[16];
 			GLView.getEyeMatrix(VMatrix, isLeft, mEyeDeviation);
-			Matrix.translateM(state.getVMatrix(), 0, 0, 0, mLookTranslateZ);
+			Matrix.translateM(VMatrix, 0, 0, 0, mLookTranslateZ);
 			if(mLookAngle > -0.01f && mLookAngle <0.01f) {
-				Matrix.rotateM(state.getVMatrix(), 0, mLookAngle, 0, 1, 0);
+				Matrix.rotateM(VMatrix, 0, mLookAngle, 0, 1, 0);
 			}
-			vmhash.put(new Integer(hashCode), VMatrix);
+
+			for(int i=0;i<16;i++) {
+				value[i] = VMatrix[i];
+			}
+			vmhash.put(new Integer(hashCode), value);
 		}
 
 		if(vmhash.size() > 20) {
