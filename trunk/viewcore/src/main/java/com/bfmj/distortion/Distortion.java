@@ -1,11 +1,15 @@
 package com.bfmj.distortion;
 
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.IntBuffer;
 
 import com.baofeng.mojing.EyeTextureParameter;
 import com.baofeng.mojing.MojingSDK;
 
+import android.graphics.Bitmap;
 import android.opengl.GLES30;
 import android.util.Log;
 
@@ -48,8 +52,37 @@ public class Distortion {
     	mTextureHeight = textureParameter.m_Height;
     	GLES30.glViewport(0, 0, mTextureWidth, mTextureHeight);
 	}
+
+	public void ReadData(){
+		int width = mTextureWidth;
+		int height = mTextureHeight;
+		IntBuffer PixelBuffer = IntBuffer.allocate(width*height);
+		PixelBuffer.position(0);
+		GLES30.glReadPixels(0, 0, width, height, GLES30.GL_RGBA, GLES30.GL_UNSIGNED_BYTE, PixelBuffer);
+		PixelBuffer.position(0);//这里要把读写位置重置下
+		int pix[] = new int[width*height];
+		PixelBuffer.get(pix);//这是将intbuffer中的数据赋值到pix数组中
+
+		Bitmap bmp = Bitmap.createBitmap(pix, width, height,Bitmap.Config.ARGB_8888);//pix是上面读到的像素
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream("/sdcard/screen.png");//注意app的sdcard读写权限问题
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);//压缩成png,100%显示效果
+		try {
+			fos.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	
 	public void afterDraw() {
+//		ReadData();
 		GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, 0, 0);
 		GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
 //		Log.e("Distortion","afterDraw begin");

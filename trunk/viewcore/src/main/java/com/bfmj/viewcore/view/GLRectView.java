@@ -1329,6 +1329,12 @@ public class GLRectView extends GLView {
 		}
 	}
 
+	public void stopAnimation(GLAnimation animation){
+		if( animation != null){
+			animation.setStart(false);
+		}
+	}
+
 	/**
 	 * 设置焦点改变事件
 	 * @author lixianke  @Date 2015-3-16 上午11:00:28

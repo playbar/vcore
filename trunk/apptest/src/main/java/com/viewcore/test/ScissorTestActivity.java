@@ -95,6 +95,8 @@ public class ScissorTestActivity extends BaseViewActivity {
 		textView.startAnimation(animation);
 
 		rootView.addView(textView);
+		rootView.setDistortionEnable(true);
+		textView.stopAnimation(animation);
 
 //		initLog();
 
