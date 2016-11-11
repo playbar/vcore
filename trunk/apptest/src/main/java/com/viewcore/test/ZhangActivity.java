@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public class ZhangActivity extends BaseViewActivity {
+	private GLRootView rootView =null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +27,7 @@ public class ZhangActivity extends BaseViewActivity {
 		super.onCreate(savedInstanceState);
 		//GLRootView rootView = (GLRootView)findViewById(R.id.rootview);
 		
-		GLRootView rootView = getRootView();
+		rootView = getRootView();
 		//setContentView(rootView);
 		
 	//	rootView.onResume();

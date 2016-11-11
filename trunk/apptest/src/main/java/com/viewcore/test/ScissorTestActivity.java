@@ -19,6 +19,7 @@ import com.bfmj.viewcore.view.GLTextView;
 
 public class ScissorTestActivity extends BaseViewActivity {
 	private GLRootView rootView;
+	private DownloadIconView iconView;
 //	MediaPlayer player;
 
 	GLSystemPlayer player;
@@ -46,6 +47,12 @@ public class ScissorTestActivity extends BaseViewActivity {
 				}
 			}
 		};
+
+		iconView = new DownloadIconView(this);
+		iconView.setX(400);
+		iconView.setY(400);
+		rootView.addView(iconView);
+
 
 		GLImageView[] imageViews = new GLImageView[2];
 		Log.d("aaaaaaaaaaaa", "");
@@ -84,7 +91,7 @@ public class ScissorTestActivity extends BaseViewActivity {
 		textView.setX( 1000 );
 		textView.setY( 1200);
 		textView.setLayoutParams( 1000, 200 );
-		textView.setScissor( 1000, 1200, 1000, 200);
+//		textView.setScissor( 1000, 1200, 1000, 200);
 		textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
 		textView.setText("北京欢迎你");
 		textView.setTextSize(100);
