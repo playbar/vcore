@@ -8,9 +8,16 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.baofeng.mojing.MojingSDK;
+import com.bfmj.viewcore.interfaces.GLOnKeyListener;
+import com.bfmj.viewcore.interfaces.GLViewFocusListener;
+import com.bfmj.viewcore.render.GLColor;
 import com.bfmj.viewcore.view.BaseViewActivity;
+import com.bfmj.viewcore.view.GLCursorView;
+import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLModelView;
+import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
+import com.bfmj.viewcore.view.GLTextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -82,22 +89,84 @@ public class Model3dActivity extends BaseViewActivity {
 
         rootView = getRootView();
 
-        modelView = new MyModelView(this);
-        if (modelView != null) {
-            modelView.groyEnable = isGroyEnable();
+        // text View
+        {
+            GLTextView textView = new GLTextView(this);
+            textView.setX( 1000);
+            textView.setY( 2000 );
+            textView.setLayoutParams(1000, 200 );
+            textView.setTextColor(new GLColor(0.0f, 1.0f, 1.0f));
+            textView.setText("3d Model");
+            textView.setTextSize(100);
+            textView.setOnKeyListener(new GLOnKeyListener() {
+                @Override
+                public boolean onKeyDown(GLRectView view, int keycode) {
+                    view.setAlpha( 0.3f );
+                    return false;
+                }
 
-            String objPath = "amenemhat";
-            String filePath = getFilesDir().getAbsolutePath() + "/" + objPath;
-            String fileName = filePath + "/amenemhat.obj";
-            copyFilesFassets(this, objPath, filePath);
+                @Override
+                public boolean onKeyUp(GLRectView view, int keycode) {
+                    view.setAlpha( 1.0f );
+                    return false;
+                }
+
+                @Override
+                public boolean onKeyLongPress(GLRectView view, int keycode) {
+                    return false;
+                }
+            });
+            textView.setFocusListener(new GLViewFocusListener() {
+                @Override
+                public void onFocusChange(GLRectView view, boolean focused) {
+                    if( focused )
+                        view.setAlpha( 0.3f );
+                    else
+                        view.setAlpha( 1.0f );
+                }
+            });
+
+            //gridView.addView( textView );
+            rootView.addView(textView);
+        }
+
+        // model view
+        {
+            modelView = new MyModelView(this);
+            if (modelView != null) {
+                modelView.groyEnable = isGroyEnable();
+
+                String objPath = "amenemhat";
+                String filePath = getFilesDir().getAbsolutePath() + "/" + objPath;
+                String fileName = filePath + "/amenemhat.obj";
+                copyFilesFassets(this, objPath, filePath);
 
 //            modelView.loadModel("/sdcard/model/amenemhat/amenemhat.obj");
-            modelView.loadModel(fileName);
-            rootView.addView(modelView);
+                modelView.loadModel(fileName);
+                rootView.addView(modelView);
+            }
+        }
+        // cursor view
+        {
+            GLCursorView cursorView = new GLCursorView(this);
+            cursorView.setX(1190);
+            cursorView.setY(1190);
+            cursorView.setLayoutParams( 20, 20);
+            cursorView.setBackground(new GLColor(1.0f, 0, 0));
+            cursorView.setDepth(1.0f);
+            rootView.addView(cursorView);
+        }
+        {
+            GLImageView imageView = new GLImageView(this);
+            imageView.setLayoutParams(512, 512);
+            imageView.setX(1000);
+            imageView.setY(1000);
+            imageView.setBackground(R.drawable.address_book);
+            rootView.addView(imageView);
         }
 
         rootView.onResume();
-        setDistortionEnable(true);
+//        setDistortionEnable(false);
     }
 
 
