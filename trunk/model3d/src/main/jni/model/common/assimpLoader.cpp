@@ -238,8 +238,6 @@ bool AssimpLoader::LoadTexturesToGL(std::string modelFilename) {
  * does not handle material properties (like diffuse, specular, etc.)
  */
 bool AssimpLoader::Load3DModel(std::string modelFilename) {
-
-//    std::string modelFilename = "/sdcard/Space/space_screen03.FBX";
     MyLOGI("Scene will be imported now");
     scene = importerPtr->ReadFile(modelFilename, aiProcessPreset_TargetRealtime_Quality);
 
@@ -297,6 +295,7 @@ void AssimpLoader::Render3DModel(glm::mat4 *mvpMat) {
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
 
+//    glDisable(GL_DEPTH_TEST);
     glEnable(GL_DEPTH_TEST);
 //    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);

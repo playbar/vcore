@@ -2,6 +2,7 @@ package com.bfmj.viewcore.view;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.opengl.GLES30;
 import android.opengl.Matrix;
 import android.util.Log;
 
@@ -67,7 +68,8 @@ public class GLModelView extends GLView {
             return;
         }
 //        Log.i("GLModelView", "DrawModels");
-
+        GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+//        GLES30.glEnable(GLES30.GL_SCISSOR_TEST);
         _model.draw(_SetMatrix);
     }
 
