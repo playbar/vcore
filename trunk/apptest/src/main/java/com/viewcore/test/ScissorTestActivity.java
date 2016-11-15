@@ -49,8 +49,10 @@ public class ScissorTestActivity extends BaseViewActivity {
 		};
 
 		iconView = new DownloadIconView(this);
-		iconView.setX(400);
-		iconView.setY(400);
+		iconView.setX(1000);
+		iconView.setY(1000);
+		iconView.setVisible(true);
+		iconView.start();
 		rootView.addView(iconView);
 
 
