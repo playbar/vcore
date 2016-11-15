@@ -5,6 +5,7 @@ import android.content.Context;
 import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.animation.GLAlphaAnimation;
 import com.bfmj.viewcore.animation.GLAnimation;
+import com.bfmj.viewcore.animation.GLTransformation;
 import com.bfmj.viewcore.animation.GLTranslateAnimation;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLRectView;
@@ -29,6 +30,33 @@ public class DownloadIconView extends GLImageView {
 //        TranslateAnimation_down1(DownloadIconView.this);
     }
 
+    private boolean mbPause = false;
+    @Override
+    public void onPause(){
+        super.onPause();
+        mbPause = true;
+        setY(1000);
+        GLTransformation transform = animation_down1.getGlTransformation();
+        if( null != transform){
+            transform.setXYZ(0, 0, 0);
+        }
+        this.stopAnimation(animation_down1);
+        Logger.printTime();
+    }
+
+    public void onResume() {
+        super.onResume();
+        mbPause = false;
+        this.stopAnimation(animation_down1);
+        setY(1000);
+        GLTransformation transform = animation_down1.getGlTransformation();
+        if( null != transform){
+            transform.setXYZ(0, 0, 0);
+        }
+        this.startAnimation(animation_down1);
+        Logger.printTime();
+    }
+
 //    @Override
 //    public void doAnimationEnd(){
 //        Logger.printTime();
@@ -40,21 +68,21 @@ public class DownloadIconView extends GLImageView {
 
     public void start(){
 //        y = getY();
-//        AlphaAnimation_show(DownloadIconView.this);
-//        TranslateAnimation_down1(DownloadIconView.this);
+        AlphaAnimation_show(DownloadIconView.this);
+        TranslateAnimation_down1(DownloadIconView.this);
 
-        if(null == timer) {
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
-
-                @Override
-                public void run() {
-                    setY(1000);
-                    AlphaAnimation_show(DownloadIconView.this);
-                    TranslateAnimation_down1(DownloadIconView.this);
-                }
-            }, 0, 1200);
-        }
+//        if(null == timer) {
+//            timer = new Timer();
+//            timer.schedule(new TimerTask() {
+//
+//                @Override
+//                public void run() {
+//                    setY(1000);
+//                    AlphaAnimation_show(DownloadIconView.this);
+//                    TranslateAnimation_down1(DownloadIconView.this);
+//                }
+//            }, 0, 1200);
+//        }
     }
 
     public void close(){
@@ -97,6 +125,28 @@ public class DownloadIconView extends GLImageView {
         animation_down1 = new GLTranslateAnimation(0f, getHeight()*2-40, 0f);
         animation_down1.setAnimView(view);
         animation_down1.setDuration(1200);
+        animation_down1.setOnGLAnimationListener( new GLAnimation.OnGLAnimationListener(){
+            @Override
+            public void onAnimationStart(GLAnimation glAnimation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(GLAnimation glAnimation) {
+                if( !mbPause) {
+                    setY(1000);
+
+                    GLTransformation transform = animation_down1.getGlTransformation();
+                    if( null != transform){
+                        transform.setXYZ(0, 0, 0);
+                    }
+                    AlphaAnimation_show(DownloadIconView.this);
+                    TranslateAnimation_down1(DownloadIconView.this);
+                    Logger.printTime();
+                }
+
+            }
+        });
         view.startAnimation(animation_down1);
     }
 //    private GLAnimation animation_down2;

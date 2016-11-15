@@ -131,6 +131,18 @@ public class ScissorTestActivity extends BaseViewActivity {
 
 	}
 
+	@Override
+	protected void onPause(){
+		super.onPause();
+		iconView.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		iconView.onResume();
+	}
+
 	private void initLog(){
 		final GLTextView fps = new GLTextView(this);
 		fps.setX(900);
