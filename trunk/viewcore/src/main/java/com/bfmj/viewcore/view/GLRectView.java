@@ -1355,6 +1355,14 @@ public class GLRectView extends GLView {
 		return mFocusListener != null || mKeyListener != null;
 	}
 
+	public boolean hasFocusListener(){
+		return mFocusListener != null;
+	}
+
+	public boolean hasKeyListener(){
+		return mKeyListener != null;
+	}
+
 	/**
 	 * 强制设置焦点
 	 * @author lixianke  @Date 2015-3-27 上午10:16:09
