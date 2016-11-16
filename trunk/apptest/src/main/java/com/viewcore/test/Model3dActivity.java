@@ -166,6 +166,7 @@ public class Model3dActivity extends BaseViewActivity {
         }
 
         rootView.onResume();
+//        rootView.setDoubleScreen(false);
 //        setDistortionEnable(false);
     }
 

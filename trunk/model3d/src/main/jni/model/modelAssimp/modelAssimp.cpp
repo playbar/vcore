@@ -52,6 +52,7 @@ void ModelAssimp::Render(float* mvpMatrix) {
     if(modelObject != NULL)
     {
         modelObject->Render3DModel(&mvpMat);
+//        MyLOGI("modelAssimp", "Render 3D Model");
     }
 
     CheckGLError("ModelAssimp::Render");

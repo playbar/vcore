@@ -18,6 +18,7 @@
 #include "myShader.h"
 #include "misc.h"
 #include <opencv2/opencv.hpp>
+#include <GLES/gl.h>
 
 
 /**
@@ -286,19 +287,6 @@ void AssimpLoader::Render3DModel(glm::mat4 *mvpMat) {
     if (!isObjectLoaded) {
         return;
     }
-    glDisable(GL_BLEND); // 2016-10-31
-//    glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
-//    glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-//    glBlendFunc(GL_ONE, GL_ONE);
-//    glEnable(GL_BLEND);
-    glFrontFace(GL_CCW);
-    glCullFace(GL_BACK);
-    glEnable(GL_CULL_FACE);
-
-//    glDisable(GL_DEPTH_TEST);
-    glEnable(GL_DEPTH_TEST);
-//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     glUseProgram(shaderProgramID);
     glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, (const GLfloat *) mvpMat);

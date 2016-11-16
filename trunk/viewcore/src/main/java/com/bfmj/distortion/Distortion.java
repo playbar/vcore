@@ -16,6 +16,7 @@ import android.util.Log;
 public class Distortion {	
 	private int[] mTextureIds = {0, 0};
 	private int framebufferId;
+	private int depthbufferId;
 	private int mTextureWidth = 0;
 	private int mTextureHeight = 0;
 	private static Distortion mInstance;
@@ -34,6 +35,19 @@ public class Distortion {
 	
 	public void setScreen(int width, int height) {
 		this.framebufferId = generateFrameBufferObject();
+		IntBuffer depthBuffer = IntBuffer.allocate(1);
+		GLES30.glGenRenderbuffers(1, depthBuffer);
+		this.depthbufferId = depthBuffer.get(0);
+
+		// bind framebuffer with renderbuffer
+		GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, this.framebufferId);
+		GLES30.glBindRenderbuffer( GLES30.GL_RENDERBUFFER, depthbufferId);
+		GLES30.glRenderbufferStorage( GLES30.GL_RENDERBUFFER, GLES30.GL_DEPTH_COMPONENT24,
+				2048, 2048);
+		GLES30.glFramebufferRenderbuffer(GLES30.GL_FRAMEBUFFER, GLES30.GL_DEPTH_ATTACHMENT,
+				GLES30.GL_RENDERBUFFER, this.depthbufferId);
+		GLES30.glBindRenderbuffer(GLES30.GL_RENDERBUFFER, 0);
+		GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
 	}
 	
 	private void initData() {
@@ -45,7 +59,10 @@ public class Distortion {
 		EyeTextureParameter textureParameter = MojingSDK.GetEyeTextureParameter(eye + 1);
 		this.mTextureIds[eye] = textureParameter.m_EyeTexID;
 		GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, this.mTextureIds[eye], 0);
-		GLES30.glClear(GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
+
+		GLES30.glDepthMask(true);
+		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+		GLES30.glClear(GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT );
     	GLES30.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 //		GLES30.glClearColor(0.3f, 0.3f, 0.6f, 1.0f);
     	mTextureWidth = textureParameter.m_Width;
@@ -85,6 +102,7 @@ public class Distortion {
 //		ReadData();
 		GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, 0, 0);
 		GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
+
 //		Log.e("Distortion","afterDraw begin");
 		if (GLES30.glIsTexture(this.mTextureIds[0]) && GLES30.glIsTexture(this.mTextureIds[1])){
 			MojingSDK.DrawTexture(this.mTextureIds[0], this.mTextureIds[1]);
@@ -92,6 +110,8 @@ public class Distortion {
 			this.framebufferId = generateFrameBufferObject();
 		}
 //		Log.e("Distortion","afterDraw end");
+		GLES30.glDepthMask(false);
+		GLES30.glDisable(GLES30.GL_DEPTH_TEST);
 	}
 	
 	private static int generateFrameBufferObject() {
@@ -108,4 +128,5 @@ public class Distortion {
 	public int getTextureHeight(){
 		return mTextureHeight;
 	}
+
 }

@@ -67,9 +67,6 @@ public class GLModelView extends GLView {
         if(!Model3dLib.getInstance()._loadLibrary) {
             return;
         }
-//        Log.i("GLModelView", "DrawModels");
-        GLES30.glEnable(GLES30.GL_DEPTH_TEST);
-//        GLES30.glEnable(GLES30.GL_SCISSOR_TEST);
         _model.draw(_SetMatrix);
     }
 
@@ -78,6 +75,9 @@ public class GLModelView extends GLView {
 
     @Override
     public void draw() {
+        if(_needLoad) {
+            _needLoad = !_model.load(_modelName);
+        }
         DrawModels();
     }
 
@@ -88,9 +88,9 @@ public class GLModelView extends GLView {
 
     @Override
     public void onBeforeDraw(boolean isLeft) {
-        if(_needLoad) {
-            _needLoad = !_model.load(_modelName);
-        }
+//        if(_needLoad) {
+//            _needLoad = !_model.load(_modelName);
+//        }
     }
 
     @Override
