@@ -63,7 +63,7 @@ public class Distortion {
 		GLES30.glDepthMask(true);
 		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 		GLES30.glClear(GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT );
-    	GLES30.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+//    	GLES30.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 //		GLES30.glClearColor(0.3f, 0.3f, 0.6f, 1.0f);
     	mTextureWidth = textureParameter.m_Width;
     	mTextureHeight = textureParameter.m_Height;

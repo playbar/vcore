@@ -15,6 +15,7 @@ import com.bfmj.viewcore.view.BaseViewActivity;
 import com.bfmj.viewcore.view.GLCursorView;
 import com.bfmj.viewcore.view.GLImageView;
 import com.bfmj.viewcore.view.GLModelView;
+import com.bfmj.viewcore.view.GLPanoView;
 import com.bfmj.viewcore.view.GLRectView;
 import com.bfmj.viewcore.view.GLRootView;
 import com.bfmj.viewcore.view.GLTextView;
@@ -24,6 +25,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 public class Model3dActivity extends BaseViewActivity {
+
+    public static final int SCENE_TYPE_DEFAULT = 0x0;
+    public static final int SCENE_TYPE_CINEMA = 0x1;
+    private int mSceneType = -1;
 
     private GLRootView rootView;
     private MyModelView modelView;
@@ -37,19 +42,19 @@ public class Model3dActivity extends BaseViewActivity {
             float[] mvpMatrix = new float[16];
             float[] VMatrix = new float[16];
             Matrix.setLookAtM(VMatrix, 0,
-                    0, 0, 15,
+                    0, 0, 20,
                     0, 0, 0,
                     0, 1, 0);
             Matrix.frustumM(prjMatrix, 0,
                     -1, 1,
                     -1, 1,
-                    3, 2000);
+                    1, 2000);
 
             Matrix.multiplyMM(mvpMatrix, 0,
                     prjMatrix, 0,
                     VMatrix, 0);
-            Matrix.rotateM(mvpMatrix, 0,
-                    135, 0.0f, 1.0f, 0);
+//            Matrix.rotateM(mvpMatrix, 0,
+//                    135, 0.0f, 1.0f, 0);
             this.setMatrix(mvpMatrix);
         }
 
@@ -136,13 +141,14 @@ public class Model3dActivity extends BaseViewActivity {
             if (modelView != null) {
                 modelView.groyEnable = isGroyEnable();
 
-                String objPath = "amenemhat";
-                String filePath = getFilesDir().getAbsolutePath() + "/" + objPath;
-                String fileName = filePath + "/amenemhat.obj";
-                copyFilesFassets(this, objPath, filePath);
+//                String objPath = "amenemhat";
+//                String filePath = getFilesDir().getAbsolutePath() + "/" + objPath;
+//                String fileName = filePath + "/amenemhat.obj";
+//                copyFilesFassets(this, objPath, filePath);
 
 //            modelView.loadModel("/sdcard/model/amenemhat/amenemhat.obj");
-                modelView.loadModel(fileName);
+                modelView.loadModel("/sdcard/model/Space/space_screen03.FBX");
+//                modelView.loadModel(fileName);
                 rootView.addView(modelView);
             }
         }
@@ -153,7 +159,7 @@ public class Model3dActivity extends BaseViewActivity {
             cursorView.setY(1190);
             cursorView.setLayoutParams( 20, 20);
             cursorView.setBackground(new GLColor(1.0f, 0, 0));
-            cursorView.setDepth(1.0f);
+            cursorView.setDepth(4.0f);
             rootView.addView(cursorView);
         }
         {
@@ -166,6 +172,7 @@ public class Model3dActivity extends BaseViewActivity {
         }
 
         rootView.onResume();
+        showSkyBox(SCENE_TYPE_DEFAULT);
 //        rootView.setDoubleScreen(false);
 //        setDistortionEnable(false);
     }
@@ -215,5 +222,33 @@ public class Model3dActivity extends BaseViewActivity {
         }
     }
 
+    /**
+     * 显示天空盒场景
+     * @param type 场景类型
+     */
+    public synchronized void showSkyBox(int type)
+    {
+        mSceneType = type;
+
+        GLPanoView mSkyboxView = GLPanoView.getSharedPanoView(this);
+        mSkyboxView.reset();
+        if(type == SCENE_TYPE_CINEMA){
+            mSkyboxView.setImage(R.drawable.skybox_cinema);
+        } else {
+            mSkyboxView.setImage(R.drawable.skybox_launcher);
+        }
+
+        mSkyboxView.setVisible(true);
+    }
+    public void setSkyboxFixed(boolean fixed){
+        GLPanoView.getSharedPanoView(this).setFixed(fixed);
+    }
+
+    /**
+     * 隐藏天空盒场景
+     */
+    public void hideSkyBox(){
+        GLPanoView.getSharedPanoView(this).setVisible(false);
+    }
 
 }

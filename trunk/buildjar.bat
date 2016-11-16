@@ -11,3 +11,5 @@ jar cf ..\MJViewCore.jar .
 mkdir arm
 cd ..
 xcopy viewcore\build\intermediates\bundles\release\jni\armeabi output\arm\ /s
+
+xcopy model3d\build\outputs\aar\model3d-release.aar .\model3d.aar  /Y
