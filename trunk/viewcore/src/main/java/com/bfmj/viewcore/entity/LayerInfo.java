@@ -18,6 +18,7 @@ public class LayerInfo implements Serializable {
     private LayerType type;
     private int resourceId;
     private Bitmap bitmap;
+    private boolean mbRecyle = false;
     private GLColor color;
     private TextInfo textInfo;
     private Rect rect;
@@ -42,8 +43,17 @@ public class LayerInfo implements Serializable {
         return bitmap;
     }
 
+    public boolean getBmpRecyle(){
+        return mbRecyle;
+    }
+
     public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap, boolean recyle) {
+        this.bitmap = bitmap;
+        mbRecyle = recyle;
     }
 
     public GLColor getColor() {

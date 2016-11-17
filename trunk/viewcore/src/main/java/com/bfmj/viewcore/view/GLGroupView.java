@@ -1,6 +1,7 @@
 package com.bfmj.viewcore.view;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.baofeng.mojing.input.base.MojingKeyCode;
@@ -949,11 +950,16 @@ public class GLGroupView extends GLRectView {
 	@Override
 	public void setAlpha(float alpha) {
 		ArrayList<GLRectView> childViews = getChildViews(this);
-		if (childViews != null && childViews.size() > 0) {
-			for (GLRectView childView : childViews) {
-				childView.setAlpha(alpha);
-			}
+		Iterator<GLRectView> iter = childViews.iterator();
+		while (iter.hasNext() ){
+			GLRectView var = iter.next();
+			var.setAlpha(alpha);
 		}
+//		if (childViews != null && childViews.size() > 0) {
+//			for (GLRectView childView : childViews) {
+//				childView.setAlpha(alpha);
+//			}
+//		}
 
 		super.setAlpha(alpha);
 	}

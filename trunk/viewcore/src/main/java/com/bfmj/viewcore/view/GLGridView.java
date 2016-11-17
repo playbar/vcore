@@ -155,6 +155,17 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 			mGLAdapter.unregisterDataSetObserver( mDataSetObserver);
 		}
 
+		for(GLRectView var : mItemViewCur){
+			removeView(var);
+		}
+		mItemViewCur.clear();
+
+		for( GLRectView var : mItemViewBack){
+			removeView(var);
+		}
+		mItemViewBack.clear();
+
+
 		//清除以前的数据
 		mGLAdapter = adapter;
 		this.mTotalCount = adapter.getCount();
