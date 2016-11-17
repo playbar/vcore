@@ -141,14 +141,14 @@ public class Model3dActivity extends BaseViewActivity {
             if (modelView != null) {
                 modelView.groyEnable = isGroyEnable();
 
-//                String objPath = "amenemhat";
-//                String filePath = getFilesDir().getAbsolutePath() + "/" + objPath;
-//                String fileName = filePath + "/amenemhat.obj";
-//                copyFilesFassets(this, objPath, filePath);
+                String objPath = "amenemhat";
+                String filePath = getFilesDir().getAbsolutePath() + "/" + objPath;
+                String fileName = filePath + "/amenemhat.obj";
+                copyFilesFassets(this, objPath, filePath);
 
 //            modelView.loadModel("/sdcard/model/amenemhat/amenemhat.obj");
-                modelView.loadModel("/sdcard/model/Space/space_screen03.FBX");
-//                modelView.loadModel(fileName);
+//                modelView.loadModel("/sdcard/model/Space/space_screen03.FBX");
+                modelView.loadModel(fileName);
                 rootView.addView(modelView);
             }
         }
@@ -172,7 +172,7 @@ public class Model3dActivity extends BaseViewActivity {
         }
 
         rootView.onResume();
-        showSkyBox(SCENE_TYPE_DEFAULT);
+//        showSkyBox(SCENE_TYPE_DEFAULT);
 //        rootView.setDoubleScreen(false);
 //        setDistortionEnable(false);
     }
