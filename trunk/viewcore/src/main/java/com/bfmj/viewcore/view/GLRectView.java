@@ -1928,9 +1928,6 @@ public class GLRectView extends GLView {
 				Bitmap dBitmap = layerInfo.getBitmap();
 				canvas.drawBitmap(dBitmap, new Rect(0, 0, dBitmap.getWidth(), dBitmap.getHeight()),
 						rect, new Paint());
-				if( layerInfo.getBmpRecyle()){
-					dBitmap.recycle();
-				}
 				break;
 			case TYPE_COLOR:
 				Paint p = new Paint();
