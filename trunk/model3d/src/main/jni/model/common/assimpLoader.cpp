@@ -17,9 +17,9 @@
 #include "assimpLoader.h"
 #include "myShader.h"
 #include "misc.h"
-#include <opencv2/opencv.hpp>
+//#include <opencv2/opencv.hpp>
 #include <GLES/gl.h>
-
+#include "../TextureUtil.h"
 
 /**
  * Class constructor, loads shaders & gets locations of variables in them
@@ -172,10 +172,11 @@ bool AssimpLoader::LoadTexturesToGL(std::string modelFilename) {
     int numTextures = (int) textureNameMap.size();
     MyLOGI("Total number of textures is %d ", numTextures);
 
+#if 0
     // create and fill array with texture names in GL
     GLuint * textureGLNames = new GLuint[numTextures];
     glGenTextures(numTextures, textureGLNames);
-
+#endif
     // Extract the directory part from the file name
     // will be used to read the texture
     std::string modelDirectoryName = GetDirectoryName(modelFilename);
@@ -189,11 +190,20 @@ bool AssimpLoader::LoadTexturesToGL(std::string modelFilename) {
         std::string texfn = textureFilename.substr(textureFilename.find_last_of('/') + 1);
         texfn = texfn.substr(texfn.find_last_of('\\') + 1);
         MyLOGI("Loading texture : texture name = [%s] ", texfn.c_str());
-//        std::string textureFullPath = "/sdcard/Space/" + texfn;
         std::string textureFullPath = modelFilename.substr(0, modelFilename.find_last_of('/') + 1) + texfn;
 //        std::string textureFullPath = modelDirectoryName + "/" + textureFilename;
-        (*textureIterator).second = textureGLNames[i];	  // save texture id for filename in map
 
+        int textureID = LoadImage2Texture( textureFullPath.c_str());
+        if( textureID > 0) {
+            MyLOGI("Loading texture : texture --name--[%s]--id--[%d]-- ", texfn.c_str(), textureID);
+            (*textureIterator).second = textureID;//textureGLNames[i];	  // save texture id for filename in map
+        } else {
+            MyLOGE("Couldn't load texture [%s | %s]", modelDirectoryName.c_str(), textureFilename.c_str());
+            //Cleanup and return
+            return false;
+        }
+
+#if 0
         // load the texture using OpenCV
         MyLOGI("Loading texture %s", textureFullPath.c_str());
         cv::Mat textureImage = cv::imread(textureFullPath);
@@ -227,10 +237,9 @@ bool AssimpLoader::LoadTexturesToGL(std::string modelFilename) {
             return false;
 
         }
+#endif
     }
 
-    //Cleanup and return
-    delete[] textureGLNames;
     return true;
 }
 
@@ -327,4 +336,3 @@ void AssimpLoader::Render3DModel(glm::mat4 *mvpMat) {
 
     CheckGLError("AssimpLoader::renderObject() ");
 }
-

@@ -15,18 +15,6 @@ model {
                             "${targetPlatform.getName()}/libassimp.so")
                 }
             }
-
-            // OpenCV prebuilt shared lib
-            my_cv {
-                // Inform Android Studio where header file dir for this lib
-                headers.srcDir "src/main/externals/opencv-3.0.0/include"
-                // Inform Android Studio where lib is -- each ABI should have a lib file
-                binaries.withType(SharedLibraryBinary) {
-                    sharedLibraryFile = file("src/main/externals/opencv-3.0.0/libs/" +
-                            "${targetPlatform.getName()}/libopencv_java3.so")
-                }
-            }
-
         }
     }
 
@@ -66,7 +54,6 @@ model {
                         project ':ndk_helper' linkage 'static'
                         project ':native_app_glue' linkage 'static'
                         library 'my_assimp' linkage 'shared'
-                        library 'my_cv' linkage 'shared'
                     }
                     source {
                         srcDirs 'src/main/jni'
@@ -82,37 +69,6 @@ model {
                     // into APk to be used at Target (phone/tablet)
                     source {
                         srcDir "src/main/externals/assimp-3.0/libs"
-                        srcDir "src/main/externals/opencv-3.0.0/libs"
-                    }
-                }
-            }
-        }
-
-        sources {
-            main {
-                jni {
-                    dependencies {
-                        // we use some functions from ndk_helper to simplify native tasks
-                        //project ':ndk_helper' linkage 'static'
-                        //project ':native_app_glue' linkage 'static'
-                        library 'my_assimp' linkage 'shared'
-                        library 'my_cv' linkage 'shared'
-                    }
-                    source {
-                        srcDirs 'src/main/jni'
-                    }
-                }
-                jniLibs {
-                    // for shared lib, lib need to be pushed to the target too
-                    // Once libs are copied into app/src/main/jniLibs directory,
-                    // Android Studio will pack them into APK's lib/ directory
-                    // Here we like to avoid another duplication by pointing
-                    // to the files that containing our libs' distribution location
-                    // so the same file is used by compiler at host, also packed
-                    // into APk to be used at Target (phone/tablet)
-                    source {
-                        srcDir "src/main/externals/assimp-3.0/libs"
-                        srcDir "src/main/externals/opencv-3.0.0/libs"
                     }
                 }
             }

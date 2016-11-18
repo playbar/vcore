@@ -23,7 +23,7 @@ public class Model3dLib {
         }catch (Error error) {
             // shared library
             _loadLibrary = false;
-            Log.e("Model3dLib", "loadModel3dLib: c++ shared library not exist || " + error.toString());
+            Log.i("Model3dLib", "loadModel3dLib: c++ shared library not exist || " + error.toString());
         }
     }
 }
