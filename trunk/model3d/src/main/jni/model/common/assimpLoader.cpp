@@ -172,11 +172,6 @@ bool AssimpLoader::LoadTexturesToGL(std::string modelFilename) {
     int numTextures = (int) textureNameMap.size();
     MyLOGI("Total number of textures is %d ", numTextures);
 
-#if 0
-    // create and fill array with texture names in GL
-    GLuint * textureGLNames = new GLuint[numTextures];
-    glGenTextures(numTextures, textureGLNames);
-#endif
     // Extract the directory part from the file name
     // will be used to read the texture
     std::string modelDirectoryName = GetDirectoryName(modelFilename);
@@ -202,42 +197,6 @@ bool AssimpLoader::LoadTexturesToGL(std::string modelFilename) {
             //Cleanup and return
             return false;
         }
-
-#if 0
-        // load the texture using OpenCV
-        MyLOGI("Loading texture %s", textureFullPath.c_str());
-        cv::Mat textureImage = cv::imread(textureFullPath);
-        if (!textureImage.empty()) {
-
-            // opencv reads textures in BGR format, change to RGB for GL
-//            cv::cvtColor(textureImage, textureImage, CV_BGR2RGB);
-            cv::cvtColor(textureImage, textureImage, CV_BGR2RGBA);
-            // opencv reads image from top-left, while GL expects it from bottom-left
-            // vertically flip the image
-            cv::flip(textureImage, textureImage, 0);
-
-            // bind the texture
-            glBindTexture(GL_TEXTURE_2D, textureGLNames[i]);
-            // specify linear filtering
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            // load the OpenCV Mat into GLES
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureImage.cols,
-                         textureImage.rows, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                         textureImage.data);
-            MyLOGE("AssimpLoader::loadGLTexGen , |%d-%d|", textureImage.cols, textureImage.rows);
-            CheckGLError("AssimpLoader::loadGLTexGen");
-
-        } else {
-
-            MyLOGE("Couldn't load texture [%s | %s]", modelDirectoryName.c_str(), textureFilename.c_str());
-
-            //Cleanup and return
-            delete[] textureGLNames;
-            return false;
-
-        }
-#endif
     }
 
     return true;
@@ -278,9 +237,9 @@ bool AssimpLoader::Load3DModel(std::string modelFilename) {
 void AssimpLoader::Delete3DModel() {
     if (isObjectLoaded) {
         // clear modelMeshes stuff
-//        for (unsigned int i = 0; i < modelMeshes.size(); ++i) {
-//            glDeleteTextures(1, &(modelMeshes[i].textureIndex));
-//        }
+        for (unsigned int i = 0; i < modelMeshes.size(); ++i) {
+            glDeleteTextures(1, &(modelMeshes[i].textureIndex));
+        }
         modelMeshes.clear();
 
         MyLOGI("Deleted Assimp object");
@@ -332,6 +291,7 @@ void AssimpLoader::Render3DModel(glm::mat4 *mvpMat) {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+        MyLOGI("AssimpLoader::Render3DModel %d times , numberOfFaces=%d ", n, modelMeshes[n].numberOfFaces);
     }
 
     CheckGLError("AssimpLoader::renderObject() ");

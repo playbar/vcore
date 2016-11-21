@@ -50,6 +50,11 @@ public class TextureUtil {
 
     static void DeleteTextureId(int textureID) {
         Log.i("TextureUtil", "DeleteTextureId : " + textureID);
+        GLES30.glBindTexture( GLES30.GL_TEXTURE_2D, textureID);
+        int[] tID = {textureID};
+        GLES30.glDeleteTextures(1, tID, 0);
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0);
+        checkGlError("DeleteTextureId");
     }
 
     static private void checkGlError(String op) {

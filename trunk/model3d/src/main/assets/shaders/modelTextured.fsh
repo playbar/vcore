@@ -23,5 +23,5 @@ uniform sampler2D textureSampler;
 
 void main()
 {
-    gl_FragColor.xyz = texture2D( textureSampler, vec2(textureCoords.x, 1.0-textureCoords.y)).xyz;
+    gl_FragColor.xyz = texture2D( textureSampler, vec2(textureCoords.x, 1.0-textureCoords.y)).xyz; // 纹理坐标
 }

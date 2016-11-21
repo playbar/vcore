@@ -172,7 +172,7 @@ public class Model3dActivity extends BaseViewActivity {
         }
 
         rootView.onResume();
-//        showSkyBox(SCENE_TYPE_DEFAULT);
+        showSkyBox(SCENE_TYPE_DEFAULT);
 //        rootView.setDoubleScreen(false);
 //        setDistortionEnable(false);
     }

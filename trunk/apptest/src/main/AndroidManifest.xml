@@ -46,16 +46,16 @@
         <meta-data
             android:name="DEVELOPER_CHANNEL_ID"
             android:value="www.mojing.cn" />
-        <!--Model3dActivity-->
-        <!--<activity-->
-            <!--android:name=".Model3dActivity"-->
-            <!--android:screenOrientation="landscape"-->
-            <!--android:label="@string/app_name" >-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
+        Model3dActivity
+        <activity
+            android:name=".Model3dActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
        <activity
             android:name=".GridViewScrollActivity"
             android:screenOrientation="landscape"
