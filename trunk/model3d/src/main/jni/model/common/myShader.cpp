@@ -19,6 +19,27 @@
 #include <iostream>
 #include <fstream>
 
+const char* modelfsh = "precision mediump float; \n"
+        "\n"
+        "varying vec2      textureCoords;\n"
+        "uniform sampler2D textureSampler;\n"
+        "\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor.xyz = texture2D( textureSampler, vec2(textureCoords.x, 1.0-textureCoords.y)).xyz; \n"
+        "}";
+
+const char* modelvsh = "attribute   vec3 vertexPosition;\n"
+        "attribute   vec2 vertexUV;\n"
+        "varying     vec2 textureCoords;\n"
+        "uniform     mat4 mvpMat;\n"
+        "\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position     = mvpMat * vec4(vertexPosition, 1.0);\n"
+        "    textureCoords   = vertexUV;\n"
+        "}";
+
 /**
  * Read the shader code from assets
  */
@@ -84,6 +105,37 @@ bool CompileShader(GLuint & shaderID, const GLenum shaderType, std::string shade
     return true;
 }
 
+/* */
+bool CompileShader(GLuint & shaderID, const GLenum shaderType, const char* shaderCode) {
+
+    // Create the shader
+    shaderID = glCreateShader(shaderType);
+
+    // Compile Shader
+    MyLOGI("Compiling shader");
+    glShaderSource(shaderID, 1, &shaderCode, NULL);
+    glCompileShader(shaderID);
+
+    // Check Shader
+    GLint result = GL_FALSE;
+    int infoLogLength;
+
+    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &result);
+    glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
+    if (result == 0) {
+        MyLOGI("Failed to compile shader");
+        std::vector<char> shaderErrorMessage(infoLogLength + 1);
+        glGetShaderInfoLog(shaderID, infoLogLength, NULL, &shaderErrorMessage[0]);
+        MyLOGI("%s", &shaderErrorMessage[0]);
+        return false;
+    }
+    else{
+        MyLOGI("Compiled shader successfully");
+    }
+
+    return true;
+}
+
 /**
  * Link the vertex and fragment shaders together
  */
@@ -126,6 +178,8 @@ bool LinkProgram(GLuint programID, GLuint vertexShaderID,
     return true;
 }
 
+
+
 /**
  * Read the vertex & fragment shaders, compile and link them, return the program ID
  */
@@ -135,24 +189,13 @@ GLuint LoadShaders(std::string vertexShaderFilename,
     GLuint vertexShaderID, fragmentShaderID, programID;
     programID = glCreateProgram();
 
-    // read and compile the vertex shader
-    std::string vertexShaderCode;
-    if (!ReadShaderCode(vertexShaderCode, vertexShaderFilename)) {
-        MyLOGE("Error in reading Vertex shader");
-        return 0;
-    }
-    if (!CompileShader(vertexShaderID, GL_VERTEX_SHADER, vertexShaderCode)) {
+    // vertex shader
+    if (!CompileShader(vertexShaderID, GL_VERTEX_SHADER, modelvsh)) {
         MyLOGE("Error in compiling Vertex shader");
         return 0;
     }
-
-    // read and compile the fragment shader
-    std::string fragmentShaderCode;
-    if (!ReadShaderCode(fragmentShaderCode, fragmentShaderFilename)) {
-        MyLOGE("Error in reading Fragment shader");
-        return 0;
-    }
-    if (!CompileShader(fragmentShaderID, GL_FRAGMENT_SHADER, fragmentShaderCode)) {
+    // fragment shader
+    if (!CompileShader(fragmentShaderID, GL_FRAGMENT_SHADER, modelfsh)) {
         MyLOGE("Error in compiling fragment shader");
         return 0;
     }

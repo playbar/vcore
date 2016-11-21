@@ -291,7 +291,7 @@ void AssimpLoader::Render3DModel(glm::mat4 *mvpMat) {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        MyLOGI("AssimpLoader::Render3DModel %d times , numberOfFaces=%d ", n, modelMeshes[n].numberOfFaces);
+//        MyLOGI("AssimpLoader::Render3DModel %d times , numberOfFaces=%d ", n, modelMeshes[n].numberOfFaces);
     }
 
     CheckGLError("AssimpLoader::renderObject() ");
