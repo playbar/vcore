@@ -17,6 +17,7 @@ public class Distortion {
 	private int[] mTextureIds = {0, 0};
 	private int framebufferId;
 	private int depthbufferId;
+	private int colorbufferId;
 	private int mTextureWidth = 0;
 	private int mTextureHeight = 0;
 	private static Distortion mInstance;
@@ -35,17 +36,26 @@ public class Distortion {
 	
 	public void setScreen(int width, int height) {
 		this.framebufferId = generateFrameBufferObject();
-		IntBuffer depthBuffer = IntBuffer.allocate(1);
-		GLES30.glGenRenderbuffers(1, depthBuffer);
-		this.depthbufferId = depthBuffer.get(0);
+		IntBuffer renderBuffer = IntBuffer.allocate(2);
+		GLES30.glGenRenderbuffers(2, renderBuffer);
+		this.depthbufferId = renderBuffer.get(0);
+		this.colorbufferId = renderBuffer.get(1);
 
 		// bind framebuffer with renderbuffer
 		GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, this.framebufferId);
-		GLES30.glBindRenderbuffer( GLES30.GL_RENDERBUFFER, depthbufferId);
+
+		GLES30.glBindRenderbuffer( GLES30.GL_RENDERBUFFER, this.depthbufferId);
 		GLES30.glRenderbufferStorage( GLES30.GL_RENDERBUFFER, GLES30.GL_DEPTH_COMPONENT24,
 				2048, 2048);
+		GLES30.glBindRenderbuffer( GLES30.GL_RENDERBUFFER, this.colorbufferId);
+		GLES30.glRenderbufferStorage( GLES30.GL_RENDERBUFFER, GLES30.GL_RGBA,
+				2048, 2048);
+
 		GLES30.glFramebufferRenderbuffer(GLES30.GL_FRAMEBUFFER, GLES30.GL_DEPTH_ATTACHMENT,
 				GLES30.GL_RENDERBUFFER, this.depthbufferId);
+		GLES30.glFramebufferRenderbuffer(GLES30.GL_RENDERBUFFER, GLES30.GL_COLOR_ATTACHMENT0,
+				GLES30.GL_RENDERBUFFER, this.colorbufferId);
+
 		GLES30.glBindRenderbuffer(GLES30.GL_RENDERBUFFER, 0);
 		GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
 	}
