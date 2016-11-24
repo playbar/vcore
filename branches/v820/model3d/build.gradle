@@ -1,0 +1,90 @@
+apply plugin: 'com.android.model.library'
+
+model {
+
+    repositories {
+        libs(PrebuiltLibraries) {
+
+            // Assimp prebuilt shared lib
+            my_assimp {
+                // Inform Android Studio where header file dir for this lib
+                headers.srcDir "src/main/externals/assimp-3.0/include"
+                // Inform Android Studio where lib is -- each ABI should have a lib file
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("src/main/externals/assimp-3.0/libs/" +
+                            "${targetPlatform.getName()}/libassimp.so")
+                }
+            }
+        }
+    }
+
+    android {
+        compileSdkVersion 23
+        buildToolsVersion "23.0.3"
+
+        defaultConfig {
+            minSdkVersion.apiLevel 13
+            targetSdkVersion.apiLevel 23
+            versionCode 1
+            versionName "1.0"
+        }
+
+        ndk{
+            platformVersion = 23
+            moduleName = 'model3d'
+            toolchain = 'clang'
+            stl         = 'gnustl_static'
+            cppFlags.addAll(['-std=c++11', '-Wall', '-fno-rtti', '-fno-exceptions'])
+            cppFlags.addAll(['-I' + file('src/main/jni/model/modelAssimp'),
+                             '-I' + file('src/main/jni/model/common'),
+                             '-I' + file('src/main/externals/glm-0.9.7.5')])
+
+            CFlags.addAll(['-Wall'])
+//            abiFilters.addAll(['armeabi-v7a'])
+            abiFilters.addAll(['armeabi'])
+            ldLibs.addAll(['android', 'log', 'GLESv3', 'EGL' ])
+            ldLibs.addAll(['GLESv2', "stdc++"])
+        }
+
+        sources {
+            main {
+                jni {
+                    dependencies {
+                        // we use some functions from ndk_helper to simplify native tasks
+                        project ':ndk_helper' linkage 'static'
+                        project ':native_app_glue' linkage 'static'
+                        library 'my_assimp' linkage 'shared'
+                    }
+                    source {
+                        srcDirs 'src/main/jni'
+                    }
+                }
+                jniLibs {
+                    // for shared lib, lib need to be pushed to the target too
+                    // Once libs are copied into app/src/main/jniLibs directory,
+                    // Android Studio will pack them into APK's lib/ directory
+                    // Here we like to avoid another duplication by pointing
+                    // to the files that containing our libs' distribution location
+                    // so the same file is used by compiler at host, also packed
+                    // into APk to be used at Target (phone/tablet)
+                    source {
+                        srcDir "src/main/externals/assimp-3.0/libs"
+                    }
+                }
+            }
+        }
+
+        buildTypes {
+            release {
+                minifyEnabled false
+                //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                proguardFiles.add(file('proguard-rules.txt'))
+            }
+        }
+    }
+}
+dependencies {
+    dependencies {
+        compile 'com.android.support:appcompat-v7:23.+'
+    }
+}
