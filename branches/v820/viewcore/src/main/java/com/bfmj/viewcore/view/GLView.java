@@ -23,7 +23,7 @@ public abstract class GLView implements GLRenderListener {
 	private float mMask = 1.0f;
 	private boolean isVisible = true;
 	private boolean mbDraw = true;
-	protected float mEyeDeviation = GLScreenParams.getEyeDistance();
+	protected float mEyeDeviation = 0;//GLScreenParams.getEyeDistance();
 	private boolean isFixed = false;
 	private boolean isCostomHeadView;
 	
@@ -173,11 +173,11 @@ public abstract class GLView implements GLRenderListener {
 		
 		Matrix.rotateM(headView, 0, -(float)yaw, 0, 1, 0);
 		
-		if (isLeft){
-        	Matrix.translateM(headView, 0, mEyeDeviation / 2, 0, 0);
-        } else {
-        	Matrix.translateM(headView, 0, -mEyeDeviation/ 2, 0, 0);
-        }
+//		if (isLeft){
+//        	Matrix.translateM(headView, 0, mEyeDeviation / 2, 0, 0);
+//        } else {
+//        	Matrix.translateM(headView, 0, -mEyeDeviation/ 2, 0, 0);
+//        }
 		
 		Matrix.rotateM(headView, 0, (float)yaw, 0, 1, 0);		
 	}
@@ -192,11 +192,11 @@ public abstract class GLView implements GLRenderListener {
 
 		Matrix.rotateM(headView, 0, -(float)yaw, 0, 1, 0);
 
-		if (isLeft){
-			Matrix.translateM(headView, 0, mEyeDeviation / 2, 0, 0);
-		} else {
-			Matrix.translateM(headView, 0, -mEyeDeviation/ 2, 0, 0);
-		}
+//		if (isLeft){
+//			Matrix.translateM(headView, 0, mEyeDeviation / 2, 0, 0);
+//		} else {
+//			Matrix.translateM(headView, 0, -mEyeDeviation/ 2, 0, 0);
+//		}
 
 		Matrix.rotateM(headView, 0, (float)yaw, 0, 1, 0);
 	}
@@ -215,7 +215,7 @@ public abstract class GLView implements GLRenderListener {
 	}
 
 	public void setEyeDeviation(float mEyeDeviation) {
-		this.mEyeDeviation = mEyeDeviation;
+//		this.mEyeDeviation = mEyeDeviation;
 	}
 
 	public void createTexture(){}
