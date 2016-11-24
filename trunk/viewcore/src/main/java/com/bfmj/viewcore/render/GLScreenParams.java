@@ -33,11 +33,11 @@ public class GLScreenParams {
 	}
 	
 	public static float getScreenWidth(){
-		return defualtDepth * (float) Math.tan(FOV / 2) * 2;
+		return 4.0f * (float) Math.tan(FOV / 2) * 2;
 	}
 	
 	public static float getScreenHeight(){
-		return defualtDepth * (float) Math.tan(FOV / 2) * 2;
+		return 4.0f * (float) Math.tan(FOV / 2) * 2;
 	}
 	
 	public static void setDpi(float x, float y){
