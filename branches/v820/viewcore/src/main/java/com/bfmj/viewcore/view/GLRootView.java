@@ -30,8 +30,9 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.AttributeSet;
+import android.util.Log;
 
-public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Renderer {
+public class GLRootView /*extends MojingSurfaceView implements GLSurfaceView.Renderer*/ {
     private ArrayList<GLView> mChild = new ArrayList<GLView>();
     private Context mContext;
     private int mWidth = 0;
@@ -39,6 +40,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     private float ratio = 1;
     private boolean isSurfaceCreated = false;
     private boolean isVisible = true;
+    private ArrayList<Runnable> mEventQueue = new ArrayList();
 
     //	private MoJingGroy mMoJingGroy;
     //private GLFocusUtils mGlFocusUtils;
@@ -87,19 +89,19 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     public Queue<GLView> mCreateTextureQueue = new ConcurrentLinkedQueue<>();
 
     public GLRootView(Context context) {
-        super(context);
+//        super(context);
         init(context);
     }
 
     public GLRootView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+//        super(context, attrs);
         init(context);
     }
 
     private void init(Context context) {
         mContext = context;
-        setEGLContextClientVersion(3);
-//        setMultiThread(true);
+//        setEGLContextClientVersion(3);
+        //setMultiThread(true);
 //        //多重采样，抗锯齿
 //		setEGLConfigChooser(new EGLConfigChooser() {
 //			@Override
@@ -126,22 +128,31 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 //			}
 //		});
 
-        setRenderer(this);
-        setRenderMode(MojingSurfaceView.RENDERMODE_CONTINUOUSLY);
+//        setRenderer(this);
+//        setRenderMode(MojingSurfaceView.RENDERMODE_CONTINUOUSLY);
 
-        BaseViewActivity activity = (BaseViewActivity) mContext;
-        mGroyEnable = activity.isGroyEnable();
-        mDistortionEnable = activity.isDistortionEnable();
+        // // TODO: 2016/11/15 madi
+//        BaseViewActivity activity = (BaseViewActivity) mContext;
+//        mGroyEnable = activity.isGroyEnable();
+//        mDistortionEnable = activity.isDistortionEnable();
 //		isSavingMode = activity.isSavingMode();
-        isLockViewAngle = activity.isLockViewAngle();
-        mLockedAngle = activity.getLockedAngle();
+//        isLockViewAngle = activity.isLockViewAngle();
+//        mLockedAngle = activity.getLockedAngle();
 
+        mDistortionEnable = false;
+
+        isLockViewAngle = false;
+        mGroyEnable = false;
         initHeadView();
         // init model3d library
         Model3dLib.getInstance().loadModel3dLib();
     }
 
-    @Override
+    protected void handleEvent(Runnable event) {
+        Log.e("ImageLoaderUtils", "event="+event);
+        event.run();
+    }
+//    @Override
     public void onResume() {
         startTracker();
 
@@ -153,10 +164,19 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
             view.onResume();
         }
 
-        super.onResume();
+//        super.onResume();
     }
 
-    @Override
+    public void queueEvent(Runnable r) {
+        if(r == null) {
+            throw new IllegalArgumentException("r must not be null");
+        } else {
+            synchronized(mEventQueue) {
+                mEventQueue.add(r);
+            }
+        }
+    }
+//    @Override
     public void onPause() {
 //		stopHeadViewChangeTimer();
 
@@ -176,7 +196,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 //			}
 //		});
 
-        super.onPause();
+//        super.onPause();
 
         if (mChild != null && mChild.size() > 0) {
             for (int i = 0; i < mChild.size(); i++) {
@@ -274,15 +294,15 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
      * 启动采集陀螺仪数据
      */
     public void startTracker() {
-        if (isGroyTracking) {
-            return;
-        }
-
-        if (!MojingSDK.StartTracker(groyRate)) {
-            setGroyEnable(false);
-        } else {
-            isGroyTracking = true;
-        }
+//        if (isGroyTracking) {
+//            return;
+//        }
+//
+//        if (!MojingSDK.StartTracker(groyRate)) {
+//            setGroyEnable(false);
+//        } else {
+//            isGroyTracking = true;
+//        }
 
 //		Log.d("video", "StartTracker");
     }
@@ -291,12 +311,12 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
      * 关闭采集陀螺仪数据
      */
     public void stopTracker() {
-        if (!isGroyTracking) {
-            return;
-        }
-
-        MojingSDK.StopTracker();
-        isGroyTracking = false;
+//        if (!isGroyTracking) {
+//            return;
+//        }
+//
+//        MojingSDK.StopTracker();
+//        isGroyTracking = false;
     }
 
 //    private void setFov() {
@@ -312,7 +332,11 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 //        GLScreenParams.setNear(near);
 //    }
 
-    @Override
+    public void onSurfaceCreated() {
+	    onSurfaceCreated(null, null);
+    }
+	
+    //@Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLThreadUtil.onSurfaceCreated(gl, config);
         isSurfaceCreated = true;
@@ -347,7 +371,7 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
     }
 
-    @Override
+    //@Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         GLThreadUtil.onSurfaceChanged(gl, width, height);
 //		DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -389,9 +413,15 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
     }
     //FPS测试 end//////
 
-    @Override
-    public void onDrawFrame(GL10 gl) {
-        GLThreadUtil.onDrawFrame(gl);
+    //@Override
+    public void onDrawFrame(GL10 gl, int frameIndex, float[] viewMatrix) {
+
+        synchronized(mEventQueue) {
+            while (!this.mEventQueue.isEmpty()) {
+                Log.e("ImageLoaderUtils", "queue event count="+mEventQueue.size());
+                handleEvent((Runnable) mEventQueue.remove(0));
+            }
+        }
 
         times ++;
         if (mChild == null || mChild.size() == 0) {
@@ -413,6 +443,9 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         if (mGroyEnable) {
             MojingSDK.getLastHeadView(headView);
         }
+        for(int i=0;i<16;i++) {
+            headView[i] = viewMatrix[i];
+        }
 
         float [] noRecenterMatrix = new float[16];
         final float[] groyMatrix = getGroyMatrix(noRecenterMatrix);
@@ -422,11 +455,11 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
 
         //双屏
         if (mIsDouble) {
-            for (int i = 0; i < 2; i++) {
+            for (int i = frameIndex; i <= frameIndex; i++) {
                 if (mDistortion != null) {
                     mDistortion.beforeDraw(i);
                 } else {
-                    GLES30.glViewport(i * mWidth / 2, (mHeight - height) / 2, mWidth / 2, height);
+//                    GLES30.glViewport(i * mWidth / 2, (mHeight - height) / 2, mWidth / 2, height);
                 }
 
                 // 为了绘制中间的视频,把GLRectView分成两部分
@@ -557,21 +590,21 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
                     Matrix.rotateM(matrix, 0, mLastXangle, 0, 1, 0);
                 }
             }
-
-            if(noRecenterMatrix != null) {
-                for(int i=0;i<16;i++) {
-                    noRecenterMatrix[i] = matrix[i];
-                }
-            }
-
-            if(mRecenter) {
-                //Matrix.multiplyMM(matrix, 0, matrix, 0, mRecenterMatrix, 0);
-                Matrix.rotateM(matrix, 0, mRecenterAngles[0], 0, 1, 0);
-                Matrix.rotateM(matrix, 0, mRecenterAngles[1], 1, 0, 0);
-                Matrix.rotateM(matrix, 0, mRecenterAngles[2], 0, 0, 1);
-            }
         } else {
             System.arraycopy(headView, 0, matrix, 0, 16);
+        }
+
+        if(noRecenterMatrix != null) {
+            for(int i=0;i<16;i++) {
+                noRecenterMatrix[i] = matrix[i];
+            }
+        }
+
+        if(mRecenter) {
+            //Matrix.multiplyMM(matrix, 0, matrix, 0, mRecenterMatrix, 0);
+            Matrix.rotateM(matrix, 0, mRecenterAngles[0], 0, 1, 0);
+            Matrix.rotateM(matrix, 0, mRecenterAngles[1], 1, 0, 0);
+            Matrix.rotateM(matrix, 0, mRecenterAngles[2], 0, 0, 1);
         }
         return matrix;
     }
@@ -914,6 +947,14 @@ public class GLRootView extends MojingSurfaceView implements GLSurfaceView.Rende
         return mIsDouble;
     }
 
+    public final static int RENDERMODE_WHEN_DIRTY = 0x100;
+    public int getRenderMode() {
+        return RENDERMODE_WHEN_DIRTY;
+    }
+
+    public void requestRender() {
+
+    }
     //recenter debuging. do receter ever debugRecenterInterval ms. called in onDrawFrame
 //    private static long debugRecenterTime = new Date().getTime();
 //    private static final long debugRecenterInterval = 5000;

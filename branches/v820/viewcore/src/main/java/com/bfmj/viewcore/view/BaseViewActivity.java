@@ -6,15 +6,17 @@ import com.baofeng.mojing.MojingSDK;
 import com.baofeng.mojing.input.base.MojingKeyCode;
 
 import android.app.Activity;
+import android.app.NativeActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
-public class BaseViewActivity extends Activity {
+public class BaseViewActivity extends NativeActivity {
 	private static BaseViewActivity instance;
 	private RelativeLayout rootLayout;
 	private GLRootView rootView;
@@ -27,7 +29,40 @@ public class BaseViewActivity extends Activity {
 
 	static {
 		System.loadLibrary("viewcore");
+		//Log.d("baseview", "20161117 load svrapi");
+		System.loadLibrary("svrapi");
 	}
+
+	public void onSurfaceCreated()
+	{
+		//Log.d("--madi--", " onSurfaceCreated called");
+		rootView.onSurfaceCreated();
+	}
+
+	public void onDrawFrame(int frameIndex, float[] viewMatrix)
+	{
+		//Log.d("--madi--", " onDrawFrame called");
+		rootView.onDrawFrame(null, frameIndex, viewMatrix);
+	}
+
+	
+    @Override
+    public void onWindowFocusChanged (boolean hasFocus)
+    {
+        if(android.os.Build.VERSION.SDK_INT >= 19)
+        {
+            if(hasFocus)
+            {
+                getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+            }
+        }
+    }
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,22 +74,22 @@ public class BaseViewActivity extends Activity {
 			MojingSDK.Init(this.getApplicationContext());
 		}
 		rootView = new GLRootView(this);
-		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+//		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		
-		rootView.setGlassesKey(mMojingType);
+//		rootView.setGlassesKey(mMojingType);
 		
-		if (isVirtualKey()) {
-			rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); 
-		}
+//		if (isVirtualKey()) {
+//			rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+//		}
 		
 		mPageManager = new GLPageManager();
 		mPageManager.setRootView(rootView);
 		
-		rootLayout = new RelativeLayout(this);
-		rootLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
-		rootLayout.addView(rootView);
-		setContentView(rootLayout);
+//		rootLayout = new RelativeLayout(this);
+//		rootLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+//
+//		rootLayout.addView(rootView);
+//		setContentView(rootLayout);
 	}
 
 	public static void log(String msg){
