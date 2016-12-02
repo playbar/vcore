@@ -147,7 +147,7 @@ public class GLGridView extends GLAdapterView<GLListAdapter> {
 	@Override
 	public void setAdapter(GLListAdapter adapter) {
 		// TODO Auto-generated method stub
-		if( adapter == null || adapter.getCount() == 0 ){
+		if( adapter == null ){
 			return;
 		}
 
