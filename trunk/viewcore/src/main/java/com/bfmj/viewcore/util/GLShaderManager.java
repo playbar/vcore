@@ -25,7 +25,14 @@ public class GLShaderManager {
 		"varying vec4 vColor;" +
         "void main()" +
         "{"+
-            "gl_Position = uMVPMatrix * vec4(vPosition, 1);"+
+            "gl_Position = uMVPMatrix * vec4(vPosition, 1.0);\n"+
+//			"vec4 tmp = uMVPMatrix * vec4(vPosition, 1.0);\n" +
+//			"float r = sqrt(tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z);\n"+
+//			"float fov = 0.802851439;\n" +
+//			"float x = asin(tmp.x / r) / fov;\n"+
+//			"float y = asin(tmp.y / r) / fov;\n" +
+//			"float z = (r-0.1) / (200.0 - 0.1);\n" +
+//			"gl_Position = vec4(x, y, z, 1.0);\n" +
             "textureCoordinate = inputTextureCoordinate;" +
 			"vColor = aColor;" +
             "vAlpha = uAlpha;" +
@@ -154,7 +161,7 @@ public class GLShaderManager {
 		int status[] = new int[1];
 		GLES30.glGetShaderiv( shader, GLES30.GL_COMPILE_STATUS, status, 0 );
 		if( status[0] != GLES30.GL_TRUE ){
-//			Log.e("GLImageRect", " " + GLES30.glGetShaderInfoLog(shader));
+			Log.e("GLImageRect", " " + GLES30.glGetShaderInfoLog(shader));
 		}
         return shader;
     }

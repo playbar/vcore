@@ -73,6 +73,8 @@ public class GLMatrixState {
 //    	Matrix.multiplyMM(mMVPMatrix, 0, mVMatrix, 0, currMatrix, 0);
 //        Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mMVPMatrix, 0);
         return multiplay(multiplay(currMatrix, mVMatrix ), mProjMatrix);
+//        return multiplay(currMatrix, mVMatrix );
+//        return multiplay(multiplay(mVMatrix, currMatrix  ), mProjMatrix);
     }
 
     public float[] multiplay(float[] a, float[] b){

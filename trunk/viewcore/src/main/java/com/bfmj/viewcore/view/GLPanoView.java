@@ -9,6 +9,8 @@ import android.opengl.GLES30;
 import android.opengl.Matrix;
 
 import com.baofeng.mojing.MojingSDK;
+import com.bfmj.distortion.FBO;
+import com.bfmj.distortion.Logger;
 import com.bfmj.viewcore.render.GLMesh;
 import com.bfmj.viewcore.render.GLVector2;
 import com.bfmj.viewcore.render.GLVector3;
@@ -51,7 +53,7 @@ public class GLPanoView extends GLView {
 
     private static final String[] SCENE_OBJS = {"skybox.obj", "sphere.obj", "half_sphere.obj"};
 
-    private int mSceneType = SCENE_TYPE_SKYBOX;
+    private int mSceneType = SCENE_TYPE_SPHERE;
     private int mPlayType = PLAY_TYPE_2D;
     private int mRenderType = RENDER_TYPE_IMAGE;
 
@@ -221,7 +223,7 @@ public class GLPanoView extends GLView {
 
     public void reset(){
         mRenderType = RENDER_TYPE_IMAGE;
-        mSceneType = SCENE_TYPE_SKYBOX;
+        mSceneType = SCENE_TYPE_SPHERE;
         mPlayType = PLAY_TYPE_2D;
         mRotateHeadview = new float[3];
         GLTextureUtils.releaseTexture(mTextureId);
@@ -443,6 +445,12 @@ public class GLPanoView extends GLView {
 
     @Override
     public void draw() {
+        Logger.e("draw");
+    }
+
+    @Override
+    public void onAfterDraw(boolean isLeft) {
+        Logger.e("onAfterDraw");
     }
 
     private void createProgram(){
@@ -587,13 +595,12 @@ public class GLPanoView extends GLView {
     }
 
     @Override
-    public void onAfterDraw(boolean isLeft) {}
-
-    @Override
     public void onSurfaceCreated() {}
 
     @Override
-    public void onSurfaceChanged(int width, int height) {}
+    public void onSurfaceChanged(int width, int height) {
+        Logger.e("onSurfaceChanged");
+    }
 
     @Override
     public void release() {

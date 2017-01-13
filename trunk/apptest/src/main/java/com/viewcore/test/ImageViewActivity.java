@@ -45,10 +45,10 @@ public class ImageViewActivity extends BaseViewActivity {
 			imageViews[i] = new GLImageView(this);
 //			imageViews[i].setX(random.nextInt(2400));
 //			imageViews[i].setY(random.nextInt(2400));
-			imageViews[i].setX(800);
-			imageViews[i].setY(800);
-			imageViews[i].setLayoutParams(300, 300);
-			imageViews[i].setImage(R.drawable.a2);
+			imageViews[i].setX(700);
+			imageViews[i].setY(700);
+			imageViews[i].setLayoutParams(1000, 1000);
+			imageViews[i].setImage(R.drawable.bird);
 			imageViews[i].setAlpha(0.5f);
 //			imageViews[i].setDepth(4 - (i - 100)*0.005f);
 			rootView.addView(imageViews[i]);

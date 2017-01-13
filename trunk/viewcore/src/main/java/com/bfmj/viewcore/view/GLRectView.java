@@ -62,7 +62,7 @@ public class GLRectView extends GLView {
 	private static float depthScale = 1.0f;
 
 	private Context mContext;
-	private List<GLRenderParams> mRenders = new ArrayList<GLRenderParams>();
+	public List<GLRenderParams> mRenders = new ArrayList<GLRenderParams>();
 
 	private GLGroupView mParent;
 	private String mId = "";

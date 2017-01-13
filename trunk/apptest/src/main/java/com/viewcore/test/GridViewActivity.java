@@ -57,7 +57,7 @@ public class GridViewActivity extends BaseViewActivity {
 
 	public List<Map<String, Object>> getData(){
 		//cion和iconName的长度是相同的，这里任选其一都可以
-		for(index=0; index < 7; ++index){
+		for(index=0; index < 3; ++index){
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("image", icon[index]);
 			map.put("text", iconName[index]);
@@ -114,7 +114,8 @@ public class GridViewActivity extends BaseViewActivity {
 		gridView.setX(500);
 		gridView.setY(500);
 		gridView.setLayoutParams(40, 40);
-		gridView.setBackground( new GLColor(1.0f, 1.0f, 1.0f ));
+//		gridView.setBackground( new GLColor(1.0f, 0.0f, 1.0f ));
+		gridView.setBackground(R.drawable.bird);
 		gridView.setHorizontalSpacing( 20.0f);
 		gridView.setVerticalSpacing( 20.0f);
 //		gridView.setPadding( 10, 10, 10, 10);
@@ -127,7 +128,7 @@ public class GridViewActivity extends BaseViewActivity {
 
 		gridView.setOrientation(GLConstant.GLOrientation.HORIZONTAL );
 
-		getData();
+//		getData();
 		adapter = new GridViewAdapter(listData, this);
 		gridView.setOnItemSelectedListener( listener );
 		gridView.setOnItemClickListener( clickListener );
@@ -141,19 +142,19 @@ public class GridViewActivity extends BaseViewActivity {
 //		gridView.setDepth( 3.5f);
 		rootView.addView(gridView);
 
-		GLImageView lineH = new GLImageView(this);
-		lineH.setX(0);
-		lineH.setY(500);
-		lineH.setLayoutParams( 960, 2 );
-		lineH.setBackground( new GLColor( 0, 0, 1));
-		rootView.addView(lineH);
+//		GLImageView lineH = new GLImageView(this);
+//		lineH.setX(0);
+//		lineH.setY(500);
+//		lineH.setLayoutParams( 960, 2 );
+//		lineH.setBackground( new GLColor( 0, 0, 1));
+//		rootView.addView(lineH);
 
-		GLImageView line = new GLImageView(this);
-		line.setX(500);
-		line.setY( 0);
-		line.setLayoutParams(2, 960);
-		line.setBackground(new GLColor(0, 1, 0));
-		rootView.addView(line);
+//		GLImageView line = new GLImageView(this);
+//		line.setX(500);
+//		line.setY( 0);
+//		line.setLayoutParams(2, 960);
+//		line.setBackground(new GLColor(0, 1, 0));
+//		rootView.addView(line);
 
 		//rootView.setRotationX( 90 );
 
@@ -223,7 +224,7 @@ public class GridViewActivity extends BaseViewActivity {
 		});
 
 		//gridView.addView( textView );
-		rootView.addView(textView);
+//		rootView.addView(textView);
 //
 //		gridView.setDepth(-4);
 

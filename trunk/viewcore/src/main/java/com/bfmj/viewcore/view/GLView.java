@@ -238,6 +238,7 @@ public abstract class GLView implements GLRenderListener {
 		return isFixed;
 	}
 
+
 	public boolean isCostomHeadView() {
 		return isCostomHeadView;
 	}
