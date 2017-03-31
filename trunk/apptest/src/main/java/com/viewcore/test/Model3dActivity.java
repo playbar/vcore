@@ -1,8 +1,12 @@
 package com.viewcore.test;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.opengl.Matrix;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 public class Model3dActivity extends BaseViewActivity {
+    public static final int REQ_CODE_PERMISSION_REQUEST = 1000;
 
     public static final int SCENE_TYPE_DEFAULT = 0x0;
     public static final int SCENE_TYPE_CINEMA = 0x1;
@@ -91,6 +96,7 @@ public class Model3dActivity extends BaseViewActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_model3d);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQ_CODE_PERMISSION_REQUEST);
 
         rootView = getRootView();
 
@@ -132,26 +138,11 @@ public class Model3dActivity extends BaseViewActivity {
             });
 
             //gridView.addView( textView );
-            rootView.addView(textView);
+//            rootView.addView(textView);
         }
 
         // model view
-        {
-            modelView = new MyModelView(this);
-            if (modelView != null) {
-                modelView.groyEnable = isGroyEnable();
 
-                String objPath = "amenemhat";
-                String filePath = getFilesDir().getAbsolutePath() + "/" + objPath;
-                String fileName = filePath + "/amenemhat.obj";
-                copyFilesFassets(this, objPath, filePath);
-
-//            modelView.loadModel("/sdcard/model/amenemhat/amenemhat.obj");
-//                modelView.loadModel("/sdcard/model/Space/space_screen03.FBX");
-                modelView.loadModel(fileName);
-                rootView.addView(modelView);
-            }
-        }
         // cursor view
         {
             GLCursorView cursorView = new GLCursorView(this);
@@ -168,13 +159,34 @@ public class Model3dActivity extends BaseViewActivity {
             imageView.setX(1000);
             imageView.setY(1000);
             imageView.setBackground(R.drawable.address_book);
-            rootView.addView(imageView);
+//            rootView.addView(imageView);
         }
 
+        loadModel();
+
         rootView.onResume();
-        showSkyBox(SCENE_TYPE_DEFAULT);
+//        showSkyBox(SCENE_TYPE_DEFAULT);
 //        rootView.setDoubleScreen(false);
 //        setDistortionEnable(false);
+    }
+
+    private void loadModel(){
+        {
+            modelView = new MyModelView(this);
+            if (modelView != null) {
+                modelView.groyEnable = isGroyEnable();
+
+//                String objPath = "amenemhat";
+//                String filePath = getFilesDir().getAbsolutePath() + "/" + objPath;
+//                String fileName = filePath + "/amenemhat.obj";
+//                copyFilesFassets(this, objPath, filePath);
+
+//            modelView.loadModel("/sdcard/model/amenemhat/amenemhat.obj");
+//                modelView.loadModel("/mnt/sdcard/space/space_screen03.FBX");
+//                modelView.loadModel(fileName);
+                rootView.addView(modelView);
+            }
+        }
     }
 
 
@@ -251,4 +263,12 @@ public class Model3dActivity extends BaseViewActivity {
         GLPanoView.getSharedPanoView(this).setVisible(false);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQ_CODE_PERMISSION_REQUEST
+                && PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(Model3dActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+            modelView.loadModel("/mnt/sdcard/space/space_screen03.FBX");
+        }
+    }
 }

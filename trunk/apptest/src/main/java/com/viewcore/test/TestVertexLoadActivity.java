@@ -42,7 +42,7 @@ public class TestVertexLoadActivity extends BaseViewActivity {
 //		cursorView.setFixed(false);
         getRootView().addView(cursorView);
 
-        showSkyBox(SCENE_TYPE_CINEMA);
+        showSkyBox(SCENE_TYPE_DEFAULT);
 
     }
 
