@@ -343,6 +343,13 @@ public class GLGridViewPage extends GLGridView {
 		return mCurIndex;
 	}
 
+	public void setCurIndexPage(int curPage)
+	{
+		mCurIndex = curPage;
+		setStartIndex((mCurIndex - 1) * getNumOneScreen());
+		requestLayout();
+	}
+
 	public void setOffsetX(float offsetx ){
 		this.mOffsetX = offsetx;
 	}
